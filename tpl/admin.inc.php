@@ -5,13 +5,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
 <script>
-function confirmDelete(evt)
-{
-    if(!window.confirm('you know what you doing' +
-
-'(this action will permanently delete all associated reports)'))
-        evt.preventDefault();
-}
+function confirmDelete(evt){if(!window.confirm('you know what you doing'+"\n\n"+'(this action will permanently delete all associated reports)')) evt.preventDefault();}
 </script>
         <article>
             <h1>edit categories</h1>

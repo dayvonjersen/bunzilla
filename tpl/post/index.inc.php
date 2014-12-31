@@ -13,7 +13,7 @@ else {
     {
 ?>
             <p style='background: #<?= $cat['color'] ?>'>
-                <a href="<?= $_SERVER['PHP_SELF'],'/category/',$cat['id'] ?>" class='<?= $cat['icon'] ?>'><?=$cat['title']?></a><br/>
+                <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>" class='<?= $cat['icon'] ?>'><?=$cat['title']?></a><br/>
                 <small><?=$cat['caption']?></small>
             </p>
 <?php

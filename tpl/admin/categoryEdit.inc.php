@@ -5,7 +5,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
         <h1><?= $pageTitle ?></h1>
-        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id'] ?>" method="post"class='pure-form pure-form-aligned'>
+        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id'] ?>" method="post" class='pure-form pure-form-aligned'>
                 <fieldset class='is-center'>
                     <legend>create new category</legend>
                     <p class='pure-control-group'>

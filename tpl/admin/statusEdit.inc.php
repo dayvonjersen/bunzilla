@@ -5,9 +5,9 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
         <h1><?= $pageTitle ?></h1>
-        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id'] ?>" method="post"class='pure-form pure-form-aligned'>
+        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id'] ?>" method="post" class='pure-form pure-form-aligned'>
                 <fieldset class='is-center'>
-                    <legend>create new category</legend>
+                    <legend>create new status</legend>
                     <p class='pure-control-group'>
                         <label>title</label>
                         <input maxlength='255' placeholder='e.g. bug reports...' name='title' type="text" value="<?= $stat['title'] ?>">

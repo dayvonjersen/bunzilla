@@ -14,6 +14,7 @@ class post extends Controller
         if(!$result->rowCount())
             $this->abort('No such category!');
 
-        $this->data = $result->fetch(PDO::FETCH_ASSOC);
+        $this->data['category'] = $result->fetch(PDO::FETCH_ASSOC);
+        $this->data['params'] = array_flip(array_keys($this->data['category']));
     }
 }
