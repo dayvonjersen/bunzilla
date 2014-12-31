@@ -172,3 +172,17 @@ function selectCount($table,$where = 1,$field='*')
         return 0;
     return (int) $result->fetchColumn();
 }
+
+/**
+ * GOOD LUCK I'M BEHIND SEVEN PROXIES
+ */
+function remoteAddr() {
+    static $ip = null;
+    if($ip === null)
+    {
+        $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? 
+            trim(end(explode (',', $_SERVER['HTTP_X_FORWARDED_FOR']))) 
+            : $_SERVER['REMOTE_ADDR'];
+    }
+    return inet_pton($ip);
+}

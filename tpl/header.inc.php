@@ -22,6 +22,26 @@ function iconSelectBox($selected = false)
     $select .= '</select>';
     return $select;
 }
+function statusButton($statusId)
+{
+    static $buttons = [];
+    if(!isset($buttons[$statusId]) && selectCount('statuses','id = '.(int)$statusId))
+    {
+        list($id,$title,$color,$icon) = current(db()->query('SELECT * FROM statuses WHERE id = '.(int)$statusId)->fetchAll(PDO::FETCH_NUM));
+        $buttons[$id] = '<span class="'.$icon.'" style="background: #'.$color.'">'.$title.'</span>';
+    }
+    return isset($buttons[$statusId]) ? $buttons[$statusId] : '';
+}
+function statusSelectBox($selected = false)
+{
+    $select = '<select name="status">';
+    foreach(db()->query('SELECT * FROM statuses ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC) as $status)
+    {
+       $select .= '<option value="'.$status['id'].'"'.($selected === $status['id']?' selected':'').' class="'.$status['icon'].'" style="background: #'.$status['color'].'">'.$status['title'].'</option>';
+    }
+    $select .= '</select>';
+    return $select;
+}
 ?>
 <!doctype html>
 <html>

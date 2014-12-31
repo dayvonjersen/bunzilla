@@ -2,7 +2,7 @@
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
         <h1>Submit New <?= $this->data['category']['title'] ?></h1>
-        <form action="<?= BUNZ_HTTP_DIR,'post/category' ?>" method="post" class='pure-form pure-form-aligned'>
+        <form action="<?= BUNZ_HTTP_DIR,'post/category/',$this->data['category']['id'] ?>" method="post" class='pure-form pure-form-aligned'>
             <fieldset class='is-center'>
                 <p class='pure-control-group'>
                     <label>email</label>
@@ -34,7 +34,7 @@ foreach($fields as $field => $placeholder)
 ?>
                 <p class='pure-control-group'>
                     <label>initial status</label>
-                    <?= iconSelectBox() ?>
+                    <?= statusSelectBox($this->data['params']['status']) ?>
                 </p>
 
                 
