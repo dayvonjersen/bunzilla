@@ -1,3 +1,28 @@
+<?php
+function getIconList()
+{
+    static $return;
+    if(!$return)
+    {
+        $return = [];
+
+        preg_match_all('/^\.(icon-\w+):before/m',file_get_contents(str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR).'bunzilla-icons.css'),$icons,PREG_SET_ORDER);
+        foreach($icons as $icon)
+            $return[] = $icon[1];
+    }
+    return $return;
+        
+}
+function iconSelectBox($selected = false)
+{
+    $select = '<select name="icon">';
+    $icons = getIconList();
+    foreach($icons as $icon)
+        $select .= '<option value="'.$icon.'"'.($selected === $icon?' selected':'').' class="'.$icon.'">'.$icon.'</option>';
+    $select .= '</select>';
+    return $select;
+}
+?>
 <!doctype html>
 <html>
     <head>

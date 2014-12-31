@@ -129,3 +129,46 @@ class Controller
             $this->abort('You must be logged in to view that page.');
     }
 }
+
+function _filterFlag($f)
+{
+    return constant(
+        'FILTER_'.($f==='null_on_failure'||$f==='require_array'?'':'FLAG_').strtoupper($f)
+    );
+}
+
+function filterOptions($validate, $id, $flag = null, $opts = null)
+{
+    $const = constant('FILTER'.
+        (stripos($id,'callback')===0?'':'_'.($validate?'VALIDATE':'SANITIZE'))
+        .'_'.strtoupper($id)
+    );
+    if($flag === null && $opts === null)
+        return $const;
+
+    if($flag||$opts)
+    {       
+        $return = ['filter'=>$const];
+        if($flag)
+        {   $flags = 0;
+            if(is_array($flag))
+                foreach($flag as $f)
+                    $flags |= _filterFlag($f);
+            else
+                $flags = _filterFlag($flag);
+            $return['flags'] = $flags;
+        }
+        if(is_array($opts)||is_scalar($opts))
+            $return['options'] = $opts;
+        return $return;
+    }
+    return $const; // no options exist without flags
+}
+
+function selectCount($table,$where = 1,$field='*')
+{
+    $result = db()->query('SELECT COUNT('.$field.') FROM '.$table.' WHERE '.$where);
+    if(!$result->rowCount())
+        return 0;
+    return (int) $result->fetchColumn();
+}
