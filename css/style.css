@@ -1,3 +1,15 @@
+/**
+ * horrible hacky bullshit */
+html::before {
+ content: " ";
+ width: 100vw;
+ height: 100vh;
+ 
+     background-color: rgba(255,255,255,0.5);
+ position: fixed;
+z-index: -1;
+}
+
 a {
     outline: 0px none !important;
 
@@ -24,6 +36,9 @@ body {
     font-size: 13px;
     height: 100%;
     margin: 1em 1em 200px 1em;
+
+     background-color: rgba(255,255,255,0.7);
+
 }
 
 h1,
@@ -67,9 +82,7 @@ a.pure-button-primary {
     background: #f955a8;
 }
 .pure-menu.pure-menu-open.pure-menu-fixed {
-    /* Fixed menus normally have a border at the bottom. */
     border-bottom: none;
-    /* I need a higher z-index here because of the scroll-over effect. */
     z-index: 4;
 }
 
@@ -156,15 +169,13 @@ textarea {
 }
 
 a:not([style]):not([class]) {
-    color: #000;
     text-decoration: none;
-    border-bottom: 1px dashed #4eb3de;
+    color: #4eb3de;
 }
 
 a:not([style]):not([class]):hover {
     background: #4eb3de;
     color: #fff;
-    border-bottom: 1px solid transparent;
 }
 
 a.pure-menu-heading, a.pure-menu-heading:hover {
@@ -289,6 +300,9 @@ input.pure-button:active
 
 .card header {
     float: left;
+
+     background-color: rgba(255,255,255,0.7);
+    width: 100%;
 }
 
 .card header + p {

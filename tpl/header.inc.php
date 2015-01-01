@@ -92,7 +92,7 @@ $crumbs = [
 if(isset($bread))
     $crumbs += $bread;
 
-foreach($crumbs as $text => $stuff)
+foreach($crumbs as $text => $href)
 {
     echo "\t\t\t\t",'<li',$href === BUNZ_HTTP_DIR . $_GET['url'] ? ' class="pure-menu-selected"' : '','><a href="',$href,'">',$text,'</a></li>',"\n";
 }

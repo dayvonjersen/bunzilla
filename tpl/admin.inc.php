@@ -61,7 +61,7 @@ if(empty($this->data['categories']))
                     </p>
                     <p class='pure-control-group'>
                         <label>required fields</label>
-                        <fieldset class='pure-menu pure-menu-open is-left' style="width: 75%">
+                        <fieldset class='pure-menu pure-menu-open is-left' style="width: 75%; border: 0px none; margin: auto;">
                             <ul><li><label><input type="checkbox" name='description'>description</label></li><li>
                             <label><input type="checkbox" name='reproduce'>reproduce</label></li><li>
                             <label><input type="checkbox" name='expected'>expected</label></li><li>
