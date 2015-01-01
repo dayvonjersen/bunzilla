@@ -28,7 +28,7 @@ function statusButton($statusId)
     if(!isset($buttons[$statusId]) && selectCount('statuses','id = '.(int)$statusId))
     {
         list($id,$title,$color,$icon) = current(db()->query('SELECT * FROM statuses WHERE id = '.(int)$statusId)->fetchAll(PDO::FETCH_NUM));
-        $buttons[$id] = '<span class="'.$icon.'" style="background: #'.$color.'">'.$title.'</span>';
+        $buttons[$id] = '<span class="pure-button '.$icon.'" style="background: #'.$color.'">'.$title.'</span>';
     }
     return isset($buttons[$statusId]) ? $buttons[$statusId] : '';
 }
@@ -50,12 +50,24 @@ function statusSelectBox($selected = false)
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <meta name='description' content='<?= BUNZ_PROJECT_MISSION_STATEMENT ?>'>
 
-        <title><?= BUNZ_PROJECT_TITLE, isset($pageTitle) ? ": $pageTitle" : '' ?></title>
+        <title><?= isset($pageTitle) ? "$pageTitle :: " : '',BUNZ_PROJECT_TITLE, ' :: tracked by Bunzilla' ?></title>
         <link rel='stylesheet' href='http://yui.yahooapis.com/pure/0.5.0/pure-min.css'>
         <link rel='stylesheet' href='http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css'>
 
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>style.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
+<?php
+/*
+$hljsdir = str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR).'highlight.js';
+$ls = dir($hljsdir);
+while(($f = $ls->read()) !== false)
+{
+    echo is_file($hljsdir.'/'.$f) ? '<link rel="alternate stylesheet" href="'.BUNZ_CSS_DIR.'highlight.js/'.$f.'" title="'.$f.'">'."\n" : '';
+}
+*/
+
+?>
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
     </head>
     <body id='bunzilla'>
         <header class='header'>
@@ -70,7 +82,7 @@ function statusSelectBox($selected = false)
 <?php
 if(!empty($this->flash))
 {
-    echo '<aside>';
+    echo '<aside class="flash is-center">';
     foreach($this->flash as $msg)
         echo '<div>',$msg,'</div>';
     echo '</aside>';

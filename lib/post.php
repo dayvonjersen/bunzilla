@@ -50,13 +50,14 @@ class post extends Controller
     {
 // $message_body = nl2br (trim (str_replace (array (chr (7),chr (160),chr (173)), '', preg_replace ('@[ ]{2,}@', ' ', preg_replace ('@[\n]{2,}@', "\n", $message_body)))));
         $msg = htmlspecialchars($msg);
-        $msg = trim(str_replace([chr(7),chr(160),chr(173),"\n","\r","\t"], '', preg_replace('/\s{2,}/',' ',$msg)));
+        $msg = trim(str_replace([chr(7),chr(160),chr(173)], '', $msg));
         $msg = preg_replace('/&lt;(\/)?('.self::ALLOWED_HTML.')&gt;/i', '<$1$2>', $msg);
+
 
         preg_match_all('/\<image\>(.{1,})\<\/image\>/i', $msg, $images, PREG_SET_ORDER);
         foreach($images as $image)
         {
-            if(preg_match('/^http(s)?:\/\//', $image[1]) && @getimagesize($image[1]))
+            if(preg_match('/^http(s)?:\/\//', $image[1]))// && @getimagesize($image[1]))
                 $msg = str_replace($image[0],'<img src="'.$img[1].'" alt="Image could not be loaded.">',$msg);
             else
                 $msg = str_replace($image[0],'&lt;!-- Invalid Image URL! --&gt;',$msg);
@@ -71,9 +72,12 @@ class post extends Controller
             $msg = str_replace($link[0], '<a href="'.$location.'" title="'.$location.'" target="_blank">'.$title.'</a>',$msg);
         }
 
-        preg_match_all('/\<code(\s+lang="[a-z0-9]+")?\>(.+?)\<\/code\>/i', $msg, $codes, PREG_SET_ORDER);
+        $msg = nl2br($msg);
+
+        preg_match_all('/\<code(\s+lang="[a-z0-9]+")?\>(.+?)\<\/code\>/ims', $msg, $codes, PREG_SET_ORDER);
         foreach($codes as $code)
         {
+            $code[2] = str_replace('<br />', '', $code[2]);
             $msg = str_replace($code[0],'<pre><code'.$code[1].'>'.$code[2].'</code></pre>',$msg);
         }
 
@@ -119,8 +123,8 @@ class post extends Controller
                     if(strtoupper($value) === $value)
                         $this->flash[] = 'JESUS CHRIST STOP SHOUTING';
 
-                    if(preg_match('/\S{80}/',$value))
-                        $this->flash[] = $field .' contains a single word over 80 characters in length. Stop it.';
+                   // if(preg_match('/\S{80}/',$value))
+                   //     $this->flash[] = $field .' contains a single word over 80 characters in length. Stop it.';
 
             }
         }
@@ -129,6 +133,7 @@ class post extends Controller
             exit;
 
         $this->data['params']['ip'] = remoteAddr();
+        $this->data['params']['category'] = $this->data['category']['id'];
 
         $stmt = db()->prepare(
             'INSERT INTO reports (id,time,'.implode(',',array_keys($this->data['params'])).') VALUES (\'\',UNIX_TIMESTAMP(),:'.implode(',:',array_keys($this->data['params'])).')'

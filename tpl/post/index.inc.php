@@ -2,7 +2,7 @@
 $pageTitle = 'Pick a Category';
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
-        <article>
+        <article class='box'>
             <h1><?= $pageTitle ?></h1>
 <?php
 if(empty($this->data['categories']))
@@ -12,10 +12,12 @@ else {
     foreach($this->data['categories'] as $cat)
     {
 ?>
-            <p style='background: #<?= $cat['color'] ?>'>
-                <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>" class='<?= $cat['icon'] ?>'><?=$cat['title']?></a><br/>
-                <small><?=$cat['caption']?></small>
-            </p>
+            <blockquote class='box'>
+                <p style='border: 2px #<?= $cat['color'] ?> groove'>
+                    <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>" class='<?= $cat['icon'] ?>' style='display: block; border: 0; color: #<?= $cat['color']?>'><?=$cat['title']?></a><br/>
+                    <small><?=$cat['caption']?></small>
+                </p>
+            </blockquote>
 <?php
     }
 }

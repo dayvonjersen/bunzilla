@@ -1,6 +1,7 @@
 <?php
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
+        <article class="box">
         <h1>Submit New <?= $this->data['category']['title'] ?></h1>
         <form action="<?= BUNZ_HTTP_DIR,'post/category/',$this->data['category']['id'] ?>" method="post" class='pure-form pure-form-aligned'>
             <fieldset class='is-center'>
@@ -41,5 +42,6 @@ foreach($fields as $field => $placeholder)
                  <button class='pure-button' type='submit'><i class='icon-plus'></i> submit report</button>
                 </fieldset>
             </form>
+        </article>
 <?php
 require BUNZ_TPL_DIR . 'footer.inc.php';

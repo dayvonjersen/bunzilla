@@ -20,7 +20,7 @@ body {
     color: #7f8c8d;
     font-size: 13px;
     height: 100%;
-    margin: 1em 1em 50px 1em;
+    margin: 1em 1em 90px 1em;
 }
 
 h1,
@@ -307,13 +307,103 @@ table.pure-table {
     padding: 0;
 }
 
-.pure-form input[type] {
+.pure-form input[type], .pure-form textarea {
     border-radius: 0;
     padding: 0;
     background: transparent;
+}
 
+textarea {
+    resize: vertical;
 }
 
 .pure-form input[type]:hover {
     border-color: #4eb3de;
+}
+
+.msginfo {
+    color: #4eb3de;
+}
+
+a:not([style]):not([class]) {
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px dashed #4eb3de;
+}
+
+a:not([style]):not([class]):hover {
+    background: #4eb3de;
+    color: #fff;
+    border-bottom: 1px solid transparent;
+}
+
+a.pure-menu-heading, a.pure-menu-heading:hover {
+    text-decoration: none;
+    background: transparent;
+    border: none;
+}
+
+a.pure-menu-heading:hover {
+    text-shadow: 1px 1px 2px;
+}
+
+.box {
+    background: rgba(255,255,255,0.8);
+    box-shadow: 2px 2px 10px 10px rgba(0,0,0,0.2);
+}
+
+a.pure-button, a.pure-button:hover, 
+.no-border {
+    border: none;
+}
+
+legend.msginfo {
+    font-size: x-small;
+}
+
+.pure-button, .pure-form select{
+    padding: 5px;
+    border-radius: 0;
+}
+
+blockquote.box {
+    margin: 0;
+    padding: 1em;
+    color: #000;
+    background: #fff;
+}
+
+.flash {
+ background: #E5F04C;
+}
+
+.danger, .warning {
+    background: #FA023C;
+    color: #fff;
+}
+
+.info {
+    background: #00AAFF; 
+    color: #fff;
+}
+
+.success {
+    background: #AAFF00;
+    color: #fff;
+}
+
+.inactive {
+    background: #888;
+    color: #fff;
+}
+
+.pure-button { 
+    text-shadow: 1px 1px 0 #3b3b3b,
+        -1px 1px 0 #3b3b3b,
+        1px -1px 0 #3b3b3b,
+        -1px -1px 0 #3b3b3b;
+}
+
+.pure-button:not(button):not(a) {
+    cursor: default;
 }

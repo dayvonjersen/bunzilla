@@ -7,7 +7,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 <script>
 function confirmDelete(evt){if(!window.confirm('you know what you doing'+"\n\n"+'(this action will permanently delete all associated reports)')) evt.preventDefault();}
 </script>
-        <article>
+        <article class='box'>
             <h1>edit categories</h1>
 <?php
 if(empty($this->data['categories']))
@@ -34,9 +34,9 @@ if(empty($this->data['categories']))
                         <td><?=$cat['title']?></td>
                         <td><?=$cat['total_reports']?></td>
                         <td>
-                            <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>">View</a> / 
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>">Edit</a> / 
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/category/',$cat['id']?>" class='pure-button' onclick="confirmDelete(event)">Delete</a>
+                            <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class='pure-button info'>View</a>
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" class='pure-button success'>Edit</a>
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/category/',$cat['id']?>" class='pure-button danger' onclick="confirmDelete(event)">Delete</a>
                     </tr>
 <?php
     }
@@ -82,7 +82,7 @@ if(empty($this->data['categories']))
                 </fieldset>
             </form>
         </article>        
-        <article>
+        <article class='box'>
             <h1>edit statuses</h1>
 <?php
 if(empty($this->data['statuses']))
@@ -107,15 +107,13 @@ if(empty($this->data['statuses']))
 ?>
                     <tr<?=$i&1?' class="pure-table-odd"':''?>>
                         <td>
-                            <button class='pure-button' style="font-size: x-small; background: #<?=$stat['color']?>">
-                                <span class='<?=$stat['icon']?>'><?=$stat['title']?></span>
-                            </button>
+                            <?= statusButton($stat['id']) ?>
                         </td>
                         <td><?=$stat['total_reports']?></td>
                         <td>
-                            <a href="<?=BUNZ_HTTP_DIR,'report/status/',$stat['id']?>">View</a> / 
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id']?>">Edit</a> / 
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/status/',$stat['id']?>" class='pure-button' onclick="confirmDelete()">Delete</a>
+                            <a href="<?=BUNZ_HTTP_DIR,'report/status/',$stat['id']?>" class='pure-button info'>View</a> 
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id']?>" class='pure-button success'>Edit</a> 
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/status/',$stat['id']?>" class='pure-button danger' onclick="confirmDelete()">Delete</a>
                     </tr>
 <?php
     }
