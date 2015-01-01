@@ -1,3 +1,11 @@
+a {
+    outline: 0px none !important;
+
+}
+.pure-button { 
+    background: #8b65f4;
+}
+
 @font-face
 {
     font-family: 'scp';
@@ -9,18 +17,13 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
-/*
- * -- BASE STYLES --
- * Most of these are inherited from Base, but I want to change a few.
- */
 body {
     font-family: 'scp', monospace;
     line-height: 1.7em;
     color: #7f8c8d;
     font-size: 13px;
     height: 100%;
-    margin: 1em 1em 90px 1em;
+    margin: 1em 1em 200px 1em;
 }
 
 h1,
@@ -38,47 +41,9 @@ label {
     height: auto;
 }
 
-/*
- * -- LAYOUT STYLES --
- * These are some useful classes which I will need
- */
-.l-box {
-    padding: 1em;
-}
-
-.l-box-lrg {
-    padding: 2em;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-}
-
 .is-center {
     text-align: center;
 }
-
-
-
-/*
- * -- PURE FORM STYLES --
- * Style the form inputs and labels
- 
-.pure-form label {
-    margin: 1em 0 0;
-    font-weight: bold;
-    font-size: 100%;
-}
-
-.pure-form input[type] {
-    border: 2px solid #ddd;
-    box-shadow: none;
-    font-size: 100%;
-    width: 100%;
-    margin-bottom: 1em;
-}
-
-/*
- * -- PURE BUTTON STYLES --
- * I want my pure-button elements to look a little different
- */
 .pure-button {
     background-color: #1f8dd6;
     color: white;
@@ -92,12 +57,6 @@ a.pure-button-primary {
     border-radius: 5px;
     font-size: 120%;
 }
-
-
-/*
- * -- MENU STYLES --
- * I want to customize how my .pure-menu looks at the top of the page
- */
 
 .home-menu {
     padding: 0.5em;
@@ -134,138 +93,8 @@ a.pure-button-primary {
     color: #4eb3de;
 }
 
-
-/*
- * -- SPLASH STYLES --
- * This is the blue top section that appears on the page.
- */
-
-.splash-container {
-}
-
-.splash {
-    text-align: center;
-}
-
-/* This is the main heading that appears on the blue section */
-.splash-head {
-    font-size: 20px;
-    font-weight: bold;
-    font-weight: 100;
-    line-height: 1em;
-}
-
-/* This is the subheading that appears on the blue section */
-.splash-subhead {
-    letter-spacing: 0.05em;
-    opacity: 0.8;
-}
-
-/*
- * -- CONTENT STYLES --
- * This represents the content area (everything below the blue section)
- */
-.content-wrapper {
-    /* These styles are required for the "scroll-over" effect */
-    position: absolute;
-    top: 87%;
-    width: 100%;
-    min-height: 12%;
-    z-index: 2;
-    background: white;
-
-}
-
-/* This is the class used for the main content headers (<h2>) */
-.content-head {
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 2em 0 1em;
-}
-
-/* This is a modifier class used when the content-head is inside a ribbon */
-.content-head-ribbon {
-    color: white;
-}
-
-/* This is the class used for the content sub-headers (<h3>) */
-.content-subhead {
-    color: #1f8dd6;
-}
-    .content-subhead i {
-        margin-right: 7px;
-    }
-
-/* This is the class used for the dark-background areas. */
-.ribbon {
-    background: #2d3e50;
-    color: #aaa;
-}
-
-/* This is the class used for the footer */
-.footer {
+.footer, .pure-menu.breadcrumb {
     background: #111;
-}
-
-/*
- * -- TABLET (AND UP) MEDIA QUERIES --
- * On tablets and other medium-sized devices, we want to customize some
- * of the mobile styles.
- */
-@media (min-width: 48em) {
-
-
-    /* We increase the body font size */
-    body {
-        font-size: 16px;
-    }
-    /* We want to give the content area some more padding */
-    .content {
-        padding: 1em;
-    }
-
-    /* We can align the menu header to the left, but float the
-    menu items to the right. */
-    .home-menu {
-        text-align: left;
-    }
-        .home-menu ul {
-            float: right;
-        }
-
-    /* We increase the height of the splash-container */
-/*    .splash-container {
-        height: 500px;
-    }*/
-
-    /* We decrease the width of the .splash, since we have more width
-    to work with */
-    .splash {
-    }
-
-    .splash-head {
-        font-size: 250%;
-    }
-
-
-    /* We remove the border-separator assigned to .l-box-lrg */
-    .l-box-lrg {
-        border: none;
-    }
-
-}
-
-/*
- * -- DESKTOP (AND UP) MEDIA QUERIES --
- * On desktops and other large devices, we want to over-ride some
- * of the mobile and tablet styles.
- */
-@media (min-width: 78em) {
-    /* We increase the header font size even more */
-    .splash-head {
-        font-size: 300%;
-    }
 }
 
 /**
@@ -282,7 +111,7 @@ footer.footer  {
     position: absolute; 
     bottom: 1em; 
     width: calc(100% - 2em);
-    height: 50px;
+    min-height: 150px;
 }
 
 table, form {
@@ -349,8 +178,11 @@ a.pure-menu-heading:hover {
 }
 
 .box {
-    background: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.95);
     box-shadow: 2px 2px 10px 10px rgba(0,0,0,0.2);
+    margin: 0;
+    padding: 1em;
+    color: #000;
 }
 
 a.pure-button, a.pure-button:hover, 
@@ -360,24 +192,26 @@ a.pure-button, a.pure-button:hover,
 
 legend.msginfo {
     font-size: x-small;
+    position: relative;
+    top: 2em;
 }
 
 .pure-button, .pure-form select {
     border-radius: 0;
 }
 
-blockquote.box {
-    margin: 0;
-    padding: 1em;
-    color: #000;
-    background: #fff;
-}
 
 .flash {
- background: #E5F04C;
+    background: #ffe458;
+    color: #000;
 }
 
-.danger, .warning {
+.danger {
+    background: #f6009a;
+    color: #fff;
+}
+
+.warning {
     background: #FA023C;
     color: #fff;
 }
@@ -388,7 +222,7 @@ blockquote.box {
 }
 
 .success {
-    background: #AAFF00;
+    background: #a3db23;
     color: #fff;
 }
 
@@ -397,21 +231,13 @@ blockquote.box {
     color: #fff;
 }
 
-.pure-button { 
-    text-shadow: 1px 1px 0 #3b3b3b,
-        -1px 1px 0 #3b3b3b,
-        1px -1px 0 #3b3b3b,
-        -1px -1px 0 #3b3b3b;
-
-    padding: 5px;
-}
 
 .pure-button:not(button):not(a) {
     cursor: default;
 }
 
-.pure-form input[type='text'],
-.pure-form textarea {
+.pure-form-aligned input[type='text'],
+.pure-form-aligned textarea {
     width: 75%;
 }
 
@@ -421,18 +247,6 @@ label,.pure-button {
     -ms-user-select: none;
     user-select: none;
 }
-@media (max-width: 600px) 
-{
-
-    .pure-form input[type='text'],
-    .pure-form textarea {
-        width: 100%;
-    }
-    .pure-button {
-        display: block;
-        width: 100%;
-    }
-}
 
 .is-left {
     text-align: left;
@@ -440,4 +254,207 @@ label,.pure-button {
 
 .pure-form select {
     padding: 0;
+}
+
+h1 {
+     color: #21B2F1;
+     font-weight: bold;
+     text-shadow: 2px 1px 0px #fff, 5px 4px 0px rgba(0,0,0,0.15);
+}
+.pure-button {
+     opacity: 0.75;
+     text-shadow: 2px 1px 0px #000, 5px 4px 0px rgba(0,0,0,0.15);
+    transition: all 125ms ease-in;
+    padding: 5px;
+}
+
+.pure-button:hover,
+button.pure-button,
+a.pure-button,
+input.pure-button {
+    opacity: 1;
+}
+
+button.pure-button:active,
+a.pure-button:active,
+input.pure-button:active
+ {
+    opacity: 1;
+    text-shadow:   -5px -4px 0px rgba(0,0,0,0.15);
+}
+
+.card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
+    margin: 0;
+}
+
+.card header {
+    float: left;
+}
+
+.card header + p {
+    clear: both;
+}
+
+.card header.msginfo {
+    float: none;
+}
+
+.card [title] {
+    position: relative;
+    padding-top: 1.25em;
+}
+.card [title]:not([class*='icon']):before,
+.pure-menu-selected:after {
+     content: attr(title);
+     font-size: xx-small;
+    position: absolute;
+    top: 0;
+    color: #999;
+}
+
+.card header a.pure-button {
+    background: none;
+}
+
+.pure-menu.breadcrumb { 
+	overflow: hidden;
+    box-shadow: none;
+    margin-bottom: 2px;
+}
+
+.pure-menu-selected:after {
+    content: 'you are here';
+    width: 100%;
+    display: block;
+    text-align: right;
+    top: auto;
+    bottom: 0;
+}
+
+.breadcrumb li { 
+	float: left; 
+}
+
+.pure-menu.breadcrumb li a {
+	color: white;
+	text-decoration: none; 
+	padding: 10px 0 10px 55px;
+	background: #888;
+	position: relative; 
+	display: block;
+	float: left;
+    border-bottom: none;
+    text-decoration: underline;
+}
+
+.breadcrumb li a:after { 
+	content: " "; 
+	display: block; 
+    width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid #888;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	left: 100%;
+	z-index: 2; 
+}	
+
+.breadcrumb li a:hover {
+    text-decoration: none;
+}
+
+.breadcrumb li a:hover:before,
+.breadcrumb li a:hover:after
+{
+    border-left-color: #4eb3de;
+}
+
+.breadcrumb li a:before { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid white;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	margin-left: 1px;
+	left: 100%;
+	z-index: 1; 
+}	
+
+
+.breadcrumb li:first-child a {
+	padding-left: 10px;
+}
+
+.breadcrumb li:last-child a {
+	background: transparent !important;
+	color: #4eb3de;
+	pointer-events: none;
+	cursor: default;
+    font-style: italic;
+    text-decoration: none;
+}
+
+.breadcrumb li:last-child.pure-menu-selected a:after,
+.breadcrumb li:last-child.pure-menu-selected a:before { border: 0; }
+
+footer.footer section {
+    padding: 1em;
+    font-family: 'scp', monospace !important;
+    text-align: left;
+}
+
+footer.footer a {
+    color: #fff !important;
+}
+
+footer.footer ul, footer.footer h6 {
+    font-size: x-small;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+footer.footer pre {
+    color: #888;
+    font-size: xx-large;
+     text-shadow: 2px 1px 0px rgba(0,0,0,0.2), 5px 4px 0px rgba(0,0,0,0.15);
+}
+@media (min-width: 48em) {
+
+    body {
+        font-size: 16px;
+    }
+    
+    .home-menu {
+        text-align: left;
+    }
+        .home-menu ul {
+            float: right;
+        }
+}
+@media (max-width: 800px) 
+{
+    body {
+        margin-bottom: 400px;
+    }
+
+    .pure-form-aligned input[type='text'],
+    .pure-form-aligned textarea {
+        width: 100%;
+    }
+    .pure-button {
+        display: block;
+        width: 100%;
+    }
+    .card header {
+        float: none;
+    }
 }

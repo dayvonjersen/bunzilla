@@ -83,7 +83,24 @@ while(($f = $ls->read()) !== false)
                 </ul>
             </nav>
         </header>
+        <nav class='pure-menu pure-menu-open pure-menu-horizontal breadcrumb'>
+            <ul>
 <?php
+$crumbs = [
+    BUNZ_PROJECT_TITLE => BUNZ_HTTP_DIR
+];
+if(isset($bread))
+    $crumbs += $bread;
+
+foreach($crumbs as $text => $stuff)
+{
+    echo "\t\t\t\t",'<li',$href === BUNZ_HTTP_DIR . $_GET['url'] ? ' class="pure-menu-selected"' : '','><a href="',$href,'">',$text,'</a></li>',"\n";
+}
+?>
+            </ul>
+        </nav>
+<?php
+       
 if(!empty($this->flash))
 {
     echo '<aside class="flash is-center">';

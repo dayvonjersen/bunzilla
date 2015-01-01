@@ -2,7 +2,7 @@
 /**
  * Preliminary stuff */
 define('BUNZ_START_TIME', microtime(1));
-define('BUNZ_SIGNATURE', 'Bunzilla bug tracker:github.com/generaltso/bunzilla');
+define('BUNZ_SIGNATURE', 'Bunzilla bug tracker');
 define('BUNZ_VERSION', '0.1a');
 define('BUNZ_DEVELOPMENT_MODE', true); // always true
 

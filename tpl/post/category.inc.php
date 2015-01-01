@@ -1,8 +1,13 @@
 <?php
+$pageTitle = 'Submit New '.$this->data['category']['title'];
+$bread = [
+    $this->data['category']['title'] => BUNZ_HTTP_DIR . 'report/category/'.$this->data['category']['id'],
+    $pageTitle => BUNZ_HTTP_DIR . $_GET['url']
+];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
         <article class="box">
-        <h1>Submit New <?= $this->data['category']['title'] ?></h1>
+        <h1><?= $pageTitle ?></h1>
         <form action="<?= BUNZ_HTTP_DIR,'post/category/',$this->data['category']['id'] ?>" method="post" class='pure-form pure-form-aligned'>
             <fieldset class='is-center'>
                 <p class='pure-control-group'>

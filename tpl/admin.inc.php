@@ -1,6 +1,8 @@
 <?php
-$pageTitle = 'bunzilla settings';
-
+$pageTitle = 'cpanel';
+$bread = [
+    $pageTitle => BUNZ_HTTP_DIR.$_GET['url']
+];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>

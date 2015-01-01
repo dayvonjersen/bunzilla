@@ -1,6 +1,10 @@
 <?php
 $stat = $this->data['status'];
 $pageTitle = 'Edit &quot;'.$stat['title'].'&quot;';
+$bread = [
+    'cpanel' => BUNZ_HTTP_DIR.'admin',
+    $pageTitle => BUNZ_HTTP_DIR.$_GET['url']
+];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
