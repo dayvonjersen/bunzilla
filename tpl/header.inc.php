@@ -51,9 +51,13 @@ function statusSelectBox($selected = false)
         <meta name='description' content='<?= BUNZ_PROJECT_MISSION_STATEMENT ?>'>
 
         <title><?= isset($pageTitle) ? "$pageTitle :: " : '',BUNZ_PROJECT_TITLE, ' :: tracked by Bunzilla' ?></title>
+<!--
+fucking cross origin bullshit 
         <link rel='stylesheet' href='//yui.yahooapis.com/pure/0.5.0/pure-min.css'>
         <link rel='stylesheet' href='//yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css'>
-
+-->
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>pure-min.css'>
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>grids-responsive-min.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>style.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
 <?php
