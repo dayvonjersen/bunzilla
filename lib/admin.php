@@ -14,7 +14,7 @@ class admin extends Controller
                  FROM categories AS c
                     LEFT JOIN reports AS r
                     ON c.id = r.category
-                 GROUP BY r.id
+                 GROUP BY c.id
                  ORDER BY c.title ASC'
                 )->fetchAll(PDO::FETCH_ASSOC) : null,
             'statuses' => selectCount('statuses') ? db()->query(
@@ -22,7 +22,7 @@ class admin extends Controller
                  FROM statuses AS s
                     LEFT JOIN reports AS r
                     ON s.id = r.status
-                 GROUP BY r.id
+                 GROUP BY s.id
                  ORDER BY s.title ASC'
                 )->fetchAll(PDO::FETCH_ASSOC) : null
         ];
