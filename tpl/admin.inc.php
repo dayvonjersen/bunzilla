@@ -57,17 +57,14 @@ if(empty($this->data['categories']))
                         <label>caption</label>
                         <input maxlength='255' placeholder='e.g. report problems here...' name='caption' type="text">
                     </p>
-                    <p class='pure-controls'>
-                        <label>requires description<input type="checkbox" name='description'></label>
-                    </p>
-                    <p class='pure-controls'>
-                        <label>requires reproduce<input type="checkbox" name='reproduce'></label>
-                    </p>
-                    <p class='pure-controls'>
-                        <label>requires expected<input type="checkbox" name='expected'></label>
-                    </p>
-                    <p class='pure-controls'>
-                        <label>requires actual<input type="checkbox" name='actual'></label>
+                    <p class='pure-control-group'>
+                        <label>required fields</label>
+                        <fieldset class='pure-menu pure-menu-open is-left' style="width: 75%">
+                            <ul><li><label><input type="checkbox" name='description'>description</label></li><li>
+                            <label><input type="checkbox" name='reproduce'>reproduce</label></li><li>
+                            <label><input type="checkbox" name='expected'>expected</label></li><li>
+                            <label><input type="checkbox" name='actual'>actual</label></li></ul>
+                        </fieldset>
                     </p>
                     <p class='pure-control-group'>
                         <label>pick a color</label>
