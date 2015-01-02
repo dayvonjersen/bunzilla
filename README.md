@@ -1,21 +1,39 @@
 bunzilla
-======
-#####Dead Simple Bug Tracking.
-##disclaimer
-**right now this is in a very prototypical phase and is not very useful or pretty**
-
+-
+Dead Simple Bug Tracking.
+disclaimer
+-
+**right now this is in a very prototypical phase**
 I'm working on it
-
 literally
 
-##about
+about
+-
 a very simple CMS to make bug tracking for a small team fun and easy
 
-every option I've come across has been cumbersome and designed for very large teams
+the idea here is a bright, colorful, upbeat can-do approach to organizing what needs to be done with regard to your project.
 
-every major project's bug tracker resembles more of a forum where unpopular opinions and dissent run rampant amongst power-mad moderators
+make custom categories which apply to your needs, whether that's one project or many, without complicating it all
 
-and they're all hideously designed
+make custom status messages to let everyone know what's going on
+
+>**Example Status Messages for Bugs**.:
+
+>- Can't Fix
+- Won't fix
+- Don't know how to fix
+
+>The sky's the limit!
+
+there's no reason to make drama llamas out of "closed" issues or "necromancy" (unless it's literal)
+
+closed issues can still be commented upon---intentionally; by design. if an issue resurfaces, reopening it and changing the status can be done with ease
+
+in other words, 
+-
+Bunzilla is merely a way to organize and keep track of notes and noteworthy dialogue about your project(s) rather than having a big, complicated, overly-professional (but ugly) over-glorified forum.
+
+For discussions, face-to-face, telephones, e-mail, IRC, bbs, forums and social media are some more preferable communication mediums (in that order)
 
 ##it's alive
 current working version: [https://var.abl.cl/bunzilla](https://var.abl.cl/bunzilla)
@@ -24,19 +42,18 @@ current working version: [https://var.abl.cl/bunzilla](https://var.abl.cl/bunzil
 - php5.4
 - apache2.whatever
 - mysql but it uses PDO so you could use anything really*
-
 ######* might have to adjust the queries tho
 
-There's no authorization mechanism except for a very crude one in `Bunzilla.php` : `Controller::requireLogin()` 
+Modify the .ini files in res/
 
-I would recommend if you want to actually use this at this stage to setup HTTP Authorization with `.htaccess`
+I added some hacky HTTP Authentication:
 
-##usage
-1. create the categories and statuses which fit your project's development needs 
-2. ???
-3. Profit.
+Run 
+`you@your-server:/var/www/bunzilla$ res/generatehtpasswd.php`
 
+It's manual! And you need console access on the server! Hoorj
 ##steals from
+- [purecss.io](http://purecss.io) -- requires a lot of hacky bullshit on top of it but >muh responsive
 - [jscolor](http://jscolor.com) -- perfect JS color picker widget
 - [highlightjs](http://highlightjs.org) -- perfect syntax highlighting thinger
 - [Adobe](http://adobe.com) -- Source Code Pro font
@@ -44,6 +61,6 @@ I would recommend if you want to actually use this at this stage to setup HTTP A
 
 
 ##license
-let's say WTFPL for now
+still WTFPL
 > Written with [StackEdit](https://stackedit.io/).
 
