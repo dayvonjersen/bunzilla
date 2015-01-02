@@ -48,7 +48,7 @@ current working version: [https://var.abl.cl/bunzilla](https://var.abl.cl/bunzil
 ######* might have to adjust the queries tho
 
 ##installation
-- `git@github.com:generaltso/bunzilla.git`
+- `git clone git@github.com:generaltso/bunzilla.git`
 - Run `bunzilla-0.1.sql`
 - Modify the .ini files in `res/`
 
