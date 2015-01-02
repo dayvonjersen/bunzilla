@@ -97,7 +97,7 @@ if(isset($bread))
 
 foreach($crumbs as $text => $href)
 {
-    echo "\t\t\t\t",'<li',($href === BUNZ_HTTP_DIR . $_GET['url']) || count($crumbs) === 1 ? ' class="pure-menu-selected"' : '','><a href="',$href,'">',$text,'</a></li>',"\n";
+    echo "\t\t\t\t",'<li',($href === BUNZ_HTTP_DIR . $_GET['url']) || count($crumbs) === 1 ? ' class="pure-menu-selected"' : '','><a href="',$href,'" title="',$text,'">',$text,'</a></li>',"\n";
 }
 ?>
             </ul>

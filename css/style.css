@@ -133,7 +133,7 @@ footer.footer  {
 }
 
 table, form {
-    background: rgba(255,255,255,0.9);
+    background: #fff;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
@@ -194,11 +194,10 @@ a.pure-menu-heading:hover {
 }
 
 .box {
-    background: rgba(255,255,255,0.95);
+    background: #fff;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
     margin: 0;
     padding: 0.25em;
-    color: #000;
 }
 
 a.pure-button, a.pure-button:hover, 
@@ -299,6 +298,11 @@ input.pure-button:active
     text-shadow:   -5px -4px 0px rgba(0,0,0,0.15);
 }
 
+.card {
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
 .card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
     margin: 0;
     box-shadow: none;
@@ -307,7 +311,6 @@ input.pure-button:active
 .card header {
     float: left;
 
-     background-color: rgba(255,255,255,0.7);
     width: 100%;
 }
 
@@ -356,6 +359,7 @@ input.pure-button:active
 }
 
 .pure-menu.breadcrumb li a {
+    max-width: 20vw; white-space: nowrap;  text-overflow: ellipsis;
 	color: white;
 	text-decoration: none; 
 	padding: 10px 0 10px 55px;
@@ -414,6 +418,7 @@ input.pure-button:active
 }
 
 .breadcrumb li:last-child a {
+    overflow: hidden;
 	background: transparent !important;
 	color: #4eb3de;
 	pointer-events: none;
@@ -427,9 +432,10 @@ input.pure-button:active
 
 footer.footer section {
     padding: 1em;
-    font-family: 'scp', monospace !important;
     text-align: left;
+    font-family: 'scp', monospace !important;
 }
+    
 
 footer.footer a {
     color: #fff !important;

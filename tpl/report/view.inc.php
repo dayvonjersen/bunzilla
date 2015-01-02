@@ -11,13 +11,17 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 <script>hljs.initHighlightingOnLoad();</script>
         <article class='card'>
             <header class='msginfo box'>
-                <h1 title='subject'><?= $this->data['subject'] ?></h1>
-                <p title='author'><?= $this->data['email'], $this->data['epenis'] ? '<span class="info">## Developer</span>' : '' ?></p>
-                <p title='date'><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['time']) ?></p>
-                <p title='status'>
-                    <?= statusButton($this->data['status'])?>
-                    <span class="icon-<?= $this->data['closed'] ? 'lock inactive' : 'unlock info' ?> pure-button"><?=$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
-                </p>
+                <div class='pure-g'>
+                    <p title='author' class='pure-u-1-2'><span><?= $this->data['email'], $this->data['epenis'] ? '<span class="info">## Developer</span>' : '' ?></span></p>
+                    <p title='date' class='pure-u-1-2'><span><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['time']) ?></span></p>
+                </div>
+                <div  class='pure-g'>
+                    <h1 title='subject' class='pure-u-1 pure-u-md-3-4'><span><?= $this->data['subject'] ?></span></h1>
+                    <p title="status" class='pure-u-1 pure-u-md-1-4'>
+                        <span><?= statusButton($this->data['status'])?></span>
+                        <span><span class="icon-<?= $this->data['closed'] ? 'lock inactive' : 'unlock info' ?> pure-button"><?=$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
+                    </p>
+                </div>
             
             </header>
 <?php
@@ -33,19 +37,25 @@ foreach(['description','reproduce','expected','actual'] as $field)
 
 if(!empty($this->data['comments']))
 {
+?>
+            <article class='card' title='comments and replies &darr;'>
+<?php
     $i = 0;
     foreach($this->data['comments'] as $comment)
     {
 ?>
             <section class='card' id="reply-<?=$comment['id']?>" title="#<?=$i++?>">
                 <header class='msginfo box'>
-                    <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?></p>
+                    <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?> <a href="#reply-<?= $comment['id'] ?>">#<?=$i?></a></p>
                 </header>
                 <blockquote class='box'><?= $comment['message'] ?></blockquote>
             </section>
                 
 <?php
     }
+?>
+            </article>
+<?php
 }
 
 if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
@@ -62,14 +72,14 @@ if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
                             <label>message</label>
                             <textarea rows='3' name='message' placeholder='your insight on this issue'><?= $this->data['params']['message'] ?></textarea>
                         </p>
-                        <button type='submit' class='pure-button'>post!</button>
+                        <button type='submit' class='pure-button icon-plus'>post!</button>
                     </fieldset>
                 </form>
             </section>
 
 <?php
 }
-if($this->auth)
+if($this->auth())
 {
 ?>
 <script>
@@ -77,7 +87,7 @@ function confirmDelete(evt){if(!window.confirm('you know what you doing'+"\n\n"+
 </script>
             <section class='box' title='actions'>
                 <form action="<?= BUNZ_HTTP_DIR,'report/action/',$this->data['id'] ?>" method="post" class='pure-form'>
-                    <fieldset>
+                    <fieldset class='is-center'>
 
                         <?= statusSelectBox($this->data['status']) ?> <button class='pure-button success' type='submit' name='updateStatus' value="1">&rarr;Update Status</button>
                   
