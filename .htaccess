@@ -1,3 +1,14 @@
+#
+# 1. use res/generatepasswd.php
+# 1.5 uncomment the following lines
+# 2. ???
+# 3. HTTP authentication!
+
+#AuthType Basic
+#AuthName "Bunzilla"
+#AuthUserFile /var/www/bunzilla/res/.htpasswd
+#Require valid-user
+
 Options -MultiViews
 
 RewriteEngine On

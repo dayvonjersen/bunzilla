@@ -104,9 +104,12 @@ class Controller
     protected $tpl;
     protected $flash = [];
 
+    private $auth = false;
+
     public function __construct()
     {
         $this->tpl = get_called_class();
+        $this->auth = $this->auth();
     }
 
     public function __destruct()
@@ -125,9 +128,73 @@ class Controller
     public function requireLogin($ulevel = 0)
     {
         //todo: login or something
-        if(strpos($_SERVER['REMOTE_ADDR'],'192.168.1.') !== 0)
-            $this->abort('You must be logged in to view that page.');
+        //if(strpos($_SERVER['REMOTE_ADDR'],'192.168.1.') !== 0)
+        if(!$this->auth())
+        {
+            $this->flash[] = 'You must be logged in to view that page.';
+            $this->login();
+        }
     }
+    /**
+     * I don't even know anymore */
+    public function auth()
+    {
+        if($this->auth)
+            return true;
+
+        if(isset($_SESSION['login']))
+            $login = $_SESSION['login'];
+        elseif(isset($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']))
+            $login = $_SERVER['PHP_AUTH_USER'] . ':' . crypt($_SERVER['PHP_AUTH_PW'],base64_encode($_SERVER['PHP_AUTH_PW']));
+
+        if(isset($login) && self::checkPassword($login))
+            $this->auth = true;
+
+        return $this->auth;
+    }
+
+    protected function login()
+    {
+        if(!isset($_SESSION['login_attempts']))
+            $_SESSION['login_attempts'] = 0;
+
+        if($_SESSION['login_attempts'] >= 4)
+            $this->abort('Please wait a while before trying to log in again.');
+
+        if(isset($_SESSION['login']))
+            $login = $_SESSION['login'];
+        elseif(isset($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']))
+            $login = $_SERVER['PHP_AUTH_USER'] . ':' . crypt($_SERVER['PHP_AUTH_PW'],base64_encode($_SERVER['PHP_AUTH_PW']));
+
+        if(isset($login) && self::checkPassword($login))
+            $this->auth = true;
+        else {
+            header('HTTP/1.1 401 Unauthorized');
+            header('WWW-Authenticate: Basic realm="bunzilla login ~"');
+
+//'"\n\n:: ".BUNZ_SIGNATURE."::\n\n LoGiN P0rT@L~~ 4 \n\n::".BUNZ_PROJECT_TITLE."::\n\n!!");
+            $_SESSION['login_attempts']++;
+            $this->abort('Authorization failed.');
+        }
+    }
+
+    private static function checkPassword($login)
+    {        
+        if(!file_exists(BUNZ_RES_DIR.'.htpasswd'))
+            $this->abort('Please use res/generatepasswd.php');
+
+        foreach(file(BUNZ_RES_DIR.'.htpasswd') as $ln)
+        {
+            $ln = trim($ln);
+            if(strlen($ln) && preg_match('/^'.preg_quote($login,'/').'$/', $ln))
+            {
+                $_SESSION['login'] = $login;
+                return true;                
+            }
+        }
+        return false;
+    }
+
 }
 
 function _filterFlag($f)

@@ -12,7 +12,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
         <article class='card'>
             <header class='msginfo box'>
                 <h1 title='subject'><?= $this->data['subject'] ?></h1>
-                <p title='author'><?= $this->data['email'] ?></p>
+                <p title='author'><?= $this->data['email'], $this->data['epenis'] ? '<span class="info">## Developer</span>' : '' ?></p>
                 <p title='date'><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['time']) ?></p>
                 <p title='status'>
                     <?= statusButton($this->data['status'])?>
@@ -32,6 +32,10 @@ foreach(['description','reproduce','expected','actual'] as $field)
 }
 ?>
             <section>insert comments here</section>
+<?php
+if($this->auth)
+{
+?>
             <section class='box' title='actions'>
                 <form action="<?= BUNZ_HTTP_DIR,'report/action/',$this->data['id'] ?>" method="post" class='pure-form'>
                     <fieldset>
@@ -43,6 +47,9 @@ foreach(['description','reproduce','expected','actual'] as $field)
                     </fieldset>
                 </form>
             </section>
+<?php
+}
+?>
         </article>
 <?php
 require BUNZ_TPL_DIR . 'footer.inc.php';

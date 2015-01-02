@@ -12,7 +12,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
             <fieldset class='is-center'>
                 <p class='pure-control-group'>
                     <label>email</label>
-                    <input maxlength='255' name='email' type="text" value="<?= $this->data['params']['email'] ?>">
+                    <input maxlength='255' name='email' type="text" value="<?= $this->auth ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled' : $this->data['params']['email'] ?>">
                 </p>
                 <p class='pure-control-group'>
                     <label>subject</label>

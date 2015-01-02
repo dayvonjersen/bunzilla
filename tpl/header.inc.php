@@ -51,17 +51,17 @@ function statusSelectBox($selected = false)
         <meta name='description' content='<?= BUNZ_PROJECT_MISSION_STATEMENT ?>'>
 
         <title><?= isset($pageTitle) ? "$pageTitle :: " : '',BUNZ_PROJECT_TITLE, ' :: tracked by Bunzilla' ?></title>
-<!--
-fucking cross origin bullshit 
-        <link rel='stylesheet' href='//yui.yahooapis.com/pure/0.5.0/pure-min.css'>
-        <link rel='stylesheet' href='//yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css'>
--->
+
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>pure-min.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>grids-responsive-min.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>style.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
 <?php
-/*
+/**
+ * highlight.js has a ton of awesome styles
+ * this is a shitty way to directory list them 
+ * and use View > Page Style in Firefox to pick 
+
 $hljsdir = str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR).'highlight.js';
 $ls = dir($hljsdir);
 while(($f = $ls->read()) !== false)
@@ -94,7 +94,7 @@ if(isset($bread))
 
 foreach($crumbs as $text => $href)
 {
-    echo "\t\t\t\t",'<li',$href === BUNZ_HTTP_DIR . $_GET['url'] ? ' class="pure-menu-selected"' : '','><a href="',$href,'">',$text,'</a></li>',"\n";
+    echo "\t\t\t\t",'<li',($href === BUNZ_HTTP_DIR . $_GET['url']) || count($crumbs) === 1 ? ' class="pure-menu-selected"' : '','><a href="',$href,'">',$text,'</a></li>',"\n";
 }
 ?>
             </ul>

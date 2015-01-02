@@ -42,6 +42,9 @@ class post extends Controller
 
         $this->data['params'] = filter_input_array(INPUT_POST,$this->data['params']);
 
+        if($this->auth())
+            $this->data['params']['email'] = $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
+
         if(!empty($_POST))
             $this->createReport();
     }
@@ -136,7 +139,7 @@ class post extends Controller
         $this->data['params']['category'] = $this->data['category']['id'];
 
         $stmt = db()->prepare(
-            'INSERT INTO reports (id,time,'.implode(',',array_keys($this->data['params'])).') VALUES (\'\',UNIX_TIMESTAMP(),:'.implode(',:',array_keys($this->data['params'])).')'
+            'INSERT INTO reports (id,time,epenis,'.implode(',',array_keys($this->data['params'])).') VALUES (\'\',UNIX_TIMESTAMP(),'.(int)$this->auth().',:'.implode(',:',array_keys($this->data['params'])).')'
         );
         $stmt->execute($this->data['params']);
         header('Location: '.BUNZ_HTTP_DIR.'report/view/'.db()->lastInsertId());
