@@ -1,6 +1,4 @@
 <?php
-print_r($_SESSION);
-print_r($_SERVER);
 $pageTitle = 'Pick a Category';
 $bread  = [
     $pageTitle => BUNZ_HTTP_DIR . $_GET['url']

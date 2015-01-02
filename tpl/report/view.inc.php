@@ -36,14 +36,17 @@ foreach(['description','reproduce','expected','actual'] as $field)
 if($this->auth)
 {
 ?>
+<script>
+function confirmDelete(evt){if(!window.confirm('you know what you doing'+"\n\n"+'(this action will permanently delete all associated comments)')) evt.preventDefault();}
+</script>
             <section class='box' title='actions'>
                 <form action="<?= BUNZ_HTTP_DIR,'report/action/',$this->data['id'] ?>" method="post" class='pure-form'>
                     <fieldset>
 
-                        <?= statusSelectBox($this->data['status']) ?> <button class='pure-button success' type='submit' name='updateStatus'>&rarr;Update Status</button>
+                        <?= statusSelectBox($this->data['status']) ?> <button class='pure-button success' type='submit' name='updateStatus' value="1">&rarr;Update Status</button>
                   
-                        <button class='pure-button icon-<?= $this->data['closed'] ? 'lock' : 'unlock' ?>' type='submit' name='toggleClosed'><?=$this->data['closed'] ? 'Open' : 'Close' ?> Report</button>
-                        <button class='pure-button danger icon-cancel' type='submit' name='delete'>Delete Report</button>
+                        <button class='pure-button icon-<?= $this->data['closed'] ? 'lock' : 'unlock' ?>' type='submit' name='toggleClosed' value="1"><?=$this->data['closed'] ? 'Open' : 'Close' ?> Report</button>
+                        <button class='pure-button danger icon-cancel' type='submit' onclick="confirmDelete(event)" name='delete' value="1">Delete Report</button>
                     </fieldset>
                 </form>
             </section>
