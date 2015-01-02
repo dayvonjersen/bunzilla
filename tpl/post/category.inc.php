@@ -25,6 +25,9 @@ $fields = [
     'expected'    => 'The result, output, or other behavior you expect',
     'actual'      => 'The actual result, output, or other behavior that occurs'
 ];
+
+$rows = round(16/(array_sum(array_intersect_key($this->data['category'],$fields))));
+
 foreach($fields as $field => $placeholder)
 {
     if($this->data['category'][$field])
@@ -32,7 +35,7 @@ foreach($fields as $field => $placeholder)
 ?>
                 <p class='pure-control-group' title="<?=$placeholder?>">
                     <label><?= $field ?></label>
-                    <textarea rows='3' name='<?=$field?>' placeholder='<?=$placeholder?>'><?= $this->data['params'][$field] ?></textarea>
+                    <textarea rows='<?=$rows?>' name='<?=$field?>' placeholder='<?=$placeholder?>'><?= $this->data['params'][$field] ?></textarea>
                 </p>
 <?php
     }

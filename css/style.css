@@ -36,14 +36,11 @@ p, pre {
 }
 body {
     font-family: 'scp', monospace;
-    line-height: 1.7em;
     color: #7f8c8d;
     font-size: 13px;
     height: 100%;
     margin: 1em 1em 200px 1em;
-
-     background-color: rgba(255,255,255,0.7);
-
+    background-color: rgba(255,255,255,0.7);
 }
 
 h1,
@@ -171,6 +168,7 @@ textarea {
 
 .msginfo {
     color: #4eb3de;
+    font-size: x-small;
 }
 
 a:not([style]):not([class]) {
@@ -300,7 +298,6 @@ input.pure-button:active
 
 .card {
     padding: 1em;
-    margin-bottom: 1em;
 }
 
 .card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
@@ -346,7 +343,7 @@ input.pure-button:active
 }
 
 .pure-menu-selected:after {
-    content: 'you are here';
+    content: 'you are here \2934';
     width: 100%;
     display: block;
     text-align: right;
@@ -358,12 +355,15 @@ input.pure-button:active
 	float: left; 
 }
 
+.breadcrumb li a span {
+    display: inline-block; max-width: 20vw; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+}
+
 .pure-menu.breadcrumb li a {
-    max-width: 20vw; white-space: nowrap;  text-overflow: ellipsis;
 	color: white;
-	text-decoration: none; 
+	text-decoration: underline;
 	padding: 10px 0 10px 55px;
-	background: #888;
+	background: #333;
 	position: relative; 
 	display: block;
 	float: left;
@@ -376,9 +376,9 @@ input.pure-button:active
 	display: block; 
     width: 0; 
 	height: 0;
-	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-top: 50px solid transparent; 
 	border-bottom: 50px solid transparent;
-	border-left: 30px solid #888;
+	border-left: 30px solid #333;
 	position: absolute;
 	top: 50%;
 	margin-top: -50px; 
@@ -421,7 +421,7 @@ input.pure-button:active
     overflow: hidden;
 	background: transparent !important;
 	color: #4eb3de;
-	pointer-events: none;
+
 	cursor: default;
     font-style: italic;
     text-decoration: none;
@@ -433,7 +433,19 @@ input.pure-button:active
 footer.footer section {
     padding: 1em;
     text-align: left;
+}
+.pure-g{
+    font-size:0;
+    *font-size:1em;
+    letter-spacing: normal;
+    *word-spacing: -0.43em;    
     font-family: 'scp', monospace !important;
+}
+.pure-g > [class*='pure-u']{font-size:1rem;
+    font-family: 'scp', monospace !important;}
+
+textarea,input,select {
+    font-family: 'scp', monospace !important;}
 }
     
 
@@ -452,6 +464,10 @@ footer.footer pre {
     color: #888;
     font-size: xx-large;
      text-shadow: 2px 1px 0px rgba(0,0,0,0.2), 5px 4px 0px rgba(0,0,0,0.15);
+}
+
+blockquote {
+    color: #111;
 }
 @media (min-width: 48em) {
 

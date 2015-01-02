@@ -16,7 +16,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                     <p title='date' class='pure-u-1-2'><span><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['time']) ?></span></p>
                 </div>
                 <div  class='pure-g'>
-                    <h1 title='subject' class='pure-u-1 pure-u-md-3-4'><span><?= $this->data['subject'] ?></span></h1>
+                    <div title='subject' class='pure-u-1 pure-u-md-3-4'><h1><?= $this->data['subject'] ?></h1></div>
                     <p title="status" class='pure-u-1 pure-u-md-1-4'>
                         <span><?= statusButton($this->data['status'])?></span>
                         <span><span class="icon-<?= $this->data['closed'] ? 'lock inactive' : 'unlock info' ?> pure-button"><?=$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
