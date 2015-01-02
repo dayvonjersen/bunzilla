@@ -1,4 +1,12 @@
 <?php
+/**
+ * Another poorly named controller
+ * 
+ * it's actually the default route
+ *
+ * words are hard
+ */
+
 class report extends Controller
 {
     protected $id = null;
@@ -16,6 +24,7 @@ class report extends Controller
         ];
     }
 
+    // should implement this kind of abstraction in more places
     protected function checkId($id)
     {
         if($this->id!==null)
@@ -26,21 +35,26 @@ class report extends Controller
         $this->id = (int)$id;
     }
 
+    // individual reports
     public function view($id)
     {
         $this->checkId($id);
 
         $this->tpl .= '/view';
 
-        $this->data = current(db()->query(
-            'SELECT * FROM reports WHERE id = '.$this->id
-        )->fetchAll(PDO::FETCH_ASSOC));
-        $this->data['comments'] = selectCount('comments','report = '.$this->id) ? db()->query(
-            'SELECT * FROM comments WHERE report = '.$this->id
-        )->fetchAll(PDO::FETCH_ASSOC) : null;
+        $this->data = 
+            current(
+                db()->query(
+                    'SELECT * FROM reports WHERE id = '.$this->id
+                )->fetchAll(PDO::FETCH_ASSOC)
+        );
+        $this->data['comments'] = selectCount('comments','report = '.$this->id)             ? db()->query('SELECT * FROM comments WHERE report = '.$this->id
+                )->fetchAll(PDO::FETCH_ASSOC) 
+            : null;
         exit;
     }
 
+    // reports by category
     public function category($id)
     {
         if(!selectCount('categories','id = '.(int)$id))
@@ -62,6 +76,7 @@ class report extends Controller
         ];
     }
 
+    // moderation actions
     public function action($id)
     {
         $this->requireLogin();
@@ -84,7 +99,11 @@ class report extends Controller
     {
         if(selectCount('statuses','id = '.(int)$status))
         {
-            db()->query('UPDATE reports SET status = '.(int)$status.' WHERE id = '.$this->id);
+            db()->query(
+                'UPDATE reports 
+                 SET status = '.(int)$status
+              .' WHERE id = '.$this->id
+            );
             $this->flash[] = 'Status changed.';
         } else {
             $this->flash[] = 'No such status!';
@@ -94,18 +113,24 @@ class report extends Controller
 
     protected function toggleClosed() 
     {
-        db()->query('UPDATE reports SET closed = NOT(closed) WHERE id = '.$this->id);
+        db()->query(
+            'UPDATE reports
+             SET closed = NOT(closed)
+             WHERE id = '.$this->id
+        );
         $this->flash[] = 'k.';
         $this->view($this->id);
     }
 
     protected function delete()
     {
-        $catid = db()->query('SELECT category FROM reports WHERE id = '.$this->id)->fetchColumn(0);
+        $catid = db()->query(
+            'SELECT category FROM reports WHERE id = '.$this->id
+        )->fetchColumn(0);
 
         db()->query('DELETE FROM comments WHERE report = '.$this->id);
         db()->query('DELETE FROM reports WHERE id = '.$this->id);
         $this->flash[] = 'Report deleted.';
         $this->category($catid);
     }
-}
+}// this file could use some work

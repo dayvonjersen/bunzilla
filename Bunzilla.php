@@ -1,5 +1,10 @@
 <?php
 /**
+ *  Herbert Hoover took office just nine months before the Stock Market Crash
+ *  of 1929 and was known for his pull-yourself-up-by-your-bootstraps mentality
+ */
+
+/**
  * Preliminary stuff */
 define('BUNZ_START_TIME', microtime(1));
 define('BUNZ_SIGNATURE', 'Bunzilla bug tracker');
@@ -39,7 +44,8 @@ if(file_exists(BUNZ_RES_DIR.'settings.ini'))
     filter_var_array($cfg['bunzilla'], [
         'allow_anonymous' => FILTER_VALIDATE_BOOLEAN,
         'require_captcha' => FILTER_VALIDATE_BOOLEAN,
-        'do_the_cron'     => FILTER_VALIDATE_BOOLEAN
+        'do_the_cron'     => FILTER_VALIDATE_BOOLEAN,
+        'date_format'     => FILTER_SANITIZE_STRING
     ]);
     filter_var_array($cfg['project'], [
         'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -52,6 +58,10 @@ if(file_exists(BUNZ_RES_DIR.'settings.ini'))
 } else
     throw new RuntimeException('pls fix res/settings.ini kthxbai');
 
+/**
+ * this only takes the URL forwarded by apache
+ * and calls the appropriate method 
+ * from the appropriate controller */
 class Bunzilla
 {
     /**
@@ -98,13 +108,16 @@ class Bunzilla
     }
 }
 
+/**
+ * Intended to be extended upon
+ * Maybe I should use "abstract" or "interface" or something */
 class Controller 
 {
     protected $data;
     protected $tpl;
     protected $flash = [];
 
-    private $auth = false;
+    private $auth = null;
 
     public function __construct()
     {
@@ -140,28 +153,29 @@ class Controller
 
     public function requireLogin($ulevel = 0)
     {
-        //todo: login or something
-        //if(strpos($_SERVER['REMOTE_ADDR'],'192.168.1.') !== 0)
         if(!$this->auth())
         {
             $this->flash[] = 'You must be logged in to view that page.';
             $this->login();
         }
     }
+
     /**
-     * I don't even know anymore */
+     * begin Terrible HTTP Authentication */
     public function auth()
     {
-        if($this->auth)
-            return true;
+        if(isset($this->auth))
+            return $this->auth;
 
         if(isset($_SESSION['login']))
             $login = $_SESSION['login'];
         elseif(isset($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']))
-            $login = $_SERVER['PHP_AUTH_USER'] . ':' . crypt($_SERVER['PHP_AUTH_PW'],base64_encode($_SERVER['PHP_AUTH_PW']));
+            $login = $_SERVER['PHP_AUTH_USER'] . ':' . 
+                crypt($_SERVER['PHP_AUTH_PW'],
+                      base64_encode($_SERVER['PHP_AUTH_PW'])
+            );
 
-        if(isset($login) && self::checkPassword($login))
-            $this->auth = true;
+        $this->auth = (bool) (isset($login) && self::checkPassword($login));        
 
         return $this->auth;
     }
@@ -174,18 +188,12 @@ class Controller
         if($_SESSION['login_attempts'] >= 4)
             $this->abort('Please wait a while before trying to log in again.');
 
-        if(isset($_SESSION['login']))
-            $login = $_SESSION['login'];
-        elseif(isset($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']))
-            $login = $_SERVER['PHP_AUTH_USER'] . ':' . crypt($_SERVER['PHP_AUTH_PW'],base64_encode($_SERVER['PHP_AUTH_PW']));
-
-        if(isset($login) && self::checkPassword($login))
-            $this->auth = true;
-        else {
+        if(!$this->auth())
+        {
             header('HTTP/1.1 401 Unauthorized');
-            header('WWW-Authenticate: Basic realm="bunzilla login ~"');
-
-//'"\n\n:: ".BUNZ_SIGNATURE."::\n\n LoGiN P0rT@L~~ 4 \n\n::".BUNZ_PROJECT_TITLE."::\n\n!!");
+            header('WWW-Authenticate: Basic realm="'.BUNZ_SIGNATURE
+                .' :: LoGiN P0rT@L~~ ::'.BUNZ_PROJECT_TITLE.'"'
+            );
             $_SESSION['login_attempts']++;
             $this->abort('Authorization failed.');
         }
@@ -207,13 +215,21 @@ class Controller
         }
         return false;
     }
-
+    /**
+     * end Terrible HTTP Authentication */
 }
+
+/**
+ * Filter is neat but a little verbose at times
+ * These mitigate that
+ * ...hopefully */
 
 function _filterFlag($f)
 {
     return constant(
-        'FILTER_'.($f==='null_on_failure'||$f==='require_array'?'':'FLAG_').strtoupper($f)
+        'FILTER_'
+        .($f==='null_on_failure'||$f==='require_array'?'':'FLAG_')
+        .strtoupper($f)
     );
 }
 
@@ -245,9 +261,16 @@ function filterOptions($validate, $id, $flag = null, $opts = null)
     return $const; // no options exist without flags
 }
 
+/**
+ * this is probably a major vulnerability
+ * and probably belongs in lib/db.inc.php */
 function selectCount($table,$where = 1,$field='*')
 {
-    $result = db()->query('SELECT COUNT('.$field.') FROM '.$table.' WHERE '.$where);
+    $result = db()->query(
+        'SELECT COUNT('.$field.') 
+         FROM '.$table.' 
+         WHERE '.$where
+    );
     if(!$result->rowCount())
         return 0;
     return (int) $result->fetchColumn();

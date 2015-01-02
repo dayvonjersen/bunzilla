@@ -1,5 +1,9 @@
 #!/usr/bin/php
 <?php
+/**
+ * hacky .htpasswd generator
+ * it works, I'll say that
+ */
 if(!defined('STDIN'))
     exit('plz run from terminal kthxbai');
 

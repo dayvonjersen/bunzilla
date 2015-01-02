@@ -1,4 +1,6 @@
 <?php
+/**
+ * Control Panel Controller */
 class admin extends Controller
 {
     public function __construct()
@@ -6,6 +8,9 @@ class admin extends Controller
         $this->requireLogin();
         parent::__construct();
     }
+
+    /**
+     * The cpanel itself */
     public function index()
     {
         $this->data = [
@@ -28,6 +33,8 @@ class admin extends Controller
         ];
     }
 
+    /**
+     * INSERT */
     public function add( )
     {
         $args = func_get_args();
@@ -36,19 +43,20 @@ class admin extends Controller
         {
             case 'category':
             case 'status':
-
                 break;
 
             default:
                 $this->abort('Unsupported action!');
         }
 
-                $mode .= 'Add';
+        $mode .= 'Add';
       
         call_user_func_array([$this,$mode],$args);
         $this->index();
     }
 
+    /**
+     * UPDATE */
     public function edit()
     {
         $args = func_get_args();
@@ -57,20 +65,19 @@ class admin extends Controller
         {
             case 'category':
             case 'status':
-
                 break;
 
             default:
                 $this->abort('Unsupported action!');
         }
-
-    
-                $mode .= 'Edit';
+        $mode .= 'Edit';
        
         call_user_func_array([$this,$mode],$args);
         $this->index();
     }
 
+    /**
+     * DELETE FROM */
     public function delete($mode,$id)
     {
         switch($mode)
@@ -95,11 +102,18 @@ class admin extends Controller
         $this->index();        
     }
 
-// so much for efficiency
-/*    public function __call( $method, $args )
-    {
-    }*/
+    // Controller::__construct() checks for method_exists()
+    // so much for efficiency
+    /**
+     * public function __call( $method, $args )
+     * {
+     * }
+     */
 
+    /**
+     * Don't Repeat Yourself!
+     * I mean you did already with add()/edit()/delete()
+     * asdf */
     private function _exec($sql,$params)
     {
         if($params === false || empty($params))
@@ -112,6 +126,8 @@ class admin extends Controller
         return $stmt->execute($params);
     }
 
+    /**
+     * OK but really factoring all this shit out is awesome */
     private function categoryAdd()
     {
         $params = filter_input_array(INPUT_POST, [
@@ -121,14 +137,19 @@ class admin extends Controller
             'reproduce' => filterOptions(1,'boolean'),
             'actual' => filterOptions(1,'boolean'),
             'expected' => filterOptions(1,'boolean'),
-            'color' => filterOptions(1,'regexp',null,['regexp'=>'/^[0-9a-f]{6}/i']),
+            'color' => filterOptions(1,'regexp',null,
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
             'icon' => filterOptions(0,'full_special_chars')
         ]);
         $sql = 
             'INSERT INTO categories
-                (id,title,caption,description,reproduce,expected,actual,color,icon)
+
+(id,title,caption,description,reproduce,expected,actual,color,icon)
+
             VALUES
-                (\'\',:title,:caption,:description,:reproduce,:actual,:expected,:color,:icon)';
+
+(\'\',:title,:caption,:description,:reproduce,:actual,:expected,:color,:icon)';
+
         if($this->_exec($sql,$params))
             $this->flash[] = 'Category added.';
     }
@@ -137,7 +158,8 @@ class admin extends Controller
     {
         $params = filter_input_array(INPUT_POST, [
             'title' => filterOptions(0,'full_special_chars'),
-            'color' => filterOptions(1,'regexp',null,['regexp'=>'/^[0-9a-f]{6}/i']),
+            'color' => filterOptions(1,'regexp',null,
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
             'icon' => filterOptions(0,'full_special_chars')
         ]);
         $sql = 
@@ -166,12 +188,13 @@ class admin extends Controller
 
         $params = filter_input_array(INPUT_POST, [
             'title' => filterOptions(0,'full_special_chars','null_on_failure'),
-            'caption' => filterOptions(0,'full_special_chars','null_on_failure'),
+            'caption'=>filterOptions(0,'full_special_chars','null_on_failure'),
             'description' => filterOptions(1,'boolean','null_on_failure'),
             'reproduce' => filterOptions(1,'boolean','null_on_failure'),
             'actual' => filterOptions(1,'boolean','null_on_failure'),
             'expected' => filterOptions(1,'boolean','null_on_failure'),
-            'color' => filterOptions(1,'regexp','null_on_failure',['regexp'=>'/^[0-9a-f]{6}/i']),
+            'color' => filterOptions(1,'regexp','null_on_failure',
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
             'icon' => filterOptions(0,'full_special_chars','null_on_failure')
         ]);
 
@@ -191,7 +214,8 @@ class admin extends Controller
             exit;
         }
 
-        $sql = 'UPDATE categories SET '.implode(',',$set).' WHERE id = '.(int)$id;
+        $sql = 'UPDATE categories SET '.implode(',',$set)
+            .' WHERE id = '.(int)$id;
 
         if($this->_exec($sql,$params))
             $this->flash[] = 'Category updated.';
@@ -214,7 +238,8 @@ class admin extends Controller
 
         $params = filter_input_array(INPUT_POST, [
             'title' => filterOptions(0,'full_special_chars','null_on_failure'),
-            'color' => filterOptions(1,'regexp','null_on_failure',['regexp'=>'/^[0-9a-f]{6}/i']),
+            'color' => filterOptions(1,'regexp','null_on_failure',
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
             'icon' => filterOptions(0,'full_special_chars','null_on_failure')
         ]);
 

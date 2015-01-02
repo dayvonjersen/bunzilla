@@ -44,9 +44,9 @@ if(!empty($this->data['comments']))
     foreach($this->data['comments'] as $comment)
     {
 ?>
-            <section class='card' id="reply-<?=$comment['id']?>" title="#<?=$i++?>">
+            <section class='card' id="reply-<?=$comment['id']?>" title="#<?=$i?>">
                 <header class='msginfo box'>
-                    <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?> <a href="#reply-<?= $comment['id'] ?>">#<?=$i?></a></p>
+                    <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <a href="#reply-<?= $comment['id'] ?>"><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?> #<?=$i++?></a></p>
                 </header>
                 <blockquote class='box'><?= $comment['message'] ?></blockquote>
             </section>
