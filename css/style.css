@@ -469,6 +469,33 @@ footer.footer pre {
 blockquote {
     color: #111;
 }
+/* i'm just way too bored */
+a.icon-link {
+     border-bottom: 1px solid;
+     color: #444444;
+     font-family: 'noto sans';
+     font-weight: bold;
+     text-decoration: none;
+     text-shadow: 1px 1px 0px #EEEEEE, 2px 2px 0px #707070;
+     transition: all 250ms ease-in 0s;
+}
+
+a.icon-link:hover {
+     border-bottom: 1px solid transparent;
+     color: #222222;
+     text-shadow: 0px 1px 0px #EEEEEE, 0px 2px 0px #707070;
+}
+
+a.icon-link:active {
+     color: #000000;
+     text-shadow: 0px -1px 0px #EEEEEE, 0px -2px 0px #707070;
+     top: 1px;
+}
+
+a.icon-link:before {
+     float: left;
+}
+
 @media (min-width: 48em) {
 
     body {

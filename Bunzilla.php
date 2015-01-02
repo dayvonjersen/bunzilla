@@ -210,6 +210,7 @@ class Controller
             if(strlen($ln) && preg_match('/^'.preg_quote($login,'/').'$/', $ln))
             {
                 $_SESSION['login'] = $login;
+                list($_SERVER['PHP_AUTH_USER'],) = explode(':',$login);
                 return true;                
             }
         }
