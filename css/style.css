@@ -39,7 +39,7 @@ body {
     color: #7f8c8d;
     font-size: 13px;
     height: 100%;
-    margin: 1em 1em 200px 1em;
+    margin: 1em 1em 190px 1em;
     background-color: rgba(255,255,255,0.7);
 }
 
@@ -356,7 +356,7 @@ input.pure-button:active
 }
 
 .breadcrumb li a span {
-    display: inline-block; max-width: 20vw; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+    display: inline-block; max-width: 15vw; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
 }
 
 .pure-menu.breadcrumb li a {
@@ -485,7 +485,7 @@ blockquote {
 @media (max-width: 800px) 
 {
     body {
-        margin-bottom: 400px;
+        margin-bottom: 250px;
     }
 
     .pure-form-aligned input[type='text'],

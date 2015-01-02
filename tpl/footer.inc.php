@@ -1,4 +1,5 @@
-        <footer class='footer l-box is-center pure-g'>
+        <footer class='footer l-box is-center'>
+            <div class='pure-g'>
             <section class='pure-u-1 pure-u-md-1-3'>
                 <pre>／(<small>◕</small>  x ◕=)＼</pre>
                 <h6><?= BUNZ_SIGNATURE ?> version <?= BUNZ_VERSION ?></h6>
@@ -24,6 +25,7 @@
                     <li class='icon-magic'><?= round(microtime(1) - BUNZ_START_TIME,4) ?>s</li>
                 </ul>
             </section>
+            </div>
         </footer>
     </body>
 </html>
