@@ -35,6 +35,10 @@ class report extends Controller
         $this->data = current(db()->query(
             'SELECT * FROM reports WHERE id = '.$this->id
         )->fetchAll(PDO::FETCH_ASSOC));
+        $this->data['comments'] = selectCount('comments','report = '.$this->id) ? db()->query(
+            'SELECT * FROM comments WHERE report = '.$this->id
+        )->fetchAll(PDO::FETCH_ASSOC) : null;
+        exit;
     }
 
     public function category($id)
@@ -71,6 +75,8 @@ class report extends Controller
 
         if(isset($_POST['delete']))
             $this->delete();
+
+        $this->abort('What are you doing!? No GET access baka!');
 
     }
 

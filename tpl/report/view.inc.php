@@ -30,9 +30,45 @@ foreach(['description','reproduce','expected','actual'] as $field)
 <?php
     }
 }
+
+if(!empty($this->data['comments']))
+{
+    $i = 0;
+    foreach($this->data['comments'] as $comment)
+    {
 ?>
-            <section>insert comments here</section>
+            <section class='card' id="reply-<?=$comment['id']?>" title="#<?=$i++?>">
+                <header class='msginfo box'>
+                    <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?></p>
+                </header>
+                <blockquote class='box'><?= $comment['message'] ?></blockquote>
+            </section>
+                
 <?php
+    }
+}
+
+if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
+{
+?>
+            <section class='box' title='post a comment'>
+                <form action="<?= BUNZ_HTTP_DIR,'post/comment/',$this->data['id'] ?>" method="post" class='pure-form pure-form-aligned'>
+                    <fieldset class='is-center'>
+                         <p class='pure-control-group'>
+                            <label>email</label>
+                            <input maxlength='255' name='email' type="text" value="<?= $this->auth() ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled' : $this->data['params']['email'] ?>">
+                        </p>
+                        <p class='pure-control-group' title="<?=$placeholder?>">
+                            <label>message</label>
+                            <textarea rows='3' name='message' placeholder='your insight on this issue'><?= $this->data['params']['message'] ?></textarea>
+                        </p>
+                        <button type='submit' class='pure-button'>post!</button>
+                    </fieldset>
+                </form>
+            </section>
+
+<?php
+}
 if($this->auth)
 {
 ?>

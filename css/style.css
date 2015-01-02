@@ -14,6 +14,11 @@ a {
     outline: 0px none !important;
 
 }
+
+p, pre {
+    margin: 0;
+}
+
 .pure-button { 
     background: #8b65f4;
 }
@@ -192,7 +197,7 @@ a.pure-menu-heading:hover {
     background: rgba(255,255,255,0.95);
     box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
     margin: 0;
-    padding: 1em;
+    padding: 0.25em;
     color: #000;
 }
 

@@ -6,7 +6,8 @@ class post extends Controller
     public function __construct()
     {
         !BUNZ_BUNZILLA_ALLOW_ANONYMOUS && $this->requireLogin();
-        if(selectCount('reports','ip = '.db()->quote(remoteAddr()).' AND time >= UNIX_TIMESTAMP() - 30'))
+        if(selectCount('reports','ip = '.db()->quote(remoteAddr()).' AND time >= UNIX_TIMESTAMP() - 30')
+            ||selectCount('comments','ip = '.db()->quote(remoteAddr()).' AND time >= UNIX_TIMESTAMP() - 30'))
             $this->abort('stop spamming D:');
         parent::__construct();
     }
@@ -15,6 +16,39 @@ class post extends Controller
     {
         $this->tpl .= '/index';
         $this->data = ['categories' => db()->query('SELECT id,title,caption,color,icon FROM categories ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC)];
+    }
+
+    public function comment($id)
+    {
+        $this->tpl = 'error';
+        if(!selectCount('reports','id = '.(int)$id))
+            $this->abort('No such report!');
+
+        $this->data['params'] = [
+            'email' => filterOptions(1,'email'),
+            'message' => filterOptions(0,'callback',null,[$this,'messageFilter'])
+        ];
+        $this->data['params'] = filter_input_array(INPUT_POST,$this->data['params']);
+
+
+        $this->data['params']['report'] = (int)$id;
+        $this->data['params']['ip'] = remoteAddr();
+
+        $this->data['params']['epenis'] = (int)$this->auth();
+        $sql = 'INSERT INTO comments (id,time,'.implode(',',array_keys($this->data['params'])).') VALUES (\'\',UNIX_TIMESTAMP(),:'.implode(',:',array_keys($this->data['params'])).')';
+
+        $location = BUNZ_HTTP_DIR.'report/view/'.(int)$id;
+        if(!empty($_POST))
+        {
+            if($this->createReport($sql))
+            {
+                $this->flash[] = 'Comment added.';
+                $location .= '#reply-'.db()->lastInsertId();
+            }
+        }
+        $_SESSION['flash'] = serialize($this->flash);
+        $_SESSION['params'] = serialize($this->data['params']);
+        header('Location: '.$location);        
     }
 
     public function category($id)
@@ -41,12 +75,18 @@ class post extends Controller
         }
 
         $this->data['params'] = filter_input_array(INPUT_POST,$this->data['params']);
+        $this->data['params']['category'] = $this->data['category']['id'];
 
-        if($this->auth())
-            $this->data['params']['email'] = $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
+        $this->data['params']['ip'] = remoteAddr();
+        $this->data['params']['epenis'] = (int)$this->auth();
+
+        $sql = 'INSERT INTO reports (id,time,'.implode(',',array_keys($this->data['params'])).') VALUES (\'\',UNIX_TIMESTAMP(),:'.implode(',:',array_keys($this->data['params'])).')';
 
         if(!empty($_POST))
-            $this->createReport();
+        {
+            if($this->createReport($sql));
+                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.db()->lastInsertId());
+        }
     }
 
     private function messageFilter($msg)
@@ -87,8 +127,10 @@ class post extends Controller
         return $msg;
     }
 
-    private function createReport()
+    private function createReport($sql)
     {
+         if($this->auth())
+            $this->data['params']['email'] = $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
         foreach($this->data['params'] as $field => $value)
         {
             if(empty($value))
@@ -119,6 +161,7 @@ class post extends Controller
                 case 'reproduce':
                 case 'expected':
                 case 'actual':
+                case 'message':
                    // $value = strlen(trim(strip_tags(preg_replace('/&.+?;/', '',$value))));
                     if(strlen($value) < 2 || strlen($value) > 65535)
                         $this->flash[] = $field .' must be between 2 and 65,535 characters. Your '.$field.' is '.strlen($value);
@@ -133,16 +176,10 @@ class post extends Controller
         }
 
         if(!empty($this->flash))
-            exit;
+            return false;
 
-        $this->data['params']['ip'] = remoteAddr();
-        $this->data['params']['category'] = $this->data['category']['id'];
-
-        $stmt = db()->prepare(
-            'INSERT INTO reports (id,time,epenis,'.implode(',',array_keys($this->data['params'])).') VALUES (\'\',UNIX_TIMESTAMP(),'.(int)$this->auth().',:'.implode(',:',array_keys($this->data['params'])).')'
-        );
-        $stmt->execute($this->data['params']);
-        header('Location: '.BUNZ_HTTP_DIR.'report/view/'.db()->lastInsertId());
+        $stmt = db()->prepare($sql);
+        return($stmt->execute($this->data['params']));
 
     }
 }

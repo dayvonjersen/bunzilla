@@ -34,6 +34,9 @@ function statusButton($statusId)
 }
 function statusSelectBox($selected = false)
 {
+    if(!selectCount('statuses'))
+        return '<div class="danger">No statuses created <a href="'.BUNZ_HTTP_DIR.'admin">go make one</a>.</div>';
+
     $select = '<select name="status">';
     foreach(db()->query('SELECT * FROM statuses ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC) as $status)
     {

@@ -110,6 +110,19 @@ class Controller
     {
         $this->tpl = get_called_class();
         $this->auth = $this->auth();
+
+        if(isset($_SESSION['flash']))
+        {
+            $this->flash = unserialize($_SESSION['flash']);
+            unset($_SESSION['flash']);
+        }
+
+        if(isset($_SESSION['params']))
+        {
+            $this->data['params'] = unserialize($_SESSION['params']);
+            unset($_SESSION['params']);
+        }
+        
     }
 
     public function __destruct()
