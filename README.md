@@ -4,7 +4,9 @@ Dead Simple Bug Tracking.
 disclaimer
 -
 **right now this is in a very prototypical phase**
+
 I'm working on it
+
 literally
 
 about
@@ -38,20 +40,25 @@ For discussions, face-to-face, telephones, e-mail, IRC, bbs, forums and social m
 ##it's alive
 current working version: [https://var.abl.cl/bunzilla](https://var.abl.cl/bunzilla)
 
-##installation
+##requirements
 - php5.4
 - apache2.whatever
 - mysql but it uses PDO so you could use anything really*
+
 ######* might have to adjust the queries tho
 
-Modify the .ini files in res/
+##installation
+- `git@github.com:generaltso/bunzilla.git`
+- Run `bunzilla-0.1.sql`
+- Modify the .ini files in `res/`
 
-I added some hacky HTTP Authentication:
+And I added some hacky HTTP Authentication:
 
 Run 
-`you@your-server:/var/www/bunzilla$ res/generatehtpasswd.php`
+`you@your-server:/var/www/bunzilla/res$./generatehtpasswd.php`
 
 It's manual! And you need console access on the server! Hoorj
+
 ##steals from
 - [purecss.io](http://purecss.io) -- requires a lot of hacky bullshit on top of it but >muh responsive
 - [jscolor](http://jscolor.com) -- perfect JS color picker widget
