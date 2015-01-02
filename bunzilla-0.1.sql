@@ -32,6 +32,21 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Data exporting was unselected.
 
 
+-- Dumping structure for table bunzilla.comments
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `report` int(10) unsigned NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `epenis` tinyint(1) NOT NULL,
+  `time` int(10) unsigned NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `report` (`report`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
+
 -- Dumping structure for table bunzilla.reports
 CREATE TABLE IF NOT EXISTS `reports` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -45,7 +60,8 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `expected` text COLLATE utf8mb4_unicode_ci,
   `actual` text COLLATE utf8mb4_unicode_ci,
   `status` int(10) unsigned NOT NULL,
-  `closed` tinyint(4) NOT NULL,
+  `closed` tinyint(1) NOT NULL,
+  `epenis` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `category` (`category`),
   KEY `status` (`status`)
