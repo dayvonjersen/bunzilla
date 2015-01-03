@@ -34,24 +34,129 @@ class post extends Controller
         ];
     }
 
+    public function edit($reportId, $commentId = false)
+    {
+        $this->tpl .= '/edit';
+        $this->checkReport($reportId);
+        $reportId = (int)$reportId;
+        $this->data['params'] = current(db()->query(
+            'SELECT category, subject'.($commentId===false?', description, reproduce, expected, actual, ip':'').'
+             FROM reports
+             WHERE id = '.$reportId
+        )->fetchAll(PDO::FETCH_ASSOC));
+
+        $this->setReportCategory($this->data['params']['category']);
+        if($commentId !== false)
+        {
+            $commentId = (int)$commentId;
+            if(!selectCount('comments',
+                'id = '.$commentId.' AND report = '.$reportId))
+                $this->abort('No such comment!');
+
+            $this->data['params'] += current(db()->query(
+                'SELECT ip, message FROM comments WHERE id = '.$commentId
+            )->fetchAll(PDO::FETCH_ASSOC));
+
+            $this->data['params']['comment_id'] = $commentId;
+            $this->data['category']['message'] = true; // shut up
+        } 
+
+        $this->data['params']['report_id'] = $reportId;
+
+        if(!$this->auth() && remoteAddr() != $this->data['params']['ip'])
+            $this->abort('Access denied.');
+
+
+        if(!empty($_POST))
+        {
+            $filtOpts = array_intersect_key(
+                $this->getFilterOptions($commentId === false ? 'report' : 'comment'), $this->data['params']);
+            $changes = filter_input_array(INPUT_POST, $filtOpts);
+            $set = [];
+            foreach($this->data['params'] as $field => $value)
+                if(!isset($changes[$field]) || $changes[$field] === $value)
+                    unset($this->data['params'][$field]);
+                else {
+                    $set[] = $field .' = :'.$field;
+                    $this->data['params'][$field] = $changes[$field];
+                }
+
+            if(!count($set))
+            {
+                $this->flash[] = 'No changes were made.';
+                $_SESSION['flash'] = serialize($this->flash);
+                header('Location: '.BUNZ_HTTP_DIR.'/report/view/'.$reportId);
+                exit;
+            }
+
+            $set[] = 'edit_time = :fux';
+            $this->data['params']['fux'] = time();
+
+            $sql = 'UPDATE '.($commentId === false ? 'report' : 'comment').'s SET '.implode(', ',$set).' WHERE id = '.($commentId === false ? $reportId : $commentId);
+            if($this->createReport($sql))
+            {
+                $this->flash[] = 'Your desired changes were made.';
+                $_SESSION['flash'] = serialize($this->flash);
+                header('Location: '.BUNZ_HTTP_DIR.'/report/view/'.$reportId.($commentId !== false? '#reply-'.$commentId : ''));
+                exit;
+            }
+        }
+           
+    }
+
+    private function checkReport($id)
+    {
+        if(!selectCount('reports','id = '.(int)$id))
+            $this->abort('No such report!');
+    }
+
+    private function getFilterOptions($mode = 'report')
+    {
+        $filtOpts = [];
+
+        $filtOpts['email'] = filterOptions(1,'email');
+
+        if($mode === 'comment')
+        {
+            $filtOpts['message'] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+            return $filtOpts;
+        }
+
+        $filtOpts['subject'] = filterOptions(0,'full_special_chars');
+        $filtOpts['status']  = filterOptions(0,'number_int');
+        foreach(['description','reproduce','expected','actual'] as $field)
+        {
+            if($this->data['category'][$field])
+                $filtOpts[$field] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+        }
+
+        return $filtOpts;       
+    }
+
+    private function setReportCategory($id)
+    {
+        $result = db()->query(
+            'SELECT id, title, description, reproduce, expected, actual
+             FROM categories 
+             WHERE id = '.(int)$id
+        );
+        if(!$result->rowCount())
+            $this->abort('No such category!');
+
+        $this->data['category'] = $result->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function comment($id)
     {
         $this->tpl = 'error';
-        if(!selectCount('reports','id = '.(int)$id))
-            $this->abort('No such report!');
+        $this->checkReport($id);
 
-        $this->data['params'] = [
-            'email' => filterOptions(1,'email'),
-            'message' => filterOptions(0,'callback',null,
-                [$this,'messageFilter']
-            )
-        ];
-        $this->data['params'] = filter_input_array(
-            INPUT_POST,
-            $this->data['params']
-        );
-
-
+        $filtOpts = $this->getFilterOptions('comment');
+        $this->data['params'] = filter_input_array(INPUT_POST,$filtOpts);
+        // force identity for logged in developers
+        if($this->auth())
+            $this->data['params']['email'] = 
+                $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
         $this->data['params']['report'] = (int)$id;
         $this->data['params']['ip'] = remoteAddr();
 
@@ -82,29 +187,14 @@ class post extends Controller
     public function category($id)
     {
         $this->tpl .= '/category';
-        $result = db()->query(
-            'SELECT id, title, description, reproduce, expected, actual
-             FROM categories 
-             WHERE id = '.(int)$id
-        );
-        if(!$result->rowCount())
-            $this->abort('No such category!');
+        $this->setReportCategory($id);
+        $filtOpts = $this->getFilterOptions('report');
 
-        $this->data['category'] = $result->fetch(PDO::FETCH_ASSOC);
-        $this->data['params'] = [
-            'email' => filterOptions(1,'email'),
-            'subject' => filterOptions(0,'full_special_chars'),
-            'status' => filterOptions(0,'number_int')
-        ];
-        foreach(['description','reproduce','expected','actual'] as $field)
-        {
-            if($this->data['category'][$field])
-                $this->data['params'][$field] = filterOptions(0,'callback',
-                    null,[$this,'messageFilter']
-                );
-        }
-
-        $this->data['params'] = filter_input_array(INPUT_POST,$this->data['params']);
+        $this->data['params'] = filter_input_array(INPUT_POST,$filtOpts);
+        // force identity for logged in developers
+        if($this->auth())
+            $this->data['params']['email'] = 
+                $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
         $this->data['params']['category'] = $this->data['category']['id'];
 
         $this->data['params']['ip'] = remoteAddr();
@@ -220,10 +310,7 @@ class post extends Controller
      * not as nice as what's in admin.php */
     private function createReport($sql)
     {
-        // force identity for logged in developers
-        if($this->auth())
-            $this->data['params']['email'] = 
-                $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
+
 
         // error checking ain't pretty
         // this isn't complete error checking for every field

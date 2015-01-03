@@ -332,7 +332,7 @@ input.pure-button:active
     color: #999;
 }
 
-.card header a.pure-button {
+.card header:not(.msginfo) a.pure-button {
     background: none;
 }
 

@@ -16,12 +16,30 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                     <p title='date' class='pure-u-1-2'><span><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['time']) ?></span></p>
                 </div>
                 <div  class='pure-g'>
-                    <div title='subject' class='pure-u-1 pure-u-md-3-4'><h1><?= $this->data['subject'] ?></h1></div>
+                    <div title='subject' class='pure-u-1 pure-u-md-3-4'>
+                        <h1><?= $this->data['subject'] ?></h1>
+                    </div>
                     <p title="status" class='pure-u-1 pure-u-md-1-4'>
                         <span><?= statusButton($this->data['status'])?></span>
                         <span><span class="icon-<?= $this->data['closed'] ? 'lock inactive' : 'unlock info' ?> pure-button"><?=$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
+<?php
+if($this->auth() || remoteAddr() == $this->data['ip'])
+{
+?>
+                        <span><a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'] ?>" class='pure-button success icon-wrench'>edit</a></span>
+<?php
+}
+?>
                     </p>
                 </div>
+<?php
+if(!is_null($this->data['edit_time']))
+{
+?>
+                <h4><strong>**EDIT**</strong> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['edit_time']) ?></h4>
+<?php
+}
+?>
             
             </header>
 <?php
@@ -46,9 +64,25 @@ if(!empty($this->data['comments']))
 ?>
             <section class='card' id="reply-<?=$comment['id']?>" title="#<?=$i?>">
                 <header class='msginfo box'>
-                    <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <a href="#reply-<?= $comment['id'] ?>"><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?> #<?=$i++?></a></p>
+                    <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <a href="#reply-<?= $comment['id'] ?>"><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?> #<?=$i++?></a>
+
+<?php
+if($this->auth() || remoteAddr() == $this->data['ip'])
+{
+?>
+                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'],'/',$comment['id'] ?>" class='pure-button success'>edit</a>
+<?php
+}
+?></p>
                 </header>
-                <blockquote class='box'><?= $comment['message'] ?></blockquote>
+                <blockquote class='box'><?= $comment['message'] ?><?php
+if(!is_null($comment['edit_time']))
+{
+?>
+                <h4><strong>**EDIT**</strong> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['edit_time']) ?></h4>
+<?php
+}
+?></blockquote>
             </section>
                 
 <?php
