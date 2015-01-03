@@ -73,10 +73,13 @@ if(empty($this->data['categories']))
                         <input type="text" class='color' name='color' value='ffffff'>
                     </p>
 
-                    <p class='pure-control-group'>
-                        <label>pick an icon</label>
+                    <div class='pure-g'>
+                        <label class='pure-u-1-4'>
+<!--style="display: inline-block; margin: 0 1em 0 0; text-align: right; vertical-align: middle; width: 10em;">-->pick an icon</label>
+                        <div style="position: relative;" class='pure-u-3-4'>
                         <?= iconSelectBox() ?>
-                    </p>
+                        </div>
+                    </div>
                     <button class='pure-button' type='submit'><i class='icon-plus'></i> create new category</button>
                 </fieldset>
             </form>

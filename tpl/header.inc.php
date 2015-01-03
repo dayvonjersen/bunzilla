@@ -15,12 +15,23 @@ function getIconList()
 }
 function iconSelectBox($selected = false)
 {
+/**/
     $select = '<select name="icon">';
     $icons = getIconList();
     foreach($icons as $icon)
         $select .= '<option value="'.$icon.'"'.($selected === $icon?' selected':'').' class="'.$icon.'">'.$icon.'</option>';
     $select .= '</select>';
     return $select;
+/**
+    $fakebox = '<div class="selectBox">';
+    $icons = getIconList();
+    $selected === false && $selected = current($icons);
+    foreach($icons as $icon)
+    {
+        $id = uniqid();
+        $fakebox .= '<input type="radio" id="'.$id.'" name="icon" value="'.$icon.'"'.($selected === $icon?' checked':'').'/><label for="'.$id.'" class="'.$icon.'">'.$icon.'</label>';
+    }
+    return $fakebox . '</div>';*/
 }
 function statusButton($statusId)
 {
@@ -38,11 +49,16 @@ function statusSelectBox($selected = false)
         return '<div class="danger">No statuses created <a href="'.BUNZ_HTTP_DIR.'admin">go make one</a>.</div>';
 
     $select = '<select name="status">';
+//    $select = '<div style="position: relative; "><div class="selectBox">';
     foreach(db()->query('SELECT * FROM statuses ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC) as $status)
     {
+    
        $select .= '<option value="'.$status['id'].'"'.($selected === $status['id']?' selected':'').' class="'.$status['icon'].'" style="background: #'.$status['color'].'">'.$status['title'].'</option>';
+        $id = uniqid();
+//       $select .= '<input type="radio" name="status" id="'.$id.'" value="'.$status['id'].'"'.($selected === $status['id']?' checked':'').'/><label for="'.$id.'" class="'.$status['icon'].'" style="background: #'.$status['color'].'">'.$status['title'].'</label>';
     }
     $select .= '</select>';
+//    $select .='</div></div>';
     return $select;
 }
 ?>

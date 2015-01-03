@@ -272,11 +272,14 @@ label,.pure-button {
 h1 {
      color: #21B2F1;
      font-weight: bold;
-     text-shadow: 2px 1px 0px #fff, 5px 4px 0px rgba(0,0,0,0.15);
+     text-shadow: 1px 1px 0px #fff, 2px 2px 0px rgba(0,0,0,0.15);
 }
 .pure-button {
      opacity: 0.75;
-     text-shadow: 2px 1px 0px #000, 5px 4px 0px rgba(0,0,0,0.15);
+
+     text-shadow: 1px 1px 0px #000, 2px 2px 0px rgba(0,0,0,0.15);
+/*
+     text-shadow: 2px 1px 0px #000, 5px 4px 0px rgba(0,0,0,0.15);*/
     transition: all 125ms ease-in;
     padding: 5px;
 }
@@ -494,6 +497,54 @@ a.icon-link:active {
 
 a.icon-link:before {
      float: left;
+}
+
+.selectBox {
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 3px #ddd inset;
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    background: #fff;
+    
+}
+
+.selectBox:hover {
+    height: 200px;
+    overflow-y: scroll;
+    box-shadow: 2px 2px;
+}
+
+.selectBox input[type="radio"],
+.selectBox input[type="checkbox"] {
+    position: fixed;
+    top: -1000px;
+    left: -1000px;
+    opacity: 0;
+}
+
+.selectBox label {
+    margin: 1px;
+    opacity: 0.2;
+    height: 1.25em;
+    display: none;
+}
+
+.selectBox:hover label {
+    display: block;
+}
+
+.selectBox label:hover {
+    opacity:0.5;
+}
+
+.selectBox input:checked + label {
+    opacity: 1;
+    display: block;
 }
 
 @media (min-width: 48em) {

@@ -185,10 +185,11 @@ class post extends Controller
             {
                 $this->flash[] = 'Comment added.';
                 $location .= '#reply-'.db()->lastInsertId();
+            } else {
+                $_SESSION['params'] = serialize($this->data['params']);
             }
         }
         $_SESSION['flash'] = serialize($this->flash);
-        $_SESSION['params'] = serialize($this->data['params']);
         header('Location: '.$location);        
     }
 
@@ -294,7 +295,7 @@ class post extends Controller
          * @usage: <code php><?= 'hello, world' ?></code>
          * highlight.js does the hard stuff */
         preg_match_all(
-            '/\&lt;code(\s+[0-9a-z]+)?&gt;(.+)\&lt;\/code\&gt;/ims',
+            '/\&lt;code(\s+[0-9a-z]+)?&gt;(.+?)\&lt;\/code\&gt;/ims',
             $msg,$codes,PREG_SET_ORDER
         );
         foreach($codes as $code)
