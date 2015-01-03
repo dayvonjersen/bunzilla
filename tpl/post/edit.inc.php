@@ -1,4 +1,26 @@
 <?php
+function unfiltermessage($msg)
+{
+    // FUCK
+    $msg = str_replace('<br />','',$msg);
+
+    preg_match_all('/\<pre\>\<code( class="language-(\w+)")?/ims', $msg, $codes,PREG_SET_ORDER);
+    foreach($codes as $code)
+        $msg = str_replace($code[0],'<code'.(isset($code[2]) ? ' '.$code[2] : ''),$msg);
+    $msg = str_replace('</code></pre>','</code>',$msg);
+
+    preg_match_all('/\<a href="(.*?)" .+\>(.*)\<\/a\>/im',$msg,$links,PREG_SET_ORDER);
+    foreach($links as $link)
+        $msg = str_replace($link[0],'<link>'.$link[1].($link[1]!=$link[2]?'{'.$link[2].'}':'').'</link>',$msg);
+    preg_match_all('/\<img src="(.*?)" .+\>/im',$msg, $images,PREG_SET_ORDER);
+    foreach($images as $image)
+        $msg = str_replace($image[0], '<image>'.$image[1].'</image>',$msg);
+
+    $msg = str_replace('<','&lt;',$msg);
+    $msg = str_replace('>','&gt;',$msg);
+
+    return $msg;
+}
 $pageTitle = 'Edit '.(isset($this->data['params']['comment_id']) ? 'Your Comment' : $this->data['params']['subject']);
 $bread = [
     $this->data['category']['title'] => BUNZ_HTTP_DIR . 'report/category/'.$this->data['category']['id'],
@@ -30,7 +52,7 @@ $fields = [
     'message'     => 'Your unique and insightful voice'
 ];
 
-$rows = round(16/(array_sum(array_intersect_key($this->data['category'],$fields))));
+$rows = isset($this->data['params']['comment_id']) ? 16 : round(16/(array_sum(array_intersect_key($this->data['category'],$fields))));
 
 foreach($fields as $field => $placeholder)
 {
@@ -41,7 +63,7 @@ foreach($fields as $field => $placeholder)
 ?>
                 <p class='pure-control-group' title="<?=$placeholder?>">
                     <label><?= $field ?></label>
-                    <textarea rows='<?=$rows?>' name='<?=$field?>' placeholder='<?=$placeholder?>'><?= $this->data['params'][$field] ?></textarea>
+                    <textarea rows='<?=$rows?>' name='<?=$field?>' placeholder='<?=$placeholder?>'><?= unfiltermessage($this->data['params'][$field]) ?></textarea>
                 </p>
 <?php
     }

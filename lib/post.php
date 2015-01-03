@@ -13,17 +13,24 @@ class post extends Controller
     {
         !BUNZ_BUNZILLA_ALLOW_ANONYMOUS && $this->requireLogin();
 
+        parent::__construct();
+    }
+
+    private function spamCheck()
+    {
+        if(!empty($_POST))
+        {
         // probably need a better mechanism than this
         $where = 'ip = '.db()->quote(remoteAddr())
                .' AND time >= UNIX_TIMESTAMP() - 30';
         if(selectCount('reports',$where)||selectCount('comments',$where))
             $this->abort('stop spamming D:');
-
-        parent::__construct();
+        }
     }
 
     public function index()
     {
+        $this->spamCheck();
         $this->tpl .= '/index';
         $this->data = [
             'categories' => db()->query(
@@ -63,7 +70,7 @@ class post extends Controller
 
         $this->data['params']['report_id'] = $reportId;
 
-        if(!$this->auth() && remoteAddr() != $this->data['params']['ip'])
+        if(!$this->auth() && dtr_ntop(remoteAddr()) != dtr_ntop($this->data['params']['ip']))
             $this->abort('Access denied.');
 
 
@@ -148,6 +155,7 @@ class post extends Controller
 
     public function comment($id)
     {
+        $this->spamCheck();
         $this->tpl = 'error';
         $this->checkReport($id);
 
@@ -186,6 +194,7 @@ class post extends Controller
 
     public function category($id)
     {
+        $this->spamCheck();
         $this->tpl .= '/category';
         $this->setReportCategory($id);
         $filtOpts = $this->getFilterOptions('report');

@@ -113,7 +113,7 @@ class Bunzilla
  * Maybe I should use "abstract" or "interface" or something */
 class Controller 
 {
-    protected $data;
+    protected $data = [];
     protected $tpl;
     protected $flash = [];
 
@@ -288,5 +288,30 @@ function remoteAddr() {
             trim(end(explode (',', $_SERVER['HTTP_X_FORWARDED_FOR']))) 
             : $_SERVER['REMOTE_ADDR'];
     }
-    return inet_pton($ip);
+    return dtr_pton($ip);
+}
+
+/**
+* dtr_pton
+* dtr_ntop
+*
+* @author Mike Mackintosh - mike@bakeryphp.com
+* @param string $ip
+* @return string $bin
+*/
+function dtr_pton( $ip ){
+ 
+    if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)){
+        return current( unpack( "A4", inet_pton( $ip ) ) );
+    }
+    elseif(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
+        return current( unpack( "A16", inet_pton( $ip ) ) );
+    }
+
+}
+
+function dtr_ntop( $str ){
+    if( strlen( $str ) == 16 OR strlen( $str ) == 4 ){
+        return inet_ntop( pack( "A".strlen( $str ) , $str ) );
+    }
 }

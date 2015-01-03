@@ -23,7 +23,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                         <span><?= statusButton($this->data['status'])?></span>
                         <span><span class="icon-<?= $this->data['closed'] ? 'lock inactive' : 'unlock info' ?> pure-button"><?=$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
 <?php
-if($this->auth() || remoteAddr() == $this->data['ip'])
+if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($comment['ip']))
 {
 ?>
                         <span><a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'] ?>" class='pure-button success icon-wrench'>edit</a></span>
@@ -67,7 +67,7 @@ if(!empty($this->data['comments']))
                     <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <a href="#reply-<?= $comment['id'] ?>"><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?> #<?=$i++?></a>
 
 <?php
-if($this->auth() || remoteAddr() == $this->data['ip'])
+if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($comment['ip']))
 {
 ?>
                         <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'],'/',$comment['id'] ?>" class='pure-button success'>edit</a>
@@ -79,7 +79,7 @@ if($this->auth() || remoteAddr() == $this->data['ip'])
 if(!is_null($comment['edit_time']))
 {
 ?>
-                <h4><strong>**EDIT**</strong> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$this->data['edit_time']) ?></h4>
+                <h4><strong>**EDIT**</strong> @ <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['edit_time']) ?></h4>
 <?php
 }
 ?></blockquote>

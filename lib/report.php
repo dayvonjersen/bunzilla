@@ -42,7 +42,7 @@ class report extends Controller
 
         $this->tpl .= '/view';
 
-        $this->data = 
+        $this->data += 
             current(
                 db()->query(
                     'SELECT * FROM reports WHERE id = '.$this->id
