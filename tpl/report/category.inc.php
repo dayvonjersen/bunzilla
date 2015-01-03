@@ -1,7 +1,10 @@
 <?php
 $pageTitle = $this->data['category']['title'];
 $bread = [
-    $pageTitle => BUNZ_HTTP_DIR.$_GET['url']
+    $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
+        'icon' => $this->data['category']['icon'],
+        'color' => $this->data['category']['color']
+    ],
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>

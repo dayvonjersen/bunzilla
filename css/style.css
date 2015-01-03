@@ -120,6 +120,7 @@ html {
     background-image: url(idk-w.png); 
     background-repeat: no-repeat; 
     background-size: cover;
+    background-attachment: fixed;
 }
 
 footer.footer  { 
@@ -220,7 +221,7 @@ legend.msginfo {
 }
 
 .danger {
-    background: #f6009a;
+    background: #fa023c;
     color: #fff;
 }
 
@@ -235,7 +236,7 @@ legend.msginfo {
 }
 
 .success {
-    background: #a3db23;
+    background: #c8ff00;
     color: #fff;
 }
 
@@ -351,6 +352,7 @@ input.pure-button:active
     display: block;
     text-align: right;
     top: auto;
+    right: 2em;
     bottom: 0;
 }
 
@@ -359,13 +361,17 @@ input.pure-button:active
 }
 
 .breadcrumb li a span {
-    display: inline-block; max-width: 15vw; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+    display: inline-block; 
+    max-width: 50vw; 
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    overflow: hidden;
 }
 
 .pure-menu.breadcrumb li a {
 	color: white;
 	text-decoration: underline;
-	padding: 10px 0 10px 55px;
+	padding: 5px 0 0 55px;
 	background: #333;
 	position: relative; 
 	display: block;
@@ -547,6 +553,10 @@ a.icon-link:before {
     display: block;
 }
 
+.breadcrumb span {
+    padding-right: 1em;
+}
+
 @media (min-width: 48em) {
 
     body {
@@ -577,4 +587,5 @@ a.icon-link:before {
     .card header {
         float: none;
     }
+
 }

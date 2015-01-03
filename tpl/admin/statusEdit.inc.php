@@ -2,8 +2,10 @@
 $stat = $this->data['status'];
 $pageTitle = 'Edit &quot;'.$stat['title'].'&quot;';
 $bread = [
-    'cpanel' => BUNZ_HTTP_DIR.'admin',
-    $pageTitle => BUNZ_HTTP_DIR.$_GET['url']
+    'cpanel' => ['href' => BUNZ_HTTP_DIR.'admin',
+                   'icon' => 'icon-cog-alt'],
+    $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
+                    'icon' => 'icon-cog']
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>

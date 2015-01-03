@@ -143,7 +143,7 @@ class post extends Controller
     private function setReportCategory($id)
     {
         $result = db()->query(
-            'SELECT id, title, description, reproduce, expected, actual
+            'SELECT *
              FROM categories 
              WHERE id = '.(int)$id
         );

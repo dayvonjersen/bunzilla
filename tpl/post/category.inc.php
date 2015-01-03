@@ -1,8 +1,13 @@
 <?php
 $pageTitle = 'Submit New '.$this->data['category']['title'];
 $bread = [
-    $this->data['category']['title'] => BUNZ_HTTP_DIR . 'report/category/'.$this->data['category']['id'],
-    $pageTitle => BUNZ_HTTP_DIR . $_GET['url']
+    $this->data['category']['title'] => ['href' => BUNZ_HTTP_DIR . 'report/category/'.$this->data['category']['id'],
+        'icon' => $this->data['category']['icon'],
+        'color' => $this->data['category']['color']
+    ],
+    $pageTitle => ['href' => BUNZ_HTTP_DIR . $_GET['url'],
+        'icon' => 'icon-plus'
+    ]
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>

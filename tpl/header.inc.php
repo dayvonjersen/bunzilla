@@ -6,7 +6,7 @@ function getIconList()
     {
         $return = [];
 
-        preg_match_all('/^\.(icon-\w+):before/m',file_get_contents(str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR).'bunzilla-icons.css'),$icons,PREG_SET_ORDER);
+        preg_match_all('/^\.(icon-[a-z0-9-_]+):before/m',file_get_contents(str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR).'bunzilla-icons.css'),$icons,PREG_SET_ORDER);
         foreach($icons as $icon)
             $return[] = $icon[1];
     }
@@ -53,7 +53,7 @@ function statusSelectBox($selected = false)
     foreach(db()->query('SELECT * FROM statuses ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC) as $status)
     {
     
-       $select .= '<option value="'.$status['id'].'"'.($selected === $status['id']?' selected':'').' class="'.$status['icon'].'" style="background: #'.$status['color'].'">'.$status['title'].'</option>';
+       $select .= '<option value="'.$status['id'].'"'.($selected === $status['id'] || !$selected && $status['default'] ?' selected':'').' class="'.$status['icon'].'" style="background: #'.$status['color'].'">'.$status['title'].'</option>';
         $id = uniqid();
 //       $select .= '<input type="radio" name="status" id="'.$id.'" value="'.$status['id'].'"'.($selected === $status['id']?' checked':'').'/><label for="'.$id.'" class="'.$status['icon'].'" style="background: #'.$status['color'].'">'.$status['title'].'</label>';
     }
@@ -106,15 +106,20 @@ while(($f = $ls->read()) !== false)
             <ul>
 <?php
 $crumbs = [
-    BUNZ_PROJECT_TITLE => BUNZ_HTTP_DIR
+    BUNZ_PROJECT_TITLE => ['icon' => 'icon-home',
+                           'href' => BUNZ_HTTP_DIR]
 ];
 if(isset($bread))
     $crumbs += $bread;
 
-$iconz = getIconList();
-foreach($crumbs as $text => $href)
+//$iconz = getIconList();
+foreach($crumbs as $text => $stuff)
 {
-    echo "\t\t\t\t",'<li',($href === BUNZ_HTTP_DIR . $_GET['url']) || count($crumbs) === 1 ? ' class="pure-menu-selected"' : '','><a href="',$href,'" title="',$text,'"><span class="',$iconz[rand(0,count($iconz)-1)],'">',$text,'</span></a></li>',"\n";
+    $icon = isset($stuff['icon']) ? $stuff['icon'] : '';
+    $href = isset($stuff['href']) ? $stuff['href'] : '#';
+    $color =// isset($stuff['color']) ? $stuff['color'] : 
+false;
+    echo "\t\t\t\t",'<li',($href === BUNZ_HTTP_DIR . $_GET['url']) || count($crumbs) === 1 ? ' class="pure-menu-selected"' : '','><a href="',$href,'" title="',$text,'"><span class="',$icon,'"',$color?' style="background: #'.$color.';"':'','>',$text,'</span></a></li>',"\n";
 }
 ?>
             </ul>

@@ -1,8 +1,14 @@
 <?php
 $pageTitle = $this->data['subject'];
 $bread = [
-    db()->query('SELECT title FROM categories WHERE id = '.$this->data['category'])->fetchColumn(0) => BUNZ_HTTP_DIR.'report/category/'.$this->data['category'],
-    $pageTitle => BUNZ_HTTP_DIR.$_GET['url']
+    
+    $this->data['category']['title'] => ['href' => BUNZ_HTTP_DIR.'report/category/'.$this->data['category']['id'],
+        'icon' => $this->data['category']['icon'],
+        'color' => $this->data['category']['color']
+    ],
+    $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
+        'icon' => 'icon-feather',
+    ]
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
@@ -26,7 +32,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($comment['ip']))
 {
 ?>
-                        <span><a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'] ?>" class='pure-button success icon-wrench'>edit</a></span>
+                        <span><a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'] ?>" class='pure-button success icon-pencil-alt'>edit</a></span>
 <?php
 }
 ?>
@@ -70,7 +76,7 @@ if(!empty($this->data['comments']))
 if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($comment['ip']))
 {
 ?>
-                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'],'/',$comment['id'] ?>" class='pure-button success'>edit</a>
+                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'],'/',$comment['id'] ?>" class='pure-button icon-pencil-alt success'>edit</a>
 <?php
 }
 ?></p>
@@ -125,7 +131,7 @@ function confirmDelete(evt){if(!window.confirm('you know what you doing'+"\n\n"+
 
                         <?= statusSelectBox($this->data['status']) ?> <button class='pure-button success' type='submit' name='updateStatus' value="1">&rarr;Update Status</button>
                   
-                        <button class='pure-button icon-<?= $this->data['closed'] ? 'lock' : 'unlock' ?>' type='submit' name='toggleClosed' value="1"><?=$this->data['closed'] ? 'Open' : 'Close' ?> Report</button>
+                        <button class='pure-button icon-<?= $this->data['closed'] ? 'unlock' : 'lock' ?>' type='submit' name='toggleClosed' value="1"><?=$this->data['closed'] ? 'Open' : 'Close' ?> Report</button>
                         <button class='pure-button danger icon-cancel' type='submit' onclick="confirmDelete(event)" name='delete' value="1">Delete Report</button>
                     </fieldset>
                 </form>

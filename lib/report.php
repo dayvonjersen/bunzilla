@@ -51,6 +51,9 @@ class report extends Controller
         $this->data['comments'] = selectCount('comments','report = '.$this->id)             ? db()->query('SELECT * FROM comments WHERE report = '.$this->id
                 )->fetchAll(PDO::FETCH_ASSOC) 
             : null;
+        $this->data['category'] =  current(db()->query(
+                'SELECT * FROM categories WHERE id = '.(int)$this->data['category']
+            )->fetchAll(PDO::FETCH_ASSOC));
         exit;
     }
 

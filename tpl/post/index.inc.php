@@ -1,7 +1,9 @@
 <?php
 $pageTitle = 'Pick a Category';
 $bread  = [
-    $pageTitle => BUNZ_HTTP_DIR . $_GET['url']
+    $pageTitle => ['href' => BUNZ_HTTP_DIR . $_GET['url'],
+        'icon' => 'icon-linux'
+    ]
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>

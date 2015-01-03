@@ -1,12 +1,10 @@
-/**
- * PLEASE REFER TO LICENSE.fontello.md IN PROJECT ROOT DIRECTORY */
 @font-face {
   font-family: 'bunzilla';
-  src: url('font/bunzilla-icons.eot?59316725');
-  src: url('font/bunzilla-icons.eot?59316725#iefix') format('embedded-opentype'),
-       url('font/bunzilla-icons.woff?59316725') format('woff'),
-       url('font/bunzilla-icons.ttf?59316725') format('truetype'),
-       url('font/bunzilla-icons.svg?59316725#bunzilla') format('svg');
+  src: url('font/bunzilla-icons.eot?4419869');
+  src: url('font/bunzilla-icons.eot?4419869#iefix') format('embedded-opentype'),
+       url('font/bunzilla-icons.woff?4419869') format('woff'),
+       url('font/bunzilla-icons.ttf?4419869') format('truetype'),
+       url('font/bunzilla-icons.svg?4419869#bunzilla') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'bunzilla';
-    src: url('../font/bunzilla.svg?59316725#bunzilla') format('svg');
+    src: url('../font/bunzilla.svg?4419869#bunzilla') format('svg');
   }
 }
 */
@@ -109,4 +107,14 @@
 .icon-lock:before { content: '\e836'; } /* '' */
 .icon-unlock:before { content: '\e837'; } /* '' */
 .icon-lightbulb:before { content: '\e838'; } /* '' */
-.icon-user-delete:before { content: '\e839'; } /* '' */
+.icon-cog:before { content: '\e83a'; } /* '' */
+.icon-rss-squared:before { content: '\e83b'; } /* '' */
+.icon-home:before { content: '\e83c'; } /* '' */
+.icon-key:before { content: '\e83d'; } /* '' */
+.icon-feather:before { content: '\e83e'; } /* '' */
+.icon-search:before { content: '\e840'; } /* '' */
+.icon-pencil-alt:before { content: '\e841'; } /* '' */
+.icon-down-open-mini:before { content: '\e842'; } /* '' */
+.icon-left-open-mini:before { content: '\e843'; } /* '' */
+.icon-right-open-mini:before { content: '\e844'; } /* '' */
+.icon-up-open-mini:before { content: '\e845'; } /* '' */

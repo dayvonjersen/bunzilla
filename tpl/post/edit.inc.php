@@ -23,9 +23,14 @@ function unfiltermessage($msg)
 }
 $pageTitle = 'Edit '.(isset($this->data['params']['comment_id']) ? 'Your Comment' : $this->data['params']['subject']);
 $bread = [
-    $this->data['category']['title'] => BUNZ_HTTP_DIR . 'report/category/'.$this->data['category']['id'],
-    $this->data['params']['subject'] => BUNZ_HTTP_DIR .' report/view/'.$this->data['params']['report_id'],
-    $pageTitle => BUNZ_HTTP_DIR . $_GET['url']
+    $this->data['category']['title'] => ['href' => BUNZ_HTTP_DIR . 'report/category/'.$this->data['category']['id'],
+        'icon' => $this->data['category']['icon'],
+        'color' => $this->data['category']['color']
+    ],
+    $this->data['params']['subject'] => ['href' => BUNZ_HTTP_DIR .' report/view/'.$this->data['params']['report_id'],
+        'icon' => 'icon-bomb'],
+    $pageTitle => ['href' => BUNZ_HTTP_DIR . $_GET['url'],
+            'icon' => 'icon-feather']
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>

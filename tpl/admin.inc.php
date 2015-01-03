@@ -1,7 +1,8 @@
 <?php
 $pageTitle = 'cpanel';
 $bread = [
-    $pageTitle => BUNZ_HTTP_DIR.$_GET['url']
+    $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
+                   'icon' => 'icon-cog-alt']
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
