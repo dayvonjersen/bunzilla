@@ -15,7 +15,7 @@ class admin extends Controller
     {
         $this->data = [
             'categories' => selectCount('categories') ? db()->query(
-                'SELECT c.id, c.title, COUNT(r.id) AS total_reports
+                'SELECT c.*, COUNT(r.id) AS total_reports, MAX(r.time) AS last_submission
                  FROM categories AS c
                     LEFT JOIN reports AS r
                     ON c.id = r.category

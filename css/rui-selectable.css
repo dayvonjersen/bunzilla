@@ -1,0 +1,167 @@
+*.rui-dd-menu, *.rui-dd-menu li {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    list-style: none;
+    font-weight: normal;
+    float: none;
+}
+
+*.rui-dd-menu {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    background: white;
+    border: 1px solid #BBB;
+    box-shadow: 2px 8px 2px 2px #888;
+}
+
+*.rui-dd-menu li {
+    border-top: none;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+*.rui-dd-menu li.current {
+    background: #DDD;
+}
+
+*.rui-dd-menu li:hover {
+    background: #EEE;
+}
+
+dl.rui-dd-menu dt {
+    cursor: default;
+    font-weight: bold;
+    font-style: italic;
+    color: #444;
+    background: #EEE;
+}
+
+dl.rui-dd-menu dd li {
+    padding-left: 1.5em;
+}
+
+*.rui-selectable, *.rui-selectable li, *.rui-selectable dt, *.rui-selectable dd, *.rui-selectable ul,div.rui-selectable-container ul.rui-selectable-display,div.rui-selectable-container ul.rui-selectable-display li {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    list-style: none;
+}
+
+*.rui-selectable {
+    border: 1px solid #CCC;
+    border-bottom: none;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    min-width: 10em;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    width: 100%;
+}
+
+*.rui-selectable li {
+    cursor: pointer;
+    border-bottom: 1px solid #CCC;
+    padding: 2px 0;
+}
+
+*.rui-selectable li:hover {
+    background: rgba(78,179,222,0.7);
+    color: #fff;
+}
+
+*.rui-selectable li.rui-selectable-selected {
+    font-weight: bold;
+    background: #4eb3de;
+    color: #fff;
+}
+
+*.rui-selectable li.rui-selectable-disabled, *.rui-selectable li.rui-selectable-disabled:hover {
+    background: #CCC;
+    color: #777;
+    cursor: default;
+}
+
+dl.rui-selectable dt {
+    cursor: default;
+    font-weight: bold;
+    font-style: italic;
+    color: #444;
+    background: #EEE;
+    border-bottom: 1px solid #CCC;
+}
+
+dl.rui-selectable dd li {
+    padding-left: 1.5em;
+}
+
+*.rui-selectable-single {
+    background: #FFF;
+    display: none;
+}
+
+*.rui-selectable-single li {
+    overflow: hidden;
+}
+
+div.rui-selectable-container {
+    border: 1px solid #CCC;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: middle;
+    min-width: 10em;
+    cursor: pointer;
+    height: 1.6em;
+    position: relative;
+}
+
+div.rui-selectable-container div.rui-selectable-handle {
+    position: absolute;
+    right: 0;
+    width: 0.8em;
+    background: #DDD;
+    text-align: center;
+    height: 100%;
+    line-height: 0.8em;
+    font-size: 200%;
+    color: #888;
+    border-left: 1px solid #CCC;
+}
+
+div.rui-selectable-container:hover div.rui-selectable-handle {
+    color: #666;
+}
+
+div.rui-selectable-container ul.rui-selectable-display {
+    display: block;
+    width: auto;
+    overflow: hidden;
+    margin-right: 2em;
+}
+
+div.rui-selectable-container ul.rui-selectable-display li {
+    line-height: 1.6em;
+    padding: 0 .5em;
+    overflow: hidden;
+    width: 100%;
+    white-space: nowrap;
+}
+
+select.rui-selectable {
+    visibility: hidden;
+}
+
+menu {
+    color: red;
+}
+
+navigation {
+    background-color: #333 /* darkgrey */;
+}
+

@@ -20,7 +20,7 @@
             </section>
             <section class='pure-u-1 pure-u-md-1-3'>
                 <ul>
-                    <li class='icon-mail'><a href="mailto:țšō@țėķńĭķ.ı0?subject=remove+accents">tell me what you think</a>
+                    <li class='icon-mail'><a href="mailto:țšō@țėķńĭķ.ı0?subject=remove+accents">tell me what you think</a></li>
                     <li class='icon-wrench'>very much a work in progress</li>
                     <li class='icon-magic'><?= round(microtime(1) - BUNZ_START_TIME,4) ?>s</li>
                 </ul>

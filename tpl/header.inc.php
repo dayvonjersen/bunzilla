@@ -1,26 +1,32 @@
 <?php
-function getIconList()
+function getIconList($indice = 0)
 {
     static $return;
     if(!$return)
     {
-        $return = [];
+        $return = [[],[]];
 
-        preg_match_all('/^\.(icon-[a-z0-9-_]+):before/m',file_get_contents(str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR).'bunzilla-icons.css'),$icons,PREG_SET_ORDER);
+        preg_match_all('/^\.(icon-[a-z0-9-_]+):before\s*\{\s*content:\s*\'([^\';]+)/m',file_get_contents(str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR).'bunzilla-icons.css'),$icons,PREG_SET_ORDER);
         foreach($icons as $icon)
-            $return[] = $icon[1];
+        {
+            $return[0][] = $icon[1];
+            $return[1][] =json_decode('"'.'\\u'.sprintf('%04x',str_replace('\\e','',$icon[2])).'"');
+        }
     }
-    return $return;
+    return $return[$indice];
         
 }
 function iconSelectBox($selected = false)
 {
 /**/
-    $select = '<select name="icon">';
+    $id = uniqid();
+    $select = '<input type="hidden" name="icon" id="'.$id.'"/>';
+    $select .= '<ul name="icon" class="rui-selectable" data-selectable=\'{"multiple":false,"update":"'.$id.'","hCont":""}\'>';
     $icons = getIconList();
-    foreach($icons as $icon)
-        $select .= '<option value="'.$icon.'"'.($selected === $icon?' selected':'').' class="'.$icon.'">'.$icon.'</option>';
-    $select .= '</select>';
+    $unicode = getIconList(1);
+    foreach($icons as $i=> $icon)
+        $select .= '<li data-icon="'.$unicode[$i].'" val="'.$icon.'"'.($selected === $icon?' selected':'').' class="'.$icon.'">'.$icon.'</li>';
+    $select .= '</ul>';
     return $select;
 /**
     $fakebox = '<div class="selectBox">';
@@ -48,7 +54,7 @@ function statusSelectBox($selected = false)
     if(!selectCount('statuses'))
         return '<div class="danger">No statuses created <a href="'.BUNZ_HTTP_DIR.'admin">go make one</a>.</div>';
 
-    $select = '<select name="status">';
+    $select = '<select name="status" class="rui-selectable">';
 //    $select = '<div style="position: relative; "><div class="selectBox">';
     foreach(db()->query('SELECT * FROM statuses ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC) as $status)
     {
@@ -91,14 +97,40 @@ while(($f = $ls->read()) !== false)
 
 ?>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
+
+        <script src="<?= BUNZ_JS_DIR ?>right.js"></script>
+        <script src="<?= BUNZ_JS_DIR ?>right-selectable-src.js"></script>
+
+        <script>
+function hereComeTheHAX()
+{
+    (new Selectable('navbar-dropdown')).on('select', function(evt)
+    {
+        window.location = evt.target.value;
+    });
+}
+        </script>
     </head>
-    <body id='bunzilla'>
+    <body id='bunzilla' onload="hereComeTheHAX()">
         <header class='header'>
             <nav class='home-menu pure-menu pure-menu-open pure-menu-horizontal'>
                 <a class='pure-menu-heading' href='<?= BUNZ_HTTP_DIR ?>'>／(≡・ x ・≡)＼</a>
                 <ul>
                     <li><a href='<?= BUNZ_HTTP_DIR ?>admin' class='icon-cog-alt' title='bunzilla settings'></a></li>
-                    <li><a href='<?= BUNZ_HTTP_DIR ?>post' class='icon-plus' title='submit new'></a></li>
+                    <li><select id="navbar-dropdown" data-selectable='{"hCont": ""}'>
+    <option ><span class="icon-plus">submit new</span></option>
+<?php
+if(!isset($this->data['categories']))
+    $this->data['categories'] = db()->query('SELECT * FROM categories ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
+foreach($this->data['categories'] as $cat)
+{
+?>
+    <option value="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="<?=$cat['icon']?>" style="color: #<?=$cat['color']?>" title="<?=$cat['caption']?>"><?= $cat['title'] ?></option>
+<?php
+}
+?>
+    
+</select></li>
                 </ul>
             </nav>
         </header>

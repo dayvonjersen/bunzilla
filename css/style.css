@@ -1,3 +1,4 @@
+@import 'rui-selectable.css';
 /**
  * horrible hacky bullshit */
 html::before {
@@ -36,8 +37,7 @@ p, pre {
 }
 body {
     font-family: 'scp', monospace;
-    color: #7f8c8d;
-    font-size: 13px;
+    color: #111;
     height: 100%;
     margin: 1em 1em 190px 1em;
     background-color: rgba(255,255,255,0.7);
@@ -76,7 +76,7 @@ a.pure-button-primary {
 }
 
 .home-menu {
-    padding: 0.5em;
+    padding: 0.5em 0 0.5em 0.5em;
     text-align: center;
     box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
 }
@@ -104,7 +104,7 @@ a.pure-button-primary {
 .home-menu li a:hover,
 .home-menu li a:focus {
     background: none;
-    border: none;
+    border: 0;
     color: #4eb3de;
 }
 
@@ -124,6 +124,7 @@ html {
 }
 
 footer.footer  { 
+    color: #888;
     position: absolute; 
     bottom: 1em; 
     width: calc(100% - 2em);
@@ -216,7 +217,7 @@ legend.msginfo {
 
 
 .flash {
-    background: #ffe458;
+    background: #FFFF15;
     color: #000;
 }
 
@@ -505,62 +506,59 @@ a.icon-link:before {
      float: left;
 }
 
-.selectBox {
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 3px #ddd inset;
-    display: inline-block;
-    width: 100%;
-    text-align: left;
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    background: #fff;
-    
-}
-
-.selectBox:hover {
-    height: 200px;
-    overflow-y: scroll;
-    box-shadow: 2px 2px;
-}
-
-.selectBox input[type="radio"],
-.selectBox input[type="checkbox"] {
-    position: fixed;
-    top: -1000px;
-    left: -1000px;
-    opacity: 0;
-}
-
-.selectBox label {
-    margin: 1px;
-    opacity: 0.2;
-    height: 1.25em;
-    display: none;
-}
-
-.selectBox:hover label {
-    display: block;
-}
-
-.selectBox label:hover {
-    opacity:0.5;
-}
-
-.selectBox input:checked + label {
-    opacity: 1;
-    display: block;
-}
-
 .breadcrumb span {
     padding-right: 1em;
+}
+
+.pure-menu ul {
+    visibility: visible;
+}
+
+.pure-menu .rui-selectable-display {
+    position: static;
+}
+
+.rui-selectable-handle::before {
+    content: '\e842';
+    font-family: 'bunzilla' !important;
+    display: inline-block;
+}
+
+.rui-selectable.rui-selectable-single.rui-dd-menu {
+    text-align: left;
+    overflow-y: scroll;    
+    max-height: 250px;
+}
+
+.header .rui-selectable.rui-selectable-single.rui-dd-menu {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow-y: auto !important;
+    padding: 1em;
+
+}
+
+.header .rui-selectable-container {
+    padding-right: 0.5em;
+}
+
+.header .rui-selectable-container, .header .rui-selectable {
+    background: #f955a8;
+    color: #fff;
+    border: 0;
+}
+
+.header div.rui-selectable-handle {
+    background: transparent !important;
+    color: #fff !important;
+    border-color: #fff !important;
 }
 
 @media (min-width: 48em) {
 
     body {
-        font-size: 16px;
+        
     }
     
     .home-menu {

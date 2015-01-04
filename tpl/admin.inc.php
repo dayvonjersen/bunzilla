@@ -1,4 +1,16 @@
 <?php
+function categorySelectBox($disable,$cats)
+{
+    if(count($cats) == 1)
+        return '';
+
+    $id = uniqid();
+    $select = '<input type="hidden" name="move_to" id="'.$id.'"/><select class="rui-selectable" data-selectable=\'{"multiple":false,"assignTo":"'.$id.'","hCont":""}\'><option>move to...</option>';
+    foreach($cats as $cat)
+        $select .= $cat['id'] !== $disable ? '<option value="'.$cat['id'].'" class="'.$cat['icon'].'" style="background: #'.$cat['color'].'">'.$cat['title'].'</value>' : '';
+    $select .= '</select>';        
+    return $select;
+}
 $pageTitle = 'cpanel';
 $bread = [
     $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
@@ -23,8 +35,9 @@ if(empty($this->data['categories']))
             <table class='pure-table pure-table-horizontal'>
                 <thead>
                     <tr>
-                        <th>title</th>
+                        <th colspan="2">title</th>
                         <th># reports</th>
+                        <th>last submission</th>
                         <th>actions</th>
                     </tr>
                 </thead>
@@ -34,12 +47,14 @@ if(empty($this->data['categories']))
     {
 ?>
                     <tr<?=$i&1?' class="pure-table-odd"':''?>>
-                        <td><?=$cat['title']?></td>
+                        <td><a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class='<?=$cat['icon']?>' style="color: #<?= $cat['color'] ?>"><?=$cat['title']?></a><br /><small><?=$cat['caption']?></small></td>
+                        <td><a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" class='pure-button icon-pencil-alt success'>Edit</a></td>
                         <td><?=$cat['total_reports']?></td>
+                        <td><?=$cat['last_submission'] ? date(BUNZ_BUNZILLA_DATE_FORMAT,$cat['last_submission']) : '<em>Never</em>'?></td>
                         <td>
-                            <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class='pure-button info'>View</a>
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" class='pure-button success'>Edit</a>
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/category/',$cat['id']?>" class='pure-button danger' onclick="confirmDelete(event)">Delete</a>
+                            
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/category/',$cat['id']?>" class='pure-button icon-cancel danger' onclick="confirmDelete(event)">Delete</a>
+                            <!-- categorySelectBox($cat['id'],$this->data['categories']) -->
                     </tr>
 <?php
     }
@@ -49,40 +64,60 @@ if(empty($this->data['categories']))
 <?php
 }
 ?>
-            <form action="<?=BUNZ_HTTP_DIR,'admin/add/category'?>" method="post" class='pure-form pure-form-aligned'>
-                <fieldset class='is-center'>
-                    <legend>create new category</legend>
-                    <p class='pure-control-group'>
-                        <label>title</label>
+<style>
+table[border][style] label {
+    display: inline;
+    border-color: #888;
+    border-spacing: 2px;
+}
+table[border][style] td:first-child:not(:only-child) {
+    text-align: right;
+}
+</style>
+            <form action="<?=BUNZ_HTTP_DIR,'admin/add/category'?>" method="post" class="pure-form">
+                <table border='1' style="margin: auto;">
+                    <thead>
+                        <tr>
+                            <th colspan="2">create new category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                 <label>title</label>
+                            </td>
+<td>
                         <input maxlength='255' placeholder='e.g. bug reports...' name='title' type="text">
-                    </p>
-                    <p class='pure-control-group'>
-                        <label>caption</label>
+</td>
+                        </tr>
+                        <tr class='pure-table-odd'><td>
+                        <label>caption</label></td><td>
                         <input maxlength='255' placeholder='e.g. report problems here...' name='caption' type="text">
-                    </p>
-                    <p class='pure-control-group'>
-                        <label>required fields</label>
-                        <fieldset class='pure-menu pure-menu-open is-left' style="width: 75%; border: 0px none; margin: auto;">
-                            <ul><li><label><input type="checkbox" name='description'>description</label></li><li>
-                            <label><input type="checkbox" name='reproduce'>reproduce</label></li><li>
-                            <label><input type="checkbox" name='expected'>expected</label></li><li>
-                            <label><input type="checkbox" name='actual'>actual</label></li></ul>
-                        </fieldset>
-                    </p>
-                    <p class='pure-control-group'>
+</td></tr><tr>
+<td rowspan="4">
+                        <label class='pure-u-1-4'>required fields</label>
+</td><td>
+                            <label class='pure-u-1-4'><input type="checkbox" name='description'>description</label>
+</td></tr><tr class='pure-table-odd'><td>
+                            <label class='pure-u-1-4'><input type="checkbox" name='reproduce'>reproduce</label>
+</td></tr><tr><td>
+                            <label class='pure-u-1-4'><input type="checkbox" name='expected'>expected</label>
+</td></tr><tr class='pure-table-odd'><td>
+                            <label class='pure-u-1-4'><input type="checkbox" name='actual'>actual</label>
+</td></tr>
+<tr><td>
                         <label>pick a color</label>
+</td><td>
                         <input type="text" class='color' name='color' value='ffffff'>
-                    </p>
-
-                    <div class='pure-g'>
-                        <label class='pure-u-1-4'>
-<!--style="display: inline-block; margin: 0 1em 0 0; text-align: right; vertical-align: middle; width: 10em;">-->pick an icon</label>
-                        <div style="position: relative;" class='pure-u-3-4'>
-                        <?= iconSelectBox() ?>
-                        </div>
-                    </div>
-                    <button class='pure-button' type='submit'><i class='icon-plus'></i> create new category</button>
-                </fieldset>
+</td></tr>
+<tr class='pure-table-odd'><td>
+                        <label>pick an icon</label>
+</td><td style="position: relative;">
+                        <?= str_replace('<select','<select style="width: 100%"',iconSelectBox()) ?>
+</td></tr>
+</tbody><tfoot><tr><th colspan="2">
+                    <button class='pure-button info' type='submit'><i class='icon-plus'></i> create new category</button>
+</th></tr></tfoot></table>
             </form>
         </article>        
         <article class='box'>
@@ -98,6 +133,7 @@ if(empty($this->data['statuses']))
             <table class='pure-table pure-table-horizontal'>
                 <thead>
                     <tr>
+                        <th>default</th>
                         <th>title</th>
                         <th># reports</th>
                         <th>actions</th>
@@ -110,13 +146,16 @@ if(empty($this->data['statuses']))
 ?>
                     <tr<?=$i&1?' class="pure-table-odd"':''?>>
                         <td>
-                            <?= statusButton($stat['id']) ?>
+                            <input type="radio" name="default_status" id="<?= $id = uniqid() ?>" value="<?=$stat['id']?>"<?=$stat['default']?' checked':''?>/>
+                        </td>
+                        <td>
+                            <label for="<?=$id?>"><?= statusButton($stat['id']) ?></label>
                         </td>
                         <td><?=$stat['total_reports']?></td>
                         <td>
-                            <a href="<?=BUNZ_HTTP_DIR,'report/status/',$stat['id']?>" class='pure-button info'>View</a> 
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id']?>" class='pure-button success'>Edit</a> 
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/status/',$stat['id']?>" class='pure-button danger' onclick="confirmDelete()">Delete</a>
+                            <a href="<?=BUNZ_HTTP_DIR,'report/status/',$stat['id']?>" class='pure-button icon-search info'>View</a> 
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id']?>" class='pure-button icon-pencil-alt success'>Edit</a> 
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/status/',$stat['id']?>" class='pure-button icon-cancel danger' onclick="confirmDelete()">Delete</a></td>
                     </tr>
 <?php
     }
