@@ -39,7 +39,9 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `epenis` tinyint(1) NOT NULL,
   `time` int(10) unsigned NOT NULL,
+  `ip` varbinary(16) NOT NULL,
   `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `edit_time` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `report` (`report`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -55,13 +57,14 @@ CREATE TABLE IF NOT EXISTS `reports` (
   `category` int(10) unsigned NOT NULL,
   `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
-  `ip` binary(50) NOT NULL,
+  `ip` varbinary(16) NOT NULL,
   `reproduce` text COLLATE utf8mb4_unicode_ci,
   `expected` text COLLATE utf8mb4_unicode_ci,
   `actual` text COLLATE utf8mb4_unicode_ci,
   `status` int(10) unsigned NOT NULL,
   `closed` tinyint(1) NOT NULL,
   `epenis` tinyint(1) NOT NULL,
+  `edit_time` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category` (`category`),
   KEY `status` (`status`)
@@ -76,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `statuses` (
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `color` char(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   `icon` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `default` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
