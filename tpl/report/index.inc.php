@@ -31,7 +31,7 @@ $this_week = selectCount('reports','time >= UNIX_TIMESTAMP()-60*60*24*7 AND cate
             </header>
                 <p class='box pure-u-1-6' title='open issues'><?= $open_issues ?></p>
                 <p class='box pure-u-1-6' title='total issues'><?= $total_issues ?></p>
-                <p class='box pure-u-1-6' title='% resolved'><?= (round($open_issues/$total_issues,4)*100) ?>%</p>
+                <p class='box pure-u-1-6' title='% resolved'><?= (round(($total_issues - $open_issues)/$total_issues,4)*100) ?>%</p>
                 <p class='box pure-u-1-6' title='added this week'><?= $this_week ?></p>
                 <p class='box pure-u-1-6' title='total comments'><?= selectCount('comments LEFT JOIN reports ON comments.report = reports.id','reports.category = '.$cat['id']) ?></p>
                 <p class='box pure-u-1 pure-u-md-1-6' title='last activity'><?= date(BUNZ_BUNZILLA_DATE_FORMAT,db()->query('SELECT MAX(time) FROM reports WHERE category = '.$cat['id'])->fetchColumn()) ?></p>
