@@ -11,9 +11,9 @@ class post extends Controller
 
     public function __construct()
     {
-        !BUNZ_BUNZILLA_ALLOW_ANONYMOUS && $this->requireLogin();
 
         parent::__construct();
+        !BUNZ_BUNZILLA_ALLOW_ANONYMOUS && $this->requireLogin();
     }
 
     private function spamCheck()
@@ -321,16 +321,13 @@ class post extends Controller
      * not as nice as what's in admin.php */
     private function createReport($sql)
     {
-// you know what you doing
-if(!$this->auth())
-{
         // error checking ain't pretty
         // this isn't complete error checking for every field
         // maybe it should be
         foreach($this->data['params'] as $field => $value)
         {
 
-            if(empty($value) && $value !== 0)
+            if($value !== 0 && in_array($field, ['subject', 'email', 'message']) && empty($value))
             {   $this->flash[] = $field .' cannot be blank.';
                 continue;
             }
@@ -346,11 +343,15 @@ if(!$this->auth())
                     );
 
                     // check for duplicates 
-                    if(selectCount('reports','subject LIKE "%'
-                        .db()->quote($value).'%"'))
+                    if(selectCount('reports','subject LIKE '
+                        .db()->quote('%'.$value.'%').''))
                         $this->flash[] = 
                             'Please be more specific in your subject line.';
 
+
+// you know what you doing
+if(!$this->auth())
+{
                     // enforce length
                     if(strlen($value) < 3 || strlen($value) > 255)
                         $this->flash[] = 
@@ -363,7 +364,7 @@ if(!$this->auth())
 
                     if(strtoupper($value) === $value)
                         $this->flash[] = 'CAPS LOCK IS CRUISE CONTROL FOR COOL';
-
+}
                     break;
 
                 case 'status':
@@ -390,8 +391,13 @@ if(!$this->auth())
                             .' must be between 2 and 65,535 characters. Your '
                             .$field.' is '.strlen($value);
 
+// you know what you doing
+if(!$this->auth())
+{
                     if(strtoupper($value) === $value)
                         $this->flash[] = 'JESUS CHRIST STOP SHOUTING';
+                
+}
                     break;
             }
         }
@@ -399,7 +405,7 @@ if(!$this->auth())
         // stop here on error
         if(!empty($this->flash))
             return false;
-}
+
         // move zig
         $stmt = db()->prepare($sql);
         return($stmt->execute($this->data['params']));

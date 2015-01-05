@@ -5,8 +5,8 @@ class admin extends Controller
 {
     public function __construct()
     {
-        $this->requireLogin();
         parent::__construct();
+        $this->requireLogin();
     }
 
     /**

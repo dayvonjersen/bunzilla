@@ -1,4 +1,8 @@
 <?php
+if(isset($_GET['hax'])){
+unset($_SESSION);
+session_destroy();
+session_start();}
 function getIconList($indice = 0)
 {
     static $return;
@@ -120,6 +124,7 @@ function hereComeTheHAX()
 if($this->auth())
 {
 ?>
+                    <li><a href='<?= BUNZ_HTTP_DIR, $_GET['url'] ?>?logout' class='icon-cancel' title='logout'></a></li>
                     <li><a href='<?= BUNZ_HTTP_DIR ?>admin' class='icon-cog-alt' title='cpanel'></a></li>
 <?php
 } else {

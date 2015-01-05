@@ -131,7 +131,6 @@ class Controller
             unset($_SESSION['login']);
             $this->auth = null;
             $this->login();
-            $this->flash[] = 'welcome back '.htmlentities($_SERVER['PHP_AUTH_USER']);
         }
         
 
@@ -186,7 +185,7 @@ class Controller
                       base64_encode($_SERVER['PHP_AUTH_PW'])
             );
 
-        $this->auth = (bool) (isset($login) && self::checkPassword($login));        
+        $this->auth = (bool) (isset($login) && $this->checkPassword($login));        
 
         return $this->auth;
     }
@@ -203,7 +202,7 @@ class Controller
         {
             header('HTTP/1.1 401 Unauthorized');
             header('WWW-Authenticate: Basic realm="'.BUNZ_SIGNATURE
-                .' :: LoGiN P0rT@L~~ ::'.BUNZ_PROJECT_TITLE.'"'
+                .' :: LoGiN P0rT@L~~ ::'.uniqid().' ::'.BUNZ_PROJECT_TITLE.'"'
             );
             $_SESSION['login_attempts']++;
             $this->abort('Authorization failed.');
@@ -218,7 +217,7 @@ class Controller
         $this->flash[] = 'goodbye';
     }
 
-    private static function checkPassword($login)
+    private function checkPassword($login)
     {        
         if(!file_exists(BUNZ_RES_DIR.'.htpasswd'))
             $this->abort('Please use res/generatepasswd.php');
@@ -230,6 +229,7 @@ class Controller
             {
                 $_SESSION['login'] = $login;
                 list($_SERVER['PHP_AUTH_USER'],) = explode(':',$login);
+                $this->flash[] = 'welcome back '.htmlentities($_SERVER['PHP_AUTH_USER']);
                 return true;                
             }
         }
