@@ -163,6 +163,7 @@ class Controller
 
     public function requireLogin($ulevel = 0)
     {
+        is_null($this->auth) && $this->auth();
         if(!$this->auth())
         {
             $this->flash[] = 'You must be logged in to view that page.';
@@ -174,7 +175,7 @@ class Controller
      * begin Terrible HTTP Authentication */
     public function auth()
     {
-        if(isset($this->auth))
+        if(!is_null($this->auth))
             return $this->auth;
 
         if(isset($_SESSION['login']))
@@ -206,7 +207,10 @@ class Controller
             );
             $_SESSION['login_attempts']++;
             $this->abort('Authorization failed.');
+        } else {
+                $this->flash[] = 'welcome back '.htmlentities($_SERVER['PHP_AUTH_USER']);
         }
+            
     }
 
     public function logout()
@@ -229,7 +233,6 @@ class Controller
             {
                 $_SESSION['login'] = $login;
                 list($_SERVER['PHP_AUTH_USER'],) = explode(':',$login);
-                $this->flash[] = 'welcome back '.htmlentities($_SERVER['PHP_AUTH_USER']);
                 return true;                
             }
         }

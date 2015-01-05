@@ -108,10 +108,22 @@ while(($f = $ls->read()) !== false)
         <script>
 function hereComeTheHAX()
 {
-    (new Selectable('navbar-dropdown')).on('select', function(evt)
-    {
-        window.location = evt.target.value;
-    });
+    var nbdd = new Selectable('navbar-dropdown');
+        nbdd.on('show', function(evt)
+        {
+            var rsc = document.querySelector('#holyshit .rui-selectable-container');
+                rsc.style.width = 'calc(100vw - 2.75em)';
+                rsc.style.position = 'fixed';
+                rsc.style.left = '1em';
+                rsc.style.top = '2em';
+        });
+        nbdd.on('hide', function(evt)
+        {
+            var rsc = document.querySelector('#holyshit .rui-selectable-container');
+                rsc.style.width = 'auto';
+                rsc.style.position = 'static';
+        });
+        
 }
         </script>
     </head>
@@ -134,21 +146,21 @@ if($this->auth())
 }
 ?>
 
-                    <li><select id="navbar-dropdown" data-selectable='{"hCont": ""}'>
-    <option ><span class="icon-plus">submit new</span></option>
+                    <li id="holyshit"><a href='<?= BUNZ_HTTP_DIR, 'post'?>' class="icon-plus" title="submit new..." id="navbar-dropdown-placeholder">submit new...</a><dl id="navbar-dropdown" data-selectable='{"hCont": "","multiple":false}'>
 <?php
 if(!isset($this->data['categories']))
     $this->data['categories'] = db()->query('SELECT * FROM categories ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
 foreach($this->data['categories'] as $cat)
 {
+$cat['color'] === null && $cat['color'] = '000000';
 ?>
-    <option value="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="<?=$cat['icon']?>" style="color: #<?=$cat['color']?>" title="<?=$cat['caption']?>"><?= $cat['title'] ?></option>
+    <dd><a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="<?=$cat['icon']?>" style="color: #<?=$cat['color'], '; background: rgba(', sprintf('%02d,%02d,%02d', hexdec(substr($cat['color'],0,2)),hexdec(substr($cat['color'],2,2)),hexdec(substr($cat['color'],4,2))),',0.5);'?> " title="<?=$cat['caption']?>"><?= $cat['title'] ?></a></dd>
 <?php
 }
 unset($cat);
 ?>
     
-</select></li>
+</dl></li>
                 </ul>
             </nav>
         </header>

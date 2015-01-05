@@ -39,7 +39,7 @@ body {
     font-family: 'scp', monospace;
     color: #111;
     height: 100%;
-    margin: 1em 1em 190px 1em;
+    margin: 4.5em 1em 190px 1em;
     background-color: rgba(255,255,255,0.7);
 }
 
@@ -503,7 +503,6 @@ a.icon-link:active {
 }
 
 a.icon-link:before {
-     float: left;
 }
 
 .breadcrumb span {
@@ -524,36 +523,56 @@ a.icon-link:before {
     display: inline-block;
 }
 
-.rui-selectable.rui-selectable-single.rui-dd-menu {
-    text-align: left;
-    overflow-y: scroll;    
-    max-height: 250px;
+:not(.header) .rui-selectable.rui-selectable-single.rui-dd-menu {
+     max-height: 250px;
+     overflow-y: scroll;
+     text-align: left;
 }
 
 .header .rui-selectable.rui-selectable-single.rui-dd-menu {
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    overflow-y: auto !important;
-    padding: 1em;
-
+     border-radius: 0px;
+     border: 0px none;
+     box-shadow: none;
+     overflow-x: hidden;
+     overflow-y: auto ! important;
 }
 
 .header .rui-selectable-container {
-    padding-right: 0.5em;
 }
 
 .header .rui-selectable-container, .header .rui-selectable {
-    background: #f955a8;
-    color: #fff;
-    border: 0;
+     border: 0px none;
+     color: #FFFFFF;
 }
 
 .header div.rui-selectable-handle {
-    background: transparent !important;
-    color: #fff !important;
-    border-color: #fff !important;
+     background: none repeat scroll 0% 0% rgba(0, 0, 0, 0) ! important;
+     border-color: #FFFFFF ! important;
+     color: #FFFFFF ! important;
 }
+
+#navbar-dropdown {
+     padding: 0px;
+     text-align: left;
+     background: #fff;
+    width: 100% !important;
+    position: static !important;
+     text-shadow: 1px 1px 0px #fff, 2px 2px 0px rgba(0,0,0,0.15);
+}
+
+#navbar-dropdown-placeholder {
+    position: absolute;
+    z-index: 100;
+    right: 1em;
+    bottom: -25%;
+}
+
+#navbar-dropdown dd {
+    margin: 0;
+}
+
+.header {z-index: 1000;position: fixed;width: calc(100% - 2em); top: 1em; }
+
 
 @media (min-width: 48em) {
 
@@ -570,6 +589,13 @@ a.icon-link:before {
 }
 @media (max-width: 800px) 
 {
+    #navbar-dropdown-placeholder {
+        font-size: 0;
+    position: static !important;
+    }
+    #navbar-dropdown-placeholder::before {
+        font-size: 16px;
+    }
     body {
         margin-bottom: 250px;
     }
