@@ -570,8 +570,12 @@ a.icon-link:before {
 #navbar-dropdown dd {
     margin: 0;
 }
+#navbar-dropdown a {
+    display: inline-block;
+    z-index:1000;
+    }
 
-.header {z-index: 1000;position: fixed;width: calc(100% - 2em); top: 1em; }
+.header {z-index: 100;position: fixed;width: calc(100% - 2em); top: 1em; }
 
 
 @media (min-width: 48em) {

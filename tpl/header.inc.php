@@ -123,7 +123,18 @@ function hereComeTheHAX()
                 rsc.style.width = 'auto';
                 rsc.style.position = 'static';
         });
-        
+        var fml = document.getElementById('navbar-dropdown-placeholder');
+        fml.addEventListener('click',function(evt)
+        {
+            if(evt.target == fml)
+                nbdd.toggleList(new Event(evt));
+        },false);
+        nbdd.on('click', function(evt)
+        {
+//            console.log(evt.target);
+              window.location = evt.target._.href;
+//                window.location = evt.target.href
+        });
 }
         </script>
     </head>
@@ -146,7 +157,7 @@ if($this->auth())
 }
 ?>
 
-                    <li id="holyshit"><a href='<?= BUNZ_HTTP_DIR, 'post'?>' class="icon-plus" title="submit new..." id="navbar-dropdown-placeholder">submit new...</a><dl id="navbar-dropdown" data-selectable='{"hCont": "","multiple":false}'>
+                    <li id="holyshit"><a href='#' class="icon-emo-shoot" id="navbar-dropdown-placeholder">&nbsp;&nbsp;</a><dl id="navbar-dropdown" data-selectable='{"hCont": "","multiple":false}'>
 <?php
 if(!isset($this->data['categories']))
     $this->data['categories'] = db()->query('SELECT * FROM categories ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
@@ -154,7 +165,7 @@ foreach($this->data['categories'] as $cat)
 {
 $cat['color'] === null && $cat['color'] = '000000';
 ?>
-    <dd><a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="<?=$cat['icon']?>" style="color: #<?=$cat['color'], '; background: rgba(', sprintf('%02d,%02d,%02d', hexdec(substr($cat['color'],0,2)),hexdec(substr($cat['color'],2,2)),hexdec(substr($cat['color'],4,2))),',0.5);'?> " title="<?=$cat['caption']?>"><?= $cat['title'] ?></a></dd>
+    <dd class="pure-g" style=" background: rgba(<?=sprintf('%02d,%02d,%02d', hexdec(substr($cat['color'],0,2)),hexdec(substr($cat['color'],2,2)),hexdec(substr($cat['color'],4,2)))?>,0.5);"><a href="<?= BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class="pure-u-1-2 <?=$cat['icon']?>" style="text-align: right; " title="<?=$cat['caption']?>"><?= $cat['title'] ?></a> | <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="pure-u-1-2 icon-plus">poast new</a></dd>
 <?php
 }
 unset($cat);
