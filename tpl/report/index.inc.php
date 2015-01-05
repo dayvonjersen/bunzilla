@@ -36,6 +36,7 @@ $this_week = selectCount('reports','time >= UNIX_TIMESTAMP()-60*60*24*7 AND cate
             <section class='box-pure-u-1'><em>nothing here yet!</em></section>
 <?php
     } else {
+?>
                 <p class='box pure-u-1-6' title='open issues'><?= $open_issues ?></p>
                 <p class='box pure-u-1-6' title='total issues'><?= $total_issues ?></p>
                 <p class='box pure-u-1-6' title='% resolved'><?= (round(($total_issues - $open_issues)/$total_issues,4)*100) ?>%</p>
