@@ -35,7 +35,11 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                     </p>
                     <p class='pure-control-group'>
                         <label>pick a color</label>
+<<<<<<< Updated upstream
                         <input type="text" class='color' name="color {pickerMode:'HVS',pickerPosition:'top',pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" value="<?= $this->data['category']['color'] ?>">
+=======
+                        <input type="text" class='color' name='color' value="<?= $this->data['category']['color'] ?>">
+>>>>>>> Stashed changes
                     </p>
 
                     <p class='pure-control-group'>

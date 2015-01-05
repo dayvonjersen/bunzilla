@@ -4,10 +4,10 @@
 # 2. ???
 # 3. HTTP authentication!
 
-#AuthType Basic
-#AuthName "Bunzilla"
-#AuthUserFile /var/www/bunzilla/res/.htpasswd
-#Require valid-user
+AuthType Basic
+AuthName "Bunzilla"
+AuthUserFile /var/www/bunzilla/res/.htpasswd
+Require valid-user
 
 Options -MultiViews
 
