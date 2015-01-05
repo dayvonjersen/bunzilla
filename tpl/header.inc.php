@@ -1,8 +1,8 @@
 <?php
-if(isset($_GET['hax'])){
+/*if(isset($_GET['hax'])){
 unset($_SESSION);
 session_destroy();
-session_start();}
+session_start();}*/
 function getIconList($indice = 0)
 {
     static $return;
