@@ -4,3 +4,4 @@
 *.htm
 *.txt
 res/.htpasswd
+update.sh
