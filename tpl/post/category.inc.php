@@ -21,7 +21,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 </p>
                 <p class='pure-control-group'>
                     <label>subject</label>
-                    <input maxlength='255' name='subject' type="text" value="<?= $this->data['params']['subject'] ?>">
+                    <input autofocus maxlength='255' name='subject' type="text" value="<?= $this->data['params']['subject'] ?>">
                 </p>
 <?php
 $fields = [
@@ -31,8 +31,9 @@ $fields = [
     'actual'      => 'The actual result, output, or other behavior that occurs'
 ];
 
-$rows = round(16/(array_sum(array_intersect_key($this->data['category'],$fields))));
+$rows = array_sum(array_intersect_key($this->data['category'],$fields));
 
+$rows = $rows > 0 ? round(16/($rows)) : 0;
 foreach($fields as $field => $placeholder)
 {
     if($this->data['category'][$field])
@@ -45,12 +46,13 @@ foreach($fields as $field => $placeholder)
 <?php
     }
 }
-?>
+/*
                 <p class='pure-control-group'>
                     <label>initial status</label>
                     <?= statusSelectBox($this->data['params']['status']) ?>
                 </p>
-
+*/
+?>
                 
                  <button class='pure-button' type='submit'><i class='icon-plus'></i> submit report</button>
                 </fieldset>

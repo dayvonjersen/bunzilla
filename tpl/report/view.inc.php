@@ -15,6 +15,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 
 <script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+  <p class='box'><a href="<?= BUNZ_HTTP_DIR, 'post/category/', $this->data['category']['id'] ?>" class='pure-button info icon-plus pure-u-1'>Submit New <?= $this->data['category']['title'] ?></a></p>
         <article class='card'>
             <header class='msginfo box'>
                 <div class='pure-g'>

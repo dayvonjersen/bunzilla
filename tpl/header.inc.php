@@ -116,7 +116,19 @@ function hereComeTheHAX()
             <nav class='home-menu pure-menu pure-menu-open pure-menu-horizontal'>
                 <a class='pure-menu-heading' href='<?= BUNZ_HTTP_DIR ?>'>／(≡・ x ・≡)＼</a>
                 <ul>
-                    <li><a href='<?= BUNZ_HTTP_DIR ?>admin' class='icon-cog-alt' title='bunzilla settings'></a></li>
+<?php
+if($this->auth())
+{
+?>
+                    <li><a href='<?= BUNZ_HTTP_DIR ?>admin' class='icon-cog-alt' title='cpanel'></a></li>
+<?php
+} else {
+?>
+                    <li><a href='<?= BUNZ_HTTP_DIR, $_GET['url'] ?>?login' class='icon-key' title='login'></a></li>
+<?php
+}
+?>
+
                     <li><select id="navbar-dropdown" data-selectable='{"hCont": ""}'>
     <option ><span class="icon-plus">submit new</span></option>
 <?php
@@ -128,6 +140,7 @@ foreach($this->data['categories'] as $cat)
     <option value="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="<?=$cat['icon']?>" style="color: #<?=$cat['color']?>" title="<?=$cat['caption']?>"><?= $cat['title'] ?></option>
 <?php
 }
+unset($cat);
 ?>
     
 </select></li>

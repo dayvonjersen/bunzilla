@@ -65,13 +65,23 @@ class admin extends Controller
         {
             case 'category':
             case 'status':
+                if(isset($_POST['default_status']))
+                {
+                    $id = (int)$_POST['default_status'];
+                    if(!selectCount('statuses','id = '.$id))
+                        $this->abort('invalid status');
+                    db()->query('UPDATE statuses SET `default` = 1 WHERE id = '.$id);
+                    db()->query('UPDATE statuses SET `default` = 0 WHERE id != '.$id);
+                    $this->flash[] = 'default status updated';
+                    $this->index();
+                    exit;
+                }
                 break;
 
             default:
                 $this->abort('Unsupported action!');
         }
         $mode .= 'Edit';
-       
         call_user_func_array([$this,$mode],$args);
         $this->index();
     }

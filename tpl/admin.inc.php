@@ -130,10 +130,11 @@ if(empty($this->data['statuses']))
 <?php
 } else {
 ?>
+<form action="<?= BUNZ_HTTP_DIR,'admin/edit/status' ?>" method="post">
             <table class='pure-table pure-table-horizontal'>
                 <thead>
                     <tr>
-                        <th>default</th>
+                        <th><button class="pure-button icon-ok success" type="submit">set as default</button></th>
                         <th>title</th>
                         <th># reports</th>
                         <th>actions</th>
@@ -165,6 +166,7 @@ if(empty($this->data['statuses']))
 <?php
 }
 ?>
+</form>
             
                     
             <form action="<?=BUNZ_HTTP_DIR,'admin/add/status'?>" method="post" class='pure-form'>

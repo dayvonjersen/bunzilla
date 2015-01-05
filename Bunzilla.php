@@ -124,6 +124,17 @@ class Controller
         $this->tpl = get_called_class();
         $this->auth = $this->auth();
 
+        if(isset($_GET['logout']) && $this->auth())
+            $this->logout();
+        elseif(isset($_GET['login']) && !$this->auth())
+        {
+            unset($_SESSION['login']);
+            $this->auth = null;
+            $this->login();
+            $this->flash[] = 'welcome back '.htmlentities($_SERVER['PHP_AUTH_USER']);
+        }
+        
+
         if(isset($_SESSION['flash']))
         {
             $this->flash = unserialize($_SESSION['flash']);
@@ -197,6 +208,14 @@ class Controller
             $_SESSION['login_attempts']++;
             $this->abort('Authorization failed.');
         }
+    }
+
+    public function logout()
+    {
+        $_SESSION['login'] = 'hacky:as:fuck';
+        unset($_SERVER['PHP_AUTH_PW'],$_SERVER['PHP_AUTH_USER']);
+        $this->auth = null;
+        $this->flash[] = 'goodbye';
     }
 
     private static function checkPassword($login)

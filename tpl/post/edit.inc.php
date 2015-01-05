@@ -41,10 +41,11 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 <?php
 if(!isset($this->data['params']['comment_id']))
 {
+$q = true;
 ?>
                 <p class='pure-control-group'>
                     <label>subject</label>
-                    <input maxlength='255' name='subject' type="text" value="<?= $this->data['params']['subject'] ?>">
+                    <input autofocus maxlength='255' name='subject' type="text" value="<?= $this->data['params']['subject'] ?>">
                 </p>
 <?php
 }
@@ -68,7 +69,7 @@ foreach($fields as $field => $placeholder)
 ?>
                 <p class='pure-control-group' title="<?=$placeholder?>">
                     <label><?= $field ?></label>
-                    <textarea rows='<?=$rows?>' name='<?=$field?>' placeholder='<?=$placeholder?>'><?= unfiltermessage($this->data['params'][$field]) ?></textarea>
+                    <textarea <?= isset($q) ? '' : ($q = 'autofocus') ?> rows='<?=$rows?>' name='<?=$field?>' placeholder='<?=$placeholder?>'><?= unfiltermessage($this->data['params'][$field]) ?></textarea>
                 </p>
 <?php
     }

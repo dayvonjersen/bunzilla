@@ -18,7 +18,7 @@ class post extends Controller
 
     private function spamCheck()
     {
-        if(!empty($_POST))
+        if(!empty($_POST) && !$this->auth())
         {
         // probably need a better mechanism than this
         $where = 'ip = '.db()->quote(remoteAddr())
@@ -130,7 +130,7 @@ class post extends Controller
         }
 
         $filtOpts['subject'] = filterOptions(0,'full_special_chars');
-        $filtOpts['status']  = filterOptions(0,'number_int');
+        //$filtOpts['status']  = filterOptions(0,'number_int');
         foreach(['description','reproduce','expected','actual'] as $field)
         {
             if($this->data['category'][$field])
@@ -206,6 +206,7 @@ class post extends Controller
             $this->data['params']['email'] = 
                 $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
         $this->data['params']['category'] = $this->data['category']['id'];
+        $this->data['params']['status'] = db()->query('SELECT id FROM statuses WHERE `default` = 1')->fetchColumn();
 
         $this->data['params']['ip'] = remoteAddr();
         $this->data['params']['epenis'] = (int)$this->auth();
@@ -320,13 +321,15 @@ class post extends Controller
      * not as nice as what's in admin.php */
     private function createReport($sql)
     {
-
-
+// you know what you doing
+if(!$this->auth())
+{
         // error checking ain't pretty
         // this isn't complete error checking for every field
         // maybe it should be
         foreach($this->data['params'] as $field => $value)
         {
+
             if(empty($value) && $value !== 0)
             {   $this->flash[] = $field .' cannot be blank.';
                 continue;
@@ -396,7 +399,7 @@ class post extends Controller
         // stop here on error
         if(!empty($this->flash))
             return false;
-
+}
         // move zig
         $stmt = db()->prepare($sql);
         return($stmt->execute($this->data['params']));

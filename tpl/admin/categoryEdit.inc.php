@@ -1,6 +1,5 @@
 <?php
-$cat = $this->data['category'];
-$pageTitle = 'Edit &quot;'.$cat['title'].'&quot;';
+$pageTitle = 'Edit &quot;'.$this->data['category']['title'].'&quot;';
 $bread = [
     'cpanel' => ['href' => BUNZ_HTTP_DIR.'admin',
                    'icon' => 'icon-cog-alt'],
@@ -11,37 +10,37 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
         <h1><?= $pageTitle ?></h1>
-        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id'] ?>" method="post" class='pure-form pure-form-aligned'>
+        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/category/',$this->data['category']['id'] ?>" method="post" class='pure-form pure-form-aligned'>
                 <fieldset class='is-center'>
                     <legend>create new category</legend>
                     <p class='pure-control-group'>
                         <label>title</label>
-                        <input maxlength='255' placeholder='e.g. bug reports...' name='title' type="text" value="<?= $cat['title'] ?>">
+                        <input maxlength='255' placeholder='e.g. bug reports...' name='title' type="text" value="<?= $this->data['category']['title'] ?>">
                     </p>
                     <p class='pure-control-group'>
                         <label>caption</label>
-                        <input maxlength='255' placeholder='e.g. report problems here...' name='caption' type="text" value="<?= $cat['caption'] ?>">
+                        <input maxlength='255' placeholder='e.g. report problems here...' name='caption' type="text" value="<?= $this->data['category']['caption'] ?>">
                     </p>
                     <p class='pure-controls'>
-                        <label>requires description<input type="checkbox" name='description'<?= $cat['description'] ? ' checked' : ''?>></label>
+                        <label>requires description<input type="checkbox" name='description'<?= $this->data['category']['description'] ? ' checked' : ''?>></label>
                     </p>
                     <p class='pure-controls'>
-                        <label>requires reproduce<input type="checkbox" name='reproduce'<?= $cat['reproduce'] ? ' checked' : ''?>></label>
+                        <label>requires reproduce<input type="checkbox" name='reproduce'<?= $this->data['category']['reproduce'] ? ' checked' : ''?>></label>
                     </p>
                     <p class='pure-controls'>
-                        <label>requires expected<input type="checkbox" name='expected'<?= $cat['expected'] ? ' checked' : ''?>></label>
+                        <label>requires expected<input type="checkbox" name='expected'<?= $this->data['category']['expected'] ? ' checked' : ''?>></label>
                     </p>
                     <p class='pure-controls'>
-                        <label>requires actual<input type="checkbox" name='actual'<?= $cat['actual'] ? ' checked' : ''?>></label>
+                        <label>requires actual<input type="checkbox" name='actual'<?= $this->data['category']['actual'] ? ' checked' : ''?>></label>
                     </p>
                     <p class='pure-control-group'>
                         <label>pick a color</label>
-                        <input type="text" class='color' name='color' value="<?= $cat['color'] ?>">
+                        <input type="text" class='color' name='color' value="<?= $this->data['category']['color'] ?>">
                     </p>
 
                     <p class='pure-control-group'>
                         <label>pick an icon</label>
-                        <?= iconSelectBox($cat['icon']) ?>
+                        <?= iconSelectBox($this->data['category']['icon']) ?>
                     </p>
                     <button class='pure-button' type='submit'><i class='icon-ok'></i> make changes</button>
                 </fieldset>
