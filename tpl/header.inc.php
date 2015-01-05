@@ -24,14 +24,17 @@ function iconSelectBox($selected = false)
 {
 /**/
     $id = uniqid();
-    $select = '<input type="hidden" name="icon" id="'.$id.'"/>';
-    $select .= '<ul name="icon" class="rui-selectable" data-selectable=\'{"multiple":false,"update":"'.$id.'","hCont":""}\'>';
     $icons = getIconList();
     $unicode = getIconList(1);
-    foreach($icons as $i=> $icon)
-        $select .= '<li data-icon="'.$unicode[$i].'" val="'.$icon.'"'.($selected === $icon?' selected':'').' class="'.$icon.'">'.$icon.'</li>';
+    $q=0;
+    $select = '';
+    foreach($icons as $i=> $icon){
+        $select .= '<li data-icon="'.$unicode[$i].'" val="'.$icon.'" class="'.$icon.'">'.$icon.'</li>';
+        if($selected === $icon)$q=$i;}
     $select .= '</ul>';
-    return $select;
+    $asdf = '<input type="hidden" name="icon" id="'.$id.'"/>';
+    $asdf .= '<ul class="rui-selectable" data-selectable=\'{"multiple":false,"update":"'.$id.'","selected":['.$q.']}\'>';
+    return $asdf.$select;
 /**
     $fakebox = '<div class="selectBox">';
     $icons = getIconList();
@@ -165,7 +168,11 @@ foreach($this->data['categories'] as $cat)
 {
 $cat['color'] === null && $cat['color'] = '000000';
 ?>
-    <dd class="pure-g" style=" background: rgba(<?=sprintf('%02d,%02d,%02d', hexdec(substr($cat['color'],0,2)),hexdec(substr($cat['color'],2,2)),hexdec(substr($cat['color'],4,2)))?>,0.5);"><a href="<?= BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class="pure-u-1-2 <?=$cat['icon']?>" style="text-align: right; " title="<?=$cat['caption']?>"><?= $cat['title'] ?></a> | <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="pure-u-1-2 icon-plus">poast new</a></dd>
+    <dd class="pure-g" style=" background: #<?= $cat['color'] ?>">
+<?php/*
+rgba(<?=sprintf('%02d,%02d,%02d', hexdec(substr($cat['color'],0,2)),hexdec(substr($cat['color'],2,2)),hexdec(substr($cat['color'],4,2)))?>,0.5);">
+*/?>
+<a href="<?= BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class="pure-u-1-2 <?=$cat['icon']?>" style="text-align: right; " title="<?=$cat['caption']?>"><?= $cat['title'] ?></a> | <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="pure-u-1-2 icon-plus">poast new</a></dd>
 <?php
 }
 unset($cat);

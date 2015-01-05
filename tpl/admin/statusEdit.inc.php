@@ -21,7 +21,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                    
                     <p class='pure-control-group'>
                         <label>pick a color</label>
-                        <input type="text" class='color' name='color' value="<?= $stat['color'] ?>">
+                        <input type="text" class="color {pickerMode:'HVS',pickerPosition:'top',pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" name='color' value="<?= $stat['color'] ?>">
                     </p>
 
                     <p class='pure-control-group'>

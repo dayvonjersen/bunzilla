@@ -1,14 +1,19 @@
 <?php
-function categorySelectBox($disable,$cats)
+function categorySelectBox($disable = false,&$cats)
 {
     if(count($cats) == 1)
         return '';
-
-    $id = uniqid();
-    $select = '<input type="hidden" name="move_to" id="'.$id.'"/><select class="rui-selectable" data-selectable=\'{"multiple":false,"assignTo":"'.$id.'","hCont":""}\'><option>move to...</option>';
+    
+    $select = '<select class="rui-selectable" data-selectable=\'{"multiple":false}\'>
+<dt>move to...</dt>';
     foreach($cats as $cat)
-        $select .= $cat['id'] !== $disable ? '<option value="'.$cat['id'].'" class="'.$cat['icon'].'" style="background: #'.$cat['color'].'">'.$cat['title'].'</value>' : '';
-    $select .= '</select>';        
+    {
+        if($cat['id'] == $disable)
+            continue;
+
+        $select .= '<option value="'.$cat['id'].'" class="'.$cat['icon'].'">'.$cat['title'].'</option>';
+    }
+    $select .= '</select>';
     return $select;
 }
 $pageTitle = 'cpanel';
@@ -38,7 +43,7 @@ if(empty($this->data['categories']))
                         <th colspan="2">title</th>
                         <th># reports</th>
                         <th>last submission</th>
-                        <th>actions</th>
+                        <th>irreversible actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,13 +53,13 @@ if(empty($this->data['categories']))
 ?>
                     <tr<?=$i&1?' class="pure-table-odd"':''?>>
                         <td><a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class='<?=$cat['icon']?>' style="color: #<?= $cat['color'] ?>"><?=$cat['title']?></a><br /><small><?=$cat['caption']?></small></td>
-                        <td><a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" class='pure-button icon-pencil-alt success'>Edit</a></td>
+                        <td><a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" class='pure-button icon-pencil-alt success'>edit</a></td>
                         <td><?=$cat['total_reports']?></td>
-                        <td><?=$cat['last_submission'] ? date(BUNZ_BUNZILLA_DATE_FORMAT,$cat['last_submission']) : '<em>Never</em>'?></td>
+                        <td><?=$cat['last_submission'] ? date(BUNZ_BUNZILLA_DATE_FORMAT,$cat['last_submission']) : '<em>never</em>'?></td>
                         <td>
-                            
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/category/',$cat['id']?>" class='pure-button icon-cancel danger' onclick="confirmDelete(event)">Delete</a>
-                            <!-- categorySelectBox($cat['id'],$this->data['categories']) -->
+                            <form action="<?=BUNZ_HTTP_DIR,'admin/action/category/',$cat['id']?>" method="post">
+<button type="submit" name="delete" class='pure-button icon-cancel danger' onclick="confirmDelete(event)">delete and move to</button> <?= $cat['total_reports'] ? '<button type="submit" name="move" class="pure-button icon-right-open-mini flash">just move reports to</button>' . categorySelectBox($cat['id'],$this->data['categories']): '' ?></form>
+                         
                     </tr>
 <?php
     }
@@ -108,7 +113,7 @@ table[border][style] td:first-child:not(:only-child) {
 <tr><td>
                         <label>pick a color</label>
 </td><td>
-                        <input type="text" class='color' name='color' value='ffffff'>
+                        <input type="text" class="color {pickerMode:'HVS',pickerPosition:'top',pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" name='color' value='ffffff'>
 </td></tr>
 <tr class='pure-table-odd'><td>
                         <label>pick an icon</label>
@@ -173,11 +178,57 @@ if(empty($this->data['statuses']))
                 <fieldset class='is-center'>
                     <legend>create new status</legend>
                         <input type="text" name='title' placeholder='title'>
-                        <input type="text" name='color' class='color' placeholder='pick a color...'>
+                        <input type="text" name='color' class="color {pickerMode:'HVS',pickerPosition:'top',pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" placeholder='pick a color...'>
                         <?= iconSelectBox() ?>
                     <button class='pure-button'><i class='icon-plus'></i> create new status</button>
                 </fieldset>
             </form>
         </article>
+        <article class='box'>
+            <h1>edit tags</h1>
+<?php
+if(empty($this->data['tags']))
+{
+?>
+            <h2>No tags yet!</h2>
+<?php
+} else {
+?>
+<form action="<?= BUNZ_HTTP_DIR,'admin/edit/status' ?>" method="post">
+            <table class='pure-table pure-table-horizontal'>
+                <thead>
+                    <tr>
+                        <th>tag</th>
+                        <th># reports</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php
+//    foreach($this->data['tags'] as $i => $tag)
+
+?>
+                    <tr<?=$i&1?' class="pure-table-odd"':''?>>
+                        <td><button class="pure-button"><small><small>&larr; example</small></small></button></td>
+                        <td>9001</td>
+                        <td>View/Edit/Delete</td>
+                    </tr>
+<?php
+}
+?>
+                </tbody>
+            </table>
+            <form action="<?=BUNZ_HTTP_DIR,'admin/add/tag'?>" method="post" class='pure-form'>
+                <fieldset class='is-center'>
+                    <legend>create new tag</legend>
+                        <input type="text" name='title' placeholder='title'>
+                        <input type="text" name='color' class="color {pickerMode:'HVS',pickerPosition:'top',pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" placeholder='pick a color...'>
+                        <?= iconSelectBox() ?>
+                    <button class='pure-button'><i class='icon-plus'></i> create new tag</button>
+                </fieldset>
+            </form>
+        </article>
+
+                        
 <?php
 require BUNZ_TPL_DIR . 'footer.inc.php';

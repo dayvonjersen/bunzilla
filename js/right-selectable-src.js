@@ -204,7 +204,7 @@ var Selectable = new Widget('UL', {
 
       limit:      null,    // put some number if you'd like to limit the number of selected items
 
-      hCont  :   '&bull;'  // single-selectable handle content
+      hCont  :   ''  // single-selectable handle content
     },
 
     // converting normal select boxes into selectables
