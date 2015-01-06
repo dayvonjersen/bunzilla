@@ -5,14 +5,21 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 
 ?>
 <script>
-    clearInterval(window.bunnyFooFoo);
+    function additionalHax()
+    {
+        clearInterval(window.bunnyFooFoo);
+        setTimeout(function(){
+            document.querySelector('#bunny-bar a.pure-menu-heading').style.opacity = 0;
+        },2500);
+    }
 </script>
 <style>
     #bunny-bar a.pure-menu-heading {
         animation-name: hinge !important;
         animation-duration: 2s;
-        animation-delay: 5s;
+        animation-delay: 1s;
         animation-iteration-count: 1;
+        transition: opacity 500ms ease-out;
     }
 </style>
         <article class='box'>

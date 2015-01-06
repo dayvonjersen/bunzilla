@@ -194,6 +194,9 @@ function hereComeTheHAX()
         var hop = document.querySelector('#bunny-bar a.pure-menu-heading');
         hop.className = hop.className.includes("bounce") ? hop.className.replace("bounce", "") : hop.className + " bounce";
     }, 5000);
+
+    if(typeof additionalHax != "undefined")
+        additionalHax();
 }
         </script>
     </head>

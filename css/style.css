@@ -116,7 +116,6 @@ a.pure-button-primary {
 .home-menu li a:hover,
 .home-menu li a:focus {
     background: none;
-    border: 0;
     color: #4eb3de;
 }
 
@@ -651,7 +650,6 @@ a.icon-link:before {
     }
 
     .home-menu.pure-menu.pure-menu-open ul {
-        display: block;
     }
 
     #burger {
