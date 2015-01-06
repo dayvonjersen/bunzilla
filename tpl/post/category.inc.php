@@ -148,7 +148,17 @@ foreach(json_decode(file_get_contents(str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_JS
 }
 ?>
 
-        <span class='icon-paragraph' title=""><input type="checkbox"><small><small>disable line breaks everywhere except inside of &lt;code&gt;</small></small></span>
+        <label class='icon-paragraph'><input id="disable_nlbr" type="checkbox" name="disable_nlbr" value="1"/>disable line breaks everywhere except inside of &lt;code&gt;</span>
+
+<h2 class="icon-tags">tags!!111</h2>
+<?php
+foreach($this->data['tags'] as $tag)
+{
+?>
+        <label><input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>"/><?= tagButton($tag['id']) ?></label>
+<?php
+}
+?>
 
                 
                  <button class='pure-button' type='submit'><i class='icon-plus'></i> submit report</button>

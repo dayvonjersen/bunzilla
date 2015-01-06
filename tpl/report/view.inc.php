@@ -7,7 +7,7 @@ $bread = [
         'color' => $this->data['category']['color']
     ],
     $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
-        'icon' => 'icon-feather',
+        'icon' => 'icon-doc-text-inv',
     ]
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
@@ -40,6 +40,17 @@ if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($comment['ip']))
                     </p>
                 </div>
 <?php
+if(!empty($this->data['tags']))
+{
+?>
+                <p class='box icon-tags' title="tagged">
+<?php
+        foreach($this->data['tags'] as $tag)
+            echo tagButton($tag[0]);
+?>
+                </p>
+<?php
+}
 if(!is_null($this->data['edit_time']))
 {
 ?>
@@ -63,13 +74,13 @@ foreach(['description','reproduce','expected','actual'] as $field)
 if(!empty($this->data['comments']))
 {
 ?>
-            <article class='card' title='comments and replies &darr;'>
+            <article class='card icon-chat' title='comments and replies &darr;'>
 <?php
     $i = 0;
     foreach($this->data['comments'] as $comment)
     {
 ?>
-            <section class='card' id="reply-<?=$comment['id']?>" title="#<?=$i?>">
+            <section id="reply-<?=$comment['id']?>" title="#<?=$i?>">
                 <header class='msginfo box'>
                     <p><?= $comment['email'], $comment['epenis'] ? '<span class="info">## Developer</span>' : '' ?> @ <a href="#reply-<?= $comment['id'] ?>"><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$comment['time']) ?> #<?=$i++?></a>
 

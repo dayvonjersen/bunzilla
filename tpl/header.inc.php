@@ -57,6 +57,17 @@ function statusButton($statusId)
     }
     return isset($buttons[$statusId]) ? $buttons[$statusId] : '';
 }
+function tagButton($tagId)
+{
+    static $buttons = [];
+    $tagId = (int)$tagId;
+    if(!isset($buttons[$tagId]) && selectCount('tags','id = '.$tagId))
+    {
+        list($title,$color,$icon) = current(db()->query('SELECT title,color,icon FROM tags WHERE id = '.$tagId)->fetchAll(PDO::FETCH_NUM));
+        $buttons[$tagId] = '<span class="pure-button '.$icon.'" style="background: #'.$color.'"><small>'.$title.'</small></span>';
+    }
+    return isset($buttons[$tagId]) ? $buttons[$tagId] : '';
+}
 function statusSelectBox($selected = false)
 {
     if(!selectCount('statuses'))

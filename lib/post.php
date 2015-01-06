@@ -7,7 +7,8 @@
 class post extends Controller
 {
     // php class constants cannot contain expressions :\
-    const ALLOWED_HTML = 'b|i|em|strong|dfn|samp|kbd|var|cite|del|ins|strike|s|u|ol|ul|li|dt|dd|dl|sup|sub|small|big|image|link';
+    // this is no longer even the longest line which is sad
+    const ALLOWED_HTML = 'b|i|kbd|del|ins|strike|s|u|ol|ul|li|dt|dd|dl|sup|sub|small|big|image|link';
 
     public function __construct()
     {
@@ -193,11 +194,27 @@ class post extends Controller
         header('Location: '.$location);        
     }
 
+    private function handleTags($reportId)
+    {
+        if(isset($_POST['tags']) && is_array($_POST['tags']))
+        {
+            $tags = [];
+            foreach($_POST['tags'] as $tag)
+                if(selectCount('tags','id = '.(int)$tag))
+                    $tags[] = '('.(int)$reportId.','.(int)$tag.')';
+
+            if(!empty($tags))
+                db()->query('INSERT INTO tag_joins (report,tag) VALUES '.implode(',',$tags));
+        }
+    }
+
     public function category($id)
     {
         $this->spamCheck();
         $this->tpl .= '/category';
         $this->setReportCategory($id);
+        $this->data['tags'] = db()->query('SELECT id FROM tags ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
+
         $filtOpts = $this->getFilterOptions('report');
 
         $this->data['params'] = filter_input_array(INPUT_POST,$filtOpts);
@@ -222,7 +239,11 @@ class post extends Controller
         if(!empty($_POST))
         {
             if($this->createReport($sql))
-                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.db()->lastInsertId());
+            {
+                $reportId = db()->lastInsertId();
+                $this->handleTags($reportId);
+                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId);
+            }
         }
     }
 
@@ -289,7 +310,9 @@ class post extends Controller
         }
 
         // how to handle newlines is a bit of a pain, this works for now
-        $msg = nl2br($msg);
+        // but disabling them is a fix
+        if(!isset($_POST['disable_nlbr']))
+            $msg = nl2br($msg);
 
         /**
          * Highlighted Code!

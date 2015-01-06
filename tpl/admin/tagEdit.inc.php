@@ -1,5 +1,5 @@
 <?php
-$stat = $this->data['status'];
+$stat = $this->data['tag'];
 $pageTitle = 'Edit &quot;'.$stat['title'].'&quot;';
 $bread = [
     'cpanel' => ['href' => BUNZ_HTTP_DIR.'admin',
@@ -11,7 +11,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
         <h1><?= $pageTitle ?></h1>
-        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id'] ?>" method="post" class='pure-form pure-form-aligned'>
+        <form action="<?= BUNZ_HTTP_DIR,'admin/edit/tag/',$stat['id'] ?>" method="post" class='pure-form pure-form-aligned'>
                 <fieldset class='is-center'>
                     <p class='pure-control-group'>
                         <label>title</label>
@@ -27,7 +27,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                         <label>pick an icon</label>
                         <?= iconSelectBox($stat['icon']) ?>
                     </p>
-                    <button class='pure-button' type='submit'><i class='icon-ok'></i> make changes</button>
+                    <button class='pure-button success' type='submit'><i class='icon-ok'></i> make changes</button>
                 </fieldset>
             </form>
 <?php
