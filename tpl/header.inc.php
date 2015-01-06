@@ -1,4 +1,5 @@
 <?php
+require_once BUNZ_TPL_DIR . 'bunnies.php';
 /*if(isset($_GET['hax'])){
 unset($_SESSION);
 session_destroy();
@@ -105,12 +106,15 @@ while(($f = $ls->read()) !== false)
 ?>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
 
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bounce.css'>
+
         <script src="<?= BUNZ_JS_DIR ?>right.js"></script>
         <script src="<?= BUNZ_JS_DIR ?>right-selectable-src.js"></script>
 
         <script>
 function hereComeTheHAX()
 {
+    // bang bang
     var nbdd = new Selectable('navbar-dropdown');
         nbdd.on('show', function(evt)
         {
@@ -138,19 +142,72 @@ function hereComeTheHAX()
               window.location = evt.target._.href;
 //                window.location = evt.target.href
         });
+
+    // pond sieve
+    var mql = window.matchMedia("(max-width:600px)");
+    mql.addListener(function(q){
+        if(q.matches){
+            var menu = document.getElementById('bunny-bar');
+
+            menu.className = menu.className.replace("pure-menu-open", "");
+
+            function toggleMenu()
+            {
+                var cssClass = "pure-menu-open";                    
+
+                menu.className = menu.className.includes(cssClass) ? menu.className.replace(cssClass,"") : menu.className + " " + cssClass;
+            }
+            
+            menu.addEventListener('click',function(evt){
+                if(evt.target == menu)
+                    toggleMenu();
+            },true);
+
+            if(!document.getElementById('burger'))
+            {
+                var burger = document.createElement('a');
+                burger.setAttribute('id','burger');
+                burger.setAttribute('class','icon-hamburger');
+                burger.setAttribute('title','toggle menu');
+                burger.setAttribute('href','javascript:void(0);');
+                burger.addEventListener('click',toggleMenu,true);
+                menu.appendChild(burger);
+            }
+        }
+    });
+    var mql2 = window.matchMedia("(min-width:601px)");
+    mql2.addListener(function(q){
+        if(q.matches){
+            var menu = document.getElementById('bunny-bar'),
+                burger = document.getElementById('burger');
+
+            if(!menu.className.includes("pure-menu-open"))
+                menu.className = menu.className + " pure-menu-open";
+
+            if(burger)
+                menu.removeChild(burger);
+        }
+    });
+
+    // bop
+    window.bunnyFooFoo = setInterval(function(){
+        var hop = document.querySelector('#bunny-bar a.pure-menu-heading');
+        hop.className = hop.className.includes("bounce") ? hop.className.replace("bounce", "") : hop.className + " bounce";
+    }, 5000);
 }
         </script>
     </head>
     <body id='bunzilla' onload="hereComeTheHAX()">
         <header class='header'>
-            <nav class='home-menu pure-menu pure-menu-open pure-menu-horizontal'>
-                <a class='pure-menu-heading' href='<?= BUNZ_HTTP_DIR ?>'>／(≡・ x ・≡)＼</a>
+            <nav id="bunny-bar" class='home-menu pure-menu pure-menu-open pure-menu-horizontal'>
+                <a class='pure-menu-heading' href='<?= BUNZ_HTTP_DIR ?>'><?= $_BUNNIES[array_rand($_BUNNIES)]?></a>
+
                 <ul>
 <?php
 if($this->auth())
 {
 ?>
-                    <li><a href='<?= BUNZ_HTTP_DIR, $_GET['url'] ?>?logout' class='icon-cancel' title='logout'></a></li>
+                    <li><a href='<?= BUNZ_HTTP_DIR, $_GET['url'] ?>?logout' class='icon-logout' title='logout'></a></li>
                     <li><a href='<?= BUNZ_HTTP_DIR ?>admin' class='icon-cog-alt' title='cpanel'></a></li>
 <?php
 } else {
@@ -172,7 +229,7 @@ $cat['color'] === null && $cat['color'] = '000000';
 <?php/*
 rgba(<?=sprintf('%02d,%02d,%02d', hexdec(substr($cat['color'],0,2)),hexdec(substr($cat['color'],2,2)),hexdec(substr($cat['color'],4,2)))?>,0.5);">
 */?>
-<a href="<?= BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class="pure-u-1-2 <?=$cat['icon']?>" style="text-align: right; " title="<?=$cat['caption']?>"><?= $cat['title'] ?></a> | <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="pure-u-1-2 icon-plus">poast new</a></dd>
+<a href="<?= BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class="pure-u-1-2 <?=$cat['icon']?>" style="text-align: right; " title="<?=$cat['caption']?>"><?= $cat['title'] ?></a> | <a href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="pure-u-1-2 icon-plus">post new</a></dd>
 <?php
 }
 unset($cat);
@@ -197,9 +254,9 @@ foreach($crumbs as $text => $stuff)
 {
     $icon = isset($stuff['icon']) ? $stuff['icon'] : '';
     $href = isset($stuff['href']) ? $stuff['href'] : '#';
-    $color =// isset($stuff['color']) ? $stuff['color'] : 
+    $color = isset($stuff['color']) ? $stuff['color'] : 
 false;
-    echo "\t\t\t\t",'<li',($href === BUNZ_HTTP_DIR . $_GET['url']) || count($crumbs) === 1 ? ' class="pure-menu-selected"' : '','><a href="',$href,'" title="',$text,'"><span class="',$icon,'"',$color?' style="background: #'.$color.';"':'','>',$text,'</span></a></li>',"\n";
+    echo "\t\t\t\t",'<li',($href === BUNZ_HTTP_DIR . $_GET['url']) || count($crumbs) === 1 ? ' class="pure-menu-selected"' : '',$color?' style="color: #'.$color.';"':'','><a href="',$href,'" title="',$text,'"><span class="',$icon,'">',$text,'</span></a></li>',"\n";
 }
 ?>
             </ul>

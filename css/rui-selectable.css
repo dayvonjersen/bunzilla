@@ -14,7 +14,7 @@
     z-index: 9999;
     background: white;
     border: 1px solid #BBB;
-    box-shadow: 2px 8px 2px 2px #888;
+    box-shadow: 0 5px 1px rgba(0,0,0, 0.20);
 }
 
 *.rui-dd-menu li {
