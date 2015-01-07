@@ -47,6 +47,7 @@ class post extends Controller
         $this->tpl .= '/edit';
         $this->checkReport($reportId);
         $reportId = (int)$reportId;
+        $this->data['tags'] = db()->query('SELECT id FROM tags ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
         $this->data['params'] = current(db()->query(
             'SELECT category, subject'.($commentId===false?', description, reproduce, expected, actual, ip':'').'
              FROM reports
@@ -303,7 +304,7 @@ class post extends Controller
                 '<a href="'.$location.
                     '" title="'.$location.
                     '" class="icon-link"'.
-                    '" target="_blank">'.$title.
+                    ' target="_blank">'.$title.
                     '</a>',
                 $msg
             );
