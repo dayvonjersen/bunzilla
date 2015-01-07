@@ -11,6 +11,7 @@ $bread = [
     ]
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
+require BUNZ_TPL_DIR . 'post/utils.inc.php';
 ?>
 
 <script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
@@ -122,8 +123,9 @@ if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
                         </p>
                         <p class='pure-control-group' title="<?=$placeholder?>">
                             <label>message</label>
-                            <textarea rows='3' name='message' placeholder='your insight on this issue'><?= $this->data['params']['message'] ?></textarea>
+                            <textarea rows='3' name='message' placeholder='your insight on this issue'><?= empty($_POST) ? $this->data['params']['message'] : unfiltermessage($this->data['params']['message'] ?></textarea>
                         </p>
+<?= tagList(db()->query('SELECT * FROM tags')->fetchAll(PDO::FETCH_ASSOC)) ?>
                         <button type='submit' class='pure-button icon-plus'>post!</button>
                     </fieldset>
                 </form>
