@@ -14,7 +14,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
         <article class="box">
         <h1><?= $pageTitle ?></h1> 
         <form action="<?= BUNZ_HTTP_DIR,'post/category/',$this->data['category']['id'] ?>" method="post" class='pure-form pure-form-aligned'>
-            <fieldset class='is-center'>
+            <fieldset class='is-center' id="postFormat-parent">
                 <p class='pure-control-group'>
                     <label>email</label>
                     <input maxlength='255' name='email' type="text" value="<?= $this->auth ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled' : $this->data['params']['email'] ?>">
@@ -86,7 +86,8 @@ function additionalHax()
     postFormat.init(document.forms[0]);
 }
 </script>
-    <fieldset id="postFormat" class="pure-g">
+<div id="postFormat-ctn">
+    <fieldset id="postFormat" class="pure-g" style="display: none">
 <p class="pure-u-1-12">
         <span class='pure-button icon-bold' data-markup="b" title="bold"></span>
 </p>
@@ -142,26 +143,27 @@ foreach(json_decode(file_get_contents(str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_JS
 </p>
 </fieldset>
 
-<a href="javascript:postFormat.activate()" id="postFormat-on" class="pure-button icon-wrench">toolbar</a>
-
+<a href="javascript:postFormat.activate()" id="postFormat-on" class="pure-button icon-wrench success" style="width: auto; display: none;"><small>toggle post tools</small></a>
+</div>
 <?php
 }
 ?>
 
         <label class='icon-paragraph'><input id="disable_nlbr" type="checkbox" name="disable_nlbr" value="1"/>disable line breaks everywhere except inside of &lt;code&gt;</span>
 
-<h2 class="icon-tags">tags!!111</h2>
+<fieldset class="pure-g">
+<h2 class="icon-tags pure-u-1">tags!!111</h2>
 <?php
 foreach($this->data['tags'] as $tag)
 {
 ?>
-        <label><input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>"/><?= tagButton($tag['id']) ?></label>
+        <label class="pure-u-1-4"><input type="checkbox" name="tags[]" value="<?= $tag['id'] ?>"<?= isset($_POST['tags']) && in_array($tag['id'],$_POST['tags'],true) ? '" checked' : '' ?>/><?= tagButton($tag['id']) ?></label>
 <?php
 }
 ?>
-
+</fieldset>
                 
-                 <button class='pure-button' type='submit'><i class='icon-plus'></i> submit report</button>
+                 <button class="pure-button info icon-cancel" type="reset">Reset Form</button><button class='pure-button' type='submit'><i class='icon-plus'></i> submit report</button>
                 </fieldset>
             </form>
         </article>

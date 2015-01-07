@@ -311,7 +311,7 @@ class post extends Controller
 
         // how to handle newlines is a bit of a pain, this works for now
         // but disabling them is a fix
-        if(!isset($_POST['disable_nlbr']))
+        if(!isset($_POST['disable_nlbr']) || !$_POST['disable_nlbr'])
             $msg = nl2br($msg);
 
         /**
