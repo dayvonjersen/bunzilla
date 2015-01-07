@@ -113,6 +113,7 @@ if(!is_null($comment['edit_time']))
 
 if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
 {
+postFormatWidget();
 ?>
             <section class='box' title='post a comment'>
                 <form action="<?= BUNZ_HTTP_DIR,'post/comment/',$this->data['id'] ?>" method="post" class='pure-form pure-form-aligned'>
@@ -123,7 +124,7 @@ if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
                         </p>
                         <p class='pure-control-group' title="<?=$placeholder?>">
                             <label>message</label>
-                            <textarea rows='3' name='message' placeholder='your insight on this issue'><?= empty($_POST) ? $this->data['params']['message'] : unfiltermessage($this->data['params']['message'] ?></textarea>
+                            <textarea rows='3' name='message' placeholder='your insight on this issue'><?= empty($_POST) ? $this->data['params']['message'] : unfiltermessage($this->data['params']['message']) ?></textarea>
                         </p>
 <?= tagList(db()->query('SELECT * FROM tags')->fetchAll(PDO::FETCH_ASSOC)) ?>
                         <button type='submit' class='pure-button icon-plus'>post!</button>

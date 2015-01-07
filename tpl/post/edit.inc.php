@@ -53,7 +53,7 @@ foreach($fields as $field => $placeholder)
 <?php
     }
 }
-
+postFormatWidget();
 tagList($this->data['tags']);
 ?>
 

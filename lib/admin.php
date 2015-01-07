@@ -144,6 +144,14 @@ class admin extends Controller
         $this->index();        
     }
 
+    /**
+     * for to consolidating the reports */
+    public function move( $from, $to )
+    {
+        $reports = db()->query('UPDATE reports SET category = '.(int)$to.' WHERE category = '.(int)$from)->rowCount();
+        $this->index();
+        $this->flash[] = $reports .' were moved to ';
+    }
     // Controller::__construct() checks for method_exists()
     // so much for efficiency
     /**
