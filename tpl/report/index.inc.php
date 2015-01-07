@@ -1,14 +1,15 @@
 <?php
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
-        <article class='card'>
-            <header class='box'>
+        <article class='card pure-g'>
+            <header class='box pure-u-1 pure-u-md-1-3'>
                 <h1><?= BUNZ_PROJECT_TITLE ?></h1>
                 <h6>version <?= BUNZ_PROJECT_VERSION ?></h6>
             </header>
             
-            <p class='box' title="mission statement"><?= BUNZ_PROJECT_MISSION_STATEMENT ?></p>
+            <p class='box pure-u-1 pure-u-md-2-3' title="mission statement"><?= BUNZ_PROJECT_MISSION_STATEMENT ?></p>
         </article>
+<hr style="border: 0; margin: 1em;"/>
 <?php
 if(empty($this->data['categories']))
 {
@@ -24,7 +25,7 @@ $this_week = selectCount('reports','time >= UNIX_TIMESTAMP()-60*60*24*7 AND cate
 
 ?>
         <article style="cursor: pointer; background: #<?= $cat['color'] ?>; margin: 1em 0" class='card pure-g' onclick="window.location='<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>';">
-            <header  title="<?=$cat['caption']?>" class="box pure-u-1-2" style="margin-top: 1em;">
+            <header  title="<?=$cat['caption']?>" class="box pure-u-1" style="margin-top: 1em;">
             <h2>
                 <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>" class='<?=$cat['icon']?>' style="display: block; color: #<?= $cat['color'] ?>"><?=$cat['title']?></a>
             </h2>
@@ -33,7 +34,7 @@ $this_week = selectCount('reports','time >= UNIX_TIMESTAMP()-60*60*24*7 AND cate
     if(!$total_issues)
     {
 ?>
-            <section class='box-pure-u-1'><em>nothing here yet!</em></section>
+            <section class='box pure-u-1'><em>nothing here yet!</em></section>
 <?php
     } else {
 ?>
@@ -47,7 +48,7 @@ $this_week = selectCount('reports','time >= UNIX_TIMESTAMP()-60*60*24*7 AND cate
     }
 ?>
         </article>
-<hr style="border: 0; margin: 2em;"/>
+<hr style="border: 0; margin: 1em;"/>
 <?php
 }
 require BUNZ_TPL_DIR . 'footer.inc.php';

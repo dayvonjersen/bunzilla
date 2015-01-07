@@ -17,9 +17,12 @@ class report extends Controller
 
         $this->data = [
             'categories' => db()->query(
-                'SELECT *
-                 FROM categories
-                 ORDER BY title ASC'
+                'SELECT c.*, COUNT(r.id) AS asdf
+                 FROM categories AS c
+                    LEFT JOIN reports AS r
+                    ON c.id = r.category
+                 GROUP BY c.id
+                 ORDER BY asdf DESC'
             )->fetchAll(PDO::FETCH_ASSOC)
         ];
     }
@@ -54,6 +57,11 @@ class report extends Controller
         $this->data['category'] =  current(db()->query(
                 'SELECT * FROM categories WHERE id = '.(int)$this->data['category']
             )->fetchAll(PDO::FETCH_ASSOC));
+        $this->data['tags'] = db()->query(
+            'SELECT tag
+             FROM tag_joins 
+             WHERE report = '.$this->id)->fetchAll(PDO::FETCH_NUM);
+
         exit;
     }
 

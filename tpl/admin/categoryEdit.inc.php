@@ -12,7 +12,6 @@ require BUNZ_TPL_DIR . 'header.inc.php';
         <h1><?= $pageTitle ?></h1>
         <form action="<?= BUNZ_HTTP_DIR,'admin/edit/category/',$this->data['category']['id'] ?>" method="post" class='pure-form pure-form-aligned'>
                 <fieldset class='is-center'>
-                    <legend>create new category</legend>
                     <p class='pure-control-group'>
                         <label>title</label>
                         <input maxlength='255' placeholder='e.g. bug reports...' name='title' type="text" value="<?= $this->data['category']['title'] ?>">

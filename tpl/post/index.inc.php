@@ -8,6 +8,9 @@ $bread  = [
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
             <h1><?= $pageTitle ?></h1>
+<div class="flash card">
+<h2>this page is redundant now, will be removed soon probably idk</h2>
+</div>
 <?php
 if(empty($this->data['categories']))
     echo '<p>Oops! No categories here! 

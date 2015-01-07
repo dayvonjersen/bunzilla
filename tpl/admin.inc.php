@@ -161,7 +161,7 @@ if(empty($this->data['statuses']))
                         <td>
                             <a href="<?=BUNZ_HTTP_DIR,'report/status/',$stat['id']?>" class='pure-button icon-search info'>View</a> 
                             <a href="<?=BUNZ_HTTP_DIR,'admin/edit/status/',$stat['id']?>" class='pure-button icon-pencil-alt success'>Edit</a> 
-                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/status/',$stat['id']?>" class='pure-button icon-cancel danger' onclick="confirmDelete()">Delete</a></td>
+                            <a href="<?=BUNZ_HTTP_DIR,'admin/delete/status/',$stat['id']?>" class='pure-button icon-cancel danger' onclick="confirmDelete(event)">Delete</a></td>
                     </tr>
 <?php
     }
@@ -194,7 +194,6 @@ if(empty($this->data['tags']))
 <?php
 } else {
 ?>
-<form action="<?= BUNZ_HTTP_DIR,'admin/edit/status' ?>" method="post">
             <table class='pure-table pure-table-horizontal'>
                 <thead>
                     <tr>
@@ -205,15 +204,19 @@ if(empty($this->data['tags']))
                 </thead>
                 <tbody>
 <?php
-//    foreach($this->data['tags'] as $i => $tag)
-
+    foreach($this->data['tags'] as $i => $tag)
+    {
 ?>
                     <tr<?=$i&1?' class="pure-table-odd"':''?>>
-                        <td><button class="pure-button"><small><small>&larr; example</small></small></button></td>
-                        <td>9001</td>
-                        <td>View/Edit/Delete</td>
+                        <td><?= tagButton($tag['id']) ?></td>
+                        <td><?= $tag['total_reports'] ?></td>
+                        <td>
+                            <a href="<?= BUNZ_HTTP_DIR,'search/tag/',$tag['id'] ?>" class="pure-button icon-search">View Uses</a>
+                            <a href="<?= BUNZ_HTTP_DIR,'admin/edit/tag/',$tag['id'] ?>" class="pure-button icon-pencil-alt success">Edit</a>
+                            <a href="<?= BUNZ_HTTP_DIR,'admin/delete/tag/',$tag['id'] ?>" class="pure-button icon-delete danger">Delete</a></td>
                     </tr>
 <?php
+    }
 }
 ?>
                 </tbody>

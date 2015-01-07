@@ -29,6 +29,14 @@ class admin extends Controller
                     ON s.id = r.status
                  GROUP BY s.id
                  ORDER BY s.title ASC'
+                )->fetchAll(PDO::FETCH_ASSOC) : null,
+            'tags' => selectCount('tags') ? db()->query(
+                'SELECT t.*, COUNT(tj.id) AS total_reports
+                 FROM tags AS t
+                    LEFT JOIN tag_joins AS tj
+                    ON t.id = tj.tag
+                GROUP BY t.id
+                ORDER BY t.title ASC'
                 )->fetchAll(PDO::FETCH_ASSOC) : null
         ];
     }
@@ -43,6 +51,7 @@ class admin extends Controller
         {
             case 'category':
             case 'status':
+            case 'tag':
                 break;
 
             default:
@@ -78,6 +87,9 @@ class admin extends Controller
                 }
                 break;
 
+            case 'tag':
+                break;
+
             default:
                 $this->abort('Unsupported action!');
         }
@@ -90,25 +102,45 @@ class admin extends Controller
      * DELETE FROM */
     public function delete($mode,$id)
     {
+        $id = (int)$id;
         switch($mode)
         {
             case 'category':
                 $table = 'categories';
                 $field = 'category';
+                $comments = db()->query('DELETE FROM comments WHERE report IN (SELECT id FROM reports WHERE category = '.$id.')')->rowCount();
+                db()->query('DELETE FROM tag_joins WHERE report IN (SELECT id FROM reports WHERE category = '.$id.')');
+                $reports = db()->query('DELETE FROM reports WHERE category = '.$id)->rowCount();
+
+                $this->flash[] = $reports .' report(s) and '.$comments.' comment(s) were purged as a result of this action.';
                 break;
             case 'status':
                 $table = 'statuses';
                 $field = 'status';
+                $default_status = db()->query('SELECT id FROM statuses WHERE `default` = 1')->fetchColumn();
+                if(selectCount('statuses') == 1)
+                    $this->abort('Can\'t delete the only status! (Try editing it instead)');
+                if($default_status == $id)
+                {
+                    $default_status = db()->query('SELECT id FROM statuses WHERE id != '.$id.' ORDER BY RAND() LIMIT 1')->fetchColumn();
+                    db()->query('UPDATE statuses SET `default` = 1 WHERE id = '.$default_status);
+                    $this->flash[] = 'New default status is '.statusButton($default_status);
+                }
+                db()->query('UPDATE reports SET status = '.$default_status.' WHERE status = '.$id);
+                break;
+            case 'tag':
+                $table = 'tags';
+                $field = 'tag';
+                db()->query('DELETE FROM tag_joins WHERE tag = '.$id);
                 break;
 
             default:
                 $this->abort('Unsupported action!');
         }
         
-        db()->query('DELETE FROM '.$table.' WHERE id = '.(int)$id);
-        db()->query('DELETE FROM reports WHERE '.$field.' = '.(int)$id);
+        db()->query('DELETE FROM '.$table.' WHERE id = '.$id);
 
-        $this->flash[] = $field .' and associated reports deleted.';
+        $this->flash[] = $field .' permanently deleted. You monster.';
         $this->index();        
     }
 
@@ -172,13 +204,31 @@ class admin extends Controller
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
             'icon' => filterOptions(0,'full_special_chars')
         ]);
+        $params['def'] = !selectCount('statuses') ? 1 : 0;
         $sql = 
             'INSERT INTO statuses
+                (id,title,color,icon,`default`)
+            VALUES
+                (\'\',:title,:color,:icon,:def)';
+        if($this->_exec($sql,$params))
+            $this->flash[] = 'Status added';
+    }
+
+    private function tagAdd()
+    {
+        $params = filter_input_array(INPUT_POST, [
+            'title' => filterOptions(0,'full_special_chars'),
+            'color' => filterOptions(1,'regexp',null,
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
+            'icon' => filterOptions(0,'full_special_chars')
+        ]);
+        $sql = 
+            'INSERT INTO tags
                 (id,title,color,icon)
             VALUES
                 (\'\',:title,:color,:icon)';
         if($this->_exec($sql,$params))
-            $this->flash[] = 'Status added';
+            $this->flash[] = 'Tag added';
     }
 
     private function categoryEdit($id)
@@ -270,6 +320,50 @@ class admin extends Controller
         }
 
         $sql = 'UPDATE statuses SET '.implode(',',$set).' WHERE id = '.(int)$id;
+
+        if($this->_exec($sql,$params))
+            $this->flash[] = 'Status updated.';
+    }
+
+    private function tagEdit($id)
+    {
+        if(!selectCount('tags','id = '.(int)$id))
+            $this->abort('No such status!');
+       
+        $this->data['tag'] = current(db()->query(
+            'SELECT * FROM tags WHERE id = '.(int)$id
+        )->fetchAll(PDO::FETCH_ASSOC));
+
+        if(empty($_POST))
+        {
+            $this->tpl .= '/tagEdit';
+            exit;
+        }
+
+        $params = filter_input_array(INPUT_POST, [
+            'title' => filterOptions(0,'full_special_chars','null_on_failure'),
+            'color' => filterOptions(1,'regexp','null_on_failure',
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
+            'icon' => filterOptions(0,'full_special_chars','null_on_failure')
+        ]);
+
+        $set = [];
+        foreach($params as $field => $value)
+        {
+            if($value === null)
+                unset($params[$field]);
+            else
+                $set[] = $field .' = :'. $field;
+        }
+
+        if(empty($params))
+        {
+            $this->flash[] = 'No changes made.';
+            $this->index();
+            exit;
+        }
+
+        $sql = 'UPDATE tags SET '.implode(',',$set).' WHERE id = '.(int)$id;
 
         if($this->_exec($sql,$params))
             $this->flash[] = 'Status updated.';

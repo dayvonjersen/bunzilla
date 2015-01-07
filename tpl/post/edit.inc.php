@@ -28,9 +28,9 @@ $bread = [
         'color' => $this->data['category']['color']
     ],
     $this->data['params']['subject'] => ['href' => BUNZ_HTTP_DIR .' report/view/'.$this->data['params']['report_id'],
-        'icon' => 'icon-bomb'],
+        'icon' => 'icon-doc-text-inv'],
     $pageTitle => ['href' => BUNZ_HTTP_DIR . $_GET['url'],
-            'icon' => 'icon-feather']
+            'icon' => 'icon-pencil-alt']
 ];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
