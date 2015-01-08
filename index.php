@@ -2,6 +2,7 @@
 require_once 'Bunzilla.php';
 
 require_once BUNZ_LIB_DIR . 'db.inc.php';
+require_once BUNZ_LIB_DIR . 'cache.inc.php';
 
 /**
  * Sessions */
