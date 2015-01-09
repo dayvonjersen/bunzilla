@@ -22,7 +22,7 @@ ini_set('html_errors',0);
 define('BUNZ_DIR',  rtrim(realpath(__DIR__), '/').'/');
 define('BUNZ_RES_DIR', BUNZ_DIR . 'res/');
 define('BUNZ_LIB_DIR', BUNZ_DIR . 'lib/');
-define('BUNZ_TPL_DIR', BUNZ_DIR . (isset($_GET['material']) ? 'material' : 'tpl/')); // temporary transition
+define('BUNZ_TPL_DIR', BUNZ_DIR . (isset($_GET['material']) ? 'material/' : 'tpl/')); // temporary transition
 define('BUNZ_CACHE_DIR', BUNZ_DIR . 'cache/');
 
 /**
