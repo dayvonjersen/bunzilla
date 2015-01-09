@@ -15,16 +15,22 @@ class report extends Controller
     {
         $this->tpl .= '/index';
 
-        $this->data = [
-            'categories' => db()->query(
-                'SELECT c.*, COUNT(r.id) AS asdf
-                 FROM categories AS c
-                    LEFT JOIN reports AS r
-                    ON c.id = r.category
-                 GROUP BY c.id
-                 ORDER BY asdf DESC'
-            )->fetchAll(PDO::FETCH_ASSOC)
-        ];
+        $stats = [];
+        $cats = Cache::read('categories');
+        foreach($cats as $id => $cat)
+        {
+            $stats[$id] = current(db()->query(
+            'SELECT
+                COUNT(*) as total_issues,
+                COUNT(DISTINCT(email)) as unique_posters,
+                GREATEST(MAX(edit_time),MAX(time),MAX(updated_at)) as last_activity
+             FROM reports
+             WHERE category = '.$id
+            )->fetchAll(PDO::FETCH_ASSOC));
+
+            $stats[$id]['open_issues'] = selectCount('reports','closed = 0 AND category = '.$id);
+        }
+        $this->data['stats'] = $stats;
     }
 
     // should implement this kind of abstraction in more places

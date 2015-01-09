@@ -1,14 +1,6 @@
 <?php
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
-<style>
-    @media (max-width: 992px)
-    {
-        *{}
-        [class*='icon-'] { font-size: 0; }
-        [class*='icon-']:before { font-size: 24px; }
-    }
-</style>
 <div class="row"><div class="col s6">
         <article class='card small'>
             <header class='card-image light-blue lighten-5'>
@@ -38,26 +30,41 @@ foreach($this->data['categories'] as $cat)
     $total_issues = selectCount('reports','category = '.$cat['id']);
     $this_week = selectCount('reports','time >= UNIX_TIMESTAMP()-60*60*24*7 AND category = '.$cat['id']);
 */
-
+$stats = $this->data['stats'][$cat['id']];
 ?>
 <?= $i == 0 ? '<div class="row">' : '' ?>
-<div class="col s12 m3">
-        <article class='card small'>
-            <header class="card-image" style="background: #<?= $cat['color'] ?>">
-                <span class="card-title <?=$cat['icon']?>"><?=$cat['title']?></span>
-            </header>
+<div class="col s12 l4">
+        <article class='card flow-text'>
+            <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?material"> 
+            <header class="card-image waves-effect waves-block waves-light" style="background: #<?= $cat['color'] ?>"><i class="h2 <?=$cat['icon']?>"></i></header>
+            </a>
             <section class="card-content">
-                <p><?=$cat['caption']?></p>
-                <p>
+                <blockquote><h4 class="card-title grey-text text-darken-4"><?=$cat['title']?></h4>
+                <p><?=$cat['caption']?></blockquote>
+            </section>
+            <section class="card-action">
+                <p class="row">
+                    <span class="col s12 m4 icon-unlock"><small>open</small><?= $stats['open_issues'] ?></span>
+                    <span class="col s12 m4 icon-lock"><small>resolved</small><?= $stats['total_issues'] > 0 ? round(($stats['total_issues'] - $stats['open_issues'])/$stats['total_issues'],4)*100 . '%' : 'n/a' ?></span>
+                    <span class="col s12 m4 icon-users"><small>users</small><?= $stats['unique_posters'] ?></span>
+                </p>
+                <p class="row">
+                    <span class="col s12"><small>last activity</small><br><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$stats['last_activity']) ?></span>
+                </p>
             </section>
             <footer class="card-action white">
-                <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?material" class="icon-flashlight">Browse</a>
-                <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="icon-plus">Submit</a>
+                <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?material" class="light-blue-text text-darken-1 icon-flashlight">browse category</a>
+                <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" title="submit new" class="btn btn-floating"><i class="icon-plus"></i></a>
             </footer>
         </article>
-</div> <?= ($i < 4 && ($i = 0)===0)? '' : '</div>' ?>
+</div> 
 <?php
-$i++;
+    if($i++ >= 3)
+    {
+        echo '</div>';
+        $i = 0;
+    } else
+        $i++;
 }/*
     if(!$total_issues)
     {
