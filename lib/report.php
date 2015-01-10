@@ -10,25 +10,6 @@
 class report extends Controller
 {
     protected $id = null;
-    
-    protected function getPreviewField( $catId )
-    {
-        static $cats = null;
-        if($cats === null)
-            $cats = Cache::read('categories');
-        $cat = $cats[$catId];
-        if($cat['description'])
-            $field = 'description';
-        elseif($cat['reproduce'])
-            $field = 'reproduce';
-        elseif($cat['expected'])
-            $field = 'expected';
-        elseif($cat['actual'])
-            $field = 'actual';
-        else
-            $field = false;
-        return $field;
-    }
 
     public function index()
     {
@@ -40,19 +21,27 @@ class report extends Controller
         {
             $stats[$id] = current(db()->query(
             'SELECT
-                COUNT(*) AS total_issues,
-                COUNT(DISTINCT(email)) AS unique_posters,
-                GREATEST(MAX(edit_time),MAX(time),MAX(updated_at))
-                    AS last_activity
+                COUNT(*) as total_issues,
+                COUNT(DISTINCT(email)) as unique_posters,
+                GREATEST(MAX(edit_time),MAX(time),MAX(updated_at)) as last_activity
              FROM reports
              WHERE category = '.$id
             )->fetchAll(PDO::FETCH_ASSOC));
 
             if($stats[$id]['total_issues'])
             {
-                $field = $this->getPreviewField($id);
-                $field = $field 
-                    ? 'r.' . $field . ' AS preview_text,' : '';
+                if($cat['description'])
+                    $field = 'description';
+                elseif($cat['reproduce'])
+                    $field = 'reproduce';
+                elseif($cat['expected'])
+                    $field = 'expected';
+                elseif($cat['actual'])
+                    $field = 'actual';
+                else
+                    $field = false;
+
+                $field = $field ? 'r.' . $field . ' AS preview_text,' : '';
 
                 $latest_issue = current(db()->query(
                     'SELECT r.id, r.subject, '.$field.' r.time, 
@@ -119,54 +108,25 @@ class report extends Controller
     }
 
     // reports by category
-    public function category($id, $offset = 0)
+    public function category($id)
     {
         if(!selectCount('categories','id = '.(int)$id))
             $this->abort('No such category.');
 
-        $offset = abs($offset);
-        if($offset && $offset > selectCount('reports', 'category = '.(int) $id))
-            $this->abort('Stop that.');
-
         $this->tpl .= '/category';
 
-        $field = $this->getPreviewField((int)$id);
-        $field .= $field ? ' AS preview_text,' : '';
-
         $this->data = [
-// todo: remove
             'category' => current(db()->query(
                 'SELECT * FROM categories WHERE id = '.(int)$id
             )->fetchAll(PDO::FETCH_ASSOC)),
-
-
             'reports' => db()->query(
-                'SELECT 
-                    id, email, subject, '.$field.' 
-                    priority, status, closed,
-                    time, edit_time, updated_at
+                'SELECT id, subject, time, status, closed
                  FROM reports
                  WHERE category = '.(int)$id.'
                  ORDER BY closed ASC,
-                    updated_at DESC,
-                    edit_time DESC,
-                    time DESC
-                 LIMIT '.$offset.',50'
+                    time DESC'
             )->fetchALL(PDO::FETCH_ASSOC)
         ];
-
-        foreach($this->data['reports'] as $i => $report)
-        {
-            $this->data['reports'][$i]['tags'] = db()->query(
-                'SELECT tag
-                 FROM tag_joins 
-                 WHERE report = '.$report['id'])->fetchAll(PDO::FETCH_NUM);
-            $this->data['reports'][$i]['comments'] = selectCount(
-                'comments','report = '.$report['id']
-            );
-        }
-
-        $this->data['category_id'] = (int)$id;
     }
 
     // moderation actions

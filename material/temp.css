@@ -1,5 +1,3 @@
-/**
- * stuff to be merged into materialize.scss */
 html,body {
     margin-top: 0;
     margin-left: 0;
@@ -13,18 +11,4 @@ html,body {
 }
 .transparent {
     background: transparent;
-}
-[class*='status-'] {
-    display: block;
-    padding: 10px;
-}
-[class*='tag-'] {
-    padding: 2px;
-}
-.collapsible, .collapsible-header {
-    border: 0;
-}
-strong, b { font-weight: bold }
-thead th[class*='sorttable_'] i {
-    display: none;
 }
