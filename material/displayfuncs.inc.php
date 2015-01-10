@@ -56,5 +56,5 @@ function badge( $type, $id, $short = false )
       title="'.${$type}[$id]['title'].'">'
 .($short ? '': ${$type}[$id]['title']).'</span>'."\n";
 }
-function status( $id ) { return badge('status',(int)$id); }
+function status( $id, $short = false ) { return badge('status',(int)$id,$short); }
 function tag( $id, $short = true ) { return badge('tag',(int)$id,$short); }

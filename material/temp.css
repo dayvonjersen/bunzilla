@@ -14,8 +14,10 @@ html,body {
 .transparent {
     background: transparent;
 }
-[class*='status-'] {
+td > [class*='status-'] {
     display: block;
+}
+[class*='status-'] {
     padding: 10px 2px;
 }
 [class*='tag-'] {

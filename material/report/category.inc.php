@@ -63,11 +63,11 @@ if(empty($this->data['reports']))
         <table class="sortable striped hoverable category-<?= $cat['id'] ?>-lighten-5">
             <thead>
                 <tr>
-                    <th style="width: 10%">status<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th class="hide-on-small-only" style="width: 10%">status<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
                     <th style="width: 50%">subject<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
                     <th style="width: 10%">comments<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
-                    <th style="width: 15%">submitted<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
-                    <th style="width: 15%">last activity<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th class="hide-on-small-only" style="width: 15%">submitted<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th class="hide-on-small-only" style="width: 15%">last activity<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
                 </tr>
             </thead>
             <tbody>
@@ -77,7 +77,7 @@ if(empty($this->data['reports']))
     {
 ?>
                 <tr id="report-<?= $report['id'] ?>">
-                    <td><?= status($report['status']) ?></td>
+                    <td class="hide-on-small-only"><?= status($report['status']) ?></td>
                     <td>
 <?php
         if(isset($report['preview_text']))
@@ -96,8 +96,12 @@ if(empty($this->data['reports']))
 
 ?>
                         <div class="collapsible">
-                            <h6 class="collapsible-header category-<?= $cat['id'] ?>-text"><i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i><?= $report['subject'] ?></h6>
+                            <h6 class="collapsible-header no-select category-<?= $cat['id'] ?>-text"><i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i><span class="hide-on-small-only"><?= $report['subject'] ?></span>
+<span class="hide-on-med-and-up"><?= substr($report['subject'],0,15), strlen($report['subject']) > 15 ? '...' : '', '<span class="right">',status($report['status'],1) ?></span></span></h6>
                             <div class="collapsible-body">
+                                <div class="hide-on-med-and-up"><small><strong>subject</strong></small><?= $report['subject'] ?></div>
+                                <div class="hide-on-med-and-up"><small><strong>posted</strong></small><br><?= datef($report['time']) ?></div>
+                                <div class="hide-on-med-and-up"><small><strong>touched</strong></small><br><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></div>
                                 <blockquote class="icon-article-alt"><?= 
 $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong><br>' : '', 
 $report['preview_text'] ?></blockquote>
@@ -120,8 +124,8 @@ $report['preview_text'] ?></blockquote>
 ?>
                     </td>
                     <td><i class="icon-chat"></i> <?= $report['comments'] ?></td>
-                    <td><?= datef($report['time']) ?></td>
-                    <td><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></td>
+                    <td class="hide-on-small-only"><?= datef($report['time']) ?></td>
+                    <td class="hide-on-small-only"><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></td>
                 </tr>
 <?php
     }

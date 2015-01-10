@@ -2,6 +2,16 @@
 //
 // individual reports : yay
 //
+function statusDropdown( $selected )
+{
+    $statuses = Cache::read('statuses');
+    $ret = '<select>';
+    foreach($statuses as $status)
+    {
+        $ret .= '<option value="'.$status['id'].'" class="status-'.$status['id'].'" data-icon="'.$status['icon'].'"'.($selected === $status['id'] ? ' selected' : '').'>'.$status['title'].'</option>';
+    }
+    return $ret.'</select>';
+}
 $pageTitle = $this->data['report']['subject'];
 
 require BUNZ_TPL_DIR . 'header.inc.php';
@@ -59,6 +69,11 @@ if($this->auth())
                 <section class='section col s6 z-depth-1 category-<?=$cat['id']?>-lighten-5'>
                     <?= status($report['status']) ?>
                     <span class="badge icon-<?= $this->data['closed'] ? 'lock grey' : 'unlock light-blue' ?> "><?=$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
+<form>
+                    <?= statusDropdown($report['status']) ?>
+                    <label><input type="checkbox">open/close</label>
+</form>
+                    
 <?php
 if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($report['ip']))
 {
@@ -71,8 +86,8 @@ if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($report['ip']))
             </header>
 
             <header class='row' id="hi">
-                <section class='section col s12 z-depth-3 category-<?=$cat['id']?>-lighten-5'>
-                    <h2 class="center-align"><?= $report['subject'] ?></h2>
+                <section class='section no-pad-top no-pad-bot col s12 z-depth-3 category-<?=$cat['id']?>-lighten-5'>
+                    <h1 class="flow-text center-align"><?= $report['subject'] ?></h1>
                 </section>
 <?php
 if(!empty($report['tags']))
