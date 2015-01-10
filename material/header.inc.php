@@ -23,6 +23,7 @@ require_once BUNZ_DIR . 'tpl/bunnies.php';
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
         <link rel='stylesheet' href='/bunzilla/material/temp.css'>
+        <link rel='stylesheet' type='text/css' href='/bunzilla/material/customcolors.css.php'>
     </head>
 
 <!-- 

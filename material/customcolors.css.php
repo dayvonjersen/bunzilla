@@ -4,7 +4,7 @@ require_once 'color.php';
 require_once '../lib/cache.inc.php';
 require_once '../lib/db.inc.php';
 
-header('Content-Type: text/plain');
+header('Content-Type: text/css; charset=utf-8');
 
 foreach(Cache::read('statuses') as $id => $data)
 {
@@ -33,6 +33,10 @@ foreach(Cache::read('categories') as $id => $data)
     echo '.category-',$id,'-base {
     background-color: ',$color,';
     color: ',$color->getTextColor(),';
+}
+.category-',$id,'-text {
+    color: ',$color,';
+    background-color: ',$color->getTextColor(),';
 }',"\n";
 
     for($i = 1; $i <= 5; $i++)
