@@ -26,13 +26,13 @@ function datef( $time = -1 )
             $unit =  'second';
         elseif($diff < 3600)
         {
-            $diff = $diff/60;
+            $diff = (int)$diff/60;
             $unit = 'minute';
         } else {
-            $diff = $diff/3600;
+            $diff = (int)$diff/3600;
             $unit = 'hour';
         }
-        return sprintf('%d %s%s ago', $diff, $unit, $diff != 1 ? 's' : '');
+        return sprintf('%d %s%s ago', $diff, $unit, ($diff == 1 ? '' : 's'));
     }
 
     return date(BUNZ_BUNZILLA_DATE_FORMAT, $time);

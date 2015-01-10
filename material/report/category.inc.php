@@ -12,9 +12,10 @@ $bread = [
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 
-$cat = $this->data['categories'][(int)$id];
+$cat = $this->data['categories'][$this->data['category_id']];
 ?>
-<div class="container category-<?= $cat['id'] ?>-base">
+<script src="/bunzilla/material/sorttable.js"></script>
+<div class="category-<?= $cat['id'] ?>-base">
 <!--
     about:category
 -->
@@ -66,33 +67,68 @@ if(empty($this->data['reports']))
         <!--
             kill me now
         -->
-        <table class="striped hoverable category-<?= $cat['id'] ?>-lighten-5">
+        <table class="sortable striped hoverable category-<?= $cat['id'] ?>-lighten-5">
             <thead>
                 <tr>
-                    <th>status</th>
-                    <th>subject</th>
-                    <th>comments</th>
-                    <th>submitted</th>
-                    <th>last activity</th>
+                    <th style="width: 10%">status<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th style="width: 50%">subject<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th style="width: 10%">comments<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th style="width: 15%">submitted<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th style="width: 15%">last activity<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
                 </tr>
             </thead>
             <tbody>
 <?php
+    $tidy = extension_loaded('tidy') ? new tidy() : false;
     foreach($this->data['reports'] as $report)
     {
 ?>
-                <tr>
-                    <td><span class="z-depth-5 status-2 icon-bug">AHHH</span></td>
+                <tr id="report-<?= $report['id'] ?>">
+                    <td><?= status($report['status']) ?></td>
                     <td>
-                        <a href="#"><i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i><?= $report['subject'] ?></a><br><blockquote><i class="icon-article-alt"></i>blablabla</blockquote>
-                        <p>
-                        <span class=" z-depth-3 tag-1 icon-bomb" title="">dabomb</span>
-                        <span class=" z-depth-3 tag-1 icon-bomb" title="">dabomb</span>
-                        </p>
+<?php
+        if(isset($report['preview_text']))
+        {
+            if(strlen(strip_tags($report['preview_text'])) > 100)
+            {
+                if($tidy)
+                {            
+                    $report['preview_text'] = substr($report['preview_text'],0,100);
+                    $report['preview_text'] = $tidy->repairString($report['preview_text']);
+                } else {
+                    $report['preview_text'] = substr(strip_tags($report['preview_text']),0,100);
+                }
+                $report['preview_text'] .= '. . .';
+            }
+
+?>
+                        <div class="collapsible">
+                            <h6 class="collapsible-header category-<?= $cat['id'] ?>-text"><i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i><?= $report['subject'] ?></h6>
+                            <div class="collapsible-body">
+                                <blockquote class="icon-article-alt"><?= 
+$report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong><br>' : '', 
+$report['preview_text'] ?></blockquote>
+                                <p><a href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>">Keep reading &rarr;</a></p></blockquote>
+                            </div>
+                        </div>
+<?php
+        } else {
+?>
+                        <a class="h6 icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>" href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>"><?= $report['subject'] ?></a>
+<?php
+        }
+        if(!empty($report['tags']))
+        {
+            echo '<p class="icon-tags">';
+            foreach($report['tags'] as $tag)
+                echo tag($tag[0],0);
+            echo '</p>';
+        }
+?>
                     </td>
-                    <td>9001</td>
-                    <td><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$report['time']) ?></td>
-                    <td><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$report['time']) ?></td>
+                    <td><i class="icon-chat"></i> <?= $report['comments'] ?></td>
+                    <td><?= datef($report['time']) ?></td>
+                    <td><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></td>
                 </tr>
 <?php
     }
