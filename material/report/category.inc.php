@@ -1,4 +1,7 @@
 <?php
+//
+// reports by category : this isn't a message board, honest!
+//
 $pageTitle = $this->data['category']['title'];
 $bread = [
     $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
@@ -6,52 +9,99 @@ $bread = [
         'color' => $this->data['category']['color']
     ],
 ];
+
 require BUNZ_TPL_DIR . 'header.inc.php';
+
+$cat = $this->data['categories'][(int)$id];
 ?>
-<div class="row"><div class="col s12">
-        <article class='card small' style='background: #<?= $this->data['category']['color'] ?>'>
-            <header class='card-image'>
-                <span class="card-title <?= $this->data['category']['icon'] ?>"><?= $pageTitle ?></span>
-            </header>
-            <section class="card-content">
-                <p class="white" title='caption'><?= $this->data['category']['caption'] ?></p>
-            </section>
-            <section class="card-action">
-            <p class='box'><a href="<?= BUNZ_HTTP_DIR, 'post/category/', $this->data['category']['id'] ?>" class='icon-plus'>Submit New <?= $this->data['category']['title'] ?></a></p>
-            </section>
+<div class="container category-<?= $cat['id'] ?>-base">
+<!--
+    about:category
+-->
+<div class="row">
+    <div class="col s12">
+        <article class='z-depth-1 category-<?= $cat['id'] ?>-lighten-1'>
+            <div class="row">
+                <!-- 
+                    title 
+                -->
+                <section class='section col s8 z-depth-5 category-<?= $cat['id'] ?>-text'>
+                    <h4 class="category-<?= $cat['id'] ?>-text <?= $cat['icon'] ?>"><?= $cat['title'] ?></a></h4>
+                    <h6><?= $cat['caption'] ?></h6>
+                </section>
+                <!--
+                    actions
+                -->
+                <section class="col s4 right-align">
+                    
+<?php
+if($this->auth())
+{
+?>
+                    <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" 
+                       class="btn btn-floating z-depth-5 transparent" 
+                       title="submit new"><i class="green-text darken-2 icon-pencil-alt"></i></a>
+<?php
+}
+?>
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
+                       class="btn btn-floating z-depth-5 transparent" 
+                       title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
+                </section>
         </article>
-</div></div>
-<div class="container" style="background: #<?= $this->data['category']['color'] ?>">
-            <table class='striped hoverable'>
-                <thead>
-                    <tr>
-                        <th>subject</th>
-                        <th>status</th>
-                        <th>submitted at</th>
-                    </tr>
-                </thead>
-                <tbody>
+    </div>
+</div>
 <?php
-
-function statusButton($id,&$status)
-{
-    
-    return '<span class="badge tag" style="background-color: #'.$status[$id]['color'].' !important;" data-title="'.$status[$id]['title'].'"><i class="'.$status[$id]['icon'].'"></i></span>';
-}
-
-foreach($this->data['reports'] as $i => $report)
+if(empty($this->data['reports']))
 {
 ?>
-                    <tr<?= $i&1 ? ' class="pure-table-odd"' : ''?>>
-                        <td><a href="<?= BUNZ_HTTP_DIR, 'report/view/', $report['id'] ?>"><?= $report['subject'], $report['closed'] ? '<i class="icon-lock" title="Closed"></i>' : '' ?></a></td>
-                        <td><?= statusButton($report['status'],$this->data['statuses']) ?></td>
-                        <td><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$report['time']) ?></td>
-                    </tr>
+        <!--
+            consistency++
+        -->
+        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-right-open-mini" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>">Got a submission?</a></div>
+<?php
+} else {
+
+?>
+        <!--
+            kill me now
+        -->
+        <table class="striped hoverable category-<?= $cat['id'] ?>-lighten-5">
+            <thead>
+                <tr>
+                    <th>status</th>
+                    <th>subject</th>
+                    <th>comments</th>
+                    <th>submitted</th>
+                    <th>last activity</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+    foreach($this->data['reports'] as $report)
+    {
+?>
+                <tr>
+                    <td><span class="z-depth-5 status-2 icon-bug">AHHH</span></td>
+                    <td>
+                        <a href="#"><i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i><?= $report['subject'] ?></a><br><blockquote><i class="icon-article-alt"></i>blablabla</blockquote>
+                        <p>
+                        <span class=" z-depth-3 tag-1 icon-bomb" title="">dabomb</span>
+                        <span class=" z-depth-3 tag-1 icon-bomb" title="">dabomb</span>
+                        </p>
+                    </td>
+                    <td>9001</td>
+                    <td><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$report['time']) ?></td>
+                    <td><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$report['time']) ?></td>
+                </tr>
+<?php
+    }
+?>
+            </tbody>
+        </table>
 <?php
 }
 ?>
-                </tbody>
-            </table>
 </div>
 <?php
 require BUNZ_TPL_DIR .'footer.inc.php';

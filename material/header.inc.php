@@ -4,6 +4,7 @@
 // random bunny emotes
 // http://japaneseemoticons.net/ <- go there, highly recommended
 require_once BUNZ_DIR . 'tpl/bunnies.php';
+require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 ?>
 <!DOCTYPE html>
 <html>

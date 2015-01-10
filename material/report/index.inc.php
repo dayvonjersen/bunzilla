@@ -10,7 +10,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 <div class="row">
         <article class="col offset-m6 m6 s12 z-depth-2 pink white-text darken-3">
             <header class="section no-pad-top z-depth-5">
-                <h1><?= BUNZ_PROJECT_TITLE ?></span>
+                <h1><?= BUNZ_PROJECT_TITLE ?></h1>
             </header>
             <section class="section row no-pad-top no-pad-bot">
                 <p class="z-depth-3 col s4 section">version <?= BUNZ_PROJECT_VERSION ?></p>
@@ -49,7 +49,7 @@ if(empty($this->data['categories']))
                 <!--
                     actions
                 -->
-                <section class="col offset-m3 offset-s1 s1">
+                <section class="col offset-m3 offset-s2 s1">
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="btn btn-floating z-depth-5 transparent" title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
                 </section>
             </div>
@@ -82,7 +82,7 @@ if(empty($this->data['categories']))
                            href="<?= BUNZ_HTTP_DIR,'report/view/',$stats['latest_issue']['id'] ?>#comments" 
                            title="<?= $stats['latest_issue']['comments'] ?> comment(s)"><?= $stats['latest_issue']['comments'] ?></a>
                     </span>
-                    <span class="badge"><em><small><?= date(BUNZ_BUNZILLA_DATE_FORMAT,$stats['latest_issue']['time'])?></small></em></span>
+                    <span class="badge"><em><small><?= datef($stats['latest_issue']['time'])?></small></em></span>
                     </p>
 
 <?php
@@ -109,7 +109,8 @@ if(empty($this->data['categories']))
 <?php
             foreach($stats['latest_issue']['tags'] as $tag)
             {
-                echo '<span class=" z-depth-3 tag-',$tag[0],' ',$this->data['tags'][$tag[0]]['icon'],'" title="',$this->data['tags'][$tag[0]]['title'],'"></span>';
+//                echo '<span class=" z-depth-3 tag-',$tag[0],' ',$this->data['tags'][$tag[0]]['icon'],'" title="',$this->data['tags'][$tag[0]]['title'],'"></span>';
+                echo tag($tag[0]);
             }
 ?>
                     </p>
@@ -140,7 +141,7 @@ if(empty($this->data['categories']))
                     <small>resolved</small><br>
                     <span class="icon-chart"><?= 
 $stats['total_issues'] > 0 ? 
-    round(($stats['total_issues'] - $stats['open_issues'])/$stats['total_issues'],4)*100 . '%' 
+    round(($stats['total_issues'] - $stats['open_issues'])/$stats['total_issues'],2)*100 . '%' 
     : 'n/a' ?></span>
                 </p>
 
@@ -160,7 +161,7 @@ $stats['total_issues'] > 0 ?
 ?>
                 <p class="col category-<?= $cat['id'] ?>-lighten-1 s12 z-depth-5">
                     <small>last activity</small><br>
-                    <?= date(BUNZ_BUNZILLA_DATE_FORMAT,$stats['last_activity']) ?>
+                    <?= datef($stats['last_activity']) ?>
                 </p>
 <?php
         }
