@@ -2,17 +2,10 @@
 //
 // reports by category : this isn't a message board, honest!
 //
-$pageTitle = $this->data['category']['title'];
-$bread = [
-    $pageTitle => ['href' => BUNZ_HTTP_DIR.$_GET['url'],
-        'icon' => $this->data['category']['icon'],
-        'color' => $this->data['category']['color']
-    ],
-];
+$cat = $this->data['categories'][$this->data['category_id']];
+$pageTitle = $cat['title'];
 
 require BUNZ_TPL_DIR . 'header.inc.php';
-
-$cat = $this->data['categories'][$this->data['category_id']];
 ?>
 <script src="/bunzilla/material/sorttable.js"></script>
 <div class="category-<?= $cat['id'] ?>-base">
@@ -21,7 +14,7 @@ $cat = $this->data['categories'][$this->data['category_id']];
 -->
 <div class="row">
     <div class="col s12">
-        <article class='z-depth-1 category-<?= $cat['id'] ?>-lighten-1'>
+        <article>
             <div class="row">
                 <!-- 
                     title 

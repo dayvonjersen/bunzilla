@@ -50,7 +50,7 @@ function badge( $type, $id, $short = false )
     static $status = null;
     if($$type === null)
         $$type = Cache::read($type.($type == 'status' ? 'e':'').'s');
-echo '<!-- ',print_r($$type,1),'-->';
+
     return '
 <span class="z-depth-3 '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
       title="'.${$type}[$id]['title'].'">'

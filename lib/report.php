@@ -98,23 +98,30 @@ class report extends Controller
 
         $this->tpl .= '/view';
 
-        $this->data += 
+        $this->data['report'] = 
             current(
                 db()->query(
                     'SELECT * FROM reports WHERE id = '.$this->id
                 )->fetchAll(PDO::FETCH_ASSOC)
         );
+
+//todo: remove xxx
+        $this->data += $this->data['report'];
+
         $this->data['comments'] = selectCount('comments','report = '.$this->id)             ? db()->query('SELECT * FROM comments WHERE report = '.$this->id
                 )->fetchAll(PDO::FETCH_ASSOC) 
             : null;
+//todo: remove xxx
         $this->data['category'] =  current(db()->query(
                 'SELECT * FROM categories WHERE id = '.(int)$this->data['category']
             )->fetchAll(PDO::FETCH_ASSOC));
-        $this->data['tags'] = db()->query(
+
+        $this->data['report']['tags'] = db()->query(
             'SELECT tag
              FROM tag_joins 
              WHERE report = '.$this->id)->fetchAll(PDO::FETCH_NUM);
 
+        $this->data['category_id'] = $this->data['report']['category'];
         exit;
     }
 
@@ -134,7 +141,7 @@ class report extends Controller
         $field .= $field ? ' AS preview_text,' : '';
 
         $this->data = [
-// todo: remove
+// todo: remove xxx
             'category' => current(db()->query(
                 'SELECT * FROM categories WHERE id = '.(int)$id
             )->fetchAll(PDO::FETCH_ASSOC)),
@@ -175,17 +182,17 @@ class report extends Controller
         $this->requireLogin();
         $this->checkId($id);
 
+        if(empty($_POST))
+            $this->abort('What are you doing!? No GET access baka!');
+        
+        if(isset($_POST['delete']))
+            $this->delete();
+
         if(isset($_POST['status'],$_POST['updateStatus']))
             $this->updateStatus((int)$_POST['status']);
 
         if(isset($_POST['toggleClosed']))
             $this->toggleClosed();
-
-        if(isset($_POST['delete']))
-            $this->delete();
-
-        $this->abort('What are you doing!? No GET access baka!');
-
     }
 
     protected function updateStatus($status)

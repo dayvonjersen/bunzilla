@@ -16,7 +16,7 @@ html,body {
 }
 [class*='status-'] {
     display: block;
-    padding: 10px;
+    padding: 10px 2px;
 }
 [class*='tag-'] {
     padding: 2px;
