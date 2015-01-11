@@ -11,6 +11,7 @@ html,body {
     overflow-x: hidden; 
     overflow-x: -moz-hidden-unscrollable;
 }
+body { margin-bottom: 150px !important; }
 .transparent {
     background: transparent;
 }
@@ -29,4 +30,23 @@ td > [class*='status-'] {
 strong, b { font-weight: bold }
 thead th[class*='sorttable_'] i {
     display: none;
+}
+/**
+ * damn it */
+nav#mp-menu ul li,
+nav#mp-menu ul {
+    float: none; 
+}
+nav#mp-menu {
+    line-height: 35px !important;
+}
+/* find a.button-collapse and KILL IT D:< */
+/*warfgarblfasdff*/
+a#mp-trigger.button-collapse {
+    display: inline-block !important;
+    cursor: pointer !important;
+}
+/** seriously, fuck off */
+div#sidenav-overlay {
+    display: none !important;
 }

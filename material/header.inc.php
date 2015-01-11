@@ -25,34 +25,14 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
         <link rel='stylesheet' href='/bunzilla/material/temp.css'>
         <link rel='stylesheet' type='text/css' href='/bunzilla/material/customcolors.css.php'>
+
+        <link rel='stylesheet' href='/bunzilla/material/mp-codrops.css'>
     </head>
 
 <!-- 
     main screen turn on
 -->
-    <body id='bunzilla'>
-<header>
-<!--
-    categories at a glance
--->
-        <ul id="categories-dropdown" class="dropdown-content">
-<?php
-foreach($this->data['categories'] as $id => $info)
-{
-?>
-            <li class="row">
-               <a href="<?= BUNZ_HTTP_DIR,'report/category/',$id ?>" 
-                   class="<?= $info['icon'] ?> s8"><?= $info['title'] ?></a>
-<!--
-                <span class="badge new s1">1</span>
-                <a href="<?= BUNZ_HTTP_DIR,'post/category/',$id ?>" 
-                   class="btn s3 icon-plus"
-                   title="Post New <?= $info['title'] ?>"></a>-->
-            </li>
-<?php
-}
-?>
-        </ul>
+    <body id="bunzilla" > 
 <!--
     header bar
 -->
@@ -70,17 +50,37 @@ foreach($this->data['categories'] as $id => $info)
 <!--
     hamburger icon
 -->
-                    <div class="container">
-                        <a href="#" 
-                           data-activates="nav-mobile"
-                           class="button-collapse top-nav full"
-                        ><i class="icon-hamburger"></i></a>
-                    </div>
+                    <a class="button-collapse" id="mp-trigger"><i class="icon-hamburger"></i></a>
+                </div>
+            </div>
+        </nav>
+
 <!--
-    nav links
+    codrops MultiLevelPushMenu
+    http://tympanus.net/codrops/?p=16252
 -->
-                    <ul id="nav-mobile" class="left side-nav">
-</ul></nav>
+
+       <div id='mp-pusher' class="mp-pusher">
+        <nav id="mp-menu" class="mp-menu">
+            <div class="mp-level pink">
+                <h2 class="icon-hamburger">navigate</h2>
+                <ul>
+<!--
+    categories at a glance
+-->
+<?php
+foreach($this->data['categories'] as $id => $info)
+{
+?>
+                    <li>
+                        <a  class="<?=$info['icon']?>" href="<?= BUNZ_HTTP_DIR,'report/category/',$id ?>"><?= $info['title'] ?></a>
+                    </li>
+<?php
+}
+?>
+                </ul>
+            </div>
+        </nav>
 <?php
 /********** TODO fix this
 // for admins
@@ -162,5 +162,5 @@ if(!empty($this->flash))
 }
 ****************/
 ?>
-</header>
+
 <main>

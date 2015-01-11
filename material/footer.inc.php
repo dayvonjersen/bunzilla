@@ -1,4 +1,4 @@
-        </main>
+        </div></main>
         <footer class="footer">
                 <div class="row">
                     <div class="col 16 s12">
@@ -7,8 +7,11 @@
                     </div>
                 </div>
         </footer>
+        </div>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>jquery-2.1.3.min.js"></script>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>materialize.min.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>classie.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>mlpushmenu.js"></script>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>cottontail.js"></script>
     </body>
 </html>
