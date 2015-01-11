@@ -36,6 +36,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 <!--
     header bar
 -->
+    <div class="navbar-fixed">
         <nav class="top-nav">
             <div class="nav-wrapper pink">
                 <div class="col s12">
@@ -54,6 +55,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
                 </div>
             </div>
         </nav>
+    </div>
 
 <!--
     codrops MultiLevelPushMenu
@@ -179,4 +181,4 @@ if(!empty($this->flash))
 ****************/
 ?>
 
-<main style="height: 100%;">
+<main>
