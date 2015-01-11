@@ -14,9 +14,11 @@ $(document).ready(function(){
  * [hax intensify] */
     function holyshit() {
         var htmlHeight = document.documentElement.scrollHeight,
-            bodyHeight = document.body.scrollHeight,
+            bodyHeight = null,//document.body.scrollHeight,
             viewHeight = window.screen.availHeight,
             troubleMaker = document.getElementById('mp-pusher');
+
+        bodyHeight = troubleMaker.scrollHeight;
 
         if(htmlHeight == bodyHeight && htmlHeight < viewHeight)
             troubleMaker.style.height = '100%';

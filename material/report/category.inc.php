@@ -52,7 +52,7 @@ if(empty($this->data['reports']))
         <!--
             consistency++
         -->
-        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-right-open-mini" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>">Got a submission?</a></div>
+        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>">Submit Something!</a></div>
 <?php
 } else {
 
@@ -63,11 +63,11 @@ if(empty($this->data['reports']))
         <table class="sortable striped hoverable category-<?= $cat['id'] ?>-lighten-5">
             <thead>
                 <tr>
-                    <th class="hide-on-small-only" style="width: 10%">status<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
-                    <th style="width: 50%">subject<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
-                    <th style="width: 10%">comments<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
-                    <th class="hide-on-small-only" style="width: 15%">submitted<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
-                    <th class="hide-on-small-only" style="width: 15%">last activity<i class="icon-up-open-mini"></i><i class="icon-down-open-mini"></i></th>
+                    <th class="hide-on-small-only" style="width: 10%">status<i class="icon-sort"></i></th>
+                    <th style="width: 50%">subject<i class="icon-sort"></i></th>
+                    <th style="width: 10%">comments<i class="icon-sort"></i></th>
+                    <th class="hide-on-small-only" style="width: 15%">submitted<i class="icon-sort"></i></th>
+                    <th class="hide-on-small-only" style="width: 15%">last activity<i class="icon-sort"></i></th>
                 </tr>
             </thead>
             <tbody>
@@ -77,8 +77,8 @@ if(empty($this->data['reports']))
     {
 ?>
                 <tr id="report-<?= $report['id'] ?>">
-                    <td class="hide-on-small-only"><?= status($report['status']) ?></td>
-                    <td>
+                    <td style="display: none;" sorttable_custom="<?= $this->data['statuses'][$report['status']]['title'] ?>"></td>
+                    <td sorttable_custom="<?= strtolower($report['subject']) ?>">
 <?php
         if(isset($report['preview_text']))
         {
@@ -96,12 +96,24 @@ if(empty($this->data['reports']))
 
 ?>
                         <div class="collapsible">
-                            <h6 class="collapsible-header no-select category-<?= $cat['id'] ?>-text"><i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i><span class="hide-on-small-only"><?= $report['subject'] ?></span>
-<span class="hide-on-med-and-up"><?= substr($report['subject'],0,15), strlen($report['subject']) > 15 ? '...' : '', '<span class="right">',status($report['status'],1) ?></span></span></h6>
+                            <h6 class="collapsible-header no-select category-<?= $cat['id'] ?>-text">
+                                <i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i>
+                                <span class="hide-on-small-only"><?= $report['subject'] ?>
+                                    <span class="right"><?= status($report['status']) ?></span>
+                                </span>
+                                <span class="hide-on-med-and-up">
+                                <?= 
+                                    substr($report['subject'],0,15),
+                                    strlen($report['subject']) > 15 ? '...' : '' 
+                                ?>
+                                    <span class="right"><?= status($report['status'],1) ?></span>
+                                </span>
+                            </h6>
                             <div class="collapsible-body">
-                                <div class="hide-on-med-and-up"><small><strong>subject</strong></small><?= $report['subject'] ?></div>
-                                <div class="hide-on-med-and-up"><small><strong>posted</strong></small><br><?= datef($report['time']) ?></div>
-                                <div class="hide-on-med-and-up"><small><strong>touched</strong></small><br><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></div>
+                                <div class="hide-on-med-and-up">
+                                    <p><strong><?= $report['subject'] ?></strong></p>
+                                    <p class="icon-time"><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></p>
+                                </div>
                                 <blockquote class="icon-article-alt"><?= 
 $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong><br>' : '', 
 $report['preview_text'] ?></blockquote>
