@@ -68,6 +68,32 @@
 		}
 	}
 
+    function breakArrowKeys(evt) {
+        var keys = [32, 33, 34, 35, 36, 37, 38, 39, 40];
+        for (var i = keys.length; i--;) {
+            if (evt.keyCode === keys[i]) {
+              evt.preventDefault();
+              breakEverything();
+              return;
+            }
+        }
+    }
+
+    function breakScrollWheel(evt) {
+        evt.preventDefault();
+        breakEverything();
+    }
+
+/*    var fuckmewitharake = document.querySelector('nav.top-nav').offsetHeight,
+        maxScrollHeight = document.body.scrollHeight - window.screen.availHeight;*/
+    function breakEverything() {
+        return;
+        /*document.getElementById('mp-menu').style.maxHeight = (window.screen.availHeight - fuckmewitharake)+"px";
+        if(document.body.scrollTop <= maxScrollHeight)
+            document.getElementById('mp-menu').style.top = (document.body.scrollTop + fuckmewitharake) + "px";*/
+        // don't ask
+        
+    }
 	mlPushMenu.prototype = {
 		defaults : {
 			// overlap: there will be a gap between open levels
@@ -199,6 +225,11 @@
 			}
 			// add class mp-level-open to the opening level element
 			classie.add( subLevel || this.levels[0], 'mp-level-open' );
+/** ayy*/
+            window.addEventListener && window.addEventListener('DOMMouseScroll', breakScrollWheel, false);
+            window.onmousewheel = document.onmousewheel = breakScrollWheel;
+            document.onkeydown = breakArrowKeys; /**/
+            breakEverything();
 		},
 		// close the menu
 		_resetMenu : function() {
@@ -208,6 +239,9 @@
 			classie.remove( this.wrapper, 'mp-pushed' );
 			this._toggleLevels();
 			this.open = false;
+/** lmao*/
+            window.removeEventListener && window.removeEventListener('DOMMouseScroll', breakScrollWheel, false);
+            window.onmousewheel = document.onmousewheel = document.onkeydown = null; /**/
 		},
 		// close sub menus
 		_closeMenu : function() {

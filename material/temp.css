@@ -22,8 +22,18 @@ body {
     overflow-y: hidden;
     margin-bottom: 150px !important;
 }*/
+footer.footer {
+    margin: 0 !important;
+}
+.mp-pushed .mp-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+}
 .mp-pusher main {
-    padding-bottom: 150px;
+    height: 100%;
+}
+.mp-pusher {
 }
 .transparent {
     background: transparent;

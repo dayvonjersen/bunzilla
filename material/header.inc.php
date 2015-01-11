@@ -36,7 +36,6 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 <!--
     header bar
 -->
-    <div class="navbar-fixed">
         <nav class="top-nav">
             <div class="nav-wrapper pink">
                 <div class="col s12">
@@ -55,7 +54,6 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
                 </div>
             </div>
         </nav>
-    </div>
 
 <!--
     codrops MultiLevelPushMenu
@@ -65,25 +63,28 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
        <div id='mp-pusher' class="mp-pusher">
         <nav id="mp-menu" class="mp-menu">
             <div class="mp-level pink">
-                <h2 class="icon-hamburger">navigate</h2>
+                <h2 class="icon-hamburger"><i class="icon-hamburger"></i>navigate</h2>
                 <ul>
 <!--
     categories at a glance
 -->
-                    <li class="icon-left-open-mini">
-                        <a class="icon-dl" href="#">Categories</a>
+                    <li class="icon-home">
+                        <a class="icon-home" href="<?= BUNZ_HTTP_DIR ?>">bunzilla, go home</a>
+                    </li>
+                    <li class="icon-list-dl">
+                        <a class="icon-list-dl" href="#">Categories</a>
                         <div class="mp-level pink">
-                            <h2 class="icon-list-dl">Categories</a>
+                            <h2 class="icon-list-dl"><i class="icon-list-dl"></i>Categories</a>
                             <ul>
                                 
 <?php
 foreach($this->data['categories'] as $id => $info)
 {
 ?>
-                                <li class="category-<?= $info['id'] ?>-base">
+                                <li class="category-<?= $info['id'] ?>-base <?=$info['icon']?>">
                                     <a class="<?=$info['icon']?> " href="#"><?= $info['title'] ?></a>
                                     <div class="mp-level category-<?= $info['id'] ?>-base">
-                                        <h2 class="<?=$info['icon']?>"><?= $info['title'] ?></h2>
+                                        <h2 class="<?=$info['icon']?>"><i class="<?=$info['icon']?>"></i><?= $info['title'] ?></h2>
                                         <ul>
                                             <li><a class="icon-flashlight" href="<?= BUNZ_HTTP_DIR,'report/category/',$id ?>?material">Browse</a></li>
                                             <li><a class="icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$id ?>?material">Submit</a></li>
@@ -95,6 +96,10 @@ foreach($this->data['categories'] as $id => $info)
 ?>
                             </ul>
                         </div>
+                    </li>
+
+                    <li class="icon-key">
+                        <a class="icon-key" href="<?= BUNZ_HTTP_DIR ?>?login">login</a>
                     </li>
                 </ul>
             </div>

@@ -10,4 +10,22 @@ $(document).ready(function(){
                      document.getElementById('mp-trigger') 
         )
     );
+/**
+ * [hax intensify] */
+    function holyshit() {
+        var htmlHeight = document.documentElement.scrollHeight,
+            bodyHeight = document.body.scrollHeight,
+            viewHeight = window.screen.availHeight,
+            troubleMaker = document.getElementById('mp-pusher');
+
+        if(htmlHeight == bodyHeight && htmlHeight < viewHeight)
+            troubleMaker.style.height = '100%';
+
+        else if(bodyHeight > viewHeight)
+            troubleMaker.style.height = 'auto';
+
+                
+    }
+    window.addEventListener('resize', holyshit, false);
+    holyshit();
 });
