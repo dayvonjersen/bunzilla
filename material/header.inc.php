@@ -179,4 +179,4 @@ if(!empty($this->flash))
 ****************/
 ?>
 
-<main>
+<main style="height: 100%;">

@@ -22,7 +22,7 @@ $report = $this->data['report'];
 <script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-<div class="category-<?= $cat['id'] ?>-base">
+<div class="category-<?= $cat['id'] ?>-base" style="height: 100%">
 
 <div class="row">
     <div class="col s12">
