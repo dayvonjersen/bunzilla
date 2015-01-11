@@ -16,14 +16,13 @@
 }
 
 .mp-pusher {
-	position: relative;
+    position: relative;
 	left: 0;
 	height: 100%;
 }
 
 .mp-menu {
 	position: absolute; /* we can't use fixed here :( */
-    position: fixed; /* yes we can :DDD */
 	top: 0;
 	left: 0;
 	z-index: 1;
