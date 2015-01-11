@@ -68,16 +68,32 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 <!--
     categories at a glance
 -->
+                    <li class="icon-left-open-mini">
+                        <a class="icon-dl" href="#">Categories</a>
+                        <div class="mp-level pink">
+                            <h2 class="icon-list-dl">Categories</a>
+                            <ul>
+                                
 <?php
 foreach($this->data['categories'] as $id => $info)
 {
 ?>
-                    <li>
-                        <a  class="<?=$info['icon']?>" href="<?= BUNZ_HTTP_DIR,'report/category/',$id ?>"><?= $info['title'] ?></a>
-                    </li>
+                                <li class="category-<?= $info['id'] ?>-base">
+                                    <a class="<?=$info['icon']?> " href="#"><?= $info['title'] ?></a>
+                                    <div class="mp-level category-<?= $info['id'] ?>-base">
+                                        <h2 class="<?=$info['icon']?>"><?= $info['title'] ?></h2>
+                                        <ul>
+                                            <li><a class="icon-flashlight" href="<?= BUNZ_HTTP_DIR,'report/category/',$id ?>?material">Browse</a></li>
+                                            <li><a class="icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$id ?>?material">Submit</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
 <?php
 }
 ?>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </nav>

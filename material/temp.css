@@ -40,6 +40,9 @@ nav#mp-menu ul {
 nav#mp-menu {
     line-height: 35px !important;
 }
+nav#mp-menu a {
+    color: inherit !important;
+}
 /* find a.button-collapse and KILL IT D:< */
 /*warfgarblfasdff*/
 a#mp-trigger.button-collapse {
