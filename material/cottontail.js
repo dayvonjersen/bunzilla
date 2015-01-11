@@ -24,7 +24,10 @@ $(document).ready(function(){
             troubleMaker.style.height = '100%';
 
         else if(bodyHeight > viewHeight)
+        {
             troubleMaker.style.height = 'auto';
+            document.querySelector('#mp-pusher > main').style.paddingBottom = "150px";
+        }
 
                 
     }
@@ -53,7 +56,8 @@ $(document).ready(function(){
 
                 sorttable.innerSortFunction.apply(th,[]);
 
-                target.className = target.className + " light-blue";
+                if(target.className.indexOf('light-blue') === -1)
+                    target.className = target.className + " light-blue";
 
                 if(th.className.indexOf('sorttable_sorted_reverse') !== -1)
                     gEbI("ico-"+target.dataset.th).className = iconSortASC;

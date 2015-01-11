@@ -76,4 +76,10 @@ a#mp-trigger.button-collapse {
 div#sidenav-overlay, .gone {
     display: none !important;
 }
+/**
+ * this is basics guys c'mon
 
+ (shoutouts to iron chef italian */
+.collapsible-body, .collapsible > p {
+    clear: both;
+}
