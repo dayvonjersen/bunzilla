@@ -31,3 +31,7 @@ $(document).ready(function(){
     window.addEventListener('resize', holyshit, false);
     holyshit();
 });
+function gEbI(id)
+{
+    return document.getElementById(id);
+}

@@ -73,6 +73,7 @@ a#mp-trigger.button-collapse {
     cursor: pointer !important;
 }
 /** seriously, fuck off */
-div#sidenav-overlay {
+div#sidenav-overlay, .gone {
     display: none !important;
 }
+

@@ -63,11 +63,45 @@ if(empty($this->data['reports']))
         <table class="sortable striped hoverable category-<?= $cat['id'] ?>-lighten-5">
             <thead>
                 <tr>
-                    <th class="hide-on-small-only" style="width: 10%">status<i class="icon-sort"></i></th>
-                    <th style="width: 50%">subject<i class="icon-sort"></i></th>
-                    <th style="width: 10%">comments<i class="icon-sort"></i></th>
-                    <th class="hide-on-small-only" style="width: 15%">submitted<i class="icon-sort"></i></th>
-                    <th class="hide-on-small-only" style="width: 15%">last activity<i class="icon-sort"></i></th>
+                    <th class="gone" id="sortSubject"></th>
+                    <th class="gone" id="sortStatus"></th>
+                    <th class="gone" id="sortComments"></th>
+                    <th class="gone" id="sortSubmitted"></th>
+                    <th class="gone" id="sortLastActive"></th>
+                    <td class="sorttable_nosort">
+                        <div>
+                            <span>
+                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortSubject'),[]);"
+                                   class="btn-flat waves-effect waves-light icon-doc-text-inv"
+                                   href="javascript:void(0);"
+                                >subject<i class="icon-sort"></i></a>
+                            </span>
+                            <span>
+                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortStatus'),[]);"
+                                   class="btn-flat waves-effect waves-light icon-pinboard"
+                                   href="javascript:void(0);"
+                                >status<i class="icon-sort"></i></a>
+                            </span>
+                            <span>
+                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortComments'),[]);"
+                                   class="btn-flat waves-effect waves-light icon-chat"
+                                   href="javascript:void(0);"
+                                >comments<i class="icon-sort"></i></a>
+                            </span>
+                            <span>
+                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortSubmitted'),[]);"
+                                   class="btn-flat waves-effect waves-light icon-time"
+                                   href="javascript:void(0);"
+                                >submitted<i class="icon-sort"></i></a>
+                            </span>
+                            <span>
+                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortLastActive'),[]);"
+                                   class="btn-flat waves-effect waves-light icon-time"
+                                   href="javascript:void(0);"
+                                >last activity<i class="icon-sort"></i></a>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
             </thead>
             <tbody>
@@ -75,10 +109,57 @@ if(empty($this->data['reports']))
     $tidy = extension_loaded('tidy') ? new tidy() : false;
     foreach($this->data['reports'] as $report)
     {
+        $report['last_active'] = max($report['time'],$report['updated_at'],$report['edit_time']);
+
+//
+// awful hax
+//
 ?>
                 <tr id="report-<?= $report['id'] ?>">
-                    <td style="display: none;" sorttable_custom="<?= $this->data['statuses'][$report['status']]['title'] ?>"></td>
-                    <td sorttable_custom="<?= strtolower($report['subject']) ?>">
+                    <td class="gone" sorttable_customkey="<?= strtolower(preg_replace('/\s+/','',$report['subject'])) ?>"></td>
+                    <td class="gone" sorttable_customkey="<?= $this->data['statuses'][$report['status']]['title'] ?>"></td>
+                    <td class="gone" sorttable_customkey="<?= $report['comments'] ?>"></td>
+                    <td class="gone" sorttable_customkey="<?= date('YmdHis', $report['time']) ?>"></td>
+                    <td class="gone" sorttable_customkey="<?= date('YmdHis', $report['last_active']) ?>"></td>
+
+                    <td>
+                        <div class="collapsible">
+
+                            <div class="h6 collapsible-header no-select category-<?= $cat['id'] ?>-text">
+                                <i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i>
+                                <span class="hide-on-small-only"><?= $report['subject'] ?>
+                                    <span class="right"><?= status($report['status']) ?></span>
+                                </span>
+                                <span class="hide-on-med-and-up">
+                                <?= 
+                                    substr($report['subject'],0,15),
+                                    strlen($report['subject']) > 15 ? '...' : '' 
+                                ?>
+                                    <span class="right"><?= status($report['status'],1) ?></span>
+                                </span>
+
+                                <span class="badge right"><?= datef($report['time']) ?></span>
+                                <span class="badge right"><?= datef($report['last_active']) ?></span>
+                                <span class="badge right icon-chat blue-text"><?= $report['comments'] ?></span>
+                            </div>
+<?php
+        if(!empty($report['tags']))
+        {
+            echo '<p class="icon-tags">';
+            foreach($report['tags'] as $tag)
+                echo tag($tag[0],0);
+            echo '</p>';
+        }
+?>
+
+                            <div class="collapsible-body">
+                                <div class="hide-on-med-and-up">
+                                    <p><strong><?= $report['subject'] ?></strong></p>
+                                    <p class="icon-time"><?= datef($report['last_active']) ?></p>
+                                </div>
+                                <blockquote class="icon-article-alt"><?= 
+$report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong><br>' : '' 
+?>
 <?php
         if(isset($report['preview_text']))
         {
@@ -93,52 +174,15 @@ if(empty($this->data['reports']))
                 }
                 $report['preview_text'] .= '. . .';
             }
-
-?>
-                        <div class="collapsible">
-                            <h6 class="collapsible-header no-select category-<?= $cat['id'] ?>-text">
-                                <i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i>
-                                <span class="hide-on-small-only"><?= $report['subject'] ?>
-                                    <span class="right"><?= status($report['status']) ?></span>
-                                </span>
-                                <span class="hide-on-med-and-up">
-                                <?= 
-                                    substr($report['subject'],0,15),
-                                    strlen($report['subject']) > 15 ? '...' : '' 
-                                ?>
-                                    <span class="right"><?= status($report['status'],1) ?></span>
-                                </span>
-                            </h6>
-                            <div class="collapsible-body">
-                                <div class="hide-on-med-and-up">
-                                    <p><strong><?= $report['subject'] ?></strong></p>
-                                    <p class="icon-time"><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></p>
-                                </div>
-                                <blockquote class="icon-article-alt"><?= 
-$report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong><br>' : '', 
-$report['preview_text'] ?></blockquote>
-                                <p><a href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>">Keep reading &rarr;</a></p></blockquote>
+            echo $report['preview_text'];
+        }  ?>
+                                    <p><a href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>">Keep reading &rarr;</a></p>
+                                </blockquote>
                             </div>
                         </div>
-<?php
-        } else {
-?>
-                        <a class="h6 icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>" href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>"><?= $report['subject'] ?></a>
-<?php
-        }
-        if(!empty($report['tags']))
-        {
-            echo '<p class="icon-tags">';
-            foreach($report['tags'] as $tag)
-                echo tag($tag[0],0);
-            echo '</p>';
-        }
-?>
                     </td>
-                    <td><i class="icon-chat"></i> <?= $report['comments'] ?></td>
-                    <td class="hide-on-small-only"><?= datef($report['time']) ?></td>
-                    <td class="hide-on-small-only"><?= datef(max($report['time'],$report['updated_at'],$report['edit_time'])) ?></td>
                 </tr>
+                    
 <?php
     }
 ?>
