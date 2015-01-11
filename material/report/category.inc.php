@@ -8,7 +8,7 @@ $pageTitle = $cat['title'];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src="/bunzilla/material/sorttable.js"></script>
-<div class="category-<?= $cat['id'] ?>-base">
+<div><!-- class="category-<?= $cat['id'] ?>-base">-->
 <!--
     about:category
 -->
@@ -60,45 +60,52 @@ if(empty($this->data['reports']))
         <!--
             kill me now
         -->
-        <table class="sortable striped hoverable category-<?= $cat['id'] ?>-lighten-5">
+        <table class="sortable hoverable transparent">
             <thead>
                 <tr>
+                    <th class="gone" id="sortClosed"></th>
                     <th class="gone" id="sortSubject"></th>
                     <th class="gone" id="sortStatus"></th>
                     <th class="gone" id="sortComments"></th>
                     <th class="gone" id="sortSubmitted"></th>
                     <th class="gone" id="sortLastActive"></th>
                     <td class="sorttable_nosort">
-                        <div>
+                        <div id="sorttable_override" class="right-align">
                             <span>
-                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortSubject'),[]);"
+                                <a data-th="sortClosed"
+                                   class="btn-flat waves-effect waves-light icon-lock"
+                                   href="javascript:void(0);"
+                                >open/closed<span id="ico-sortClosed" class="icon-sort"></span></a>
+                            </span>
+                            <span>
+                                <a data-th="sortSubject"
                                    class="btn-flat waves-effect waves-light icon-doc-text-inv"
                                    href="javascript:void(0);"
-                                >subject<i class="icon-sort"></i></a>
+                                >subject<span id="ico-sortSubject" class="icon-sort"></span></a>
                             </span>
                             <span>
-                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortStatus'),[]);"
-                                   class="btn-flat waves-effect waves-light icon-pinboard"
-                                   href="javascript:void(0);"
-                                >status<i class="icon-sort"></i></a>
-                            </span>
-                            <span>
-                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortComments'),[]);"
+                                <a data-th="sortComments"
                                    class="btn-flat waves-effect waves-light icon-chat"
                                    href="javascript:void(0);"
-                                >comments<i class="icon-sort"></i></a>
+                                >comments<span id="ico-sortComments" class="icon-sort"></span></a>
                             </span>
                             <span>
-                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortSubmitted'),[]);"
+                                <a data-th="sortSubmitted"
                                    class="btn-flat waves-effect waves-light icon-time"
                                    href="javascript:void(0);"
-                                >submitted<i class="icon-sort"></i></a>
+                                >submitted<span id="ico-sortSubmitted" class="icon-sort"></span></a>
                             </span>
                             <span>
-                                <a onclick="sorttable.innerSortFunction.apply(gEbI('sortLastActive'),[]);"
+                                <a data-th="sortLastActive"
                                    class="btn-flat waves-effect waves-light icon-time"
                                    href="javascript:void(0);"
-                                >last activity<i class="icon-sort"></i></a>
+                                >last activity<span id="ico-sortLastActive" class="icon-sort"></span></a>
+                            </span>
+                            <span>
+                                <a data-th="sortStatus"
+                                   class="btn-flat waves-effect waves-light icon-pinboard"
+                                   href="javascript:void(0);"
+                                >status<span id="ico-sortStatus" class="icon-sort"></span></a>
                             </span>
                         </div>
                     </td>
@@ -116,6 +123,7 @@ if(empty($this->data['reports']))
 //
 ?>
                 <tr id="report-<?= $report['id'] ?>">
+                    <td class="gone" sorttable_customkey="<?= $report['closed'] ?>"></td>
                     <td class="gone" sorttable_customkey="<?= strtolower(preg_replace('/\s+/','',$report['subject'])) ?>"></td>
                     <td class="gone" sorttable_customkey="<?= $this->data['statuses'][$report['status']]['title'] ?>"></td>
                     <td class="gone" sorttable_customkey="<?= $report['comments'] ?>"></td>
@@ -135,22 +143,15 @@ if(empty($this->data['reports']))
                                     substr($report['subject'],0,15),
                                     strlen($report['subject']) > 15 ? '...' : '' 
                                 ?>
-                                    <span class="right"><?= status($report['status'],1) ?></span>
+                                    <span class="right"><?= status($report['status']) ?></span>
                                 </span>
 
-                                <span class="badge right"><?= datef($report['time']) ?></span>
-                                <span class="badge right"><?= datef($report['last_active']) ?></span>
-                                <span class="badge right icon-chat blue-text"><?= $report['comments'] ?></span>
+                                <span class="badge right icon-time" title="last active"><?= datef($report['last_active']) ?></span>
+                                <span class="badge right icon-history" title="submitted at"><?= datef($report['time']) ?></span> 
+                                <span class="badge right icon-chat blue-text" title="comments"><?= $report['comments'] ?></span>
+
+                                <!-- float: right makes me confus @_@ -->
                             </div>
-<?php
-        if(!empty($report['tags']))
-        {
-            echo '<p class="icon-tags">';
-            foreach($report['tags'] as $tag)
-                echo tag($tag[0],0);
-            echo '</p>';
-        }
-?>
 
                             <div class="collapsible-body">
                                 <div class="hide-on-med-and-up">
@@ -179,6 +180,15 @@ $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong
                                     <p><a href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>">Keep reading &rarr;</a></p>
                                 </blockquote>
                             </div>
+<?php
+        if(!empty($report['tags']))
+        {
+            echo '<p class="icon-tags">';
+            foreach($report['tags'] as $tag)
+                echo tag($tag[0],0);
+            echo '</p>';
+        }
+?>
                         </div>
                     </td>
                 </tr>
