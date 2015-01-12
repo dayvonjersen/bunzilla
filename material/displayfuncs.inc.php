@@ -26,10 +26,10 @@ function datef( $time = -1 )
             $unit =  'second';
         elseif($diff < 3600)
         {
-            $diff = (int)$diff/60;
+            $diff = (int)($diff/60);
             $unit = 'minute';
         } else {
-            $diff = (int)$diff/3600;
+            $diff = (int)($diff/3600);
             $unit = 'hour';
         }
         return sprintf('%d %s%s ago', $diff, $unit, ($diff == 1 ? '' : 's'));

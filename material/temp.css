@@ -48,7 +48,8 @@ td > [class*='status-'] {
     padding: 2px;
 }
 .collapsible, .collapsible-header {
-    border: 0;
+    border: none !important;
+    box-shadow: none !important;
 }
 strong, b { font-weight: bold }
 thead th[class*='sorttable_'] i {
@@ -63,7 +64,7 @@ nav#mp-menu ul {
 nav#mp-menu {
     line-height: 35px !important;
 }
-nav#mp-menu a {
+nav#mp-menu a, .collapsible label {
     color: inherit !important;
 }
 /* find a.button-collapse and KILL IT D:< */
@@ -107,4 +108,12 @@ table tbody tr td {
 }
 span.badge {
     color: inherit !important;
+}
+.tabs, ul.tabs li {
+    height: 2em !important;
+    line-height: 2em !important;
+    text-transform: none !important;
+}
+:target {
+    box-shadow: 0px 0px 50px 50px #fff;
 }

@@ -4,6 +4,8 @@ $(document).ready(function(){
     $(".dropdown-button").dropdown();
     $(".collapsible").collapsible();
     $('select').material_select();
+    $('ul.tabs').tabs();
+
 /**
  * codrops MultiLevelPushMenu initialization */
     (new mlPushMenu( document.getElementById("mp-menu"), 

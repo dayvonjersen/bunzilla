@@ -12,18 +12,31 @@ function statusDropdown( $selected )
     }
     return $ret.'</select>';
 }
+function categoryDropdown( $selected )
+{
+    $categories = Cache::read('categories');
+    $ret = '<select>';
+    foreach($categories as $cat)
+    {
+        $ret .= '<option value="'.$cat['id'].'" class="category-'.$cat['id'].'-base" data-icon="'.$cat['icon'].'"'.($selected === $cat['id'] ? ' selected' : '').'>'.$cat['title'].'</option>';
+    }
+    return $ret.'</select>';
+}
 $pageTitle = $this->data['report']['subject'];
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 //require BUNZ_TPL_DIR . 'post/utils.inc.php';
 $cat = $this->data['categories'][$this->data['category_id']];
 $report = $this->data['report'];
-?>
-<script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
-<script>hljs.initHighlightingOnLoad();</script>
 
+//<script src="<?= BUNZ_JS_DIR,'highlight.js' "></script>
+//<script>hljs.initHighlightingOnLoad();</script>
+?>
 <div class="category-<?= $cat['id'] ?>-base" style="height: 100%">
 
+<!--
+    category info
+-->
 <div class="row">
     <div class="col s12">
         <article>
@@ -60,35 +73,140 @@ if($this->auth())
     </div>
 </div>
 
-        <article>
-            <header class='row'>
-                <section class='section col s6 z-depth-2 category-<?=$cat['id']?>-lighten-1'>
-                    <p><?= $report['email'], $report['epenis'] ? ' <span class="badge blue white-text">## Developer</span>' : '' ?></span></p>
-                    <p><span><?= datef($report['time']) ?></span></p>
-                </section>
-                <section class='section col s6 z-depth-1 category-<?=$cat['id']?>-lighten-5'>
-                    <?= status($report['status']) ?>
-                    <span class="badge icon-<?= $this->data['closed'] ? 'lock grey' : 'unlock light-blue' ?> "><?=$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
-<form>
-                    <?= statusDropdown($report['status']) ?>
-                    <label><input type="checkbox">open/close</label>
-</form>
-                    
-<?php
-if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($report['ip']))
-{
-?>
-                        <span><a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'] ?>" class='btn icon-pencil-alt'>edit</a></span>
-<?php
-}
-?>
-                </section>
-            </header>
 
-            <header class='row' id="hi">
-                <section class='section no-pad-top no-pad-bot col s12 z-depth-3 category-<?=$cat['id']?>-lighten-5'>
-                    <h1 class="flow-text center-align"><?= $report['subject'] ?></h1>
-                </section>
+<!--
+    report view
+-->
+
+<article class="container">
+    <header class="row">
+        <!--
+            author and time
+        -->
+        <section class="section col s12 m6 z-depth-3 category-<?=$cat['id']?>-text">
+            <!--
+                email and authlevel
+            -->
+            <p class="icon-mail"><?= $report['email'], 
+$report['epenis'] ? ' <span class="badge blue white-text" style="color: white !important">## Developer</span>' : '' ?></p>
+            <!--
+                submission and edit time
+            -->
+            <p class="icon-time" title="submitted at"><?= datef($report['time']) ?></p><?=
+$report['edit_time'] ? '<p class="icon-pencil-alt"><span class="icon-time">'.datef($report['edit_time']).'</span></p>' : ''
+?>      </section>
+
+        <!--
+            oh boy oh boy
+        -->
+        <section class="col s12 m6">
+            <div class="row">
+            <ul class="tabs waves-effect waves-light">
+                <li class="tab col s2">
+                    <a href="#status" class="icon-medkit"><span class="hide-on-small-only">Status</span></a>
+                </li>
+                <li class="tab col s2">
+                    <a href="#history" class="icon-history grey white-text"><span class="hide-on-small-only">History</span></a>
+                </li>
+                <li class="tab col s2">
+                    <a href="#update" class="icon-magic light-blue white-text"><span class="hide-on-small-only">Update</span></a>
+                </li>
+                <li class="tab col s2">
+                    <a href="#move" class="icon-move yellow black-text"><span class="hide-on-small-only">Move</span></a>
+                </li>
+                <li class="tab col s2">
+                    <a href="#delete" class="icon-delete red white-text"><span class="hide-on-small-only">Delete</span></a>
+                </li>
+            </ul>
+
+            <!--
+                current status 
+            -->
+            <section class="section col s12 white" id="status">
+            <div class="valign-wrapper" style="padding: 2em;">
+            <div class="valign z-depth-3">
+                <?= status($report['status']) ?>
+                <span class="badge z-depth-2 white-text icon-<?= 
+$this->data['closed'] ? 'lock grey ' : 'unlock light-blue'?>"><?=
+$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
+
+                <span class="badge z-depth-2 icon-attention yellow black-text" style="color: #000 !important">Low Priority</span>
+            </div>
+            </div>
+            </section>
+            <section class="section col s12 grey" id="history">
+                    <dl class="white section grey-text">
+                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
+                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
+                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
+                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
+                    </dl>
+            </section>
+
+        <!--
+            actions
+        -->        
+            <section class="section col s12 light-blue" id="update">
+                <h5 class="white-text">update status to</h5>
+                <form class="white z-depth-5 section">
+                <?= statusDropdown($report['status']) ?>
+                <div class="input-field">
+                    <input type="radio" id="toggleClosed_1" name="toggleClosed" class="with-gap"<?=$this->data['closed'] ? ' checked' : ''?>>
+                    <label for="toggleClosed_1">
+                    <i  class="icon-lock"></i></label>
+                
+                                <input type="radio" id="toggleOpen_1" name="toggleClosed" class="with-gap"<?=!$this->data['closed'] ? ' checked' : ''?>>
+                                <label for="toggleOpen_1" >
+                                <i  class="icon-unlock"></i></label>
+                            </div>
+                            <div class="input-field">
+                                <p style="color: #000 !important">priority</p>
+                                <p class="range-field"><input type="range" min="0" max="10"></p>
+                            </div>
+                            <div class="center">
+                            <button class="btn light-blue waves-effect icon-magic">Update Status</button>
+                            </div>
+            </form>
+            </section>
+            <section class="section col s12 yellow" id="move">
+                <h5 class="black-text">move report to</h5>
+                <form class="white z-depth-5 section">
+                                <?= categoryDropdown($cat['id']) ?>
+                <div class="input-field">
+                    <input type="radio" id="toggleClosed_2" name="toggleClosed" class="with-gap"<?=$this->data['closed'] ? ' checked' : ''?>>
+                    <label for="toggleClosed_2">
+                                <i  class="icon-lock"></i></label>
+                
+                                <input type="radio" id="toggleOpen_2" name="toggleClosed" class="with-gap"<?=!$this->data['closed'] ? ' checked' : ''?>>
+                                <label for="toggleOpen_2" >
+                                <i  class="icon-unlock"></i></label>
+                            </div>
+                            <div class="input-field">
+                                <p style="color: #000 !important">priority</p>
+                                <p class="range-field"><input type="range" min="0" max="10"></p>
+                            </div>
+    <div>
+                            <div class="center">
+                            <button class="btn yellow black-text waves-effect icon-move">Move</button>
+                            </div>
+</div>
+                </form>
+            </section>
+            <section class="col s12 red" id="delete">
+                <form class="white z-depth-5 center section">
+                    <button class="btn red icon-delete waves-red" onclick="alert('y u do dis :<');">Delete (no undo)</button>
+                </form>
+             </section>
+        </div>
+        </section>
+    
+        <!--
+            subject
+        -->
+        <section class='section no-pad-top no-pad-bot col s12 z-depth-5 category-<?=$cat['id']?>-text'>
+            <a href="#comments" class="btn blue icon-chat right">reply</a>
+            <button class="btn green icon-pencil-alt right">edit</button>
+            <span class="flow-text"><?= $report['subject'] ?></span>
 <?php
 if(!empty($report['tags']))
 {
@@ -97,15 +215,13 @@ if(!empty($report['tags']))
         echo tag($tag[0],0);
     echo '</p>';
 }
-
-if(!is_null($report['edit_time']))
-{
 ?>
-                <h6 class="z-depth-4 icon-pencil-alt"><strong>**EDIT**</strong> @ <?= datef($report['edit_time']) ?></h6>
-<?php
-}
-?>
-            </header>
+        </section>
+    </header>
+    <!--
+        description reproduce expected actual
+    -->
+    <main>
 <?php
 $d = 5;
 foreach(['description','reproduce','expected','actual'] as $field)
@@ -113,24 +229,30 @@ foreach(['description','reproduce','expected','actual'] as $field)
     if($cat[$field])
     {
 ?>
-            <section class='container flow-text z-depth-<?= $d-- ?> category-<?=$cat['id']?>-lighten-5'><span class="badge grey white-text"><?=$field?></span><p><?= $report[$field] ?></blockquote></p>
+        <section class='z-depth-<?= $d-- ?> category-<?=$cat['id']?>-lighten-5'>
+            <span class="badge grey white-text left"><?=$field?></span>
+            <p style="clear: both; margin: 10px 0 " class="flow-text"><?= $report[$field] ?></p>
+        </section>
 <?php
     }
 }
+?>
+    </main>
 
+    <!--
+        comments
+    -->
+    <footer id="comments" class="" style="text-align: left !important; margin: 0 !important">
+<?php
 if(!empty($this->data['comments']))
 {
-?>
-        </article>
-        <article id="comments" class="container">
-<?php
     $i = 0;
     foreach($this->data['comments'] as $comment)
     {
 ?>
-            <section class=" z-depth-2 category-<?=$cat['id']?>-lighten-4" id="reply-<?=$comment['id']?>">
+            <section class="z-depth-2 category-<?=$cat['id']?>-lighten-5" id="reply-<?=$comment['id']?>">
                 <header>
-                    <p class="icon-chat"><?= $comment['email'], $comment['epenis'] ? '<span class="badge light-blue white-text">## Developer</span>' : '' ?> @ <a href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
+                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge light-blue white-text left">## Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
 
 <?php
 /*
@@ -142,22 +264,49 @@ if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($comment['ip']))
 }*/
 ?></p>
                 </header>
-                <section class='z-depth-2'><?= $comment['message'] ?><?php
+                <p class='z-depth-2'><?= $comment['message'] ?><?php
 if($comment['edit_time'])
 {
 ?>
-                <h6 class="icon-pencil-alt"><strong>**EDIT**</strong> @ <?= datef(BUNZ_BUNZILLA_DATE_FORMAT,$comment['edit_time']) ?></h6>
+                <span class="badge right icon-pencil-alt"><em><?= datef($comment['edit_time']) ?></em></h6>
 <?php
 }
-?></section>
+?></p>
             </section>
                 
 <?php
     }
 ?>
-            </article>
 <?php
 }
+?>
+            <!--
+                spammer's delight
+            -->
+            <section class="category-<?=$cat['id']?>-lighten-5 z-depth-3">
+                <form class="">
+                    <div class="section">
+                        <h4>dis converzashun iz missing ur voice :DDD</h4>
+    
+                    <div class="input-field">
+                        <i class="icon-mail prefix"></i>
+                        <input type="email" id="email">
+                        <label for="email">email</label>
+                    </div>
+                    <div class="input-field">
+                        <i class="icon-chat prefix"></i>
+                        <textarea class="materialize-textarea" required></textarea>
+                        <label for="email">your comment</label>
+                    </div>
+                    <div class="input-field"><button class="btn">!</button></div>
+            
+                </form>
+            </section>
+        </footer>
+    </article>
+
+<?php
+
 /*
 if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
 {

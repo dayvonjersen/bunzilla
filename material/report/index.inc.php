@@ -172,7 +172,7 @@ $stats['total_issues'] > 0 ?
 </div> 
 <?php
         // configure rows if you want or something
-        if($i++ >= 2)
+        if($i++ >= 2 || end($this->data['categories']) === $cat)
         {
             echo '</div>';
             $i = 0;
