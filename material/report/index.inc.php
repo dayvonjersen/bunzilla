@@ -36,7 +36,7 @@ if(empty($this->data['categories']))
 ?>
 <?= $i == 0 ? '<div class="row">' : '' ?>
     <div class="col s12 l6">
-        <article class='z-depth-1 container category-<?= $cat['id'] ?>-base'>
+        <article class='z-depth-1 category-<?= $cat['id'] ?>-base'>
             <div class="row">
                 <!-- 
                     title 

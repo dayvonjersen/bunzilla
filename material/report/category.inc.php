@@ -8,7 +8,7 @@ $pageTitle = $cat['title'];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src="/bunzilla/material/sorttable.js"></script>
-<div><!-- class="category-<?= $cat['id'] ?>-base">-->
+<div class="category-<?= $cat['id'] ?>-base" style="height: 100%;">
 <!--
     about:category
 -->
@@ -60,7 +60,7 @@ if(empty($this->data['reports']))
         <!--
             kill me now
         -->
-        <table class="sortable hoverable transparent">
+        <table class="sortable container z-depth-5">
             <thead>
                 <tr>
                     <th class="gone" id="sortClosed"></th>
@@ -69,7 +69,7 @@ if(empty($this->data['reports']))
                     <th class="gone" id="sortComments"></th>
                     <th class="gone" id="sortSubmitted"></th>
                     <th class="gone" id="sortLastActive"></th>
-                    <td class="sorttable_nosort">
+                    <td class="sorttable_nosort category-<?=$cat['id']?>-darken-1">
                         <div id="sorttable_override" class="right-align">
                             <span>
                                 <a data-th="sortClosed"
@@ -114,7 +114,7 @@ if(empty($this->data['reports']))
             <tbody>
 <?php
     $tidy = extension_loaded('tidy') ? new tidy() : false;
-    foreach($this->data['reports'] as $report)
+    foreach($this->data['reports'] as $i => $report)
     {
         $report['last_active'] = max($report['time'],$report['updated_at'],$report['edit_time']);
 
@@ -122,10 +122,10 @@ if(empty($this->data['reports']))
 // awful hax
 //
 ?>
-                <tr id="report-<?= $report['id'] ?>">
+                <tr id="report-<?= $report['id'] ?>" class="z-depth-4">
                     <td class="gone" sorttable_customkey="<?= $report['closed'] ?>"></td>
                     <td class="gone" sorttable_customkey="<?= strtolower(preg_replace('/\s+/','',$report['subject'])) ?>"></td>
-                    <td class="gone" sorttable_customkey="<?= $this->data['statuses'][$report['status']]['title'] ?>"></td>
+                    <td class="gone" sorttable_customkey="<?= strtolower($this->data['statuses'][$report['status']]['title']) ?>"></td>
                     <td class="gone" sorttable_customkey="<?= $report['comments'] ?>"></td>
                     <td class="gone" sorttable_customkey="<?= date('YmdHis', $report['time']) ?>"></td>
                     <td class="gone" sorttable_customkey="<?= date('YmdHis', $report['last_active']) ?>"></td>
@@ -133,8 +133,8 @@ if(empty($this->data['reports']))
                     <td>
                         <div class="collapsible">
 
-                            <div class="h6 collapsible-header no-select category-<?= $cat['id'] ?>-text">
-                                <i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?>"></i>
+                            <div class="collapsible-header no-select category-<?= $cat['id'] ?>-lighten-3 z-depth-5">
+                                <i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?> category-<?=$cat['id']?>-text"></i>
                                 <span class="hide-on-small-only"><?= $report['subject'] ?>
                                     <span class="right"><?= status($report['status']) ?></span>
                                 </span>
@@ -153,7 +153,7 @@ if(empty($this->data['reports']))
                                 <!-- float: right makes me confus @_@ -->
                             </div>
 
-                            <div class="collapsible-body">
+                            <div class="collapsible-body category-<?= $cat['id'] ?>-lighten-3 z-depth-5">
                                 <div class="hide-on-med-and-up">
                                     <p><strong><?= $report['subject'] ?></strong></p>
                                     <p class="icon-time"><?= datef($report['last_active']) ?></p>
@@ -169,7 +169,7 @@ $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong
                 if($tidy)
                 {            
                     $report['preview_text'] = substr($report['preview_text'],0,100);
-                    $report['preview_text'] = $tidy->repairString($report['preview_text']);
+                    $report['preview_text'] = $tidy->repairString($report['preview_text'],["doctype" => "omit","show-body-only" => "yes"]);
                 } else {
                     $report['preview_text'] = substr(strip_tags($report['preview_text']),0,100);
                 }

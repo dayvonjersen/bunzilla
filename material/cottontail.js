@@ -26,7 +26,7 @@ $(document).ready(function(){
         else if(bodyHeight > viewHeight)
         {
             troubleMaker.style.height = 'auto';
-            document.querySelector('#mp-pusher > main').style.paddingBottom = "150px";
+            document.querySelector('#mp-pusher > main').style.paddingBottom = navigator.mozApps ? "170px" : "150px"; //ffs
         }
 
                 

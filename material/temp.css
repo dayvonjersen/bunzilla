@@ -80,6 +80,31 @@ div#sidenav-overlay, .gone {
  * this is basics guys c'mon
 
  (shoutouts to iron chef italian */
-.collapsible-body, .collapsible > p {
-    clear: both;
+.collapsible-body, .collapsible p {
+    padding: 0 !important;
+    border: 0 !important;
+    clear: both !important;
+}
+tr,td,th,.collapsible-header,.collapsible-body {
+    border-radius: 0;
+    padding: 0;
+}
+.collapsible {
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+}
+blockquote {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+table thead tr th {
+    text-align: right !important;
+}
+
+table tbody tr td {
+    text-align: left !important;
+}
+span.badge {
+    color: inherit !important;
 }
