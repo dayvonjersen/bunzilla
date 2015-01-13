@@ -7,6 +7,7 @@ $pageTitle = $this->data['report']['subject'];
 require BUNZ_TPL_DIR . 'header.inc.php';
 //require BUNZ_TPL_DIR . 'post/utils.inc.php';
 require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
+require_once BUNZ_TPL_DIR . 'color.php';
 
 $cat = $this->data['categories'][$this->data['category_id']];
 $report = $this->data['report'];
@@ -149,7 +150,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
 foreach($this->data['priorities'] as $pryor)
 {
 ?>
-                                    <dd data-color="#<?= $pryor['color'] ?>" data-value="<?= $pryor['id'] ?>"><?= $pryor['title'] ?></dd>
+                                    <dd data-text="<?= (new Color($pryor['color']))->getTextColor() ?>" data-icon="<?= $pryor['icon'] ?>" data-color="#<?= $pryor['color'] ?>" data-value="<?= $pryor['id'] ?>"><?= $pryor['title'] ?></dd>
 <?php
 }
 ?>

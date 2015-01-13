@@ -116,9 +116,16 @@ span.badge {
 }
 /** DELETE THIS **/
 :target {
-    box-shadow: 0px 0px 50px 50px #fff;
+    box-shadow: 0px 0px 10px #fff;
 }
 /** FUCKERS **/
 .thumb {
     display: inline-block;
+    text-align: center;
+}
+.thumb .value {
+    width: 50% !important;
+    margin: auto !important;
+    color: inherit !important;
+    transform: none !important;
 }
