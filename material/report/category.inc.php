@@ -20,7 +20,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                     title 
                 -->
                 <section class='section col s8 z-depth-5 category-<?= $cat['id'] ?>-text'>
-                    <h4 class="category-<?= $cat['id'] ?>-text <?= $cat['icon'] ?>"><?= $cat['title'] ?></a></h4>
+                    <h4 class="category-<?= $cat['id'] ?>-text <?= $cat['icon'] ?>"><?= $cat['title'] ?></h4>
                     <h6><?= $cat['caption'] ?></h6>
                 </section>
                 <!--
@@ -113,14 +113,22 @@ if(empty($this->data['reports']))
             </thead>
             <tbody>
 <?php
+//
+// tidy can be used to fix up html from truncated message "previews"
+// but it's not required because we can just strip_tags()
+//
     $tidy = extension_loaded('tidy') ? new tidy() : false;
     foreach($this->data['reports'] as $i => $report)
     {
         $report['last_active'] = max($report['time'],$report['updated_at'],$report['edit_time']);
 
-//
-// awful hax
-//
+/**
+ * okay so we're using a table and fucking it up like this
+ * just to take advantage of sorttable.js
+ *
+ * http://www.kryogenix.org/code/browser/sorttable/
+ *
+ * which is awesome and totally worth it */
 ?>
                 <tr id="report-<?= $report['id'] ?>" class="z-depth-4">
                     <td class="gone" sorttable_customkey="<?= $report['closed'] ?>"></td>
@@ -162,6 +170,10 @@ if(empty($this->data['reports']))
 $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong><br>' : '' 
 ?>
 <?php
+//
+// as mentioned above, cleaning up message previews in case they're too long
+// and/or contain HTML
+//
         if(isset($report['preview_text']))
         {
             if(strlen(strip_tags($report['preview_text'])) > 100)
@@ -170,6 +182,7 @@ $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong
                 {            
                     $report['preview_text'] = substr($report['preview_text'],0,100);
                     $report['preview_text'] = $tidy->repairString($report['preview_text'],["doctype" => "omit","show-body-only" => "yes"]);
+                    $report['preview_text'] = preg_replace('/.*\<body\>(.*)\<\/body\>.*\<\/html\>/mis', '$1', $report['preview_text']);
                 } else {
                     $report['preview_text'] = substr(strip_tags($report['preview_text']),0,100);
                 }

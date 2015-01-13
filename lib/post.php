@@ -42,6 +42,22 @@ class post extends Controller
         ];
     }
 
+    protected function diff( $what, $text1, $text2, $type, $id )
+    {
+        if(!in_array(['reports', 'comments'],$type,true))
+            throw new InvalidArgumentException('$type must be a valid table');
+
+        $orig = tmpfile();
+        $edit = tmpfile();
+        file_put_contents($orig, $text1);
+        file_put_contents($edit, $text2);
+        return file_put_contents(
+            BUNZ_DIR . 'diff/'.$type.'/'.(int)$id,
+            "$what changed @ ".date('r')."\n".`diff $orig $edit`,
+            FILE_APPEND | LOCK_EX
+        );
+    }
+
     public function edit($reportId, $commentId = false)
     {
         $this->tpl .= '/edit';
@@ -88,6 +104,7 @@ class post extends Controller
                 else {
                     $set[] = $field .' = :'.$field;
                     $this->data['params'][$field] = $changes[$field];
+                    $this->diff($field, $value, $changes[$field], $commentId === false ? 'reports' : 'comments', $commentId === false ? $reportId : $commentId);
                 }
 
             if(!count($set))

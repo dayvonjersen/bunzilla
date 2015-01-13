@@ -24,6 +24,8 @@ define('BUNZ_RES_DIR', BUNZ_DIR . 'res/');
 define('BUNZ_LIB_DIR', BUNZ_DIR . 'lib/');
 define('BUNZ_TPL_DIR', BUNZ_DIR . (isset($_GET['material']) ? 'material/' : 'tpl/')); // temporary transition
 define('BUNZ_CACHE_DIR', BUNZ_DIR . 'cache/');
+// bad ideas++
+define('BUNZ_DIFF_DIR', BUNZ_DIR . 'diff/');
 
 /**
  * External */
@@ -154,6 +156,7 @@ class Controller
         $this->data['categories'] = Cache::read('categories');
         $this->data['statuses']   = Cache::read('statuses');
         $this->data['tags']       = Cache::read('tags');
+        $this->data['priorities']       = Cache::read('priorities');
 
         require_once BUNZ_TPL_DIR . $this->tpl . '.inc.php';
     }

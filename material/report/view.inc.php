@@ -2,30 +2,12 @@
 //
 // individual reports : yay
 //
-function statusDropdown( $selected )
-{
-    $statuses = Cache::read('statuses');
-    $ret = '<select>';
-    foreach($statuses as $status)
-    {
-        $ret .= '<option value="'.$status['id'].'" class="status-'.$status['id'].'" data-icon="'.$status['icon'].'"'.($selected === $status['id'] ? ' selected' : '').'>'.$status['title'].'</option>';
-    }
-    return $ret.'</select>';
-}
-function categoryDropdown( $selected )
-{
-    $categories = Cache::read('categories');
-    $ret = '<select>';
-    foreach($categories as $cat)
-    {
-        $ret .= '<option value="'.$cat['id'].'" class="category-'.$cat['id'].'-base" data-icon="'.$cat['icon'].'"'.($selected === $cat['id'] ? ' selected' : '').'>'.$cat['title'].'</option>';
-    }
-    return $ret.'</select>';
-}
 $pageTitle = $this->data['report']['subject'];
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 //require BUNZ_TPL_DIR . 'post/utils.inc.php';
+require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
+
 $cat = $this->data['categories'][$this->data['category_id']];
 $report = $this->data['report'];
 
@@ -149,7 +131,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
             <section class="section col s12 light-blue" id="update">
                 <h5 class="white-text">update status to</h5>
                 <form class="white z-depth-5 section">
-                <?= statusDropdown($report['status']) ?>
+                <?= statusDropdown(false, $report['status']) ?>
                 <div class="input-field">
                     <input type="radio" id="toggleClosed_1" name="toggleClosed" class="with-gap"<?=$this->data['closed'] ? ' checked' : ''?>>
                     <label for="toggleClosed_1">
@@ -161,7 +143,19 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
                             </div>
                             <div class="input-field">
                                 <p style="color: #000 !important">priority</p>
-                                <p class="range-field"><input type="range" min="0" max="10"></p>
+                                <div class="range-field">
+                                <dl class="gone">
+<?php
+foreach($this->data['priorities'] as $pryor)
+{
+?>
+                                    <dd data-color="#<?= $pryor['color'] ?>" data-value="<?= $pryor['id'] ?>"><?= $pryor['title'] ?></dd>
+<?php
+}
+?>
+                                </dl>
+                                <input name="priority" type="range" min="0" max="<?= count($this->data['priorities']) - 1 ?>">
+                            </div>
                             </div>
                             <div class="center">
                             <button class="btn light-blue waves-effect icon-magic">Update Status</button>
@@ -171,7 +165,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
             <section class="section col s12 yellow" id="move">
                 <h5 class="black-text">move report to</h5>
                 <form class="white z-depth-5 section">
-                                <?= categoryDropdown($cat['id']) ?>
+                                <?= categoryDropdown(false,$cat['id']) ?>
                 <div class="input-field">
                     <input type="radio" id="toggleClosed_2" name="toggleClosed" class="with-gap"<?=$this->data['closed'] ? ' checked' : ''?>>
                     <label for="toggleClosed_2">

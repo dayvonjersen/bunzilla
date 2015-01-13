@@ -58,3 +58,24 @@ function badge( $type, $id, $short = false )
 }
 function status( $id, $short = false ) { return badge('status',(int)$id,$short); }
 function tag( $id, $short = true ) { return badge('tag',(int)$id,$short); }
+
+/**
+ * ditto for <select> dropdowns */
+function dropdown( $fieldName, $values, $selected = false, $disableKey = false )
+{
+    if($disableKey !== false && isset($values[$disableKey]))
+        unset($values[$disableKey]);
+
+    $ret = "<select name='$fieldName'>\n";
+    foreach($values as $opt)
+    {
+        $ret .= "\t<option value='{$opt['id']}' class='{$fieldName}-{$opt['id']}' data-icon='{$opt['icon']}'".($selected === $opt['id'] ? ' selected' : '').">{$opt['title']}</option>\n";
+    }
+    return "$ret</select>";
+}
+function statusDropdown( $selected, $disableId = false ) { 
+    return dropdown('status',Cache::read('statuses'),$selected, $disableId);
+}
+function categoryDropdown( $selected, $disableId = false ) { 
+    return dropdown('category', Cache::read('categories'), $selected, $disableId);
+}

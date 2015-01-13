@@ -1,58 +1,104 @@
-<!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="materialize.min.css">
-        <link rel="stylesheet" href="../css/bunzilla-icons.css">
-<style>
-html,body { height: 100% !important; }
-</style>
-    </head>
-    <body style="background: #fff !important">
-<div class="container"
-<main class="light-blue">
-<form>
-    <label>ICONS THAT FUCKING WORK OMG</label>
-    <select>
-        <option value="" disabled selected>CAN YOU BELIEVE IT</option>
-        <option value="1" data-icon="icon-firefox">holy</option>
-        <option value="2" data-icon="icon-chrome">fucking</option>
-        <option value="3" data-icon="icon-ie">shit</option>
-        <option value="4" data-icon="icon-opera">dicks</option>
-    </select>
-</form>
-</main>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="materialize.min.css">
+		<link rel="stylesheet" href="temp.css">
+		<link rel="stylesheet" href="../css/bunzilla-icons.css">
+		<style>html,body { height: 100% !important; }
+#toolsModal label { display: block; }</style>
+<script src="jquery-2.1.3.min.js"></script>
+<script src="materialize.js"></script>
+	</head>
+	<body style="background: #fff !important">
+    <a href="#toolsModal" class="modal-trigger">Tools!</a>
+
+<div class="row">
+  <form class="col s12">
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea class="materialize-textarea" required></textarea>
+        <label>Textarea</label>
+      </div>
+    </div>
+  </form>
 </div>
-<div class="row breadcrumb">
-<div class="col s12">
-<ul class="row">
-<li class="col s12 m3"><a class="btn btn-flat">you</a></li>
-<li class="col s12 m3 icon-right-open-mini"><a class="btn btn-flat">are</a></li>
-<li class="col s12 m3 icon-right-open-mini"><a class="btn btn-flat">here</a></li>
-<li class="col s12 m3 icon-right-open-mini"><span class="btn btn-raised">nowhere</span></li>
-</ul></div>
+        
+
+<div class="row">
+  <form class="col s12">
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea class="materialize-textarea" required></textarea>
+        <label>Textarea</label>
+      </div>
+    </div>
+  </form>
 </div>
-
+        
 <style>
-.breadcrumb li {
-    position: relative;
+#toolsModal i::before {
+    font-size: inherit;
 }
-.breadcrumb [class*='icon']:before {
-    position: absolute;
-    top: 25%;
-    left: -25%;
-}
-
-.btn { border-radius: 0 !important; }
 </style>
-
-    <script src="jquery-2.1.3.min.js"></script>
-    <script src="materialize.min.js"></script>
-    <script src="cottontail.js"></script>        
+        <div class="modal z-depth-5" id="toolsModal" style=" background: rgba(255,255,255,0.7) !important; padding: 0 !important">
+         <div class="row center flow-text" >
+			<p class="col s12 m6 l4 waves-effect waves-blue">
+                <label>text style</label>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<b>bold</b>" data-markup="b" title="bold"><i class="icon-bold"></i></i></button>
+				<button class="btn-floating btn tooltipped" data-markup="i" data-position="bottom" data-tooltip="<i>italic</i>" title="italic"><i class="icon-italic"></i></button>
+				<button class="btn-floating btn tooltipped" data-markup="u" data-position="bottom" data-tooltip="<u>underline</u>" data-markup="u" title="underline"><i class="icon-underline"></i></button>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<s>strikethrough</s>" data-markup="s" title="strikethrough"><i class="icon-strike"></i></button>
+			</p>
+			<p class="col s12 m6 l4 waves-effect waves-light-blue">
+                <label>font size</label>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<big>bigger</big>" data-markup="big" title="bigger"><i class="icon-fontsize-large"></i></button>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<small>smaller</small>" data-markup="small" title="smaller"><i class="icon-fontsize-small"></i></button>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="super<sup>script</sup>" data-markup="sup" title="superscript"><i class="icon-superscript"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="sub<sub>script</sub>" data-markup="sub" title="subscript"><i class="icon-subscript"></i></button>
+			</p>
+			<p class="col s12 m6 l4 waves-effect waves-blue">
+                <label>lists, links, and images</label>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<ul><li>unordered</li><li>list</li></ul>" data-markup="ul" title="unordered list"><i class="icon-ul"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<ol><li>ordered</li><li>list</li></ol>" data-markup="ol" title="ordered list"><i class="icon-ol"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<a href=#>hyperlink</a>" data-markup="link" title="insert link"><i class="icon-link"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<img src=something alt=image>" data-markup="image" title="insert image"><i class="icon-picture"></i></button>			</p>
+            <div class="waves-effect waves-blue col s12 m6 l6">
+			<p class="col s4 tooltipped" data-position="bottom" data-tooltip="yay code highlighting">
+                <label> code</label>
+                <button class="btn-floating btn" data-markup="code" title="insert code">
+                    <i class="icon-code"></i>
+                </button>
+            </p>
+			<p class="col s8">
+                    <label>language (optional)</label>
+        				<select id="codelang" class="browser-default">
+					        <option value="-1" selected>autodetect</option>
+					        <option value="asdf">javascript</option>
+					        <option value="asdf">javascript</option>
+					        <option value="asdf">javascript</option>
+					        <option value="asdf">javascript</option>
+        				</select>
+                </p>
+                
+            </div>
+			<p class="col s12 m12 l6 waves-effect waves-blue   tooltipped" data-position="bottom" data-tooltip="<del>oldtext</del><ins>new text!</ins>">
+                <label>quick edit</label>
+				<button class="btn-floating btn" data-markup="delins" title="delete and insert"><i class="icon-pencil-alt"></i></button>
+            </p>
+        </div>
+</div>
 <script>
 $(document).ready(function(){
-$('select').material_select();
+    $('select').material_select();
+    $('.modal-trigger').leanModal({
+        opacity: .1,
+        in_duration: 225,
+        out_duration: 500,
+        ready: function(){console.log('modal opened')},
+        complete: function(){console.log('modal closed')}
+    });
+    $('.tooltipped').tooltip({"delay": 50});
 });
 </script>
-    </body>
+	</body>
 </html>
