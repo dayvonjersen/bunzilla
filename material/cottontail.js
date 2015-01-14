@@ -5,7 +5,7 @@ $(document).ready(function(){
     $(".collapsible").collapsible();
     $('select').material_select();
     $('ul.tabs').tabs();
-
+    $('img').materialbox();
 /**
  * codrops MultiLevelPushMenu initialization */
     (new mlPushMenu( document.getElementById("mp-menu"), 

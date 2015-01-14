@@ -41,7 +41,7 @@ function datef( $time = -1 )
 /**
  * lets create the tag and status buttons with the same html
  * and use CSS to differentiate them */
-function badge( $type, $id, $short = false )
+function badge( $type, $id, $short = false, $z = 1 )
 {
     if(!in_array($type,['tag','status','priority'],true))
         throw new InvalidArgumentException(__FUNCTION__);
@@ -61,13 +61,23 @@ function badge( $type, $id, $short = false )
     }
 
     return '
-<span class="badge z-depth-3 '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
+<span class="badge z-depth-'.$z.' '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
       title="'.${$type}[$id]['title'].'">'
 .($short ? '': '<span class="hide-on-small-only">').${$type}[$id]['title'].'</span></span>'."\n";
 }
-function status( $id, $short = false ) { return badge('status',(int)$id,$short); }
+function status( $id, $short = false ) { return badge('status',(int)$id,$short,5); }
 function tag( $id, $short = true ) { return badge('tag',(int)$id,$short); }
-function priority( $id ) { return badge('priority',(int)$id); }
+function priority( $id, $justIcon = false ) { 
+
+    if(!$justIcon)
+        return badge('priority',(int)$id); 
+
+
+    static $pryor = null;
+    $pryor === null && $pryor = Cache::read('priorities');
+    $p = isset($pryor[$id]) ? $pryor[$id] : ['id'=>0,'title'=>'Well, it can\'t be THAT important','icon'=>'icon-emo-displeased'];
+    return sprintf('<i class="%s priority-%d" title="%s"></i>', $p['icon'],$p['id'],$p['title']);
+}
 
 /**
  * ditto for <select> dropdowns */

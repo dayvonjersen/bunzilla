@@ -289,7 +289,7 @@ foreach(['description','reproduce','expected','actual'] as $field)
     <!--
         comments
     -->
-    <footer class="" style="text-align: left !important; margin: 0 !important">
+    <footer id="comments" style="text-align: left !important; margin: 0 !important">
 <?php
 if(!empty($this->data['comments']))
 {

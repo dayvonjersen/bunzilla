@@ -31,12 +31,7 @@ foreach(Cache::read('priorities') as $data)
     $color = new Color($data['color']);
 
     echo '.priority-',$data['id'],' {
-    background-color: ',$color,' !important;
-    color: ',$color->getTextColor(),' !important;
-}
-
-.priority-',$data['id'],':not(.active) .',$data['icon'],' {
-    color: ',$color,' !important;
+        color: ',$color,' !important;
 }
 ',"\n";
 }
@@ -76,3 +71,15 @@ foreach(Cache::read('categories') as $id => $data)
 }',"\n";
     }
 }
+
+/*** XXX idea
+$_ = [
+    'class-name' => ['background'=>'#fff','color'=>'#000']
+];
+foreach($_ as $class => $rules)
+{
+    foreach($rules as $property => $value)
+    {   $rules[] = sprintf('%s: %s',$property,$value);
+        unset($rules[$property]); }
+    printf('.%s{%s}',implode(';',$rules));
+}***/

@@ -285,8 +285,9 @@ jQuery.extend( jQuery.easing,
       if (defaults.accordion) {
 
         $panel_headers.each(function () {
-          $(this).click(function () {
-            accordionOpen($(this));
+          $(this).click(function (event) {
+            if(!(event.target instanceof HTMLAnchorElement))
+                accordionOpen($(this));
           });
         });
 
@@ -301,8 +302,9 @@ jQuery.extend( jQuery.easing,
             collapsibleOpen($(this));
           }
 
-          $(this).click(function () {
-            collapsibleOpen($(this));
+          $(this).click(function (event) {
+            if(!(event.target instanceof HTMLAnchorElement))
+                collapsibleOpen($(this));
           });
         });
       }

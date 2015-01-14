@@ -8,7 +8,7 @@ $pageTitle = $cat['title'];
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src="/bunzilla/material/sorttable.js"></script>
-<div class="category-<?= $cat['id'] ?>-base" style="height: 100%;">
+<div style="height: 100%;">
 <!--
     about:category
 -->
@@ -59,116 +59,139 @@ if(empty($this->data['reports']))
 ?>
         <!--
             kill me now
+            ok I will
         -->
-        <table class="sortable container z-depth-5">
-            <thead>
-                <tr>
-                    <th class="gone" id="sortClosed"></th>
-                    <th class="gone" id="sortSubject"></th>
-                    <th class="gone" id="sortStatus"></th>
-                    <th class="gone" id="sortComments"></th>
-                    <th class="gone" id="sortSubmitted"></th>
-                    <th class="gone" id="sortLastActive"></th>
-                    <td class="sorttable_nosort category-<?=$cat['id']?>-darken-1">
-                        <div id="sorttable_override" class="right-align">
-                            <span>
-                                <a data-th="sortClosed"
-                                   class="btn-flat waves-effect waves-light icon-lock"
-                                   href="javascript:void(0);"
-                                >open/closed<span id="ico-sortClosed" class="icon-sort"></span></a>
-                            </span>
-                            <span>
-                                <a data-th="sortSubject"
-                                   class="btn-flat waves-effect waves-light icon-doc-text-inv"
-                                   href="javascript:void(0);"
-                                >subject<span id="ico-sortSubject" class="icon-sort"></span></a>
-                            </span>
-                            <span>
-                                <a data-th="sortComments"
-                                   class="btn-flat waves-effect waves-light icon-chat"
-                                   href="javascript:void(0);"
-                                >comments<span id="ico-sortComments" class="icon-sort"></span></a>
-                            </span>
-                            <span>
-                                <a data-th="sortSubmitted"
-                                   class="btn-flat waves-effect waves-light icon-time"
-                                   href="javascript:void(0);"
-                                >submitted<span id="ico-sortSubmitted" class="icon-sort"></span></a>
-                            </span>
-                            <span>
-                                <a data-th="sortLastActive"
-                                   class="btn-flat waves-effect waves-light icon-time"
-                                   href="javascript:void(0);"
-                                >last activity<span id="ico-sortLastActive" class="icon-sort"></span></a>
-                            </span>
-                            <span>
-                                <a data-th="sortStatus"
-                                   class="btn-flat waves-effect waves-light icon-pinboard"
-                                   href="javascript:void(0);"
-                                >status<span id="ico-sortStatus" class="icon-sort"></span></a>
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
+<script src="/bunzilla/material/list.min.js"></script>
+<script>
+//
+// list.js! http://listjs.com
+//
+document.body.onload = function(){
+    var options = {
+            valueNames: [
+'closed','subject','comments','submitted','lastactive','status','priority'
+        ]
+    },
+    myList = new List('list', options);
+};
+</script>
+
+<div class="category-<?= $cat['id'] ?>-base z-depth-2 container" id="list">
+    <div class="row section no-pad-bot category-<?= $cat['id'] ?>-darken-2 z-depth-1">
+        <button data-sort="closed" 
+           class="sort btn-flat waves-effect waves-light icon-lock"
+        >open/closed<span class="icon-sort"></span></button>
+
+        <button data-sort="subject" 
+           class="sort btn-flat waves-effect waves-light icon-doc-text-inv"
+        >subject<span class="icon-sort"></span></button>
+
+        <button data-sort="comments" 
+           class="sort btn-flat waves-effect waves-light icon-chat"
+        >comments<span class="icon-sort"></span></button>
+
+        <button data-sort="submitted" 
+           class="sort btn-flat waves-effect waves-light icon-time"
+        >submitted<span class="icon-sort"></span></button>
+
+        <button data-sort="lastactive" 
+           class="sort btn-flat waves-effect waves-light icon-time"
+        >last activity<span class="icon-sort"></span></button>
+
+        <button data-sort="status" 
+           class="sort btn-flat waves-effect waves-light icon-pinboard"
+        >status<span class="icon-sort"></span></button>
+
+        <button data-sort="priority" 
+           class="sort btn-flat waves-effect waves-light icon-attention"
+        >priority<span class="icon-sort"></span></button>
+    </div>
+
+    <ul class="list collapsible category-<?= $cat['id'] ?>-base">
 <?php
 //
 // tidy can be used to fix up html from truncated message "previews"
 // but it's not required because we can just strip_tags()
 //
     $tidy = extension_loaded('tidy') ? new tidy() : false;
+
     foreach($this->data['reports'] as $i => $report)
     {
         $report['last_active'] = max($report['time'],$report['updated_at'],$report['edit_time']);
 
 /**
- * okay so we're using a table and fucking it up like this
- * just to take advantage of sorttable.js
+ * logical smooth sailing 
+ * shoutouts to sorttable.js tho 
  *
- * http://www.kryogenix.org/code/browser/sorttable/
- *
- * which is awesome and totally worth it */
+ * check the history for this file if the above comment doesn't make any sense
+ */
 ?>
-                <tr id="report-<?= $report['id'] ?>" class="z-depth-4">
-                    <td class="gone" sorttable_customkey="<?= $report['closed'] ?>"></td>
-                    <td class="gone" sorttable_customkey="<?= strtolower(preg_replace('/\s+/','',$report['subject'])) ?>"></td>
-                    <td class="gone" sorttable_customkey="<?= strtolower($this->data['statuses'][$report['status']]['title']) ?>"></td>
-                    <td class="gone" sorttable_customkey="<?= $report['comments'] ?>"></td>
-                    <td class="gone" sorttable_customkey="<?= date('YmdHis', $report['time']) ?>"></td>
-                    <td class="gone" sorttable_customkey="<?= date('YmdHis', $report['last_active']) ?>"></td>
+        <li>
+<?php // these values are hidden by/for purely presentational purposes ?>
+            <div class="gone">
+            <span class="closed"><?= $report['closed'] ?></span>
+            <span class="priority"><?= $report['priority'] ?></span>
+            <span class="status"><?= $this->data['statuses'][$report['status']]['title'] ?></span>
+            <span class="submitted"><?= date('YmdHis', $report['time']) ?></span>
+            <span class="lastactive"><?= date('YmdHis', $report['last_active']) ?></span>
+            <span class="comments"><?= $report['comments'] ?></span>
+            </div>
 
-                    <td>
-                        <div class="collapsible">
+<?php // it looks like a lot of markup because it is. ?>
+            <div class="collapsible-header no-select">
+                <div class="row">
 
-                            <div class="collapsible-header no-select category-<?= $cat['id'] ?>-lighten-3 z-depth-5">
-                                <i class="icon-<?=$report['closed'] ? 'lock' : 'doc-text-inv'?> category-<?=$cat['id']?>-text"></i>
-                                <span class="hide-on-small-only"><?= $report['subject'] ?>
-                                    <span class="right"><?= status($report['status']) ?></span>
-                                </span>
-                                <span class="hide-on-med-and-up">
-                                <?= 
-                                    substr($report['subject'],0,15),
-                                    strlen($report['subject']) > 15 ? '...' : '' 
-                                ?>
-                                    <span class="right"><?= status($report['status']) ?></span>
-                                </span>
+<?php // [icon] subject line blablabla [status] ?>
+                    <div class="col s12 z-depth-5 ">
 
-                                <span class="badge right icon-time" title="last active"><?= datef($report['last_active']) ?></span>
-                                <span class="badge right icon-history" title="submitted at"><?= datef($report['time']) ?></span> 
-                                <span class="badge right icon-chat blue-text" title="comments"><?= $report['comments'] ?></span>
-
-                                <!-- float: right makes me confus @_@ -->
-                            </div>
-
-                            <div class="collapsible-body category-<?= $cat['id'] ?>-lighten-3 z-depth-5">
-                                <div class="hide-on-med-and-up">
-                                    <p><strong><?= $report['subject'] ?></strong></p>
-                                    <p class="icon-time"><?= datef($report['last_active']) ?></p>
-                                </div>
-                                <blockquote class="icon-article-alt"><?= 
-$report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong><br>' : '' 
+                        <span class="left">
+ <?= $report['closed'] ? '<i class="icon-lock grey-text" title="CLOSED."></i>' : priority($report['priority'],1) 
 ?>
+                        </span>
+
+                        <span class="subject-line h4">
+                            <a class="flow-text" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material'?>"><?= $report['subject'] ?></a>
+                        </span>
+
+                        <span class="right"><?= status($report['status']) ?></span>
+
+                    </div>
+<?php // x comments | 4 hours ago | [php] [DIVitis] ?>
+                    <div class="col left">
+
+                        <span class="badge right blue-text" title="comments">
+                            <a class=" icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material#comments'?>"><?= $report['comments'] ?></a>
+                        </span>
+
+                    </div>
+
+                    <div class="col s8">
+                        <span class="submitted icon-history small" title="submitted at"><?= datef($report['time']) ?></span>
+
+<?php // no point in redundancy ?>
+<?= 
+($report['last_active'] == $report['time']) ? '' 
+: '<p class="icon-time small" title="last active">'.datef($report['last_active']).'</p>' 
+?>
+                    </div>
+<?php 
+//
+// tags!
+//
+        if(!empty($report['tags']))
+        {
+            echo '<div class="right right-align icon-tags">';
+            foreach($report['tags'] as $tag)
+                echo tag($tag[0],0);
+            echo '</div>';
+        }
+?>
+                </div>
+            </div>
+            <div class="collapsible-body">
+                <blockquote class=" category-<?= $cat['id'] ?>-text z-depth-4 icon-article-alt"><span class="subject"><?= $report['subject'] ?></span><?=
+$report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.BUNZ_DIFF_DIR.'reports/'.$report['id'].'">'.datef($report['edit_time']).'</a></p>' : '' 
+?><div class="divider"></div>
 <?php
 //
 // as mentioned above, cleaning up message previews in case they're too long
@@ -176,11 +199,11 @@ $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong
 //
         if(isset($report['preview_text']))
         {
-            if(strlen(strip_tags($report['preview_text'])) > 100)
+            if(strlen(strip_tags($report['preview_text'])) > 400)
             {
                 if($tidy)
                 {            
-                    $report['preview_text'] = substr($report['preview_text'],0,100);
+                    $report['preview_text'] = substr($report['preview_text'],0,400);
                     $report['preview_text'] = $tidy->repairString($report['preview_text'],["doctype" => "omit","show-body-only" => "yes"]);
                     $report['preview_text'] = preg_replace('/.*\<body\>(.*)\<\/body\>.*\<\/html\>/mis', '$1', $report['preview_text']);
                 } else {
@@ -189,28 +212,18 @@ $report['edit_time'] ? '<strong>**EDIT** '.datef($report['edit_time']).'</strong
                 $report['preview_text'] .= '. . .';
             }
             echo $report['preview_text'];
-        }  ?>
-                                    <p><a href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>">Keep reading &rarr;</a></p>
-                                </blockquote>
-                            </div>
-<?php
-        if(!empty($report['tags']))
-        {
-            echo '<p class="icon-tags">';
-            foreach($report['tags'] as $tag)
-                echo tag($tag[0],0);
-            echo '</p>';
-        }
+        }  
 ?>
-                        </div>
-                    </td>
-                </tr>
-                    
+                    <p class="section no-pad-bot"><a class="icon-doc-text-inv btn-flat category-<?= $cat['id'] ?>-darken-2 waves-effect" 
+                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>">Full Report &rarr;</a></p>
+                </blockquote>
+            </div>
+        </li>       
 <?php
     }
 ?>
-            </tbody>
-        </table>
+    </ul>
+</div>
 <?php
 }
 ?>
