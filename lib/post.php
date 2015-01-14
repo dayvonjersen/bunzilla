@@ -52,8 +52,8 @@ class post extends Controller
 
         $orig = tempnam('/tmp',uniqid());
         $edit = tempnam('/tmp',uniqid());
-        file_put_contents("$orig\n", $text1);
-        file_put_contents("$edit\n", $text2);
+        file_put_contents($orig, "$text1\n");
+        file_put_contents($edit, "$text2\n");
         file_put_contents(
             BUNZ_DIR . 'diff/'.$type.'/'.(int)$id,
             "$what changed @ ".date('r')."\n".`diff $orig $edit`,
@@ -93,7 +93,7 @@ class post extends Controller
 
         $this->data['params']['report_id'] = $reportId;
 
-        if(!$this->auth() && dtr_ntop(remoteAddr()) != dtr_ntop($this->data['params']['ip']))
+        if(!$this->auth() && !compareIP($this->data['params']['ip']))
             $this->abort('Access denied.');
 
 
