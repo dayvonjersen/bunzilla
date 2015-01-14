@@ -2064,10 +2064,13 @@ jQuery.extend( jQuery.easing,
         else if (left > width) {
           left = width;
         }
-        thumb.addClass('active').css('left', left);
-        thumb.css('backgroundColor', thing.data('color'));
-        thumb.css('color', thing.data('text'));
-      thumb.find('.value').html(thing.text() + "<i style='font-size: x-large !important; color: " + thing.data('color') + ";' class='" + thing.data('icon') + "'></i>");
+        thumb.removeClass();
+        thumb.addClass('thumb active').css('left', left);
+        thumb.addClass(thing.data('class'));
+        thumb.find('.value').html(thing.text() + "<i class='" + thing.data('icon') + "'></i>");
+//        thumb.css('backgroundColor', thing.data('color'));
+//        thumb.css('color', thing.data('text'));
+//      thumb.find('.value').html(thing.text() + "<i style='font-size: x-large !important; color: " + thing.data('color') + ";' class='" + thing.data('icon') + "'></i>");
 
       }
     }

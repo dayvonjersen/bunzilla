@@ -91,6 +91,10 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><span class="icon-time">'.dat
                 <li class="tab col s2">
                     <a href="#history" class="icon-history grey white-text"><span class="hide-on-small-only">History</span></a>
                 </li>
+<?php
+if($this->auth())
+{
+?>
                 <li class="tab col s2">
                     <a href="#update" class="icon-magic light-blue white-text"><span class="hide-on-small-only">Update</span></a>
                 </li>
@@ -99,6 +103,9 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><span class="icon-time">'.dat
                 </li>
                 <li class="tab col s2">
                     <a href="#delete" class="icon-delete red white-text"><span class="hide-on-small-only">Delete</span></a>
+<?php
+}
+?>
                 </li>
             </ul>
 
@@ -106,32 +113,39 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><span class="icon-time">'.dat
                 current status 
             -->
             <section class="section col s12 white" id="status">
-            <div class="valign-wrapper" style="padding: 2em;">
-            <div class="valign z-depth-3">
                 <?= status($report['status']) ?>
                 <span class="badge z-depth-2 white-text icon-<?= 
 $this->data['closed'] ? 'lock grey ' : 'unlock light-blue'?>"><?=
 $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
 
-                <span class="badge z-depth-2 icon-attention yellow black-text" style="color: #000 !important">Low Priority</span>
-            </div>
-            </div>
+                <?= priority($report['priority']) ?>
             </section>
             <section class="section col s12 grey" id="history">
-                    <dl class="white section grey-text">
-                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
-                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
-                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
-                        <dd><strong>nobody</strong><small> changed status from </small><strong>Unassigned</strong><small> to </small><strong>Won't Fix</strong><br><small><?=datef()?></small></dd>
-                    </dl>
+                    <div class="white section grey-text">
+<?php
+if(empty($this->data['status_log']))
+    echo '<p><em>No history for this report!</em></p>';
+
+foreach($this->data['status_log'] as $log)
+{
+?>
+                        <p><?= $log['message'] ?><br><small><?=datef($log['time'])?></small></p>
+<?php
+}
+?>
+                    </div>
             </section>
 
+<?php
+if($this->auth())
+{
+?>
         <!--
             actions
         -->        
             <section class="section col s12 light-blue" id="update">
                 <h5 class="white-text">update status to</h5>
-                <form class="white z-depth-5 section">
+                <form class="white z-depth-5 section" action="">
                 <?= statusDropdown(false, $report['status']) ?>
                 <div class="input-field">
                     <input type="radio" id="toggleClosed_1" name="toggleClosed" class="with-gap"<?=$this->data['closed'] ? ' checked' : ''?>>
@@ -145,17 +159,8 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
                             <div class="input-field">
                                 <p style="color: #000 !important">priority</p>
                                 <div class="range-field">
-                                <dl class="gone">
-<?php
-foreach($this->data['priorities'] as $pryor)
-{
-?>
-                                    <dd data-text="<?= (new Color($pryor['color']))->getTextColor() ?>" data-icon="<?= $pryor['icon'] ?>" data-color="#<?= $pryor['color'] ?>" data-value="<?= $pryor['id'] ?>"><?= $pryor['title'] ?></dd>
-<?php
-}
-?>
-                                </dl>
-                                <input name="priority" type="range" min="0" max="<?= count($this->data['priorities']) - 1 ?>">
+                                <?= rangeOptions(Cache::read('priorities')) ?>
+                                <input name="priority" type="range" min="0" max="<?= count($this->data['priorities']) - 1 ?>" value="<?= $report['priority']?>">
                             </div>
                             </div>
                             <div class="center">
@@ -178,7 +183,9 @@ foreach($this->data['priorities'] as $pryor)
                             </div>
                             <div class="input-field">
                                 <p style="color: #000 !important">priority</p>
-                                <p class="range-field"><input type="range" min="0" max="10"></p>
+                                <div class="range-field">
+                                <?= rangeOptions(Cache::read('priorities')) ?>
+                                <input name="priority" type="range" min="0" max="<?= count($this->data['priorities']) - 1 ?>" value="<?= $report['priority']?>">
                             </div>
     <div>
                             <div class="center">
@@ -192,6 +199,9 @@ foreach($this->data['priorities'] as $pryor)
                     <button class="btn red icon-delete waves-red" onclick="alert('y u do dis :<');">Delete (no undo)</button>
                 </form>
              </section>
+<?php
+}
+?>
         </div>
         </section>
     

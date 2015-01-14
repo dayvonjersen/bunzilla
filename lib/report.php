@@ -121,6 +121,10 @@ class report extends Controller
              FROM tag_joins 
              WHERE report = '.$this->id)->fetchAll(PDO::FETCH_NUM);
 
+        $this->data['status_log'] = db()->query(
+            'SELECT message,time FROM status_log WHERE report = '.$this->id.' ORDER BY time DESC'
+        )->fetchAll(PDO::FETCH_ASSOC);
+
         $this->data['category_id'] = $this->data['report']['category'];
         exit;
     }

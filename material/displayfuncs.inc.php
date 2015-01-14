@@ -43,13 +43,22 @@ function datef( $time = -1 )
  * and use CSS to differentiate them */
 function badge( $type, $id, $short = false )
 {
-    if(!in_array($type,['tag','status'],true))
+    if(!in_array($type,['tag','status','priority'],true))
         throw new InvalidArgumentException(__FUNCTION__);
 
     static $tags = null;
     static $status = null;
+    static $priorities = null;
     if($$type === null)
-        $$type = Cache::read($type.($type == 'status' ? 'e':'').'s');
+    {
+        switch($type)
+        {
+            case 'tag': $tbl = 'tags'; break;
+            case 'status': $tbl = 'statuses'; break;
+            case 'priority': $tbl = 'priorities'; break;
+        }
+        $$type = Cache::read($tbl);
+    }
 
     return '
 <span class="z-depth-3 '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
@@ -58,6 +67,7 @@ function badge( $type, $id, $short = false )
 }
 function status( $id, $short = false ) { return badge('status',(int)$id,$short); }
 function tag( $id, $short = true ) { return badge('tag',(int)$id,$short); }
+function priority( $id ) { return badge('priority',(int)$id); }
 
 /**
  * ditto for <select> dropdowns */
@@ -78,4 +88,19 @@ function statusDropdown( $selected, $disableId = false ) {
 }
 function categoryDropdown( $selected, $disableId = false ) { 
     return dropdown('category', Cache::read('categories'), $selected, $disableId);
+}
+
+/**
+ * and my input[type="range"] hack */
+function rangeOptions( $values )
+{
+    $ret = "<dl class='gone'>\n";
+    foreach($values as $opt)
+    {
+        $ret .= sprintf(
+            "\t<dd data-class='priority-%d' data-icon='%s' data-value='%d'>%s</dd>\n",
+            $opt['id'],$opt['icon'],$opt['id'],$opt['title']
+        );
+    }
+    return "$ret</dl>\n";
 }

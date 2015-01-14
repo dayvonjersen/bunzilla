@@ -1,0 +1,181 @@
+<!--
+    begin toolsModal postFormat widget thing
+-->
+        <div class="modal z-depth-5" id="toolsModal">
+         <div class="row center flow-text" >
+			<p class="col s12 m6 l4 waves-effect waves-blue">
+                <label>text style</label>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<b>bold</b>" data-markup="b" title="bold"><i class="icon-bold"></i></i></button>
+				<button class="btn-floating btn tooltipped" data-markup="i" data-position="bottom" data-tooltip="<i>italic</i>" title="italic"><i class="icon-italic"></i></button>
+				<button class="btn-floating btn tooltipped" data-markup="u" data-position="bottom" data-tooltip="<u>underline</u>" data-markup="u" title="underline"><i class="icon-underline"></i></button>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<s>strikethrough</s>" data-markup="s" title="strikethrough"><i class="icon-strike"></i></button>
+			</p>
+			<p class="col s12 m6 l4 waves-effect waves-light-blue">
+                <label>font size</label>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<big>bigger</big>" data-markup="big" title="bigger"><i class="icon-fontsize-large"></i></button>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<small>smaller</small>" data-markup="small" title="smaller"><i class="icon-fontsize-small"></i></button>
+				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="super<sup>script</sup>" data-markup="sup" title="superscript"><i class="icon-superscript"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="sub<sub>script</sub>" data-markup="sub" title="subscript"><i class="icon-subscript"></i></button>
+			</p>
+			<p class="col s12 m6 l4 waves-effect waves-blue">
+                <label>lists, links, and images</label>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<ul><li>unordered</li><li>list</li></ul>" data-markup="ul" title="unordered list"><i class="icon-ul"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<ol><li>ordered</li><li>list</li></ol>" data-markup="ol" title="ordered list"><i class="icon-ol"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<a href=#>hyperlink</a>" data-markup="link" title="insert link"><i class="icon-link"></i></button>
+				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<img src=something alt=image>" data-markup="image" title="insert image"><i class="icon-picture"></i></button>			</p>
+            <div class="waves-effect waves-blue col s12 m6 l6">
+			<p class="col s4 tooltipped" data-position="bottom" data-tooltip="yay code highlighting">
+                <label>code</label>
+                <button class="btn-floating btn" data-markup="code" title="insert code">
+                    <i class="icon-code"></i>
+                </button>
+            </p>
+			<p class="col s8">
+                    <label>language (optional)</label>
+        				<select id="codelang" class="browser-default">
+<!--
+    if this is your copy of bunzilla:
+
+    feel free to delete the languages 
+    you will never have occasion to use
+    from this list
+
+    I'm including all the possible options
+    for the sake of it
+-->
+	<option value='1c'>1c</option>
+	<option value='actionscript'>actionscript</option>
+	<option value='apache'>apache</option>
+	<option value='applescript'>applescript</option>
+	<option value='asciidoc'>asciidoc</option>
+	<option value='aspectj'>aspectj</option>
+	<option value='autohotkey'>autohotkey</option>
+	<option value='avrasm'>avrasm</option>
+	<option value='axapta'>axapta</option>
+	<option value='bash'>bash</option>
+	<option value='brainfuck'>brainfuck</option>
+	<option value='capnproto'>capnproto</option>
+	<option value='clojure-repl'>clojure-repl</option>
+	<option value='clojure'>clojure</option>
+	<option value='cmake'>cmake</option>
+	<option value='coffeescript'>coffeescript</option>
+	<option value='cpp'>cpp</option>
+	<option value='cs'>cs</option>
+	<option value='css'>css</option>
+	<option value='d'>d</option>
+	<option value='dart'>dart</option>
+	<option value='delphi'>delphi</option>
+	<option value='diff'>diff</option>
+	<option value='django'>django</option>
+	<option value='dos'>dos</option>
+	<option value='dust'>dust</option>
+	<option value='elixir'>elixir</option>
+	<option value='erb'>erb</option>
+	<option value='erlang-repl'>erlang-repl</option>
+	<option value='erlang'>erlang</option>
+	<option value='fix'>fix</option>
+	<option value='fsharp'>fsharp</option>
+	<option value='gcode'>gcode</option>
+	<option value='gherkin'>gherkin</option>
+	<option value='glsl'>glsl</option>
+	<option value='go'>go</option>
+	<option value='gradle'>gradle</option>
+	<option value='groovy'>groovy</option>
+	<option value='haml'>haml</option>
+	<option value='handlebars'>handlebars</option>
+	<option value='haskell'>haskell</option>
+	<option value='haxe'>haxe</option>
+	<option value='http'>http</option>
+	<option value='ini'>ini</option>
+	<option value='java'>java</option>
+	<option value='javascript'>javascript</option>
+	<option value='json'>json</option>
+	<option value='lasso'>lasso</option>
+	<option value='less'>less</option>
+	<option value='lisp'>lisp</option>
+	<option value='livecodeserver'>livecodeserver</option>
+	<option value='livescript'>livescript</option>
+	<option value='lua'>lua</option>
+	<option value='makefile'>makefile</option>
+	<option value='markdown'>markdown</option>
+	<option value='mathematica'>mathematica</option>
+	<option value='matlab'>matlab</option>
+	<option value='mel'>mel</option>
+	<option value='mercury'>mercury</option>
+	<option value='mizar'>mizar</option>
+	<option value='monkey'>monkey</option>
+	<option value='nginx'>nginx</option>
+	<option value='nimrod'>nimrod</option>
+	<option value='nix'>nix</option>
+	<option value='nsis'>nsis</option>
+	<option value='objectivec'>objectivec</option>
+	<option value='ocaml'>ocaml</option>
+	<option value='oxygene'>oxygene</option>
+	<option value='parser3'>parser3</option>
+	<option value='perl'>perl</option>
+	<option value='php'>php</option>
+	<option value='powershell'>powershell</option>
+	<option value='processing'>processing</option>
+	<option value='profile'>profile</option>
+	<option value='protobuf'>protobuf</option>
+	<option value='puppet'>puppet</option>
+	<option value='python'>python</option>
+	<option value='q'>q</option>
+	<option value='r'>r</option>
+	<option value='rib'>rib</option>
+	<option value='roboconf'>roboconf</option>
+	<option value='rsl'>rsl</option>
+	<option value='ruby'>ruby</option>
+	<option value='ruleslanguage'>ruleslanguage</option>
+	<option value='rust'>rust</option>
+	<option value='scala'>scala</option>
+	<option value='scheme'>scheme</option>
+	<option value='scilab'>scilab</option>
+	<option value='scss'>scss</option>
+	<option value='smali'>smali</option>
+	<option value='smalltalk'>smalltalk</option>
+	<option value='sml'>sml</option>
+	<option value='sql'>sql</option>
+	<option value='stata'>stata</option>
+	<option value='step21'>step21</option>
+	<option value='stylus'>stylus</option>
+	<option value='swift'>swift</option>
+	<option value='tcl'>tcl</option>
+	<option value='tex'>tex</option>
+	<option value='thrift'>thrift</option>
+	<option value='twig'>twig</option>
+	<option value='typescript'>typescript</option>
+	<option value='vala'>vala</option>
+	<option value='vbnet'>vbnet</option>
+	<option value='vbscript-html'>vbscript-html</option>
+	<option value='vbscript'>vbscript</option>
+	<option value='verilog'>verilog</option>
+	<option value='vhdl'>vhdl</option>
+	<option value='vim'>vim</option>
+	<option value='x86asm'>x86asm</option>
+	<option value='xl'>xl</option>
+	<option value='xml'>xml</option>
+        				</select>
+                </p>
+            </div>
+			<p class="col s12 m12 l6 waves-effect waves-blue   tooltipped" data-position="bottom" data-tooltip="<del>oldtext</del><ins>new text!</ins>">
+                <label>quick edit</label>
+				<button class="btn-floating btn" data-markup="delins" title="delete and insert"><i class="icon-pencil-alt"></i></button>
+            </p>
+        </div>
+</div>
+<script>
+$(document).ready(function(){
+    $('.modal-trigger').leanModal({
+        opacity: .1,
+        in_duration: 225,
+        out_duration: 500,
+        ready: function(){console.log('modal opened')},
+        complete: function(){console.log('modal closed')}
+    });
+    $('.tooltipped').tooltip({"delay": 50});
+});
+</script>
+<!--
+    end widget
+-->

@@ -26,6 +26,21 @@ foreach(Cache::read('tags') as $id => $data)
 }',"\n";
 }
 
+foreach(Cache::read('priorities') as $data)
+{
+    $color = new Color($data['color']);
+
+    echo '.priority-',$data['id'],' {
+    background-color: ',$color,' !important;
+    color: ',$color->getTextColor(),' !important;
+}
+
+.priority-',$data['id'],':not(.active) .',$data['icon'],' {
+    color: ',$color,' !important;
+}
+',"\n";
+}
+
 foreach(Cache::read('categories') as $id => $data)
 {
     $color = new Color($data['color']);
