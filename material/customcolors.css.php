@@ -12,7 +12,7 @@ foreach(Cache::read('statuses') as $id => $data)
 
     echo '.status-',$id,' {
     background-color: ',$color,';
-    color: ',$color->getTextColor(),';
+    color: ',$color->getTextColor(),' !important;
 }',"\n";
 }
 
@@ -22,7 +22,7 @@ foreach(Cache::read('tags') as $id => $data)
 
     echo '.tag-',$id,' {
     background-color: ',$color,';
-    color: ',$color->getTextColor(),';
+    color: ',$color->getTextColor(),' !important;
 }',"\n";
 }
 
@@ -50,7 +50,7 @@ foreach(Cache::read('categories') as $id => $data)
     color: ',$color->getTextColor(),';
 }
 .category-',$id,'-text {
-    color: ',$color,';
+    color: ',$color,' !important;
     background-color: ',$color->getTextColor(),';
 }',"\n";
 

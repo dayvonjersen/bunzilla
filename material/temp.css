@@ -106,8 +106,9 @@ table thead tr th {
 table tbody tr td {
     text-align: left !important;
 }
+/** just fix the scss already fff */
 span.badge {
-    color: inherit !important;
+/*    color: inherit !important;*/
 }
 .tabs, ul.tabs li {
     height: 2em !important;
@@ -128,4 +129,19 @@ span.badge {
     margin: auto !important;
     color: inherit !important;
     transform: none !important;
+}
+
+/**
+ * widgetry */
+#toolsModal {
+    background: rgba(255,255,255,0.7);
+    padding: 0;
+}
+#toolsModal i::before {
+    font-size: inherit;
+}
+/**
+ * faggotry */
+span.badge[class*='tag-'] {
+    float: none !important;
 }

@@ -61,9 +61,9 @@ function badge( $type, $id, $short = false )
     }
 
     return '
-<span class="z-depth-3 '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
+<span class="badge z-depth-3 '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
       title="'.${$type}[$id]['title'].'">'
-.($short ? '': '<span class="hide-on-med-and-down">').${$type}[$id]['title'].'</span></span>'."\n";
+.($short ? '': '<span class="hide-on-small-only">').${$type}[$id]['title'].'</span></span>'."\n";
 }
 function status( $id, $short = false ) { return badge('status',(int)$id,$short); }
 function tag( $id, $short = true ) { return badge('tag',(int)$id,$short); }
