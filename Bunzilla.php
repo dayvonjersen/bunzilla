@@ -24,14 +24,15 @@ define('BUNZ_RES_DIR', BUNZ_DIR . 'res/');
 define('BUNZ_LIB_DIR', BUNZ_DIR . 'lib/');
 define('BUNZ_TPL_DIR', BUNZ_DIR . (isset($_GET['material']) ? 'material/' : 'tpl/')); // temporary transition
 define('BUNZ_CACHE_DIR', BUNZ_DIR . 'cache/');
-// bad ideas++
-define('BUNZ_DIFF_DIR', BUNZ_DIR . 'diff/');
 
 /**
  * External */
 define('BUNZ_HTTP_DIR', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/').'/');
 define('BUNZ_CSS_DIR', BUNZ_HTTP_DIR . 'css/');
 define('BUNZ_JS_DIR',  BUNZ_HTTP_DIR . 'js/');
+
+// bad ideas++
+define('BUNZ_DIFF_DIR', BUNZ_HTTP_DIR . 'diff/');
 
 /*
  * More definitions... 
@@ -344,4 +345,9 @@ function dtr_ntop( $str ){
     if( strlen( $str ) == 16 OR strlen( $str ) == 4 ){
         return inet_ntop( pack( "A".strlen( $str ) , $str ) );
     }
+}
+
+function compareIP( $ip )
+{
+    return ( dtr_ntop(remoteAddr()) == dtr_ntop($ip) );
 }

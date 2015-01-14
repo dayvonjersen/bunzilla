@@ -76,7 +76,7 @@ $report['epenis'] ? ' <span class="badge blue white-text" style="color: white !i
                 submission and edit time
             -->
             <p class="icon-time" title="submitted at"><?= datef($report['time']) ?></p><?=
-$report['edit_time'] ? '<p class="icon-pencil-alt"><span class="icon-time">'.datef($report['edit_time']).'</span></p>' : ''
+$report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.BUNZ_DIFF_DIR.'reports/'.$report['id'].'">'.datef($report['edit_time']).'</a></p>' : ''
 ?>      </section>
 
         <!--
@@ -95,6 +95,7 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><span class="icon-time">'.dat
 if($this->auth())
 {
 ?>
+        <!-- admin actions -->
                 <li class="tab col s2">
                     <a href="#update" class="icon-magic light-blue white-text"><span class="hide-on-small-only">Update</span></a>
                 </li>
@@ -112,14 +113,18 @@ if($this->auth())
             <!--
                 current status 
             -->
-            <section class="section col s12 white" id="status">
+            <section class="section col s12 transparent" id="status">
                 <?= status($report['status']) ?>
+                <?= priority($report['priority']) ?>
                 <span class="badge z-depth-2 white-text icon-<?= 
 $this->data['closed'] ? 'lock grey ' : 'unlock light-blue'?>"><?=
 $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span>
 
-                <?= priority($report['priority']) ?>
             </section>
+
+            <!--
+                status log
+            -->
             <section class="section col s12 grey" id="history">
                     <div class="white section grey-text">
 <?php
@@ -141,7 +146,7 @@ if($this->auth())
 {
 ?>
         <!--
-            actions
+            admin actions
         -->        
             <section class="section col s12 light-blue" id="update">
                 <h5 class="white-text">update status to</h5>
@@ -209,8 +214,15 @@ if($this->auth())
             subject
         -->
         <section class='section no-pad-top no-pad-bot col s12 z-depth-5 category-<?=$cat['id']?>-text'>
-            <a href="#comments" class="btn blue icon-chat right">reply</a>
-            <button class="btn green icon-pencil-alt right">edit</button>
+            <a href="#comment" class="btn blue icon-chat right">reply</a>
+<?php
+if($this->auth() || compareIP($report['ip']))
+{
+?>
+            <a href="<?= BUNZ_HTTP_DIR ?>post/edit/<?= $report['id'] ?>" class="btn green icon-pencil-alt right">edit</a>
+<?php
+}
+?>
             <span class="flow-text"><?= $report['subject'] ?></span>
 <?php
 if(!empty($report['tags']))
@@ -247,7 +259,7 @@ foreach(['description','reproduce','expected','actual'] as $field)
     <!--
         comments
     -->
-    <footer id="comments" class="" style="text-align: left !important; margin: 0 !important">
+    <footer class="" style="text-align: left !important; margin: 0 !important">
 <?php
 if(!empty($this->data['comments']))
 {
@@ -260,20 +272,19 @@ if(!empty($this->data['comments']))
                     <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge light-blue white-text left">## Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
 
 <?php
-/*
-if($this->auth() || dtr_ntop(remoteAddr()) == dtr_ntop($comment['ip']))
+if($this->auth() || compareIP($comment['ip']))
 {
 ?>
-                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$this->data['id'],'/',$comment['id'] ?>" class='btn icon-pencil-alt'>edit</a>
+                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='btn-floating green right' title="edit this comment"><i class='icon-pencil-alt'></i></a>
 <?php
-}*/
+}
 ?></p>
                 </header>
                 <p class='z-depth-2'><?= $comment['message'] ?><?php
 if($comment['edit_time'])
 {
 ?>
-                <span class="badge right icon-pencil-alt"><em><?= datef($comment['edit_time']) ?></em></h6>
+                <span class="badge right icon-pencil-alt"><em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></span>
 <?php
 }
 ?></p>
@@ -284,80 +295,37 @@ if($comment['edit_time'])
 ?>
 <?php
 }
+if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
+{
 ?>
             <!--
                 spammer's delight
             -->
             <section class="category-<?=$cat['id']?>-lighten-5 z-depth-3">
-                <form class="">
+                <form class="" action="<?= BUNZ_HTTP_DIR,'post/comment/',$this->data['id'] ?>" method="post">
                     <div class="section">
                         <h4>dis converzashun iz missing ur voice :DDD</h4>
     
                     <div class="input-field">
                         <i class="icon-mail prefix"></i>
-                        <input type="email" id="email">
+                        <input type="email" id="email" maxlength='255' name='email' value="<?= $this->auth() ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled' : $this->data['params']['email'] ?>">
                         <label for="email">email</label>
                     </div>
                     <div class="input-field">
                         <i class="icon-chat prefix"></i>
-                        <textarea class="materialize-textarea" required></textarea>
-                        <label for="email">your comment</label>
+                        <textarea id="comment" class="materialize-textarea" required name='message' placeholder='your insight on this issue'><?= empty($_POST) ? $this->data['params']['message'] : unfiltermessage($this->data['params']['message']) ?></textarea>
+                        <label for="comment">your comment</label>
                     </div>
-                    <div class="input-field"><button class="btn">!</button></div>
+                    <div class="input-field center"><button type="submit" class="btn">post!</button></div>
             
                 </form>
             </section>
+<?php
+}
+?>
         </footer>
     </article>
 
 <?php
-
-/*
-if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
-{
-postFormatWidget();
-?>
-            <section class='box' title='post a comment'>
-                <form action="<?= BUNZ_HTTP_DIR,'post/comment/',$this->data['id'] ?>" method="post" class='pure-form pure-form-aligned'>
-                    <fieldset class='is-center'>
-                         <p class='pure-control-group'>
-                            <label>email</label>
-                            <input maxlength='255' name='email' type="text" value="<?= $this->auth() ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled' : $this->data['params']['email'] ?>">
-                        </p>
-                        <p class='pure-control-group' title="<?=$placeholder?>">
-                            <label>message</label>
-                            <textarea rows='3' name='message' placeholder='your insight on this issue'><?= empty($_POST) ? $this->data['params']['message'] : unfiltermessage($this->data['params']['message']) ?></textarea>
-                        </p>
-<?= tagList(db()->query('SELECT * FROM tags')->fetchAll(PDO::FETCH_ASSOC)) ?>
-                        <button type='submit' class='pure-button icon-plus'>post!</button>
-                    </fieldset>
-                </form>
-            </section>
-
-<?php
-}
-if($this->auth())
-{
-?>
-<script>
-function confirmDelete(evt){if(!window.confirm('you know what you doing'+"\n\n"+'(this action will permanently delete all associated comments)')) evt.preventDefault();}
-</script>
-            <section class='box' title='actions'>
-                <form action="<?= BUNZ_HTTP_DIR,'report/action/',$this->data['id'] ?>" method="post" class='pure-form'>
-                    <fieldset class='is-center'>
-
-                        <?= statusSelectBox($this->data['status']) ?> <button class='pure-button success' type='submit' name='updateStatus' value="1">&rarr;Update Status</button>
-                  
-                        <button class='pure-button icon-<?= $this->data['closed'] ? 'unlock' : 'lock' ?>' type='submit' name='toggleClosed' value="1"><?=$this->data['closed'] ? 'Open' : 'Close' ?> Report</button>
-                        <button class='pure-button danger icon-cancel' type='submit' onclick="confirmDelete(event)" name='delete' value="1">Delete Report</button>
-                    </fieldset>
-                </form>
-            </section>
-<?php
-}
-?>
-        </article>
-<?php
-*/
 require BUNZ_TPL_DIR . 'footer.inc.php';
 ?>

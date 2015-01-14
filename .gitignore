@@ -6,3 +6,5 @@
 res/.htpasswd
 update.sh
 *.cache
+diff/reports/*
+diff/comments/*

@@ -42,20 +42,25 @@ class post extends Controller
         ];
     }
 
+    /**
+     * useless feature, 
+     * but prevents someone from deleting useful/damning information */
     protected function diff( $what, $text1, $text2, $type, $id )
     {
-        if(!in_array(['reports', 'comments'],$type,true))
+        if(!in_array($type,['reports', 'comments'],true))
             throw new InvalidArgumentException('$type must be a valid table');
 
-        $orig = tmpfile();
-        $edit = tmpfile();
-        file_put_contents($orig, $text1);
-        file_put_contents($edit, $text2);
-        return file_put_contents(
+        $orig = tempnam('/tmp',uniqid());
+        $edit = tempnam('/tmp',uniqid());
+        file_put_contents("$orig\n", $text1);
+        file_put_contents("$edit\n", $text2);
+        file_put_contents(
             BUNZ_DIR . 'diff/'.$type.'/'.(int)$id,
             "$what changed @ ".date('r')."\n".`diff $orig $edit`,
             FILE_APPEND | LOCK_EX
         );
+        unlink($orig);
+        unlink($edit);
     }
 
     public function edit($reportId, $commentId = false)
@@ -123,7 +128,7 @@ class post extends Controller
             {
                 $this->flash[] = 'Your desired changes were made.';
                 $_SESSION['flash'] = serialize($this->flash);
-                header('Location: '.BUNZ_HTTP_DIR.'/report/view/'.$reportId.($commentId !== false? '#reply-'.$commentId : ''));
+                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId.($commentId !== false? '#reply-'.$commentId : ''));
                 exit;
             }
         }
