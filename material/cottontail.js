@@ -6,6 +6,7 @@ $(document).ready(function(){
     $('select').material_select();
     $('ul.tabs').tabs();
     $('img').materialbox();
+    $('.tooltipped').tooltip({"delay": 50});
 /**
  * codrops MultiLevelPushMenu initialization */
     (new mlPushMenu( document.getElementById("mp-menu"), 

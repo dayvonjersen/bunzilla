@@ -76,36 +76,58 @@ document.body.onload = function(){
 };
 </script>
 
-<div class="category-<?= $cat['id'] ?>-base z-depth-2 container" id="list">
-    <div class="row section no-pad-bot category-<?= $cat['id'] ?>-darken-2 z-depth-1">
+<!--
+    dear god
+-->
+<div class="category-<?= $cat['id'] ?>-base z-depth-2" id="list">
+    <div class="section no-pad-bot ">
+    <div class="row black white-text z-depth-1"  id="fuck"><!-- me -->
+    <div class="col s12 m4 ">
+
+        <div class="col s3  right-align">
         <button data-sort="closed" 
-           class="sort btn-flat waves-effect waves-light icon-lock"
-        >open/closed<span class="icon-sort"></span></button>
+           class="sort btn-flat waves-effect waves-light icon-lock tooltipped" data-position="bottom" data-tooltip="sort by open/closed"
+        ><i class="icon-sort"></i></button>
+        </div>
 
-        <button data-sort="subject" 
-           class="sort btn-flat waves-effect waves-light icon-doc-text-inv"
-        >subject<span class="icon-sort"></span></button>
-
-        <button data-sort="comments" 
-           class="sort btn-flat waves-effect waves-light icon-chat"
-        >comments<span class="icon-sort"></span></button>
-
-        <button data-sort="submitted" 
-           class="sort btn-flat waves-effect waves-light icon-time"
-        >submitted<span class="icon-sort"></span></button>
-
-        <button data-sort="lastactive" 
-           class="sort btn-flat waves-effect waves-light icon-time"
-        >last activity<span class="icon-sort"></span></button>
-
-        <button data-sort="status" 
-           class="sort btn-flat waves-effect waves-light icon-pinboard"
-        >status<span class="icon-sort"></span></button>
-
+        <div class="col s3  center-align">
         <button data-sort="priority" 
-           class="sort btn-flat waves-effect waves-light icon-attention"
-        >priority<span class="icon-sort"></span></button>
+           class="sort btn-flat waves-effect waves-light icon-attention tooltipped" data-position="bottom" data-tooltip="sort by priority"
+        ><i class="icon-sort"></i></button>
+        </div>
+
+        <div class="col s3  left-align">
+        <button data-sort="status" 
+           class="sort btn-flat waves-effect waves-light icon-pinboard tooltipped" data-position="bottom" data-tooltip="sort by status"
+        ><i class="icon-sort"></i></button>
+        </div>
+
     </div>
+    <div class="col s12 m8 ">
+        <div class="col s3  right-align">
+        <button data-sort="subject" 
+           class="sort btn-flat waves-effect waves-light icon-doc-text-inv tooltipped" data-position="bottom" data-tooltip="sort by subject"
+        ><i class="icon-sort"></i></button>
+        </div>
+        <div class="col s3  center-align">
+        <button data-sort="comments" 
+           class="sort btn-flat waves-effect waves-light icon-chat tooltipped" data-position="bottom" data-tooltip="sort by # comments"
+        ><i class="icon-sort"></i></button>
+        </div>
+        <div class="col s3  center-align">
+        <button data-sort="submitted" 
+           class="sort btn-flat waves-effect waves-light icon-time tooltipped" data-position="bottom" data-tooltip="sort by submission time"
+        ><i class="icon-sort"></i></button>
+
+        </div>
+        <div class="col s3  left-align">
+        <button data-sort="lastactive" 
+           class="sort btn-flat waves-effect waves-light icon-time tooltipped" data-position="bottom" data-tooltip="sort by last activity"
+        ><i class="icon-sort"></i></button>
+        </div>
+    </div>
+    </div>
+    </div><!-- asdfasdfasdfasdf -->
 
     <ul class="list collapsible category-<?= $cat['id'] ?>-base">
 <?php
@@ -142,7 +164,7 @@ document.body.onload = function(){
                 <div class="row">
 
 <?php // [icon] subject line blablabla [status] ?>
-                    <div class="col s12 z-depth-5 ">
+                    <div class="col s12 z-depth-5">
 
                         <span class="left">
  <?= $report['closed'] ? '<i class="icon-lock grey-text" title="CLOSED."></i>' : priority($report['priority'],1) 

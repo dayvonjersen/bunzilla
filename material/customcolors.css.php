@@ -11,6 +11,7 @@ foreach(Cache::read('statuses') as $id => $data)
     $color = new Color($data['color']);
 
     echo '.status-',$id,' {
+    padding: 0.5em 0 !important;
     background-color: ',$color,';
     color: ',$color->getTextColor(),' !important;
 }',"\n";

@@ -153,7 +153,7 @@ img { width: 50%; cursor: zoom-in }
 
 /**
  * goddam */
-#list { padding: 0 2em; height: 100%;  }
+#list { padding: 0 2em; height: 100%; margin: 0 1em 1em 1em; }
 #list li { margin-bottom: 1em; }
 #list li .row { margin: 0 !important }
 #list .collapsible-header {/* margin-bottom: 1em; */ cursor: row-resize; box-shadow: none !important;  }
@@ -161,8 +161,17 @@ img { width: 50%; cursor: zoom-in }
 #list .collapsible-header > .row { padding: 0.5em 1em 0 1em; }
 #list .collapsible-header a:hover { text-decoration: underline; cursor: pointer; }
 #list .subject-line a { line-height: 3rem; display: inline-block; max-width: 66.6667%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#list li:nth-child(even) .collapsible-header { background: rgba(221,221,221,1); }
-#list li:nth-child(odd) { background: rgba(255,255,255,0.7); }
+#list li:nth-child(even) .collapsible-header { background: #ccc }
+#list li:nth-child(odd) .collapsible-header { background: #fff; }
 #list blockquote { padding-right: 1rem; margin: 0 1rem; border-left-color: currentColor !important; border-left-style: dotted }
 #list .divider { margin: 1rem 0; }
 .row { margin-bottom: 0 !important; }
+
+#fuck .btn-flat { 
+    overflow: visible !important;
+    padding: 0 !important;
+    height: auto !important;
+    color: #fff !important;
+    width: 100% !important;
+}
+#fuck .row { margin: -
