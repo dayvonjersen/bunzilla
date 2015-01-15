@@ -7,7 +7,8 @@ $pageTitle = $cat['title'];
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
-<script src="/bunzilla/material/sorttable.js"></script>
+<script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 <div style="height: 100%;">
 <!--
     about:category

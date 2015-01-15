@@ -1,5 +1,6 @@
         </main>
         <footer class="footer">
+<a style="position: fixed; bottom: 2em; right: 2em; " class="btn-floating black white-text" title="helo r u lost" href="#mp-pusher"><i class="icon-up-open-mini"></i></a>
                 <div class="row">
                     <div class="col 16 s12">
                         <h5><?= $_BUNNIES[array_rand($_BUNNIES)] ?></h5>
