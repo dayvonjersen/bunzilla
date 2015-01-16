@@ -20,28 +20,30 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 <!-- 
                     title 
                 -->
-                <section class='section col s8 z-depth-5 category-<?= $cat['id'] ?>-text'>
-                    <h4 class="category-<?= $cat['id'] ?>-text <?= $cat['icon'] ?>"><?= $cat['title'] ?></h4>
-                    <h6><?= $cat['caption'] ?></h6>
-                </section>
-                <!--
-                    actions
-                -->
-                <section class="col s4 right-align">
-                    
+                <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base'>
+
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
+                       class="right btn btn-floating z-depth-5 transparent" 
+                       title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
 <?php
 if($this->auth())
 {
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" 
-                       class="btn btn-floating z-depth-5 transparent" 
+                       class="right btn btn-floating z-depth-5 transparent" 
                        title="submit new"><i class="green-text darken-2 icon-pencil-alt"></i></a>
 <?php
 }
 ?>
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
-                       class="btn btn-floating z-depth-5 transparent" 
-                       title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
+                    <h4 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h4>
+                    <h6><?= $cat['caption'] ?></h6>
+
+                <!--
+                    actions
+                -->
+
+                    
+
                 </section>
         </article>
     </div>
@@ -80,7 +82,7 @@ document.body.onload = function(){
 <!--
     dear god
 -->
-<div class="category-<?= $cat['id'] ?>-base z-depth-2" id="list">
+<div class="category-<?= $cat['id'] ?>-lighten-1 z-depth-2" id="list">
     <div class="section no-pad-bot ">
     <div class="row black white-text z-depth-1"  id="fuck"><!-- me -->
     <div class="col s12 m4 ">
@@ -130,7 +132,7 @@ document.body.onload = function(){
     </div>
     </div><!-- asdfasdfasdfasdf -->
 
-    <ul class="list collapsible category-<?= $cat['id'] ?>-base">
+    <ul class="list collapsible">
 <?php
 //
 // tidy can be used to fix up html from truncated message "previews"
@@ -168,47 +170,47 @@ document.body.onload = function(){
                     <div class="col s12 z-depth-5">
 
                         <span class="left">
- <?= $report['closed'] ? '<i class="icon-lock grey-text" title="CLOSED."></i>' : priority($report['priority'],1) 
+<?php //  '<i class="icon-lock grey-text" title="CLOSED."></i>' : priority($report['priority'],1) 
 ?>
                         </span>
 
-                        <span class="subject-line h4">
-                            <a class="flow-text" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material'?>"><?= $report['subject'] ?></a>
+                        <span class="subject-line h6" title="<?= $report['subject'] ?>">
+                            <a class="icon-<?= $report['closed'] ? 'lock' : 'doc-text-inv'?>" 
+                               href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material'?>"><?= $report['subject'] ?></a>
                         </span>
 
                         <span class="right"><?= status($report['status']) ?></span>
-
-                    </div>
-<?php // x comments | 4 hours ago | [php] [DIVitis] ?>
-                    <div class="col left">
 
                         <span class="badge right blue-text" title="comments">
                             <a class=" icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material#comments'?>"><?= $report['comments'] ?></a>
                         </span>
 
-                    </div>
-
-                    <div class="col s8">
-                        <span class="submitted icon-history small" title="submitted at"><?= datef($report['time']) ?></span>
-
 <?php // no point in redundancy ?>
 <?= 
 ($report['last_active'] == $report['time']) ? '' 
-: '<p class="icon-time small" title="last active">'.datef($report['last_active']).'</p>' 
+: '<span class="icon-time small right" title="last active">'.datef($report['last_active']).'</span>' 
 ?>
-                    </div>
+ <span class="submitted icon-history small right" title="submitted at"><?= datef($report['time']) ?></span>
+
+<?php // x comments | 4 hours ago | [php] [DIVitis] ?>
+
 <?php 
 //
 // tags!
 //
-        if(!empty($report['tags']))
+
+        if(!$report['closed'])
         {
-            echo '<div class="right right-align icon-tags">';
-            foreach($report['tags'] as $tag)
-                echo tag($tag[0],0);
-            echo '</div>';
+            echo '<div class="icon-tags" style="clear: both;">';
+            if(!empty($report['tags']))
+            {
+                foreach($report['tags'] as $tag)
+                    echo tag($tag[0],0);
+            }
+            echo priority($report['priority']),'</div>';
         }
 ?>
+                    </div>
                 </div>
             </div>
             <div class="collapsible-body">

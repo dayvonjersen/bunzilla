@@ -61,7 +61,7 @@ function badge( $type, $id, $short = false, $z = 1 )
     }
 
     return '
-<span class="badge z-depth-'.$z.' '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
+<span class="z-depth-'.$z.' '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
       title="'.${$type}[$id]['title'].'">'
 .($short ? '': '<span class="hide-on-small-only">').${$type}[$id]['title'].'</span></span>'."\n";
 }
@@ -69,15 +69,23 @@ function status( $id, $short = false ) { return badge('status',(int)$id,$short,5
 function tag( $id, $short = true ) { return badge('tag',(int)$id,$short); }
 function priority( $id, $justIcon = false ) { 
 
-    if(!$justIcon)
-        return badge('priority',(int)$id); 
+//    if(!$justIcon)
+//        return badge('priority',(int)$id); 
 
 
     static $pryor = null;
     $pryor === null && $pryor = Cache::read('priorities');
+    if(empty($pryor))
+        return '<!-- no priorities defined -->';
+
     $p = isset($pryor[$id]) ? $pryor[$id] : ['id'=>0,'title'=>'Well, it can\'t be THAT important','icon'=>'icon-emo-displeased'];
-    return sprintf('<i class="%s priority-%d" title="%s"></i>', $p['icon'],$p['id'],$p['title']);
+
+//    return sprintf('<i class="%s priority-%d" title="%s"></i>', $p['icon'],$p['id'],$p['title']);
+
+    $z = round(($id/count($pryor))*5);
+    return '<span class="badge tag '.($z ? 'z-depth-'.$z : '').' priority-'.$id.'" title="Priority '.$id.' out of '.count($pryor).'"><span class="hide-on-small-only">Priority: </span><strong class="'.$p['icon'].'">'.$p['title'].'</strong></span>';
 }
+
 
 /**
  * ditto for <select> dropdowns */

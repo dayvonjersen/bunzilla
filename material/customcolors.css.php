@@ -11,7 +11,7 @@ foreach(Cache::read('statuses') as $id => $data)
     $color = new Color($data['color']);
 
     echo '.status-',$id,' {
-    padding: 0.5em 0 !important;
+    padding: 0.5em 2px !important;
     background-color: ',$color,';
     color: ',$color->getTextColor(),' !important;
 }',"\n";
@@ -24,6 +24,7 @@ foreach(Cache::read('tags') as $id => $data)
     echo '.tag-',$id,' {
     background-color: ',$color,';
     color: ',$color->getTextColor(),' !important;
+    font-size: x-small;
 }',"\n";
 }
 
@@ -32,7 +33,9 @@ foreach(Cache::read('priorities') as $data)
     $color = new Color($data['color']);
 
     echo '.priority-',$data['id'],' {
-        color: ',$color,' !important;
+        background-color: ',$color,' !important;
+        color: ',$color->getTextColor(),' !important;
+        font-size: xx-small;
 }
 ',"\n";
 }
