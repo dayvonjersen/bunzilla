@@ -201,7 +201,7 @@ document.body.onload = function(){
 
         if(!$report['closed'])
         {
-            echo '<div class="icon-tags" style="clear: both;">';
+            echo '<div ',empty($report['tags']) ? '' : 'class="icon-tags"',' style="clear: both;">';
             if(!empty($report['tags']))
             {
                 foreach($report['tags'] as $tag)

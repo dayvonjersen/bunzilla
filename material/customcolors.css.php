@@ -24,7 +24,7 @@ foreach(Cache::read('tags') as $id => $data)
     echo '.tag-',$id,' {
     background-color: ',$color,';
     color: ',$color->getTextColor(),' !important;
-    font-size: x-small;
+    font-size: x-small !important;
 }',"\n";
 }
 
@@ -35,7 +35,7 @@ foreach(Cache::read('priorities') as $data)
     echo '.priority-',$data['id'],' {
         background-color: ',$color,' !important;
         color: ',$color->getTextColor(),' !important;
-        font-size: xx-small;
+        font-size: xx-small !important;
 }
 ',"\n";
 }

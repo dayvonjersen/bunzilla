@@ -15,7 +15,7 @@ $report = $this->data['report'];
 <script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-<div class="category-<?= $cat['id'] ?>-base" style="height: 100%">
+<div class="" style="height: 100%">
 
 <!--
     category info
@@ -27,30 +27,27 @@ $report = $this->data['report'];
                 <!-- 
                     title 
                 -->
-<a href="<?= BUNZ_HTTP_DIR,'report/category/',$cat['id'] ?>?material" class="category-<?=$cat['id']?>-text">
-                <section class='section col s8 z-depth-5 category-<?= $cat['id'] ?>-text'>
-                    <h4 class="category-<?= $cat['id'] ?>-text <?= $cat['icon'] ?>"><?= $cat['title'] ?></a></h4>
-                    <h6><?= $cat['caption'] ?></h6>
-                </section>
-</a>
-                <!--
-                    actions
-                -->
-                <section class="col s4 right-align">
-                    
+ <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base'>
+
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
+                       class="right btn btn-floating z-depth-5 transparent" 
+                       title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
 <?php
 if($this->auth())
 {
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" 
-                       class="btn btn-floating z-depth-5 transparent" 
-                       title="submit new"><i class="green-text darken-4 icon-pencil-alt"></i></a>
+                       class="right btn btn-floating z-depth-5 transparent" 
+                       title="submit new"><i class="green-text darken-2 icon-pencil-alt"></i></a>
 <?php
 }
 ?>
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" 
-                       class="btn btn-floating z-depth-5 transparent" 
-                       title="submit new"><i class="green-text darken-4 icon-plus"></i></a>
+                    <h4 class="<?= $cat['icon'] ?>"><a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?material"><?= $cat['title'] ?></a></h4>
+                    <h6><?= $cat['caption'] ?></h6>
+
+                <!--
+                    actions
+                -->
                 </section>
         </article>
     </div>
@@ -61,7 +58,7 @@ if($this->auth())
     report view
 -->
 
-<article class="container">
+<article class="container category-<?= $cat['id'] ?>-base">
     <header class="row">
 
         <!--
@@ -69,8 +66,8 @@ if($this->auth())
         -->
         <section class="col s12">
             <div class="row">
-            <ul class="tabs waves-effect waves-light">
-                <li class="tab col s2"><a href="#status" class="icon-doc-text-inv category-<?=$cat['id']?>-text">.</a></li>
+            <ul class="tabs waves-effect waves-light z-depth-3">
+                <li class="tab col s2"><a href="#status" class="active icon-doc-text-inv category-<?=$cat['id']?>-text"></a></li>
                 <li class="tab col s2">
                     <a href="#history" class="icon-history grey white-text"><span class="hide-on-small-only">History</span></a>
                 </li>
@@ -94,9 +91,46 @@ if($this->auth())
             </ul>
 
             <!--
-                current status 
+                about: time, edits + actions: edit and reply
             -->
-            <section class="section col s12 transparent" id="status">
+            <section class="section col s12" id="status">
+<!--
+            author and time
+        -->
+        <section class="section col s8 m8 z-depth-3 category-<?=$cat['id']?>-text">
+            <!--
+                email and authlevel
+            -->
+            <p class="icon-mail"><?= $report['email'], 
+$report['epenis'] ? ' <span class="badge blue white-text" style="color: white !important">## Developer</span>' : '' ?></p>
+            <!--
+                submission and edit time
+            -->
+            <p class="icon-time" title="submitted at"><?= datef($report['time']) ?></p><?=
+$report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.BUNZ_DIFF_DIR.'reports/'.$report['id'].'">'.datef($report['edit_time']).'</a></p>' : ''
+
+?>
+
+      </section>
+
+        <!--
+            edit and reply
+        -->
+        <section class="section col s4 m4 transparent ">
+
+             <!-- nice javascript m8 -->
+            <a href="#comment" onclick="(function(evt){evt.preventDefault();document.getElementById('comment').focus()})(event)" class="waves-effect z-depth-5 btn-large btn-floating blue right" title="post a comment!"><i class="icon-chat"></i></a>
+
+<?php
+if($this->auth() || compareIP($report['ip']))
+{
+?>
+            <!-- edit -->
+            <a href="<?= BUNZ_HTTP_DIR ?>post/edit/<?= $report['id'] ?>" class="btn-floating green black-text z-depth-4 right waves-effect " style="margin-right: 2px" title="edit this report"><i class="icon-pencil-alt"></i></a>
+<?php
+}
+?>
+        </section>
                        </section>
 
             <!--
@@ -197,71 +231,46 @@ if($this->auth())
         </div>
         </section>
 
-        <!--
-            author and time
-        -->
-        <section class="section col s8 m6 z-depth-3 category-<?=$cat['id']?>-darken-1">
-            <!--
-                email and authlevel
-            -->
-            <p class="icon-mail"><?= $report['email'], 
-$report['epenis'] ? ' <span class="badge blue white-text" style="color: white !important">## Developer</span>' : '' ?></p>
-            <!--
-                submission and edit time
-            -->
-            <p class="icon-time" title="submitted at"><?= datef($report['time']) ?></p><?=
-$report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.BUNZ_DIFF_DIR.'reports/'.$report['id'].'">'.datef($report['edit_time']).'</a></p>' : ''
-?>      </section>
-
-        <!--
-            edit and reply
-        -->
-        <section class="section col s4 m6">
-
-             <!-- nice javascript m8 -->
-            <a href="#comment" onclick="(function(evt){evt.preventDefault();document.getElementById('comment').focus()})(event)" class="waves-effect z-depth-5 btn-large btn-floating blue  right" title="post a comment!"><i class="icon-chat"></i></a>
-
-<?php
-if($this->auth() || compareIP($report['ip']))
-{
-?>
-            <!-- edit -->
-            <a href="<?= BUNZ_HTTP_DIR ?>post/edit/<?= $report['id'] ?>" class="btn-floating green z-depth-4 right waves-effect" style="margin-right: 2px" title="edit this report"><i class="icon-pencil-alt"></i></a>
-<?php
-}
-?>
-        </section>
+        
     
         <!--
             subject
         -->
-        <section class='section no-pad-top no-pad-bot col s12 z-depth-5 category-<?=$cat['id']?>-darken-1'>
-
-          
-            <!-- actual subject text -->
-            <span class="flow-text"><?= $report['subject'] ?></span>
-
-
-            <!-- status, priority, closed -->
-                <span class="badge z-depth-2 white-text icon-<?= 
-$this->data['closed'] ? 'lock grey ' : 'unlock light-blue'?>"><span class="hide-on-small-only"><?=
-$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
-                <?= priority($report['priority']) ?>
-        <?= status($report['status']) ?>
-
+        <section id="subject" class='section no-pad-top no-pad-bot col s12 z-depth-5 category-<?=$cat['id']?>-text'>
 
 <?php
+
+    echo '<p class="left">';
 if(!empty($report['tags']))
 {
+    echo '<i class="icon-tags"></i>';
     //
     // tags!
     //
-    echo '<p class="icon-tags" style="clear: both; float: left;">';
     foreach($report['tags'] as $tag)
         echo tag($tag[0],0);
-    echo '</p>';
 }
 ?>
+
+                <?= priority($report['priority']) ?>
+          
+           <?= '</p>' ?>
+
+
+            <!-- status, closed -->
+        <?= status($report['status']) ?>
+
+                <span class="badge z-depth-2 white-text icon-<?= 
+$this->data['closed'] ? 'lock grey' : 'unlock light-blue'?>" title="
+<?= 
+$this->data['closed'] ? 'closed' : 'open'?>"><span class="hide-on-small-only"><?=
+$this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
+ <!-- actual subject text -->
+<div class="divider" style="clear: both;"></div>
+            <a href="#subject" title="subject" class="small left"><em>subject</em>:</a>
+            <h2 class="flow-text"><?= $report['subject'] ?></h2>
+
+
 
         </section>
     </header>
@@ -269,17 +278,18 @@ if(!empty($report['tags']))
     <!--
         description reproduce expected actual
     -->
-    <main>
+    <main id="report" class="section z-depth-5 category-<?=$cat['id']?>-darken-1">
 <?php
+$d = 5;
 foreach(['description','reproduce','expected','actual'] as $field)
 {
     if($cat[$field])
     {
 ?>
-        <section class='z-depth-<?= $d-- ?> category-<?=$cat['id']?>-lighten-5'>
-            <span class="badge grey white-text left"><?=$field?></span>
-            <p style="clear: both; margin: 10px 0 " class="flow-text"><?= $report[$field] ?></p>
-        </section>
+        <blockquote id="<?=$field?>" class='section no-pad-top z-depth-<?= $d-- ?> category-<?=$cat['id']?>-text'>
+            <a href="#<?=$field?>" title="<?=$field?>" class="small left"><em><?=$field?></em>:</a><br>
+            <?= $report[$field] ?>
+        </blockquote>
 <?php
     }
 }

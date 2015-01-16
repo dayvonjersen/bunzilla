@@ -163,15 +163,17 @@ img { width: 50%; cursor: zoom-in }
 #list .subject-line a { line-height: 2rem; display: inline-block; max-width: 66.6667%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #list li:nth-child(even) .collapsible-header { background: #ccc; color: #000 !important; }
 #list li:nth-child(odd) .collapsible-header { background: #fff; color: #000 !important;  }
-#list blockquote { padding-right: 1rem; margin: 0 1rem; border-left-color: currentColor !important; border-left-style: dotted }
+#list blockquote, #report blockquote { padding-right: 1rem; margin: 0 1rem; border-left-color: currentColor !important; border-left-style: dotted }
 #list .divider { margin: 1rem 0; }
 #list span.small { padding: 0.5em; }
 #list span { cursor: default }
 
 .row { margin-bottom: 0 !important; }
 
-#fuck .btn-flat { 
+[class*='waves-'] {
     overflow: visible !important;
+}
+#fuck .btn-flat { 
     padding: 0 !important;
     height: auto !important;
     color: #fff !important;
