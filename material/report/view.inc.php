@@ -257,10 +257,12 @@ if(!empty($report['tags']))
            <?= '</p>' ?>
 
 
-            <!-- status, closed -->
+<!-- 
+    status, closed 
+-->
         <?= status($report['status']) ?>
 
-                <span class="badge z-depth-2 white-text icon-<?= 
+                <span class="badge right z-depth-2 white-text icon-<?= 
 $this->data['closed'] ? 'lock grey' : 'unlock light-blue'?>" title="
 <?= 
 $this->data['closed'] ? 'closed' : 'open'?>"><span class="hide-on-small-only"><?=
@@ -315,7 +317,7 @@ if(!empty($this->data['comments']))
 if($this->auth() || compareIP($comment['ip']))
 {
 ?>
-                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='btn-floating green right' title="edit this comment"><i class='icon-pencil-alt'></i></a>
+                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='badge small green-text right' title="edit this comment"><i class='icon-pencil-alt'></i></a>
 <?php
 }
 ?></p>

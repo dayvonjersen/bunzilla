@@ -8,13 +8,11 @@ $(document).ready(function(){
     $('img').materialbox();
     $('.tooltipped').tooltip({"delay": 50});
 /**
- * codrops MultiLevelPushMenu initialization */
-    (new mlPushMenu( document.getElementById("mp-menu"), 
-                     document.getElementById('mp-trigger') 
-        )
-    );
+ * codrops google nexus 7 menu initialization */
+    (new gnMenu( document.getElementById("gn-menu") ));
 /**
- * [hax intensify] */
+ * [hax intensify] 
+ * xxx obsolete
     function holyshit() {
         var htmlHeight = document.documentElement.scrollHeight,
             bodyHeight = null,//document.body.scrollHeight,
@@ -37,6 +35,7 @@ $(document).ready(function(){
     window.addEventListener('resize', holyshit, false);
     holyshit();
 
+ * todo : list.js **
     if(gEbI("sorttable_override"))
     {
         var iconSortDESC = 'icon-down-open-mini',
@@ -78,10 +77,11 @@ $(document).ready(function(){
                 }
             }
         }, false);
-   }     
+   }     */
 });
+/** xxx
 function gEbI(id)
 {
     return document.getElementById(id);
-}
+} **/
 

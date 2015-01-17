@@ -61,7 +61,7 @@ function badge( $type, $id, $short = false, $z = 1 )
     }
 
     return '
-<span class="badge z-depth-'.$z.' '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
+<span class="badge right z-depth-'.$z.' '.$type.' '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
       title="'.ucfirst($type).': '.${$type}[$id]['title'].'">'
 .($short ? '': '<span class="hide-on-small-only">').${$type}[$id]['title'].'</span></span>'."\n";
 }
@@ -83,7 +83,7 @@ function priority( $id, $badge = true ) {
 //    return sprintf('<i class="%s priority-%d" title="%s"></i>', $p['icon'],$p['id'],$p['title']);
 
     $z = round(($id/count($pryor))*5);
-    return '<span class="'.($badge ? 'badge ' : '').($z ? 'z-depth-'.$z : '').' priority-'.$id.'" title="Priority '.$id.' out of '.count($pryor).'"><span class="hide-on-small-only">Priority: </span><strong class="'.$p['icon'].'">'.$p['title'].'</strong></span>';
+    return '<span class="right badge '.($badge ? 'badge ' : '').($z ? 'z-depth-'.$z : '').' priority-'.$id.'" title="Priority '.$id.' out of '.count($pryor).'"><span class="hide-on-small-only">Priority: </span><strong class="'.$p['icon'].'">'.$p['title'].'</strong></span>';
 }
 
 
