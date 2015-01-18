@@ -22,7 +22,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 -->
                 <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base'>
 
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" 
                        class="right btn btn-floating z-depth-5 transparent" 
                        title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
 <?php
@@ -55,7 +55,7 @@ if(empty($this->data['reports']))
         <!--
             consistency++
         -->
-        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>">Submit Something!</a></div>
+        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>?material">Submit Something!</a></div>
 <?php
 } else {
 

@@ -14,5 +14,20 @@
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>gnmenu.js"></script>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>headroom.js"></script>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>cottontail.js"></script>
+<?php
+if(!empty($this->flash))
+{
+?>
+        <script>
+document.body.onload = function() {
+<?php
+foreach($this->flash as $msg)
+    echo "\t",'toast("',htmlentities($msg,ENT_QUOTES),'",30000);',"\n";
+?>
+}
+        </script>
+<?php
+}
+?>
     </body>
 </html>

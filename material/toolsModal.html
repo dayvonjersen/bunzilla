@@ -164,16 +164,23 @@
             </p>
         </div>
 </div>
+<script src="/bunzilla/material/toolsModal.js"></script>
 <script>
-$(document).ready(function(){
+document.body.onload = (function(){
+    toolsModal.init(document.forms["withToolsModal"]);
+
     $('.modal-trigger').leanModal({
         opacity: .1,
         in_duration: 225,
         out_duration: 500,
-        ready: function(){console.log('modal opened')},
-        complete: function(){console.log('modal closed')}
+        ready: function(){ document.getElementById('description').scrollIntoView(); toolsModal.activate() },
+        complete: function(){ toolsModal.deactivate() },
+        posTop: 0,
+        posBottom: 0,
     });
-    $('.tooltipped').tooltip({"delay": 50});
+//    $('.tooltipped').tooltip({"delay": 50});
+
+    
 });
 </script>
 <!--

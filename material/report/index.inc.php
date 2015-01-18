@@ -50,7 +50,7 @@ if(empty($this->data['categories']))
                     actions
                 -->
                 <section class="col offset-m3 offset-s2 s1">
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="btn btn-floating z-depth-5 transparent" title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" class="btn btn-floating z-depth-5 transparent" title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
                 </section>
             </div>
 
@@ -72,14 +72,14 @@ if(empty($this->data['categories']))
                         subject, quick link
                     -->
                     <p>
-                    <a href="<?= BUNZ_HTTP_DIR,'report/view/',$stats['latest_issue']['id'] ?>" 
+                    <a href="<?= BUNZ_HTTP_DIR,'report/view/',$stats['latest_issue']['id'] ?>?material" 
                        class="icon-doc-text-inv"><?= $stats['latest_issue']['subject'] ?></a>
                     <!--
                         # of comments and timestamp
                     -->
                     <span class="badge category-<?= $cat['id'] ?>-text">
                         <a class="icon-chat" 
-                           href="<?= BUNZ_HTTP_DIR,'report/view/',$stats['latest_issue']['id'] ?>#comments" 
+                           href="<?= BUNZ_HTTP_DIR,'report/view/',$stats['latest_issue']['id'] ?>?material#comments" 
                            title="<?= $stats['latest_issue']['comments'] ?> comment(s)"><?= $stats['latest_issue']['comments'] ?></a>
                     </span>
                     <span class="badge"><em><small><?= datef($stats['latest_issue']['time'])?></small></em></span>

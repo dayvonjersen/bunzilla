@@ -5,14 +5,15 @@ $pageTitle = 'Submit New &quot;'.$cat['title'].'&quot;';
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 
+require BUNZ_TPL_DIR .'toolsModal.html';
 ?>
 <div class="category-<?= $cat['id'] ?>-base container">
 <form action="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>?material"
+      id="withToolsModal"
       method="post"
       class="category-<?= $cat['id'] ?>-lighten-5">
 
     <div class="section">
-
          <h1 class="icon-plus"><?= $pageTitle ?></h1>
          <div class="input-field">
             <i class="icon-mail prefix"></i>
@@ -49,12 +50,13 @@ foreach($fields as $name => $placeholder)
     if(!$cat[$name])
         continue;
 ?>
-        <div class="input-field">
+        <div class="input-field">            
             <i class="icon-doc-text-inv prefix"></i>
             <textarea id="<?= $name ?>"
                       class="materialize-textarea" 
                       required 
                       name='<?= $name ?>'><?= empty($_POST) ? $this->data['params'][$name] : unfiltermessage($this->data['params'][$name]) ?></textarea>
+            <a href="#toolsModal" data-for="<?= $name ?>" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
             <label for="<?= $name ?>"><?= $name, ': ', $placeholder ?></label>
         </div>
 <?php

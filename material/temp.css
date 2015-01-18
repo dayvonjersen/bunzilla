@@ -121,11 +121,14 @@ span.badge {
 /**
  * widgetry */
 #toolsModal {
-    background: rgba(255,255,255,0.7);
     padding: 0;
 }
 #toolsModal i::before {
     font-size: inherit;
+}
+
+#toolsModal label {
+    display: block;
 }
 /**
  * faggotry */
@@ -222,3 +225,9 @@ img { width: 50%; cursor: zoom-in }
     width: 60px;
     background: transparent;
 }
+
+#toolsModal, #toolsModal *, [class*='waves-'] { overflow: hidden; }
+#toolsModal .btn { background: #4eb3de; }
+textarea ~ a[href="#toolsModal"] { position: absolute; right: 0; top: 0; opacity: 0; transition: opacity 0.2s ease-in}
+textarea:focus ~ a[href="#toolsModal"] { opacity: 1; }
+#withToolsModal div.input-field { position: relative; }

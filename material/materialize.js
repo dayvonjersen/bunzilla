@@ -264,6 +264,20 @@ jQuery.extend( jQuery.easing,
         if (object.parent().hasClass('active')){
 //          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
           object.siblings('.collapsible-body').addClass('animated');
+
+
+          var elem = object.get()[0];
+          setTimeout(function(){
+            elem.scrollIntoView({behavior: "smooth"});
+          },350);
+/* idk xxx              i = 0, intval;
+          intval = setInterval(function(){
+            elem.scrollIntoView({behavior: "smooth"})
+            i += 300;
+            if(i >= 600)
+                clearInterval(intval);
+            },
+          300); */
         }
         else{
 //          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
@@ -280,6 +294,19 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
         if (object.parent().hasClass('active')){
 //          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
           object.siblings('.collapsible-body').addClass('animated');
+
+          var elem = object.get()[0];
+          setTimeout(function(){
+            elem.scrollIntoView({behavior: "smooth"});
+          },350);
+/* idk xxx              i = 0, intval;
+          intval = setInterval(function(){
+            elem.scrollIntoView({behavior: "smooth"})
+            i += 300;
+            if(i >= 600)
+                clearInterval(intval);
+            },
+          300); */
         }
         else{
 //          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
@@ -470,7 +497,9 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
         out_duration: 200,
         ready: undefined,
         complete: undefined,
-        dismissible: true
+        dismissible: true,
+        posTop: "4%",
+        posBottom: "0",
       }
 
       // Override defaults
@@ -498,7 +527,8 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
 
       $(modal).css({
         display : "block",
-        top: "4%",
+        top: options.posTop,
+        bottom: options.posBot,
         opacity: 0
       });
 
@@ -1996,14 +2026,16 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
     }
     var hiddendiv = $('.hiddendiv');
     var text_area_selector = '.materialize-textarea';
-      $('body').on('keyup keydown',text_area_selector , function () {
+    function textareaResize(that) {
         // console.log($(this).val());
-        content = $(this).val();
+        content = $(that).val();
         content = content.replace(/\n/g, '<br>');
         hiddenDiv.html(content + '<br>');
         // console.log(hiddenDiv.html());
-        $(this).css('height', hiddenDiv.height());
-      });
+        $(that).css('height', hiddenDiv.height());
+      }
+      $('body').on('keyup keydown focus',text_area_selector , function(){ textareaResize(this)});     // window.textareaResize = textareaResize;
+
 
 
     // Range Input

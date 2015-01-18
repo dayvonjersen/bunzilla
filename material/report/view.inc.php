@@ -338,12 +338,13 @@ if($comment['edit_time'])
 }
 if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
 {
+require BUNZ_TPL_DIR .'toolsModal.html';
 ?>
             <!--
                 spammer's delight
             -->
             <section class="category-<?=$cat['id']?>-lighten-5 z-depth-3">
-                <form class="" action="<?= BUNZ_HTTP_DIR,'post/comment/',$this->data['id'] ?>" method="post">
+                <form class="" action="<?= BUNZ_HTTP_DIR,'post/comment/',$this->data['id'] ?>" method="post" id="withToolsModal">
                     <div class="section">
                         <h4>post a comment</h4>
     
@@ -355,6 +356,7 @@ if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
                     <div class="input-field">
                         <i class="icon-chat prefix"></i>
                         <textarea id="comment" class="materialize-textarea" required name='message'><?= empty($_POST) ? $this->data['params']['message'] : unfiltermessage($this->data['params']['message']) ?></textarea>
+<a href="#toolsModal" data-for="message" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
                         <label for="comment">your insight on this issue</label>
                     </div>
                     <div class="input-field center"><button type="submit" class="btn">post!</button></div>

@@ -103,19 +103,13 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
             <li class="hide-on-small-only"><a href="<?= BUNZ_HTTP_DIR ?>?material&login" class="icon-key">Login</a></li>
         </ul>
         </header>
-<?php
-if(!empty($this->flash))
-{
-?>
-        <script>
-document.body.onload = function() {
-<?php
-foreach($this->flash as $msg)
-    echo "\t",'toast("',htmlentities($msg,ENT_QUOTES),'",30000);',"\n";
-?>
-}
-        </script>
-<?php
-}
-?>
-        <main>
+
+        <noscript>
+            <aside class="yellow h1">
+                <p><b>Note:</b> This layout uses a large amount of Javascript.</p>
+                <p>Certain things may not work as intended with Javascript disabled.</p>
+                <p>You may find <a href="?nofrills">this layout</a> more suitable to your tastes.</p>
+                <p>By the way, the 1970s called. When are you coming home, grandpa?</p>
+            </aside>
+        </noscript>
+        <main class="waves-effect">
