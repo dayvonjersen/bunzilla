@@ -10,6 +10,7 @@ $(document).ready(function(){
 /**
  * codrops google nexus 7 menu initialization */
     (new gnMenu( document.getElementById("gn-menu") ));
+
 /**
  * [hax intensify] 
  * xxx obsolete

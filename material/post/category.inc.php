@@ -7,12 +7,13 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 
 ?>
 <div class="category-<?= $cat['id'] ?>-base container">
-<h1><?= $pageTitle ?></h1>
 <form action="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>?material"
       method="post"
       class="category-<?= $cat['id'] ?>-lighten-5">
 
-    <fieldset>
+    <div class="section">
+
+         <h1 class="icon-plus"><?= $pageTitle ?></h1>
          <div class="input-field">
             <i class="icon-mail prefix"></i>
             <input type="email" 
@@ -45,6 +46,8 @@ $fields = [
 ];
 foreach($fields as $name => $placeholder)
 {
+    if(!$cat[$name])
+        continue;
 ?>
         <div class="input-field">
             <i class="icon-doc-text-inv prefix"></i>
@@ -52,30 +55,56 @@ foreach($fields as $name => $placeholder)
                       class="materialize-textarea" 
                       required 
                       name='<?= $name ?>'><?= empty($_POST) ? $this->data['params'][$name] : unfiltermessage($this->data['params'][$name]) ?></textarea>
-            <label for="<?= $name ?>"><?= $placeholder ?></label>
+            <label for="<?= $name ?>"><?= $name, ': ', $placeholder ?></label>
         </div>
 <?php
 }
 ?>
         <p class="input-field">
-            <strike class="icon-paragraph prefix"></strike>
+            <label for="disable_nlbr"><s class="icon-paragraph prefix"></s></label>
             <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) ? ' checked' : ''?>>
             <label for="disable_nlbr">Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
         </p>
 
-        <div class="input-field icon-tags" id="tagz">
-            <?= dropdown('addTag\' onchange="(function(){ document.getElementById(\'tagz\').insertAdjacentHTML(\'afterbegin\', \'<p class=input-field><input type=checkbox name=tags[] value=\' + this.value + \' id=tagno\' + this.value + \'><label for=tagno\' + this.value + \'>o_k</label></p>\')})()" data-hello=\'', Cache::read('tags')) ?>
+        <div class="divider"></div>
+
+        <div class="input-field collapsible no-select section" id="tagz">
+            <i class="icon-tags prefix"></i>
+            <div class="collapsible-header center large">Tags! <span class="icon-down-open-mini"></span></div>
+            <div class="collapsible-body section">
+            <div class="row section">
+<?php
+//
+// todo: figure out Javascript solution for this
+// either <menu> or asJSON to do it
+//
+$checked = isset($_POST['tags']) && is_array($_POST['tags']) ? $_POST['tags'] : [];
+$i = 1;
+foreach($this->data['tags'] as $id => $tag)
+{
+?>
+    <div class="input-field col s6 m3">
+        <input type="checkbox" name="tags[]" id="tag_<?= $id ?>" value="<?= $id ?>"<?= in_array($id, $checked) ? ' checked' : ''?>>
+        <label for="tag_<?= $id ?>"><?= $tag['title'] ?></label>
+    </div>
+<?php
+    if($i%4 == 0 || $tag === end($this->data['tags']))
+        echo '</div>', $tag !== end($this->data['tags']) ? '<div class="row section">' : '';
+    $i++;
+}
+?>
+        </div>
         </div>
         <div class="input-field center">
             <button type="reset" class="btn-flat white grey-text icon-cancel waves-effect"<?php
-if(!empty($_POST))
+if(empty($_POST))
  echo <<<JAVASCRIPT
-onclick="function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()}(event)"
+onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
 JAVASCRIPT;
-?>><?= !empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
+?>><?= empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
             <button type="submit" class="btn icon-plus light-blue white-text waves-effect">Submit</button>
         </div>
-    </fieldset>
+    </div>
 </form>
 </div>
 <?php

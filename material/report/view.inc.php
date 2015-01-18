@@ -186,7 +186,7 @@ count($this->data['priorities'])
                             <button type="submit"
                                     name="updateStatus" 
                                     value="1"
-                                    class="btn pink">Make Changes</button>
+                                    class="btn pink icon-ok">Make Changes</button>
                             <button type="submit" 
                                     name="toggleClosed" 
                                     class="btn icon-<?= $report['closed'] ? 'unlock light-blue' : 'lock grey' ?>"
@@ -221,7 +221,7 @@ count($this->data['priorities'])
                 <form class="white z-depth-5 center section"
                       action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>" 
                       method="post">
-                    <button class="btn red icon-delete waves-red" onclick="function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this report and all associated comments?')) evt.preventDefault();}(event);">Delete (no undo)</button>
+                    <button name="delete" class="btn red icon-delete waves-red" onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this report and all associated comments?')) evt.preventDefault();})(event);">Delete (no undo)</button>
                 </form>
             </section>
 <?php

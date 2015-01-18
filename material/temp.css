@@ -185,3 +185,4 @@ img { width: 50%; cursor: zoom-in }
 
 .section { padding: 1em; }
 .btn-floating { color: #fff !important }
+#page-wrap, main, .container { min-height: 100%; }

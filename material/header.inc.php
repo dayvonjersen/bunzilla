@@ -40,7 +40,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 <!--
     google nexus 7 product page menu from codrops
 -->
-        <ul id="gn-menu" class="gn-menu-main z-depth-5">
+        <ul id="gn-menu" class="gn-menu-main z-depth-1">
 <!--
     sidebar
 -->
@@ -92,7 +92,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
     ~brand~ of our ~product~
 -->
             <li>
-                    <a href='<?= BUNZ_HTTP_DIR ?>'><?= $_BUNNIES[array_rand($_BUNNIES)]?></a>
+                    <a href='<?= BUNZ_HTTP_DIR ?>?material'><?= $_BUNNIES[array_rand($_BUNNIES)]?></a>
 
             </li>
 
@@ -100,7 +100,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
             <li class="hide-on-small-only"><a href="#" class="icon-list-dl">Crumb</a></li>
             <li class="hide-on-small-only"><a href="#" class="icon-bug">Trail</a></li>
 
-            <li class="hide-on-small-only"><a href="#" class="icon-emo-displeased">Maybe</a></li>
+            <li class="hide-on-small-only"><a href="<?= BUNZ_HTTP_DIR ?>?material&login" class="icon-key">Login</a></li>
         </ul>
         </header>
 <?php
