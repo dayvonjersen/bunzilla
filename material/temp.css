@@ -168,7 +168,6 @@ img { width: 50%; cursor: zoom-in }
 }
 
 #gn-menu nav, #gn-menu li {
-    background: #fff;
     vertical-align: middle;
 }
 #gn-menu [class*='icon']::before {
@@ -186,3 +185,40 @@ img { width: 50%; cursor: zoom-in }
 .section { padding: 1em; }
 .btn-floating { color: #fff !important }
 #page-wrap, main, .container { min-height: 100%; }
+
+.collapsible-body {
+        display: block;
+        max-height: 0px;
+        overflow: hidden;
+        -webkit-transform: translate3d(0,0,0);
+        -webkit-transition: max-height 350ms cubic-bezier(1.000, 0.000, 0.000, 1.000);
+        transform: translate3d(0,0,0);
+        transition: max-height 350ms cubic-bezier(1.000, 0.000, 0.000, 1.000);
+        -webkit-backface-visibility:hidden;
+        -webkit-perspective: 1000;
+}
+ 
+.collapsible-body.animated {
+        max-height: 1000px;
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+}
+
+#gn-menu {
+    -webkit-transition: width 0.6s cubic-bezier(0.8, 0, 0.2, 1) 0s, background-color 0.6s cubic-bezier(0.8, 0, 0.2, 1) 0s;
+    transition: width 0.6s cubic-bezier(0.8, 0, 0.2, 1) 0s, background-color 0.6s cubic-bezier(0.8, 0, 0.2, 1) 0s;
+}
+
+#gn-menu.headroom--pinned {
+    width: 100%;
+}
+
+#gn-menu.headroom--unpinned > li:not([class^="gn-trigger"]) {
+    font-size: 0px;
+    display: none;
+}
+
+#gn-menu.headroom--unpinned {
+    width: 60px;
+    background: transparent;
+}

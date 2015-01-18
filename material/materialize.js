@@ -262,23 +262,28 @@ jQuery.extend( jQuery.easing,
       function accordionOpen(object) {
         object.parent().toggleClass('active');
         if (object.parent().hasClass('active')){
-          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
+//          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
+          object.siblings('.collapsible-body').addClass('animated');
         }
         else{
-          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
+//          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
+          object.siblings('.collapsible-body').removeClass('animated');
         }
         $panel_headers.not(object).parent().removeClass('active');
-        $panel_headers.not(object).parent().children('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
+//        $panel_headers.not(object).parent().children('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
+$panel_headers.not(object).parent().children('.collapsible-body').removeClass('animated');
       }
 
       // Collapsible Open
       function collapsibleOpen(object) {
         object.parent().toggleClass('active');
         if (object.parent().hasClass('active')){
-          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
+//          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
+          object.siblings('.collapsible-body').addClass('animated');
         }
         else{
-          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
+//          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
+          object.siblings('.collapsible-body').removeClass('animated');
         }
       }
 

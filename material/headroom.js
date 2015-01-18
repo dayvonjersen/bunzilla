@@ -333,7 +333,7 @@
       var scrollingUp  = currentScrollY < this.lastKnownScrollY,
         pastOffset = currentScrollY <= this.offset;
   
-      return (scrollingUp && toleranceExceeded) || pastOffset;
+      return /*(scrollingUp && toleranceExceeded) ||*/ pastOffset;
     },
   
     /**
@@ -370,8 +370,8 @@
    */
   Headroom.options = {
     tolerance : {
-      up : 0,
-      down : 0
+      "up" : 0,
+      "down" : 0
     },
     offset : 0,
     scroller: window,

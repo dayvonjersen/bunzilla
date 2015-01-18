@@ -8,34 +8,41 @@ $(document).ready(function(){
     $('img').materialbox();
     $('.tooltipped').tooltip({"delay": 50});
 /**
- * codrops google nexus 7 menu initialization */
-    (new gnMenu( document.getElementById("gn-menu") ));
+ * codrops google nexus 7 menu 
+ * http://tympanus.net/codrops/?p=16030
+ *
+ * codrops example is based off of this:
+ * http://web.archive.org/web/20130731035203/http://www.google.com/nexus/
+ *
+ * additional fuckery c/o headroom.js 
+ * http://wicky.nillia.ms/headroom.js/
+ */
 
-/**
- * [hax intensify] 
- * xxx obsolete
-    function holyshit() {
-        var htmlHeight = document.documentElement.scrollHeight,
-            bodyHeight = null,//document.body.scrollHeight,
-            viewHeight = window.screen.availHeight,
-            troubleMaker = document.getElementById('mp-pusher');
-
-        bodyHeight = troubleMaker.scrollHeight;
-
-        if(htmlHeight == bodyHeight && htmlHeight < viewHeight)
-            troubleMaker.style.height = '100%';
-
-        else if(bodyHeight > viewHeight)
-        {
-            troubleMaker.style.height = 'auto';
-            document.querySelector('#mp-pusher > main').style.paddingBottom = navigator.mozApps ? "170px" : "150px"; //ffs
-        }
-
-                
+    function clozure(yes) {
+        setTimeout(function(){
+            nexus.style.overflow = yes ? "visible" : "hidden";
+        },500);
     }
-    window.addEventListener('resize', holyshit, false);
-    holyshit();
 
+    var nexus = document.getElementById("gn-menu"),
+        seven = document.querySelector('li.gn-trigger a'),
+        headroom = (new Headroom(nexus,{onPin: function(){clozure(true);}, onUnpin: function(){clozure(false);}}));
+
+    (new gnMenu(nexus));
+
+    headroom.init();
+
+    function muhClosures(evt){
+        headroom.pin()
+    }
+
+    seven.addEventListener('mouseover',muhClosures,false);
+    seven.addEventListener('click',muhClosures,false);
+    seven.addEventListener('touchstart',muhClosures,false);
+    
+});
+/*
+***************
  * todo : list.js **
     if(gEbI("sorttable_override"))
     {
@@ -79,7 +86,6 @@ $(document).ready(function(){
             }
         }, false);
    }     */
-});
 /** xxx
 function gEbI(id)
 {

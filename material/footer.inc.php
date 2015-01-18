@@ -12,6 +12,7 @@
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>jquery-2.1.3.min.js"></script>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>materialize.js"></script>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>gnmenu.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>headroom.js"></script>
         <script src="<?= BUNZ_HTTP_DIR,'material/' ?>cottontail.js"></script>
     </body>
 </html>
