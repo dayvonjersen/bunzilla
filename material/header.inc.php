@@ -103,4 +103,19 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
             <li class="hide-on-small-only"><a href="#" class="icon-emo-displeased">Maybe</a></li>
         </ul>
         </header>
+<?php
+if(!empty($this->flash))
+{
+?>
+        <script>
+document.body.onload = function() {
+<?php
+foreach($this->flash as $msg)
+    echo "\t",'toast("',htmlentities($msg,ENT_QUOTES),'",30000);',"\n";
+?>
+}
+        </script>
+<?php
+}
+?>
         <main>

@@ -190,40 +190,34 @@ class report extends Controller
             $this->abort('What are you doing!? No GET access baka!');
         
         if(isset($_POST['delete']))
-            $this->delete();
+            $location = $this->delete();
 
-        if(isset($_POST['status'],$_POST['updateStatus']))
-            $this->updateStatus((int)$_POST['status']);
+        elseif(isset($_POST['status'],$_POST['priority']))
+        {
+            $location = $this->updateStatus((int)$_POST['status'],(int)$_POST['priority']);
+        }
 
-        if(isset($_POST['toggleClosed']))
-            $this->toggleClosed();
+        $_SESSION['flash'] = serialize($this->flash);
+        header('Location: '.BUNZ_HTTP_DIR.$location.'?material');
+        exit;
     }
 
-    protected function updateStatus($status)
+    protected function updateStatus($status,$priority)
     {
-        if(selectCount('statuses','id = '.(int)$status))
+        if(selectCount('statuses','id = '.$status)&&selectCount('priorities','id = '.$priority))
         {
             db()->query(
                 'UPDATE reports 
-                 SET status = '.(int)$status
+                 SET status = '.$status.', 
+                     priority = '.$priority.
+                (isset($_POST['toggleClosed']) ? ', closed = NOT(closed) ' : '')
               .' WHERE id = '.$this->id
             );
-            $this->flash[] = 'Status changed.';
+            $this->flash[] = 'Status updated successfully.';
         } else {
-            $this->flash[] = 'No such status!';
+            $this->flash[] = 'Invalid form data!';
         }
-        $this->view($this->id);
-    }
-
-    protected function toggleClosed() 
-    {
-        db()->query(
-            'UPDATE reports
-             SET closed = NOT(closed)
-             WHERE id = '.$this->id
-        );
-        $this->flash[] = 'k.';
-        $this->view($this->id);
+        return 'report/view/'.$this->id;
     }
 
     protected function delete()
@@ -233,8 +227,12 @@ class report extends Controller
         )->fetchColumn(0);
 
         db()->query('DELETE FROM comments WHERE report = '.$this->id);
+        db()->query('DELETE FROM tag_joins WHERE report = '.$this->id);
+        db()->query('DELETE FROM status_log WHERE report = '.$this->id);
         db()->query('DELETE FROM reports WHERE id = '.$this->id);
+
         $this->flash[] = 'Report deleted.';
-        $this->category($catid);
+
+        return 'report/category/'.$catid;
     }
 }// this file could use some work

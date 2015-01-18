@@ -202,7 +202,7 @@ class post extends Controller
          (\'\',UNIX_TIMESTAMP(),:'.implode(',:',
             array_keys($this->data['params'])).')';
 
-        $location = BUNZ_HTTP_DIR.'report/view/'.(int)$id;
+        $location = BUNZ_HTTP_DIR.'report/view/'.(int)$id.'?material';
         if(!empty($_POST))
         {
             if($this->createReport($sql))
@@ -265,7 +265,9 @@ class post extends Controller
             {
                 $reportId = db()->lastInsertId();
                 $this->handleTags($reportId);
-                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId);
+                $this->flash[] = 'Report submitted!';
+                $_SESSION['flash'] = serialize($this->flash);
+                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId.'?material');
             }
         }
     }
