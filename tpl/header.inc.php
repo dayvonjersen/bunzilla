@@ -275,6 +275,7 @@ false;
 ?>
             </ul>
         </nav>
+<aside class="flash is-center icon-emo-coffee">come check out <h1><a href="/bunzilla/?material">the future</a></h1></aside>
 <?php
        
 if(!empty($this->flash))

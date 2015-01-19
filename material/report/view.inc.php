@@ -359,7 +359,20 @@ require BUNZ_TPL_DIR .'toolsModal.html';
 <a href="#toolsModal" data-for="message" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
                         <label for="comment">your insight on this issue</label>
                     </div>
-                    <div class="input-field center"><button type="submit" class="btn">post!</button></div>
+ <p class="input-field">
+            <label for="disable_nlbr"><s class="icon-paragraph prefix"></s></label>
+            <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) ? ' checked' : ''?>>
+            <label for="disable_nlbr">Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
+        </p>
+        <div class="input-field center">
+            <button type="reset" class="btn-flat white grey-text icon-cancel waves-effect"<?php
+if(empty($_POST))
+ echo <<<JAVASCRIPT
+onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
+JAVASCRIPT;
+?>><?= empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
+                    <button type="submit" class="btn light-blue icon-chat">post!</button></div>
+        </div>
             
                 </form>
             </section>

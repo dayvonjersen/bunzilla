@@ -211,6 +211,7 @@ class post extends Controller
                 $location .= '#reply-'.db()->lastInsertId();
             } else {
                 $_SESSION['params'] = serialize($this->data['params']);
+                $location .= '#comment';
             }
         }
         $_SESSION['flash'] = serialize($this->flash);

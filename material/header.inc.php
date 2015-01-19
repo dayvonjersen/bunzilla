@@ -112,4 +112,4 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
                 <p>By the way, the 1970s called. When are you coming home, grandpa?</p>
             </aside>
         </noscript>
-        <main class="waves-effect">
+        <main>
