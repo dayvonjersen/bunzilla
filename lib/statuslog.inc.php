@@ -81,7 +81,7 @@ class StatusLog {
 
         foreach($fields as $column => $value)
         {
-            if($old[$column] !== $value)
+            if($old[$column] != $value)
             {
                 if($column == 'closed')
                     $msg = ($old['closed'] ? 'Re-opened':'Closed'). ' report';

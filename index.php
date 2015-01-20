@@ -1,4 +1,10 @@
 <?php
+if(strpos($_SERVER['REMOTE_ADDR'],'192.168.1') !== 0 && !isset($_GET['material']))
+{
+    $_SESSION['flash'] = serialize(['/(^_^)\\']);
+    header('Location: /bunzilla?material');
+    exit;
+}
 require_once 'Bunzilla.php';
 
 require_once BUNZ_LIB_DIR . 'db.inc.php';

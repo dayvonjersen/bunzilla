@@ -14,3 +14,4 @@ class Changelog {
             'msg' => $msg
         ]);
     }
+}

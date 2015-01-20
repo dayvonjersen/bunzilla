@@ -8,7 +8,16 @@ require BUNZ_TPL_DIR . 'header.inc.php';
     about:bunzilla
 -->
 <div class="row">
-        <article class="col offset-m6 m6 s12 z-depth-2 pink white-text darken-3">
+        <article class="col s12 m6 z-depth-2 white">
+            <section style="max-height: 6em; overflow-y: auto">
+<h2>Recent Activity</h2>
+<?php
+foreach(db()->query('SELECT who, time, message FROM status_log ORDER BY time DESC LIMIT 10')->fetchAll(PDO::FETCH_ASSOC) as $log)
+    echo '<p><strong>',$log['who'],'</strong> ',$log['message'],'<br>',datef($log['time']),'</p>',"\n";
+?>
+            </section>
+        </article>
+        <article class="col m6 s12 z-depth-2 pink white-text darken-3">
             <header class="section no-pad-top z-depth-5">
                 <h1><?= BUNZ_PROJECT_TITLE ?></h1>
             </header>
