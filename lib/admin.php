@@ -50,17 +50,23 @@ class admin extends Controller
         switch($mode)
         {
             case 'category':
+                $tbl = 'categories';
+                break;
             case 'status':
+                $tbl = 'statuses';
+                break;
+
             case 'tag':
+                $tbl = 'tags';
                 break;
 
             default:
                 $this->abort('Unsupported action!');
         }
 
-        $mode .= 'Add';
-      
-        call_user_func_array([$this,$mode],$args);
+        call_user_func_array([$this,$mode.'Add'],$args);
+        Statuslog::create($mode, db()->lastInsertId(), 'created');
+        Cache::clear($tbl);
         $this->index();
     }
 
@@ -73,6 +79,9 @@ class admin extends Controller
         switch($mode)
         {
             case 'category':
+                $tbl = 'categories';
+                break;
+
             case 'status':
                 if(isset($_POST['default_status']))
                 {
@@ -81,20 +90,25 @@ class admin extends Controller
                         $this->abort('invalid status');
                     db()->query('UPDATE statuses SET `default` = 1 WHERE id = '.$id);
                     db()->query('UPDATE statuses SET `default` = 0 WHERE id != '.$id);
+                    Statuslog::create('status', $id, 'is now the default status');
+                    Cache::clear('statuses');
                     $this->flash[] = 'default status updated';
                     $this->index();
                     exit;
                 }
+                $tbl = 'statuses';
                 break;
 
             case 'tag':
+                $tbl = 'tags';
                 break;
 
             default:
                 $this->abort('Unsupported action!');
         }
-        $mode .= 'Edit';
-        call_user_func_array([$this,$mode],$args);
+        call_user_func_array([$this,$mode.'Edit'],$args);
+        Statuslog::create($mode, (int)$args[0], 'modified');
+        Cache::clear($tbl);
         $this->index();
     }
 
@@ -112,6 +126,12 @@ class admin extends Controller
                 db()->query('DELETE FROM tag_joins WHERE report IN (SELECT id FROM reports WHERE category = '.$id.')');
                 $reports = db()->query('DELETE FROM reports WHERE category = '.$id)->rowCount();
 
+                if($reports + $comments)
+                    Statuslog::globalMessage(sprintf('%d report%s and %d comment%s were purged by %s',
+                        $reports, $reports == 1 ? '' : 's', $comments, $comments == 1 ? '' : 's',
+                        $_SERVER['PHP_AUTH_USER']
+                    ));
+
                 $this->flash[] = $reports .' report(s) and '.$comments.' comment(s) were purged as a result of this action.';
                 break;
             case 'status':
@@ -127,6 +147,10 @@ class admin extends Controller
                     $this->flash[] = 'New default status is '.statusButton($default_status);
                 }
                 db()->query('UPDATE reports SET status = '.$default_status.' WHERE status = '.$id);
+                $stat = Cache::read('status');
+                Statuslog::create('status', $default_status, 
+                    'all reports previously marked '.$stat[$id]['title'].' are now marked as '.$stat[$id]['title']
+                );
                 break;
             case 'tag':
                 $table = 'tags';
@@ -139,7 +163,10 @@ class admin extends Controller
         }
         
         db()->query('DELETE FROM '.$table.' WHERE id = '.$id);
-
+        Statuslog::globalMessage(sprintf('%s "%s" was permanently deleted by %s',
+            $mode,Cache::read($table)[$id]['title'],$_SERVER['PHP_AUTH_USER']
+        ));
+        Cache::clear($table);
         $this->flash[] = $field .' permanently deleted. You monster.';
         $this->index();        
     }
@@ -149,6 +176,12 @@ class admin extends Controller
     public function move( $from, $to )
     {
         $reports = db()->query('UPDATE reports SET category = '.(int)$to.' WHERE category = '.(int)$from)->rowCount();
+        $cats = Cache::read('categories');
+        Statuslog::create('category',$to,sprintf(
+            'all reports in category "%s" were moved to "%s"',
+            $cats[$from]['title'],
+            $cats[$to]['title']
+        ));
         $this->index();
         $this->flash[] = $reports .' were moved to ';
     }

@@ -17,6 +17,71 @@ error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
 ini_set('display_errors', 1);
 ini_set('html_errors',0);
 
+function err_handler($no,$str,$file,$line,$context)
+{
+    switch($no) {
+        case E_ERROR:
+        case E_PARSE:
+        case E_CORE_ERROR:
+        case E_COMPILE_ERROR:
+            $type = 'what did you do jesus christ this should never happen';
+            break;
+
+        case E_WARNING:
+        case E_CORE_WARNING:
+        case E_COMPILE_WARNING:
+        case E_USER_WARNING:
+            $type = 'bretty srs';
+            break;
+
+        case E_RECOVERABLE_ERROR:
+            $type = 'we dodged a bullet this time guys';
+            break;
+
+        case E_STRICT:
+        case E_DEPRECATED:
+        case E_USER_DEPRECATED:
+            $type = 'DEPRECATED.';
+            break;
+        
+        case E_NOTICE:
+        case E_USER_NOTICE:
+        default:
+            $type = 'you can probably ignore this, but you should fix it anyway';
+    }
+
+    $_ERROR = ['severity' => $type,
+        'where' => basename($file).':'.$line,
+        'what' => $str
+    ];
+
+    if(BUNZ_DEVELOPMENT_MODE)
+        $_ERROR['witnesses'] = print_r($context,1);
+            
+    if(defined('BUNZ_TPL_DIR'))
+    {
+        require_once BUNZ_TPL_DIR . 'error.inc.php';
+        exit;
+    }
+
+    if(!headers_sent())
+        header('Content-Type: text/plain');
+
+    print_r($_ERROR);
+    exit(1);    
+}
+
+set_error_handler('err_handler');
+set_exception_handler(function($e)
+{
+    err_handler(E_PARSE, 
+        $e->getMessage(), 
+        $e->getFile(), 
+        $e->getLine(),
+        $e->getTrace()
+    );
+});
+
 /*
  * Internal Directories */
 define('BUNZ_DIR',  rtrim(realpath(__DIR__), '/').'/');
@@ -61,6 +126,13 @@ if(file_exists(BUNZ_RES_DIR.'settings.ini'))
             define('BUNZ_'.strtoupper($cat).'_'.strtoupper($def),$val);
 } else
     throw new RuntimeException('pls fix res/settings.ini kthxbai');
+
+// why did they get rid of __autoload() ._.
+spl_autoload_register(function($class) {
+    $class = BUNZ_LIB_DIR . strtolower(basename($class)) . '.inc.php';
+    if(file_exists($class))
+        require_once $class;
+});
 
 /**
  * this only takes the URL forwarded by apache
@@ -118,13 +190,15 @@ class Bunzilla
 class Controller 
 {
     protected $data = [];
-    protected $tpl;
+    protected $tpl  = null;
     protected $flash = [];
 
     private $auth = null;
 
     public function __construct()
     {
+        ob_start();
+
         $this->tpl = get_called_class();
         $this->auth = $this->auth();
 
@@ -159,7 +233,8 @@ class Controller
         $this->data['tags']       = Cache::read('tags');
         $this->data['priorities']       = Cache::read('priorities');
 
-        require_once BUNZ_TPL_DIR . $this->tpl . '.inc.php';
+        if(isset($this->tpl))
+            require_once BUNZ_TPL_DIR . $this->tpl . '.inc.php';
     }
 
     public function abort($error = false)

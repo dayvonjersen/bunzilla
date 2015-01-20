@@ -92,7 +92,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
     ~brand~ of our ~product~
 -->
             <li>
-                    <a href='<?= BUNZ_HTTP_DIR ?>?material'><?= $_BUNNIES[array_rand($_BUNNIES)]?></a>
+                    <a href='<?= BUNZ_HTTP_DIR ?>?material'>bunzilla<?php // $_BUNNIES[array_rand($_BUNNIES)] ?></a>
 
             </li>
 

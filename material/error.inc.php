@@ -1,7 +1,23 @@
 <?php
+ob_clean();
+
 $pageTitle = 'Whoops!';
 
 require BUNZ_TPL_DIR .'header.inc.php';
+
+if(isset($_ERROR))
+{
+?>
+    <article class="yellow container">
+        <header><h1>PHP Error</h1></header>
+<?php
+    foreach($_ERROR as $thing => $problem)
+        echo '<section class="section white"><strong>',$thing,':</strong> <pre>',$problem,'</pre></section>',"\n";
+?>
+    </article>
+<?php
+    exit;
+}
 ?>
 <h1>HTTP/1.1 404: Duck Season</h1>
 <h2>That's an error</h2>

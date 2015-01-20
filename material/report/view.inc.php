@@ -350,12 +350,12 @@ require BUNZ_TPL_DIR .'toolsModal.html';
     
                     <div class="input-field">
                         <i class="icon-mail prefix"></i>
-                        <input type="email" id="email" maxlength='255' name='email' value="<?= $this->auth() ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled"' : $this->data['params']['email'] . '" required' ?>>
+                        <input type="email" id="email" maxlength='255' name='email' value="<?= $this->auth() ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled"' : (isset($this->data['params']) ? $this->data['params']['email'] : '') . '" required' ?>>
                         <label for="email">email</label>
                     </div>
                     <div class="input-field">
                         <i class="icon-chat prefix"></i>
-                        <textarea id="comment" class="materialize-textarea" required name='message'><?= empty($_POST) ? $this->data['params']['message'] : unfiltermessage($this->data['params']['message']) ?></textarea>
+                        <textarea id="comment" class="materialize-textarea" required name='message'><?= empty($_POST) ? '' : unfiltermessage($this->data['params']['message']) ?></textarea>
 <a href="#toolsModal" data-for="message" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
                         <label for="comment">your insight on this issue</label>
                     </div>

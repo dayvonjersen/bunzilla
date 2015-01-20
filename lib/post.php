@@ -126,6 +126,9 @@ class post extends Controller
             $sql = 'UPDATE '.($commentId === false ? 'report' : 'comment').'s SET '.implode(', ',$set).' WHERE id = '.($commentId === false ? $reportId : $commentId);
             if($this->createReport($sql))
             {
+                if($commentId === false)
+                    Statuslog::create('report', $reportId, 'made an edit');
+
                 $this->flash[] = 'Your desired changes were made.';
                 $_SESSION['flash'] = serialize($this->flash);
                 header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId.($commentId !== false? '#reply-'.$commentId : ''));
@@ -143,22 +146,30 @@ class post extends Controller
 
     private function getFilterOptions($mode = 'report')
     {
-        $filtOpts = [];
+        $filtOpts = new Filter();
+        $filtOpts->addEmail();
+//        $filtOpts = [];
 
-        $filtOpts['email'] = filterOptions(1,'email');
+//        $filtOpts['email'] = filterOptions(1,'email');
 
+        $callback = [$this,'messageFilter'];
         if($mode === 'comment')
         {
-            $filtOpts['message'] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+//            $filtOpts['message'] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+            $filtOpts->addCallback('message',$callback);
             return $filtOpts;
         }
 
-        $filtOpts['subject'] = filterOptions(0,'full_special_chars');
+//        $filtOpts['subject'] = filterOptions(0,'full_special_chars');
+        $filtOpts->addString('subject');
         //$filtOpts['status']  = filterOptions(0,'number_int');
         foreach(['description','reproduce','expected','actual'] as $field)
         {
             if($this->data['category'][$field])
-                $filtOpts[$field] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+            {
+//                $filtOpts[$field] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+                $filtOpts->addCallback($field, $callback);
+            }
         }
 
         return $filtOpts;       
@@ -184,7 +195,8 @@ class post extends Controller
         $this->checkReport($id);
 
         $filtOpts = $this->getFilterOptions('comment');
-        $this->data['params'] = filter_input_array(INPUT_POST,$filtOpts);
+//        $this->data['params'] = filter_input_array(INPUT_POST,$filtOpts);
+        $this->data['params'] = $filtOpts->input_array();
         // force identity for logged in developers
         if($this->auth())
             $this->data['params']['email'] = 
@@ -209,6 +221,9 @@ class post extends Controller
             {
                 $this->flash[] = 'Comment added.';
                 $location .= '#reply-'.db()->lastInsertId();
+
+                if($this->auth() && isset($_POST['changelog']))
+                    Changelog::append($this->data['params']['message']);
             } else {
                 $_SESSION['params'] = serialize($this->data['params']);
                 $location .= '#comment';
@@ -241,7 +256,11 @@ class post extends Controller
 
         $filtOpts = $this->getFilterOptions('report');
 
-        $this->data['params'] = filter_input_array(INPUT_POST,$filtOpts);
+       // throw new Exception(print_r($filtOpts,1));
+//        $q = filter_input_array(INPUT_POST,$filtOpts,true);
+//        $this->data['params'] = array_merge($q,array_combine(array_keys($filtOpts),array_fill(0,count($filtOpts),"")));
+
+        $this->data['params'] = $filtOpts->input_array();
         // force identity for logged in developers
         if($this->auth())
             $this->data['params']['email'] = 
@@ -252,6 +271,7 @@ class post extends Controller
         $this->data['params']['ip'] = remoteAddr();
         $this->data['params']['epenis'] = (int)$this->auth();
 
+//throw new Exception(print_r($this->data['params'],1));
         $sql = 'INSERT INTO reports 
 
         (id,time,'.implode(',',array_keys($this->data['params'])).')
@@ -277,7 +297,7 @@ class post extends Controller
      * Callback to format/filter posts 
      * Taken straight from forum software I made as a teenager
      */
-    private function messageFilter($msg)
+    public function messageFilter($msg)
     {
         $msg = htmlspecialchars($msg);
         $msg = trim(str_replace([chr(7),chr(160),chr(173)], '', $msg));

@@ -46,7 +46,7 @@ function badge( $type, $id, $short = false, $z = 1 )
     if(!in_array($type,['tag','status','priority'],true))
         throw new InvalidArgumentException(__FUNCTION__);
 
-    static $tags = null;
+    static $tag = null;
     static $status = null;
     static $priorities = null;
     if($$type === null)

@@ -24,7 +24,7 @@ require BUNZ_TPL_DIR .'toolsModal.html';
                     value=<?= 
 $this->auth() 
 ? '"' . $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled' 
-: '"' . $this->data['params']['email'] . '" required' ?>>
+: '"' . (isset($this->data['params']) ? $this->data['params']['email'] : '') . '" required' ?>>
             <label for="email">email</label>
         </div>
         <div class="input-field">
@@ -35,7 +35,7 @@ $this->auth()
                     name="subject"
                     autofocus
                     required
-                    value="<?= $this->data['params']['subject'] ?>">
+                    value="<?= isset($this->data['params']) ? $this->data['params']['subject'] : '' ?>">
             <label for="subject">subject</label>
         </div>
 <?php
@@ -55,7 +55,7 @@ foreach($fields as $name => $placeholder)
             <textarea id="<?= $name ?>"
                       class="materialize-textarea" 
                       required 
-                      name='<?= $name ?>'><?= empty($_POST) ? $this->data['params'][$name] : unfiltermessage($this->data['params'][$name]) ?></textarea>
+                      name='<?= $name ?>'><?= empty($_POST) ? '' : unfiltermessage($this->data['params'][$name]) ?></textarea>
             <a href="#toolsModal" data-for="<?= $name ?>" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
             <label for="<?= $name ?>"><?= $name, ': ', $placeholder ?></label>
         </div>
