@@ -29,7 +29,7 @@ class StatusLog {
         if($column == 'report')
             db()->query(
                 'UPDATE reports 
-                 SET updated_at = UNIX_TIMESTAMP() W
+                 SET updated_at = UNIX_TIMESTAMP() 
                  WHERE id = '.$column_id
             );
 
@@ -47,8 +47,6 @@ class StatusLog {
             'usr' => $usr,
             'msg' => $msg
         ]);
-global class 
-    ma
     }
 
     public static function globalMessage( $msg ) {
@@ -59,8 +57,8 @@ global class
     }
 
     // maybe later
-    abstract public static function read();
-    abstract public static function update();
+    //abstract public static function read();
+    //abstract public static function update();
 
     public static function delete( $column, $column_id )
     {

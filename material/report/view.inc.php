@@ -140,7 +140,7 @@ if(empty($this->data['status_log']))
 foreach($this->data['status_log'] as $log)
 {
 ?>
-                        <p><?= $log['message'] ?><br><small><?=datef($log['time'])?></small></p>
+                        <p><strong><?= $log['who'] ?></strong> <?= $log['message'] ?><br><small><?=datef($log['time'])?></small></p>
 <?php
 }
 ?>
@@ -158,7 +158,7 @@ if($this->auth())
                 <h5 class="white-text">update status to</h5>
 
                 <form class="category-<?=$cat['id']?>-lighten-5 z-depth-5 section" 
-                      action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>" 
+                      action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>?material" 
                       method="post">
 
                     <fieldset class="row">

@@ -122,7 +122,7 @@ class report extends Controller
              WHERE report = '.$this->id)->fetchAll(PDO::FETCH_NUM);
 
         $this->data['status_log'] = db()->query(
-            'SELECT message,time FROM status_log WHERE report = '.$this->id.' ORDER BY time DESC'
+            'SELECT who,message,time FROM status_log WHERE report = '.$this->id.' ORDER BY time DESC'
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['category_id'] = $this->data['report']['category'];
@@ -206,6 +206,10 @@ class report extends Controller
     {
         if(selectCount('statuses','id = '.$status)&&selectCount('priorities','id = '.$priority))
         {
+            $statlog = ['status' => $status, 'priority' => $priority];
+            isset($_POST['toggleClosed']) && $statlog['closed'] = -1;
+            Statuslog::reportMetadata($this->id, $statlog);
+
             db()->query(
                 'UPDATE reports 
                  SET status = '.$status.', 
@@ -225,6 +229,8 @@ class report extends Controller
         $catid = db()->query(
             'SELECT category FROM reports WHERE id = '.$this->id
         )->fetchColumn(0);
+
+        Statuslog::create('category', $catid, 'deleted a report');
 
         db()->query('DELETE FROM comments WHERE report = '.$this->id);
         db()->query('DELETE FROM tag_joins WHERE report = '.$this->id);
