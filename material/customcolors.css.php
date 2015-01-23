@@ -1,87 +1,78 @@
 <?php
 require_once '../Bunzilla.php';
-require_once 'color.php';
+require_once 'color.php'; // see also this file
 require_once '../lib/cache.inc.php';
 require_once '../lib/db.inc.php';
-
-header('Content-Type: text/css; charset=utf-8');
-
-foreach(Cache::read('statuses') as $id => $data)
+/**
+ * standard theming */
+function createCSSRule( $className, $color, $inverse = false )
 {
-    $color = new Color($data['color']);
+    if(!($color instanceof Color))
+        $color = new Color($color);
 
-    echo '.status-',$id,' {
-    background-color: ',$color,';
-    color: ',$color->getTextColor(),' !important;
-}',"\n";
+    return [$className =>  
+                ['background-color' => $inverse ? 
+                    $color->getTextColor() : (string)$color,
+                 'color' => $inverse ? 
+                    (string)$color : $color->getTextColor(),
+                ]
+    ];
 }
-
-foreach(Cache::read('tags') as $id => $data)
+/**
+ * useful alternate colors */
+function createShades( $className, $color )
 {
-    $color = new Color($data['color']);
-
-    echo '.tag-',$id,' {
-    background-color: ',$color,';
-    color: ',$color->getTextColor(),' !important;
-}',"\n";
-}
-
-foreach(Cache::read('priorities') as $data)
-{
-    $color = new Color($data['color']);
-
-    echo '.priority-',$data['id'],' {
-        background-color: ',$color,' !important;
-        color: ',$color->getTextColor(),' !important;
-        font-size: xx-small !important;
-}
-',"\n";
-}
-
-foreach(Cache::read('categories') as $id => $data)
-{
-    $color = new Color($data['color']);
-
-    echo '.category-',$id,'-base {
-    background-color: ',$color,';
-    color: ',$color->getTextColor(),';
-}
-.category-',$id,'-text {
-    color: ',$color,' !important;
-    background-color: ',$color->getTextColor(),';
-}',"\n";
+    $color = new Color($color);
+    $ret = [];
+    $ret += createCSSRule("$className-base",$color);
+    $ret += createCSSRule("$className-text",$color,true);
 
     for($i = 1; $i <= 5; $i++)
     {
-        $color->lighten($i * 5);
-        
-        echo '.category-',$id,'-lighten-',$i,' {
-    background-color: ',$color,';
-    color: ',$color->getTextColor(),';
-}',"\n";
+        $color->lighten($i);
+        $ret += createCSSRule("$className-lighten-$i",$color);
     }
-
     $color->undo();
-
     for($i = 1; $i < 5; $i++)
     {
-        $color->darken($i * 5);
-        
-        echo '.category-',$id,'-darken-',$i,' {
-    background-color: ',$color,';
-    color: ',$color->getTextColor(),';
-}',"\n";
+        $color->darken($i);
+        $ret += createCSSRule("$className-darken-$i",$color);
     }
+    return $ret;
 }
-
-/*** XXX idea
-$_ = [
-    'class-name' => ['background'=>'#fff','color'=>'#000']
-];
-foreach($_ as $class => $rules)
+/**
+ * holds all the css rules */
+$_ = [];
+/**
+ * defined in res/settings.ini */
+foreach(['primary','secondary','shade'] as $className)
 {
+    if(defined('BUNZ_THEME_'.strtoupper($className).'_COLOR'))
+        $_ += createShades(
+                $className,
+                constant('BUNZ_THEME_'.strtoupper($className).'_COLOR')
+        );
+}
+/**
+ * weeee */
+foreach(Cache::read('statuses') as $id => $data)
+    $_ += createCSSRule("status-$id",$data['color']);
+
+foreach(Cache::read('tags') as $id => $data)
+    $_ += createCSSRule("tag-$id",$data['color']);
+
+foreach(Cache::read('priorities') as $id => $data)
+    $_ += createCSSRule("priority-$id",$data['color']);
+
+foreach(Cache::read('categories') as $id => $data)
+    $_ += createShades("category-$id", $data['color']);
+/**
+ * output tiem */
+header('Content-Type: text/css; charset=utf-8');
+foreach($_ as $selector => $rules)
+{
+    $css = [];
     foreach($rules as $property => $value)
-    {   $rules[] = sprintf('%s: %s',$property,$value);
-        unset($rules[$property]); }
-    printf('.%s{%s}',implode(';',$rules));
-}***/
+        $css[] = sprintf('%s: %s',$property,$value);
+    printf('.%s{%s}', $selector, implode(';',$css));
+}

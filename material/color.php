@@ -182,12 +182,23 @@ class Color {
         return $this->adjust('lightness',-1 * $percent);
     }
 
+//  public function pullHairOut()
     public function getTextColor()
     {
-        return self::fstop(
-            self::luminanace([255,255,255])/self::luminanace($this->rgb) 
-                >= self::CONTRAST_RATIO ? [255,255,255] : [0,0,0]
-        );
+//        return self::fstop(
+//            self::luminanace([255,255,255])/self::luminanace($this->rgb) 
+//                >= self::CONTRAST_RATIO ? [255,255,255] : [0,0,0]
+//        );
+
+          $tempColor = new self(substr(self::fstop($this->rgb),1));
+          $luma = self::luminanace($this->rgb);
+
+          $method = (self::luminanace([255,255,255])/$luma) >= self::CONTRAST_RATIO ? 'lighten' : 'darken';
+          $i = 1;
+          while(self::CONTRAST_RATIO > (self::luminanace($tempColor->rgb)/$luma) && $i < 99)
+            $tempColor->$method($i++);
+//            trigger_error("CONTRAST RATIO: ".self::CONTRAST_RATIO."\n LUMIA TEMP COLOR: ".self::luminanace($tempColor->rgb)."\n LUMIA BASE COLOR: $luma",E_USER_ERROR);/*ffffffffffffffff*/
+          return self::fstop($tempColor->rgb);
     }
 
     public function __toString()

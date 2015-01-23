@@ -34,6 +34,13 @@ class report extends Controller
     {
         $this->tpl .= '/index';
 
+        $this->data['recent_activity'] = db()->query(
+            'SELECT *
+             FROM status_log
+             ORDER BY time DESC
+             LIMIT 10'
+        )->fetchAll(PDO::FETCH_ASSOC);
+
         $stats = [];
         $cats = Cache::read('categories');
         foreach($cats as $id => $cat)

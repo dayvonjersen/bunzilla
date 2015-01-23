@@ -28,7 +28,7 @@ class search extends Controller
                 $criterion,$matches
             )) {
                 list($field, $value) = $matches;
-                $specific[] = $field .' LIKE '.db()->quote("%$value%")
+                $specific[] = $field .' LIKE '.db()->quote("%$value%");
                 continue;
             }
 
@@ -98,7 +98,7 @@ class search extends Controller
             ORDER BY t.title
         ')->fetchAll(PDO::FETCH_NUM) as $row)
         {
-            $ret[$row[0]] = $row[1]
+            $ret[$row[0]] = $row[1];
         }
         return $ret;
     }

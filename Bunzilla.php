@@ -7,8 +7,8 @@
 /**
  * Preliminary stuff */
 define('BUNZ_START_TIME', microtime(1));
-define('BUNZ_SIGNATURE', 'Bunzilla bug tracker');
-define('BUNZ_VERSION', '0.1a');
+define('BUNZ_SIGNATURE', 'tracked by Bunzilla');
+define('BUNZ_VERSION', '0.2a');
 define('BUNZ_DEVELOPMENT_MODE', true); // always true
 
 /**
@@ -87,7 +87,7 @@ set_exception_handler(function($e)
 define('BUNZ_DIR',  rtrim(realpath(__DIR__), '/').'/');
 define('BUNZ_RES_DIR', BUNZ_DIR . 'res/');
 define('BUNZ_LIB_DIR', BUNZ_DIR . 'lib/');
-define('BUNZ_TPL_DIR', BUNZ_DIR . (isset($_GET['material']) ? 'material/' : 'tpl/')); // temporary transition
+define('BUNZ_TPL_DIR', BUNZ_DIR . 'material/'); // xxx temporary transition
 define('BUNZ_CACHE_DIR', BUNZ_DIR . 'cache/');
 
 /**

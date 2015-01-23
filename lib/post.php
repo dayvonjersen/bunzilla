@@ -270,6 +270,7 @@ class post extends Controller
 
         $this->data['params']['ip'] = remoteAddr();
         $this->data['params']['epenis'] = (int)$this->auth();
+        $this->data['params']['priority'] = db()->query('SELECT id FROM priorities WHERE `default` = 1')->fetchColumn();
 
 //throw new Exception(print_r($this->data['params'],1));
         $sql = 'INSERT INTO reports 
