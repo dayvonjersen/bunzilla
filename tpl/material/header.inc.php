@@ -3,7 +3,7 @@
 
 // random bunny emotes
 // http://japaneseemoticons.net/ <- go there, highly recommended
-require_once BUNZ_DIR . 'tpl/bunnies.php';
+require_once BUNZ_TPL_DIR . 'bunnies.php';
 require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 ?>
 <!DOCTYPE html>
@@ -20,14 +20,14 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 
 <!--        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>-->
 <!--        <link rel='stylesheet' href='/bunzilla/material/materialize.min.css'>-->
-        <link rel='stylesheet' href='/bunzilla/material/matfix03.css'>
+        <link rel='stylesheet' href='/bunzilla/tpl/material/matfix03.css'>
 
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
-        <link rel='stylesheet' href='/bunzilla/material/temp.css'>
-        <link rel='stylesheet' type='text/css' href='/bunzilla/material/customcolors.css.php'>
+        <link rel='stylesheet' href='/bunzilla/tpl/material/temp.css'>
+        <link rel='stylesheet' type='text/css' href='/bunzilla/tpl/material/customcolors.css.php'>
 
-        <link rel='stylesheet' href='/bunzilla/material/gn-codrops.css'>
+        <link rel='stylesheet' href='/bunzilla/tpl/material/gn-codrops.css'>
     </head>
 
 <!-- 

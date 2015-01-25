@@ -87,7 +87,9 @@ set_exception_handler(function($e)
 define('BUNZ_DIR',  rtrim(realpath(__DIR__), '/').'/');
 define('BUNZ_RES_DIR', BUNZ_DIR . 'res/');
 define('BUNZ_LIB_DIR', BUNZ_DIR . 'lib/');
-define('BUNZ_TPL_DIR', BUNZ_DIR . 'material/'); // xxx temporary transition
+define('BUNZ_CTL_DIR', BUNZ_DIR . 'ctl/');
+//define('BUNZ_TPL_DIR', BUNZ_DIR . 'material/'); // xxx temporary transition
+define('BUNZ_TPL_BASE_DIR', BUNZ_DIR . 'tpl/');
 define('BUNZ_CACHE_DIR', BUNZ_DIR . 'cache/');
 
 /**
@@ -99,6 +101,12 @@ define('BUNZ_JS_DIR',  BUNZ_HTTP_DIR . 'js/');
 // bad ideas++
 define('BUNZ_DIFF_DIR', BUNZ_HTTP_DIR . 'diff/');
 
+// why did they get rid of __autoload() ._.
+spl_autoload_register(function($class) {
+    $class = BUNZ_LIB_DIR . strtolower(basename($class)) . '.inc.php';
+    if(file_exists($class))
+        require_once $class;
+});
 /*
  * More definitions... 
  *
@@ -109,7 +117,30 @@ define('BUNZ_DIFF_DIR', BUNZ_HTTP_DIR . 'diff/');
  * User config (find in res/settings.ini) */
 if(file_exists(BUNZ_RES_DIR.'settings.ini'))
 {
-    $cfg = parse_ini_file(BUNZ_RES_DIR.'settings.ini',1);
+    $cfg = (
+        parse_ini_file(BUNZ_RES_DIR.'settings.ini',1) +
+        ['bunzilla' => [], 'project' => [], 'theme' => []]
+    );
+    $filt = new Filter;
+    $filt->addBool('allow_anonymous');
+    $filt->addBool('require_captcha');
+    $filt->addBool('do_the_cron');
+    $filt->add('date_format',FILTER_SANITIZE_STRING);
+    $cfg['bunzilla'] = $filt->var_array($cfg['bunzilla']);
+
+    $filt = new Filter;
+    $filt->addString('title');
+    $filt->addString('version');
+    $filt->addString('mission_statement');
+    $cfg['project'] = $filt->var_array($cfg['project']);
+
+    $filt = new Filter;
+    $filt->addString('default_template');
+    $filt->addString('primary_color');
+    $filt->addString('secondary_color');
+    $filt->addString('shade_color');
+    $cfg['theme'] = $filt->var_array($cfg['theme']);
+/*
     filter_var_array($cfg['bunzilla'], [
         'allow_anonymous' => FILTER_VALIDATE_BOOLEAN,
         'require_captcha' => FILTER_VALIDATE_BOOLEAN,
@@ -121,18 +152,13 @@ if(file_exists(BUNZ_RES_DIR.'settings.ini'))
         'version' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
         'mission_statement' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
     ]);
+*/
     foreach($cfg as $cat => $settings)
         foreach($settings as $def => $val)
             define('BUNZ_'.strtoupper($cat).'_'.strtoupper($def),$val);
 } else
     throw new RuntimeException('pls fix res/settings.ini kthxbai');
 
-// why did they get rid of __autoload() ._.
-spl_autoload_register(function($class) {
-    $class = BUNZ_LIB_DIR . strtolower(basename($class)) . '.inc.php';
-    if(file_exists($class))
-        require_once $class;
-});
 
 /**
  * this only takes the URL forwarded by apache
@@ -150,13 +176,13 @@ class Bunzilla
     {
         $url = $this->parseUrl();
 
-        if(file_exists(BUNZ_LIB_DIR.$url[0].'.php'))
+        if(file_exists(BUNZ_CTL_DIR.$url[0].'.php'))
         {
             $this->controller = $url[0];
             unset($url[0]);
         }
 
-        require_once BUNZ_LIB_DIR.$this->controller.'.php';
+        require_once BUNZ_CTL_DIR.$this->controller.'.php';
 
         $this->controller = new $this->controller;
 
@@ -195,8 +221,26 @@ class Controller
 
     private $auth = null;
 
+    protected function setTemplate()
+    {
+        $tpl = BUNZ_THEME_DEFAULT_TEMPLATE;
+        if(isset($_GET['json']))
+            $tpl = 'json';
+        elseif(isset($_GET['rss']))
+            $tpl = 'rss';
+        elseif(isset($_GET['nofrills']))
+            $tpl = 'nofrills';
+
+        if(!is_dir(BUNZ_TPL_BASE_DIR . $tpl))
+            exit("fux.");
+
+        define('BUNZ_TPL_DIR', BUNZ_TPL_BASE_DIR . $tpl . '/');
+    }
+
     public function __construct()
     {
+        $this->setTemplate();
+
         ob_start();
 
         $this->tpl = get_called_class();

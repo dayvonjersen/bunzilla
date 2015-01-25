@@ -55,7 +55,7 @@ class report extends Controller
              WHERE category = '.$id
             )->fetchAll(PDO::FETCH_ASSOC));
 
-            if($stats[$id]['total_issues'])
+/*            if($stats[$id]['total_issues'])
             {
                 $field = $this->getPreviewField($id);
                 $field = $field 
@@ -81,7 +81,7 @@ class report extends Controller
                 $latest_issue = null;
             }
             $stats[$id]['latest_issue'] = $latest_issue;
-
+*/
             $stats[$id]['open_issues'] = selectCount('reports','closed = 0 AND category = '.$id);
         }
         $this->data['stats'] = $stats;

@@ -80,7 +80,7 @@ foreach(db()->query('SELECT message FROM change_log ORDER BY time DESC')->fetchA
             <section id="tagCloud" class="section primary-darken-2">
                 <div class="section primary-lighten-4 center" style="max-height: 14em; overflow-y: auto">
 <?php
-require_once BUNZ_LIB_DIR . 'search.php';
+require_once BUNZ_CTL_DIR . 'search.php';
 $tags = search::getTagCloud();
 $unused = [];
 $sum = array_sum($tags);

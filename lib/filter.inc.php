@@ -71,11 +71,45 @@ class Filter
         $this->add($key, self::_filterOptions(0,'number_int'));
     }
 
+    public function addBool($key)
+    {
+        $this->add($key, self::_filterOptions(1,'boolean'));
+    }
+
     // all this so I can get an empty, keyed array for blank forms
     // ._.;
     public function input_array()
     {
-        $result = filter_input_array(INPUT_POST,$this->options);
+        return $this->apply('input','post');
+    }
+
+    public function var_array($var_array)
+    {
+        return $this->apply('var',$var_array);
+    }
+
+    protected function apply($function = 'input', $target = 'post', $empty = '')
+    {
+        switch($function)
+        {
+            case 'input':
+                $function = 'filter_input_array';
+                $target = $target === 'get' ? INPUT_GET : INPUT_POST;
+                break;
+            case 'var':
+                $function = 'filter_var_array';
+                if(!is_array($target))
+                    throw new InvalidArgumentException('filter_var_array()'
+                        .' expects array argument, '
+                        .strtoupper(gettype($target)).' given.');
+                break;
+            default:
+                throw new InvalidArgumentException(__METHOD__
+                    .' only does filter_(input|var)_array');
+        }
+
+        $result = $function($target,$this->options);
+
         if(count($result) < count($this->options))
         {
             $justkeys = array_combine(

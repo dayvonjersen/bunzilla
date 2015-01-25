@@ -233,4 +233,4 @@ textarea:focus ~ a[href="#toolsModal"] { opacity: 1; }
 #withToolsModal div.input-field { position: relative; }
 
 div.indicator { max-width: 10px !important }
-a { color: currentColor !important; }
+a { color: inherit; }

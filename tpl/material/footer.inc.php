@@ -9,11 +9,11 @@
                     </div>
                 </div>
         </footer>
-        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>jquery-2.1.3.min.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>materialize.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>gnmenu.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>headroom.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'material/' ?>cottontail.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>jquery-2.1.3.min.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>materialize.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>gnmenu.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>headroom.js"></script>
+        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>cottontail.js"></script>
 <?php
 if(!empty($this->flash))
 {
