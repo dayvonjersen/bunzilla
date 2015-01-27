@@ -2,19 +2,19 @@
 $cat = $this->data['category'];
 
 $pageTitle = 'Submit New &quot;'.$cat['title'].'&quot;';
+$background = "category-{$cat['id']}-base";
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 
 require BUNZ_TPL_DIR .'toolsModal.html';
 ?>
-<div class="category-<?= $cat['id'] ?>-base container">
+<h1 class="icon-plus"><?= $pageTitle ?></h1>
 <form action="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>?material"
       id="withToolsModal"
       method="post"
-      class="category-<?= $cat['id'] ?>-text">
+      class="section">
 
-    <div class="section">
-         <h1 class="icon-plus"><?= $pageTitle ?></h1>
+    <div class="section  category-<?= $cat['id'] ?>-text" style="padding-top: 1em;">
          <div class="input-field">
             <i class="icon-mail prefix"></i>
             <input type="email" 
@@ -109,6 +109,5 @@ JAVASCRIPT;
         </div>
     </div>
 </form>
-</div>
 <?php
 require BUNZ_TPL_DIR .'footer.inc.php';

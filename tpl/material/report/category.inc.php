@@ -4,12 +4,13 @@
 //
 $cat = $this->data['categories'][$this->data['category_id']];
 $pageTitle = $cat['title'];
+$background="category-{$cat['id']}-base";
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<div style="height: 100%;">
+<div class="section">
 <!--
     about:category
 -->
@@ -20,7 +21,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 <!-- 
                     title 
                 -->
-                <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base'>
+                <section class='section col s12 z-depth-5'>
 
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" 
                        class="right btn btn-floating z-depth-5 transparent" 
@@ -35,7 +36,7 @@ if($this->auth())
 <?php
 }
 ?>
-                    <h4 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h4>
+                    <h1 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h1>
                     <h6><?= $cat['caption'] ?></h6>
 
                 <!--
@@ -64,7 +65,7 @@ if(empty($this->data['reports']))
             kill me now
             ok I will
         -->
-<script src="/bunzilla/material/list.min.js"></script>
+<script src="/bunzilla/tpl/material/list.min.js"></script>
 <script>
 //
 // list.js! http://listjs.com
@@ -82,14 +83,14 @@ document.body.onload = function(){
 <!--
     dear god
 -->
-<div class="category-<?= $cat['id'] ?>-lighten-1 z-depth-2" id="list">
-    <div class="section no-pad-bot ">
-    <div class="row black white-text z-depth-1"  id="fuck"><!-- me -->
+<div class="section" id="list">
+    <div class="no-pad-bot ">
+    <div class="row shade-lighten-5 z-depth-5"  id="fuck"><!-- me -->
     <div class="col s12 m4 ">
 
         <div class="col s3  right-align">
         <button data-sort="closed" 
-           class="sort btn-flat waves-effect waves-light icon-lock tooltipped" data-position="bottom" data-tooltip="sort by open/closed"
+           class="sort btn-flat waves-effect icon-lock tooltipped" data-position="bottom" data-tooltip="sort by open/closed"
         ><i class="icon-sort"></i></button>
         </div>
 
@@ -132,7 +133,7 @@ document.body.onload = function(){
     </div>
     </div><!-- asdfasdfasdfasdf -->
 
-    <ul class="list collapsible">
+    <ul class="list collapsible section no-pad-top">
 <?php
 //
 // tidy can be used to fix up html from truncated message "previews"
@@ -164,10 +165,10 @@ document.body.onload = function(){
 
 <?php // it looks like a lot of markup because it is. ?>
             <div class="collapsible-header no-select">
-                <div class="row">
+                <div class="row z-depth-5">
 
 <?php // [icon] subject line blablabla [status] ?>
-                    <div class="col s12 z-depth-5">
+                    <div class="col s12">
 
                         <span class="left">
 <?php //  '<i class="icon-lock grey-text" title="CLOSED."></i>' : priority($report['priority'],1) 
@@ -175,8 +176,8 @@ document.body.onload = function(){
                         </span>
 
                         <span class="subject-line h6" title="<?= $report['subject'] ?>">
-                            <a class="icon-<?= $report['closed'] ? 'lock' : 'doc-text-inv'?>" 
-                               href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material'?>"><?= $report['subject'] ?></a>
+                            <a class="flow-text icon-<?= $report['closed'] ? 'lock' : 'doc-text-inv'?>" 
+                               href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#subject'?>"><?= $report['subject'] ?></a>
                         </span>
 
                         <span class="right"><?= status($report['status']) ?></span>
@@ -240,7 +241,7 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.
         }  
 ?>
                     <p class="section no-pad-bot"><a class="icon-doc-text-inv btn-flat category-<?= $cat['id'] ?>-darken-2 waves-effect" 
-                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'?material'?>">Full Report &rarr;</a></p>
+                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'#subject'?>">Full Report &rarr;</a></p>
                 </blockquote>
             </div>
         </li>       

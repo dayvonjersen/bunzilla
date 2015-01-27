@@ -4,6 +4,7 @@
 //
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
+<div style="height: 100%">
 <!--
     about:bunzilla
 -->
@@ -204,4 +205,7 @@ if(empty($this->data['categories']))
             $i++;
     }
 }
+?>
+    </div>
+<?php
 require BUNZ_TPL_DIR . 'footer.inc.php';

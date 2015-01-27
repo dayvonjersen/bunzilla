@@ -34,13 +34,13 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
     main screen turn on
 -->
     <body id="bunzilla">
-   <div id="page-wrap">
+   <div id="page-wrap"<?= isset($background) ? " class='$background'" : ''?>>
         <header>
 
 <!--
     google nexus 7 product page menu from codrops
 -->
-        <ul id="gn-menu" class="gn-menu-main z-depth-1">
+        <ul id="gn-menu" class="gn-menu-main">
 <!--
     sidebar
 -->
