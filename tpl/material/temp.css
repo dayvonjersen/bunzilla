@@ -6,9 +6,16 @@ body > main { height: calc(100% - 170px); }**
 AAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 */
+html {
+
+    /**
+     * sv_cheats 1 */
+    overflow-x: hidden; 
+    overflow-x: -moz-hidden-unscrollable;
+}
 html,body#bunzilla { height: 100% !important; }
 body#bunzilla { margin: 60px 0 0 0 !important; }
-#page-wrap { min-height: 100% !important; margin-bottom: -150px !important; }
+#page-wrap { min-height: 100% !important; margin-bottom: -60px !important; }
 #page-wrap::after { content: ""; display: block; }
 body#bunzilla > footer.footer, #page-wrap::after { padding: 0 !important; height: 150px !important; }
 
@@ -248,8 +255,8 @@ img { width: 50%; cursor: zoom-in }
 
 #toolsModal, #toolsModal *, [class*='waves-'] { overflow: hidden; }
 #toolsModal .btn { background: #4eb3de; }
-textarea ~ a[href="#toolsModal"] { position: absolute; right: 0; top: 0; opacity: 0; transition: opacity 0.2s ease-in}
-textarea:focus ~ a[href="#toolsModal"] { opacity: 1; }
+textarea ~ a[href="#toolsModal"] { position: absolute; right: 0; top: 0; opacity: 0; transition: all 0.2s ease-in}
+textarea:focus ~ a[href="#toolsModal"] { opacity: 1; top: -2em; }
 #withToolsModal div.input-field { position: relative; }
 
 a:not([class*='tag-']):not([class*='category-']), .btn-floating i { color: inherit !important; }
@@ -330,3 +337,6 @@ input:checked ~ label { color: #4eb3de !important; }
 @media (max-width: 601px) {
     .section { padding-left: 0; padding-right: 0; }
 }
+
+blockquote { width: calc(100% - 3em); padding: 0 0.5rem 1rem 0.5rem; overflow-x: auto; }
+blockquote pre { width: 100%; margin: 0; }

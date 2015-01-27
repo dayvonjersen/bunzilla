@@ -175,8 +175,8 @@ document.body.onload = function(){
 ?>
                         </span>
 
-                        <span class="subject-line h6" title="<?= $report['subject'] ?>">
-                            <a class="flow-text icon-<?= $report['closed'] ? 'lock' : 'doc-text-inv'?>" 
+                        <span class="subject-line" title="<?= $report['subject'] ?>">
+                            <a class="icon-<?= $report['closed'] ? 'lock' : 'doc-text-inv'?>" 
                                href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#subject'?>"><?= $report['subject'] ?></a>
                         </span>
 

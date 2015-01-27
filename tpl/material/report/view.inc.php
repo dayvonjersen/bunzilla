@@ -2,70 +2,40 @@
 //
 // individual reports : yay
 //
-$pageTitle = $this->data['report']['subject'];
 
+$cat = $this->data['categories'][$this->data['category_id']];
+$report = $this->data['report'];
+
+$pageTitle = $report['subject'];
+$background = "category-{$cat['id']}-base";
 require BUNZ_TPL_DIR . 'header.inc.php';
 //require BUNZ_TPL_DIR . 'post/utils.inc.php';
 require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 require_once BUNZ_TPL_DIR . 'color.php';
 
-$cat = $this->data['categories'][$this->data['category_id']];
-$report = $this->data['report'];
 ?>
 <script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!--
-    category info
--->
-<div class="row">
-    <div class="col s12">
-        <article>
-            <div class="row">
-                <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base'>
-                    <!-- submit new report -->
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" 
-                       class="right btn btn-floating z-depth-5 transparent" 
-                       title="submit new <?= $cat['title'] ?>"><i class="green-text darken-2 icon-plus"></i></a>
-<?php
-if($this->auth())
-{
-?>
-                    <!-- edit category -->
-                    <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>?material" 
-                       class="right btn btn-floating z-depth-5 transparent" 
-                       title="edit &quot;<?= $cat['title'] ?>&quot;"><i class="green-text darken-2 icon-pencil-alt"></i></a>
-<?php
-}
-?>
-                <!-- 
-                    title and caption
-                -->
-                    <h4 class="<?= $cat['icon'] ?>"><a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?material"><?= $cat['title'] ?></a></h4>
-                    <h6><?= $cat['caption'] ?></h6>
-                </section>
-        </article>
-    </div>
-</div>
 
 
 <!--
     report view
 -->
 
-<article class="container category-<?= $cat['id'] ?>-base">
+<article class="category-<?= $cat['id'] ?>-base">
     <header class="row">
 
         <!--
             tab toolbar thing
         -->
-        <section class="col s12">
+        <section class="col s12 z-depth-5">
             <div class="row">
-            <ul class="tabs waves-effect waves-light z-depth-3">
+            <ul class="tabs z-depth-3">
                 <!-- default yet-as-unnamed tab -->
-                <li class="tab col s2"><a href="#status" class="active icon-doc-text-inv category-<?=$cat['id']?>-text"></a></li>
+                <li class="tab col s2"><a href="#status" class="waves-effect active icon-doc-text-inv category-<?=$cat['id']?>-text"></a></li>
                 <!-- status log -->
                 <li class="tab col s2">
-                    <a href="#history" class="icon-history grey white-text"><span class="hide-on-small-only">History</span></a>
+                    <a href="#history" class="waves-effect icon-history grey white-text"><span class="hide-on-small-only">History</span></a>
                 </li>
 <?php
 if($this->auth())
@@ -73,13 +43,13 @@ if($this->auth())
 ?>
                 <!-- admin actions -->
                 <li class="tab col s2">
-                    <a href="#update" class="icon-magic light-blue white-text"><span class="hide-on-small-only">Update</span></a>
+                    <a href="#update" class="waves-effect icon-magic light-blue white-text"><span class="hide-on-small-only">Update</span></a>
                 </li>
                 <li class="tab col s2">
-                    <a href="#move" class="icon-move yellow black-text"><span class="hide-on-small-only">Move</span></a>
+                    <a href="#move" class=" waves-effect icon-move yellow black-text"><span class="hide-on-small-only">Move</span></a>
                 </li>
                 <li class="tab col s2">
-                    <a href="#delete" class="icon-delete red white-text"><span class="hide-on-small-only">Delete</span></a>
+                    <a href="#delete" class="waves-effect icon-delete red white-text"><span class="hide-on-small-only">Delete</span></a>
                 </li>
 <?php
 }
@@ -235,7 +205,9 @@ count($this->data['priorities'])
         <!--
             subject
         -->
-        <section id="subject" class='section no-pad-top no-pad-bot col s12 z-depth-5 category-<?=$cat['id']?>-text'>
+        <section class='section no-pad-top no-pad-bot col s12'>
+
+            <section class="z-depth-1 category-<?=$cat['id']?>-text">
 
 <?php
 
@@ -267,9 +239,9 @@ $this->data['closed'] ? 'lock grey' : 'unlock light-blue'?>" title="
 $this->data['closed'] ? 'closed' : 'open'?>"><span class="hide-on-small-only"><?=
 $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
  <!-- actual subject text -->
-<div class="divider" style="clear: both;"></div>
-            <a href="#subject" title="subject" class="small left"><em>subject</em>:</a>
-            <h2 class="flow-text"><?= $report['subject'] ?></h2>
+<div style="clear: both;"></div>
+            <a href="#subject" title="subject" class="small left"><em>subject</em>:</a><br>
+            <h2 id="subject" class="" style="margin: 0 1em; clear: both"><?= $report['subject'] ?></h2>
 
 
 
@@ -279,7 +251,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
     <!--
         description reproduce expected actual
     -->
-    <main id="report" class="section z-depth-5 category-<?=$cat['id']?>-darken-1">
+    <main id="report" class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-1">
 <?php
 $d = 5;
 foreach(['description','reproduce','expected','actual'] as $field)
@@ -287,10 +259,12 @@ foreach(['description','reproduce','expected','actual'] as $field)
     if($cat[$field])
     {
 ?>
-        <blockquote id="<?=$field?>" class='section no-pad-top z-depth-<?= $d-- ?> category-<?=$cat['id']?>-text'>
+<section class="section no-pad z-depth-<?= $d-- ?> category-<?=$cat['id']?>-text">
+        <blockquote id="<?=$field?>">
             <a href="#<?=$field?>" title="<?=$field?>" class="small left"><em><?=$field?></em>:</a><br>
             <?= $report[$field] ?>
         </blockquote>
+</section>
 <?php
     }
 }
@@ -300,7 +274,8 @@ foreach(['description','reproduce','expected','actual'] as $field)
     <!--
         comments
     -->
-    <footer id="comments" style="text-align: left !important; margin: 0 !important">
+    <footer id="comments" class="section no-pad-top no-pad-bot" style="text-align: left !important">
+        
 <?php
 if(!empty($this->data['comments']))
 {
@@ -308,8 +283,8 @@ if(!empty($this->data['comments']))
     foreach($this->data['comments'] as $comment)
     {
 ?>
-            <section class="z-depth-2 category-<?=$cat['id']?>-lighten-5" id="reply-<?=$comment['id']?>">
-                <header>
+            <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
+                <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
                     <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge light-blue white-text left">## Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
 
 <?php
@@ -321,14 +296,14 @@ if($this->auth() || compareIP($comment['ip']))
 }
 ?></p>
                 </header>
-                <p class='z-depth-2'><?= $comment['message'] ?><?php
+                <blockquote><?= $comment['message'] ?><?php
 if($comment['edit_time'])
 {
 ?>
                 <span class="badge right icon-pencil-alt"><em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></span>
 <?php
 }
-?></p>
+?></blockquote>
             </section>
                 
 <?php
@@ -343,24 +318,26 @@ require BUNZ_TPL_DIR .'toolsModal.html';
             <!--
                 spammer's delight
             -->
-            <section class="category-<?=$cat['id']?>-lighten-5 z-depth-3">
+            <section class="section">
                 <form class="" action="<?= BUNZ_HTTP_DIR,'post/comment/',$this->data['id'] ?>" method="post" id="withToolsModal">
-                    <div class="section">
-                        <h4>post a comment</h4>
+                    <div class="section category-<?=$cat['id']?>-text z-depth-3">
+                        <h2><i class="icon-chat prefix"></i>post a comment</h2>
     
                     <div class="input-field">
                         <i class="icon-mail prefix"></i>
                         <input type="email" id="email" maxlength='255' name='email' value="<?= $this->auth() ? $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled="disabled"' : (isset($this->data['params']) ? $this->data['params']['email'] : '') . '" required' ?>>
                         <label for="email">email</label>
+                        <span class="material-input"></span>
                     </div>
                     <div class="input-field">
                         <i class="icon-chat prefix"></i>
                         <textarea id="comment" class="materialize-textarea" required name='message'><?= empty($_POST) ? '' : unfiltermessage($this->data['params']['message']) ?></textarea>
-<a href="#toolsModal" data-for="message" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
+<a href="#toolsModal" data-for="message" class="modal-trigger btn-flat waves-effect secondary-lighten-2" onclick="(function(evt){evt.preventDefault()})(event)" title="insert html into your post"><i class="icon-code"></i><span class="hide-on-small-only">insert html</span></a>
                         <label for="comment">your insight on this issue</label>
+                        <span class="material-input"></span>
                     </div>
          <p class="input-field">
-            <label for="disable_nlbr"><s class="icon-paragraph prefix"></s></label>
+            <i class="icon-paragraph prefix" style="text-decoration: line-through"></i>
             <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) ? ' checked' : ''?>>
             <label for="disable_nlbr">Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
         </p>
@@ -377,13 +354,13 @@ if($this->auth())
 }
 ?>
         <div class="input-field center">
-            <button type="reset" class="btn-flat white grey-text icon-cancel waves-effect"<?php
+            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect"<?php
 if(empty($_POST))
  echo <<<JAVASCRIPT
 onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
 JAVASCRIPT;
 ?>><?= empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
-                    <button type="submit" class="btn light-blue icon-chat">post!</button></div>
+                    <button type="submit" class="btn category-<?= $cat['id'] ?>-darken-4 icon-chat waves-effect">post!</button></div>
         </div>
             
                 </form>
