@@ -55,33 +55,6 @@ class report extends Controller
              WHERE category = '.$id
             )->fetchAll(PDO::FETCH_ASSOC));
 
-/*            if($stats[$id]['total_issues'])
-            {
-                $field = $this->getPreviewField($id);
-                $field = $field 
-                    ? 'r.' . $field . ' AS preview_text,' : '';
-
-                $latest_issue = current(db()->query(
-                    'SELECT r.id, r.subject, '.$field.' r.time, 
-                        COUNT(c.id) AS comments
-                        FROM reports AS r
-                            LEFT JOIN comments AS c
-                            ON r.id = c.report
-                        WHERE r.category = '.$id.'
-                        GROUP BY r.id
-                        ORDER BY r.time DESC
-                        LIMIT 1'
-                )->fetchAll(PDO::FETCH_ASSOC));
-                $latest_issue['tags'] = db()->query(
-                    'SELECT tag 
-                     FROM tag_joins 
-                     WHERE report = '.$latest_issue['id']
-                )->fetchAll(PDO::FETCH_NUM);
-            } else {
-                $latest_issue = null;
-            }
-            $stats[$id]['latest_issue'] = $latest_issue;
-*/
             $stats[$id]['open_issues'] = selectCount('reports','closed = 0 AND category = '.$id);
         }
         $this->data['stats'] = $stats;

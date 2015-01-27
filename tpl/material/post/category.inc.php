@@ -11,7 +11,7 @@ require BUNZ_TPL_DIR .'toolsModal.html';
 <form action="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>?material"
       id="withToolsModal"
       method="post"
-      class="category-<?= $cat['id'] ?>-lighten-5">
+      class="category-<?= $cat['id'] ?>-text">
 
     <div class="section">
          <h1 class="icon-plus"><?= $pageTitle ?></h1>
@@ -25,6 +25,7 @@ require BUNZ_TPL_DIR .'toolsModal.html';
 $this->auth() 
 ? '"' . $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled' 
 : '"' . (isset($this->data['params']) ? $this->data['params']['email'] : '') . '" required' ?>>
+            <span class="material-input"></span>
             <label for="email">email</label>
         </div>
         <div class="input-field">
@@ -36,6 +37,7 @@ $this->auth()
                     autofocus
                     required
                     value="<?= isset($this->data['params']) ? $this->data['params']['subject'] : '' ?>">
+            <span class="material-input"></span>
             <label for="subject">subject</label>
         </div>
 <?php
@@ -56,6 +58,7 @@ foreach($fields as $name => $placeholder)
                       class="materialize-textarea" 
                       required 
                       name='<?= $name ?>'><?= empty($_POST) ? '' : unfiltermessage($this->data['params'][$name]) ?></textarea>
+            <span class="material-input"></span>
             <a href="#toolsModal" data-for="<?= $name ?>" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
             <label for="<?= $name ?>"><?= $name, ': ', $placeholder ?></label>
         </div>
@@ -63,12 +66,10 @@ foreach($fields as $name => $placeholder)
 }
 ?>
         <p class="input-field">
-            <label for="disable_nlbr"><s class="icon-paragraph prefix"></s></label>
+            <i class="icon-paragraph prefix" style="text-decoration: line-through"></i>
             <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) ? ' checked' : ''?>>
             <label for="disable_nlbr">Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
         </p>
-
-        <div class="divider"></div>
 
         <div class="input-field collapsible no-select section" id="tagz">
             <i class="icon-tags prefix"></i>

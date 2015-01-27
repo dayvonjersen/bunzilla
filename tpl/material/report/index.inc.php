@@ -118,7 +118,7 @@ if(!empty($unused))
 if(empty($this->data['categories']))
 {
 ?>
-        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">No categories have been created yet! <a class="btn-flat icon-right-open-mini" href="<?= BUNZ_HTTP_DIR ?>admin">Go make one!</a></div>
+        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">No categories have been created yet! <a class="btn-flat icon-right-open-mini" href="<?= BUNZ_HTTP_DIR ?>cpanel">Go make one!</a></div>
 <?php
 } else {
 
