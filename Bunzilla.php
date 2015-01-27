@@ -132,6 +132,7 @@ if(file_exists(BUNZ_RES_DIR.'settings.ini'))
     $filt->addString('title');
     $filt->addString('version');
     $filt->addString('mission_statement');
+    $filt->add('website', FILTER_VALIDATE_URL);
     $cfg['project'] = $filt->var_array($cfg['project']);
 
     $filt = new Filter;

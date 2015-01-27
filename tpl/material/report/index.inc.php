@@ -8,26 +8,31 @@ require BUNZ_TPL_DIR . 'header.inc.php';
     about:bunzilla
 -->
 <div class="row">
-        <article class="col s12 m6 z-depth-2 primary-darken-1">
+        <article class="col s12 m6">
 
-            <header class="section no-pad-top z-depth-5 primary-base">
-                <h1><?= BUNZ_PROJECT_TITLE ?></h1>
-                <h6><em><?= BUNZ_SIGNATURE, ' v', BUNZ_VERSION ?></em></h6>
+            <header class="section no-pad-bot">
+                <section class="primary-base z-depth-5 waves-effect tooltipped"
+                         data-tooltip="Go to project website: <?= BUNZ_PROJECT_WEBSITE ?>"
+                         onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?= BUNZ_PROJECT_WEBSITE ?>'; }})(event);">
+                    <h1><?= BUNZ_PROJECT_TITLE ?></h1>
+                    <h6><em><?= BUNZ_SIGNATURE, ' v', BUNZ_VERSION ?></em></h6>
+                </section>
             </header>
 
-            <section class="section row no-pad-top no-pad-bot">
-                <p class="z-depth-3 col s4 section primary-base">version <?= BUNZ_PROJECT_VERSION ?></p>
-                <p class="col s8 right-align"><em><?= BUNZ_PROJECT_MISSION_STATEMENT ?></em></p>
+            <section class="section row no-pad-top">
+                <p class="z-depth-5 col s4 section primary-lighten-3">version <?= BUNZ_PROJECT_VERSION ?></p>
+                <p class="z-depth-5 col s8 section primary-lighten-5 right-align tooltipped" 
+                   data-tooltip="mission statement"><em><?= BUNZ_PROJECT_MISSION_STATEMENT ?></em></p>
             </section>
 
         </article>
-        <article class="col s12 m6 z-depth-2 shade-base">
-            <ul class="tabs">
-                <li class="tab"><a href="#recent" class="shade-base icon-history"><span class="hide-on-small-only">Recent Activity</span></a></li>
-                <li class="tab"><a href="#changelog" class="secondary-base icon-doc-text-inv"><span class="hide-on-small-only">Changelog</span></a></li>
-                <li class="tab"><a href="#tagCloud" class="primary-darken-2 icon-tags"><span class="hide-on-small-only">Popular Tags</span></a></li>
+        <article class="section col s12 m6">
+            <ul class="tabs z-depth-3">
+                <li class="tab"><a href="#recent" class="waves-effect shade-base icon-history"><span class="hide-on-med-and-down">Recent Activity</span></a></li>
+                <li class="tab"><a href="#changelog" class="waves-effect secondary-base icon-doc-text-inv"><span class="hide-on-med-and-down">Changelog</span></a></li>
+                <li class="tab"><a href="#tagCloud" class="waves-effect primary-darken-2 icon-tags"><span class="hide-on-med-and-down">Popular Tags</span></a></li>
             </ul>
-            <section id="recent" class="section shade-base" >
+            <section id="recent" class="section shade-base z-depth-5" >
                 <div class="section shade-lighten-3" style="max-height: 14em; overflow-y: auto">
 <?php
 if(empty($this->data['recent_activity']))
@@ -69,7 +74,7 @@ foreach($this->data['recent_activity'] as $log)
 ?>
                 </div>
             </section>
-            <section id="changelog" class="section secondary-base">
+            <section id="changelog" class="section secondary-base z-depth-5">
                 <pre class="section secondary-lighten-3" style="max-height: 14em; overflow-y: auto">
 <?php
 foreach(db()->query('SELECT message FROM change_log ORDER BY time DESC')->fetchAll(PDO::FETCH_NUM) as $msg)
@@ -77,7 +82,7 @@ foreach(db()->query('SELECT message FROM change_log ORDER BY time DESC')->fetchA
 ?>
                 </pre>
             </section>
-            <section id="tagCloud" class="section primary-darken-2">
+            <section id="tagCloud" class="section primary-darken-2 z-depth-5">
                 <div class="section primary-lighten-4 center" style="max-height: 14em; overflow-y: auto">
 <?php
 require_once BUNZ_CTL_DIR . 'search.php';
@@ -121,16 +126,19 @@ if(empty($this->data['categories']))
     foreach($this->data['categories'] as $cat)
     {
         $stats = $this->data['stats'][$cat['id']];
+        $stats['percent_resolved'] = $stats['total_issues'] > 0 
+            ? round(($stats['total_issues'] - $stats['open_issues'])/$stats['total_issues'],2)*100 . '%' 
+            : 'n/a';
 ?>
-<?= $i == 0 ? '<div class="row center">' : '' ?>
+<?= $i == 0 ? '<div class="row">' : '' ?>
     <div class="col s12 m6 l3">
-        <article class='z-depth-1 category-<?= $cat['id'] ?>-darken-1'>
-            <div class="section">
-                <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base'>
+        <article>
+            <div class="section no-pad-top">
+                <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base waves-effect' onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>'; }})(event);">
                 <!--
                     actions
                 -->
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" class="btn btn-floating z-depth-5 right category-<?= $cat['id'] ?>-text" title="submit new"><i class="category-<?= $cat['id'] ?>-text icon-plus"></i></a>
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" class="waves-effect btn btn-floating z-depth-5 right category-<?= $cat['id'] ?>-base" title="submit new"><i class="icon-plus"></i></a>
                 <!-- 
                     title 
                 -->
@@ -140,119 +148,49 @@ if(empty($this->data['categories']))
 
             </div>
 
-<!--            <section class="section no-pad-top no-pad-bot col s12 z-depth-5 category-<?= $cat['id'] ?>-lighten-1">
-            
-                preview of latest post
-            -->
-<?php
-/*        if(empty($stats['latest_issue']))
-        {
-?>
-                <blockquote class='z-depth-1 category-<?= $cat['id'] ?>-lighten-5'><em>Nothing has been posted here yet!</em></blockquote>
-<?php
-        } else {
-?>
-                <p><small>latest issue:</small></p>
-                <blockquote class='z-depth-5 category-<?= $cat['id'] ?>-lighten-5'>
-                    <!--
-                        subject, quick link
-                    -->
-                    <p>
-                    <a href="<?= BUNZ_HTTP_DIR,'report/view/',$stats['latest_issue']['id'] ?>?material" 
-                       class="icon-doc-text-inv"><?= $stats['latest_issue']['subject'] ?></a>
-                    <!--
-                        # of comments and timestamp
-                    -->
-                    <span class="badge category-<?= $cat['id'] ?>-text">
-                        <a class="icon-chat" 
-                           href="<?= BUNZ_HTTP_DIR,'report/view/',$stats['latest_issue']['id'] ?>?material#comments" 
-                           title="<?= $stats['latest_issue']['comments'] ?> comment(s)"><?= $stats['latest_issue']['comments'] ?></a>
-                    </span>
-                    <span class="badge"><em><small><?= datef($stats['latest_issue']['time'])?></small></em></span>
-                    </p>
 
-<?php
-    //
-    // preview_text has already been determined in lib/report.php
-    // from possible desc,repr,expect,actual or none
-    //
-            if(isset($stats['latest_issue']['preview_text']))
-            {
-                $preview = strip_tags($stats['latest_issue']['preview_text']);
-                $preview = strlen($preview) > 50 ? substr($preview,0,50) . '. . .' : $preview;
-?>
-                    <!--
-                        wordz
-                    -->
-                    <p class="icon-article-alt"><?= $preview ?></p>
-<?php
-            }
-?>
-                    <!--
-                        tagz
-                    -->
-                    <p>
-<?php
-            foreach($stats['latest_issue']['tags'] as $tag)
-            {
-//                echo '<span class=" z-depth-3 tag-',$tag[0],' ',$this->data['tags'][$tag[0]]['icon'],'" title="',$this->data['tags'][$tag[0]]['title'],'"></span>';
-                echo tag($tag[0]);
-            }
-?>
-                    </p>
-                </blockquote>
-                <!--
-                    browse! (redundant maybe)
-                -->
-                <div class="center row">
-                    <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?material" class="btn category-<?= $cat['id'] ?>-darken-2 icon-flashlight">browse category</a>
-                </div>
-<?php
-        }*/
-?>
-                
-       <!--     </section> -->
 
             <!--
                 stats!
             -->
-            <section class="section row no-pad-top">
-
-                <p class="col offset-s1 category-<?= $cat['id'] ?>-lighten-5 s2 z-depth-5">
-<!--                    <small class="hide-on-small-only">open</small><br>-->
-                    <span class="icon-unlock"><?= $stats['open_issues'] ?></span>
-                </p>
-
-                <p class="col category-<?= $cat['id'] ?>-lighten-4 offset-s1 s2 z-depth-2">
-       <!--             <small class="hide-on-small-only">resolved</small><br>-->
-                    <span class="icon-ok"><?= 
-$stats['total_issues'] > 0 ? 
-    round(($stats['total_issues'] - $stats['open_issues'])/$stats['total_issues'],2)*100 . '%' 
-    : 'n/a' ?></span>
-                </p>
-
-                <p class="col category-<?= $cat['id'] ?>-lighten-3 s2 z-depth-5">
-        <!--            <small class="hide-on-small-only">total</small><br>-->
-                    <span class="icon-doc-text-inv"><?= $stats['total_issues'] ?></span>
-                </p>
-
-                <p class="col category-<?= $cat['id'] ?>-lighten-2 offset-s1 s2 z-depth-2">
-<!--                    <small class="hide-on-small-only">users</small><br>-->
-                    <span class="icon-users"><?= $stats['unique_posters'] ?></span>
-                </p>
-
+            <section class="section row center no-pad-top">
 <?php
         if($stats['last_activity'])
         {
 ?>
-                <p class="col category-<?= $cat['id'] ?>-lighten-1 s12 z-depth-5">
-              <!--      <small class="hide-on-small-only">last activity</small><br>-->
+                <p class="col category-<?= $cat['id'] ?>-lighten-1 s3 z-depth-2 tooltipped" 
+                          data-tooltip="<?= $stats['open_issues'] ?> open issue<?= 
+                            $stats['open_issues'] == 1 ? '' : 's' ?>">
+                    <span class="icon-unlock"><?= $stats['open_issues'] ?></span>
+                </p>
+
+                <p class="col category-<?= $cat['id'] ?>-lighten-2 s3 z-depth-3 tooltipped"
+                          data-tooltip="percentage resolved: <?= $stats['percent_resolved'] ?>">
+                    <span class="icon-ok"><?= $stats['percent_resolved']?></span>
+                </p>
+
+                <p class="col category-<?= $cat['id'] ?>-lighten-3 s3 z-depth-4 tooltipped" 
+                          data-tooltip="<?= $stats['total_issues'] ?> total issue<?= 
+                            $stats['total_issues'] == 1 ? '' : 's' ?>">
+                    <span class="icon-doc-text-inv"><?= $stats['total_issues'] ?></span>
+                </p>
+
+                <p class="col category-<?= $cat['id'] ?>-lighten-4 s3 z-depth-5 tooltipped" 
+                          data-tooltip="<?= $stats['unique_posters'] ?> unique poster<?= 
+                            $stats['unique_posters'] == 1 ? '' : 's' ?>">
+                    <span class="icon-users"><?= $stats['unique_posters'] ?></span>
+                </p>
+                <p class="col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-5 tooltipped"
+                          data-tooltip="last activity">
                     <span class="icon-time"><?= datef($stats['last_activity']) ?></span>
                 </p>
 <?php
-        }
+        } else {
 ?>
-
+                <p class="col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-1"><em>Nothing has been posted here yet!</em></p>
+<?php
+    }
+?>
             </section>
         </article>
 </div> 

@@ -186,7 +186,7 @@ img { width: 50%; cursor: zoom-in }
 #fuck, #fuck * { background: #888 !important; /* FUCKING ISDFL:KJSDFLJ:K */ }
 
 .section { padding: 1em; }
-.btn-floating { color: #fff !important }
+
 #page-wrap, main, .container { min-height: 100%; }
 
 .collapsible-body {
@@ -232,5 +232,10 @@ textarea ~ a[href="#toolsModal"] { position: absolute; right: 0; top: 0; opacity
 textarea:focus ~ a[href="#toolsModal"] { opacity: 1; }
 #withToolsModal div.input-field { position: relative; }
 
-div.indicator { max-width: 10px !important }
-a { color: inherit; }
+a:not([class*='tag-']), .btn-floating i { color: inherit !important; }
+p { margin: 0; }
+p.tooltipped { cursor: help; }
+header section.primary-base > * { margin: 0 !important; }
+.waves-effect { overflow: hidden !important; }
+header section.primary-base.waves-effect { display: block !important; }
+.tabs div.indicator { width: auto !important; }

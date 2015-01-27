@@ -83,7 +83,7 @@ class Color {
 
     /**
      * http://stackoverflow.com/a/9733420 */
-    const CONTRAST_RATIO = 4.5;
+    const CONTRAST_RATIO = 3;
 
     public static function luminanace( $rgb )
     {
@@ -182,51 +182,22 @@ class Color {
         return $this->adjust('lightness',-1 * $percent);
     }
 
-//  public function pullHairOut()
     public function getTextColor()
     {
-//trigger_error(print_r($this->hsl,1),E_USER_ERROR);
+        /** change hue; results in odd colors so not using for now
         list($h,$s,$l) = $this->hsl;
-//        list($wh,$ws,$wl) = self::rgb2hsl([135,135,135]);
-//        $h += 0.5;
-//        $h %= 1;
         $h -= deg2rad(40);
         $h = abs(($h > 1 ? 1 : 0) - $h);
         $s = 1;//0.6667;
-//        $s > 1 && $s = abs(1 - $s);
         $l = 1 - $l;
-//        if(self::luminanace(self::hsl2rgb([$h,$s,$l]))/self::luminanace($this->rgb) >=  self::CONTRAST_RATIO / 10)
         $q = function($rgb) { list($r,$g,$b) = $rgb; return (299*$r + 587*$g + 114*$b)/1000; };
         if($q(self::hsl2rgb([$h,$s,$l])) - $q($this->rgb) >= 3.0)
             return self::fstop(self::hsl2rgb([$h,$s,$l]));
-
+        */
         return self::fstop(
             self::luminanace([255,255,255])/self::luminanace($this->rgb) 
                 >= self::CONTRAST_RATIO ? [255,255,255] : [0,0,0]
         );
-
-        $tempColor = new self(substr(self::fstop($this->rgb),1));
-        $tempColor->hsl[2] *= self::CONTRAST_RATIO;
-        return self::fstop(self::hsl2rgb($tempColor->hsl));
-/****
- **********************************************************************************************
-          list($r,$g,$b) = self::fstop($this->rgb,'array');        
-          $tempColor = new self(sprintf('%02x%02x%02x', 255 - $r, 255 - $g, 255 - $b));
-
-          $luma = self::luminanace($this->rgb);
-
-          $method = (self::luminanace([255,255,255])/$luma) >= self::CONTRAST_RATIO ? 'darken' : 'lighten';
-          $i = 1;
-          while(self::CONTRAST_RATIO > (self::luminanace($tempColor->rgb)/$luma) && $i < 20)
-          {
-            $tempColor->$method(50); $i++;
-          }
-
-          if(self::CONTRAST_RATIO > (self::luminanace($tempColor->rgb)/$luma))
-            trigger_error("WHAT THE FUCK\n\n\nCONTRAST RATIO: ".self::CONTRAST_RATIO."\n LUMIA TEMP COLOR: ".self::luminanace($tempColor->rgb)."\n LUMIA BASE COLOR: $luma",E_USER_ERROR);/*ffffffffffffffff
-//          return self::fstop($tempColor->rgb);
-****************************************************************************************/
-
     }
 
     public function __toString()
