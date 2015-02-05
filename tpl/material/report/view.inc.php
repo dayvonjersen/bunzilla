@@ -7,7 +7,7 @@ $cat = $this->data['categories'][$this->data['category_id']];
 $report = $this->data['report'];
 
 $pageTitle = $report['subject'];
-$background = "category-{$cat['id']}-base";
+$background = 'transparent';//"category-{$cat['id']}-base";
 require BUNZ_TPL_DIR . 'header.inc.php';
 //require BUNZ_TPL_DIR . 'post/utils.inc.php';
 require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
@@ -22,7 +22,7 @@ require_once BUNZ_TPL_DIR . 'color.php';
     report view
 -->
 
-<article class="category-<?= $cat['id'] ?>-base">
+<article>
     <header class="row">
 
         <!--
@@ -59,7 +59,7 @@ if($this->auth())
             <!--
                 about: time, edits + actions: edit and reply
             -->
-            <section class="section col s12" id="status">
+            <section class="section col s12 category-<?= $cat['id'] ?>-base" id="status">
                 <!--
                     author and time
                 -->
@@ -251,7 +251,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
     <!--
         description reproduce expected actual
     -->
-    <main id="report" class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-1">
+    <main id="report" class="section no-pad-top no-pad-bot">
 <?php
 $d = 5;
 foreach(['description','reproduce','expected','actual'] as $field)

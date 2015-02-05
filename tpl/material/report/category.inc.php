@@ -4,13 +4,12 @@
 //
 $cat = $this->data['categories'][$this->data['category_id']];
 $pageTitle = $cat['title'];
-$background="category-{$cat['id']}-base";
+$background='transparent';//"category-{$cat['id']}-base";
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<div class="section">
 <!--
     about:category
 -->
@@ -21,7 +20,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 <!-- 
                     title 
                 -->
-                <section class='section col s12 z-depth-5'>
+                <section class='section no-pad-top col s12 z-depth-5 category-<?=$cat['id']?>-base'>
 
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" 
                        class="right btn btn-floating z-depth-5 transparent" 
@@ -36,7 +35,7 @@ if($this->auth())
 <?php
 }
 ?>
-                    <h1 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h1>
+                    <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
                     <h6><?= $cat['caption'] ?></h6>
 
                 <!--
@@ -85,7 +84,7 @@ document.body.onload = function(){
 -->
 <div class="section" id="list">
     <div class="no-pad-bot ">
-    <div class="row shade-lighten-5 z-depth-5"  id="fuck"><!-- me -->
+    <div class="row z-depth-5 blue-text"  id="fuck"><!-- me -->
     <div class="col s12 m4 ">
 
         <div class="col s3  right-align">
@@ -164,23 +163,17 @@ document.body.onload = function(){
             </div>
 
 <?php // it looks like a lot of markup because it is. ?>
-            <div class="collapsible-header no-select">
-                <div class="row z-depth-5">
+            <div class="collapsible-header no-select <?= $report['closed'] ? 'shade-text' : 'category-'.$cat['id'].'-darken-3' ?> z-depth-5">
 
 <?php // [icon] subject line blablabla [status] ?>
-                    <div class="col s12">
 
                         <span class="left">
 <?php //  '<i class="icon-lock grey-text" title="CLOSED."></i>' : priority($report['priority'],1) 
 ?>
                         </span>
 
-                        <span class="subject-line" title="<?= $report['subject'] ?>">
-                            <a class="icon-<?= $report['closed'] ? 'lock' : 'doc-text-inv'?>" 
-                               href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#subject'?>"><?= $report['subject'] ?></a>
-                        </span>
 
-                        <span class="right"><?= status($report['status']) ?></span>
+                        <?= $report['closed'] ? '<span class="right">'.status($report['status']).'</span>' : '' ?>
 
                         <span class="badge right blue-text" title="comments">
                             <a class=" icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material#comments'?>"><?= $report['comments'] ?></a>
@@ -202,7 +195,7 @@ document.body.onload = function(){
 
         if(!$report['closed'])
         {
-            echo '<div ',empty($report['tags']) ? '' : 'class="icon-tags"',' style="clear: both;">';
+            echo '<div class="left',empty($report['tags']) ? '' : ' icon-tags','">';
             if(!empty($report['tags']))
             {
                 foreach($report['tags'] as $tag)
@@ -211,13 +204,18 @@ document.body.onload = function(){
             echo priority($report['priority']),'</div>';
         }
 ?>
-                    </div>
-                </div>
+                        <div class="subject-line<?= $report['closed'] ? '  transparent' : ' category-'.$cat['id'].'-text" style="clear: both'?>" title="<?= $report['subject'] ?>">
+                            <a class="subject icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv'?>" 
+                               href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>"><?= $report['subject'] ?></a>
+
+                        <?= $report['closed'] ? '' : '<span class="right">'.status($report['status']).'</span>' ?>
+                        </div>
             </div>
             <div class="collapsible-body">
-                <blockquote class=" category-<?= $cat['id'] ?>-text z-depth-4 icon-article-alt"><span class="subject"><?= $report['subject'] ?></span><?=
+                <blockquote class=" category-<?= $cat['id'] ?>-text z-depth-1 icon-article-alt">
+<!--<span class="subject"><?= $report['subject'] ?></span>--><?=
 $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.BUNZ_DIFF_DIR.'reports/'.$report['id'].'">'.datef($report['edit_time']).'</a></p>' : '' 
-?><div class="divider"></div>
+?>
 <?php
 //
 // as mentioned above, cleaning up message previews in case they're too long
@@ -237,11 +235,11 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.
                 }
                 $report['preview_text'] .= '. . .';
             }
-            echo $report['preview_text'];
+            echo "<p>{$report['preview_text']}</p>";
         }  
 ?>
                     <p class="section no-pad-bot"><a class="icon-doc-text-inv btn-flat category-<?= $cat['id'] ?>-darken-2 waves-effect" 
-                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id'],'#subject'?>">Full Report &rarr;</a></p>
+                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>">Full Report &rarr;</a></p>
                 </blockquote>
             </div>
         </li>       
@@ -253,6 +251,5 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.
 <?php
 }
 ?>
-</div>
 <?php
 require BUNZ_TPL_DIR .'footer.inc.php';

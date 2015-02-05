@@ -896,10 +896,24 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
     // append indicator then set indicator width to tab width
     $this.append('<div class="indicator"></div>');
     var $indicator = $this.find('.indicator');
-    if ($this.is(":visible")) {
-      $indicator.css({"right": $tabs_width - (($index + 1) * $tab_width)});
-      $indicator.css({"left": $index * $tab_width});
-    }
+
+/**
+ * @NOTE
+ * for some reason jQuery won't report the correct "outerWidth" of an element 
+ * until the page has been completely rendered so setting this default selected
+ * tab actually results in a janky too short or too long tab indicator
+ *
+ * so this is the solution which actually, due to the inherit animation delay,
+ * actually feels more Material-ish, imo, for the time being
+ * - tso
+ */
+    $(document).ready(function()
+    { 
+        setTimeout(function(){ 
+            update_indicator($index,$index);
+        }, 250); 
+    });
+
     $(window).resize(function () {
       $tabs_width = $this.width();
       $tab_width = $this.find('li').first().outerWidth();
@@ -917,11 +931,23 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
       $(this.hash).hide();
     });
 
+// Update indicator
+function update_indicator($index, $prev_index) {
+    $tabs_width = $this.width();
+      $tab_width = $this.find('li').first().outerWidth();
+      if (($index - $prev_index) >= 0) {
+        $indicator.velocity({"right": $tabs_width - (($index + 1) * $tab_width)}, { duration: 300, queue: false, easing: 'easeOutQuad'});
+        $indicator.velocity({"left": $index * $tab_width}, {duration: 300, queue: false, easing: 'easeOutQuad', delay: 80});
 
+      }
+      else {
+        $indicator.velocity({"left": $index * $tab_width}, { duration: 300, queue: false, easing: 'easeOutQuad'});
+        $indicator.velocity({"right": $tabs_width - (($index + 1) * $tab_width)}, {duration: 300, queue: false, easing: 'easeOutQuad', delay: 80});
+      }
+}
     // Bind the click event handler
     $this.on('click', 'a', function(e){
-      $tabs_width = $this.width();
-      $tab_width = $this.find('li').first().outerWidth();
+      
 
       // Make the old tab inactive.
       $active.removeClass('active');
@@ -944,16 +970,7 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
 
       $content.show();
 
-      // Update indicator
-      if (($index - $prev_index) >= 0) {
-        $indicator.velocity({"right": $tabs_width - (($index + 1) * $tab_width)}, { duration: 300, queue: false, easing: 'easeOutQuad'});
-        $indicator.velocity({"left": $index * $tab_width}, {duration: 300, queue: false, easing: 'easeOutQuad', delay: 80});
-
-      }
-      else {
-        $indicator.velocity({"left": $index * $tab_width}, { duration: 300, queue: false, easing: 'easeOutQuad'});
-        $indicator.velocity({"right": $tabs_width - (($index + 1) * $tab_width)}, {duration: 300, queue: false, easing: 'easeOutQuad', delay: 80});
-      }
+      update_indicator($index,$prev_index); 
 
       // Prevent the anchor's default click action
       e.preventDefault();
@@ -1983,11 +2000,13 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
     // Text based inputs
     var input_selector = 'input[type=text], input[type=password], input[type=email], textarea';
 
+/*
     $(input_selector).each(function(){
       if($(this).val().length !== 0) {
        $(this).siblings('label, i').addClass('active');
       }
     })
+*/
 
     $(document).on('focus', input_selector, function () {
       $(this).siblings('label, i').addClass('active');

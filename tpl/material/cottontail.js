@@ -1,6 +1,7 @@
 /**
  * activate materialize.js components */
-$(document).ready(function(){
+//$(document).ready(function(){
+$(window).load(function(){
     $(".dropdown-button").dropdown();
     $(".collapsible").collapsible();
     $('select').material_select();

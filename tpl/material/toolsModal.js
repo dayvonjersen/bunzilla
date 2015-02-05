@@ -48,7 +48,7 @@ var toolsModal = (function()
                 // merely "sets" the target for tags inserted
                     activate();
                 },false);
-                activate();
+                //activate();
             }
         }
     }

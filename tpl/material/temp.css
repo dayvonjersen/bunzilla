@@ -15,7 +15,7 @@ html {
 }
 html,body#bunzilla { height: 100% !important; }
 body#bunzilla { margin: 60px 0 0 0 !important; }
-#page-wrap { min-height: 100% !important; margin-bottom: -60px !important; }
+#page-wrap { min-height: 100% !important; margin-bottom: -150px; }
 #page-wrap::after { content: ""; display: block; }
 body#bunzilla > footer.footer, #page-wrap::after { padding: 0 !important; height: 150px !important; }
 
@@ -33,13 +33,13 @@ body#bunzilla > footer.footer, #page-wrap::after { padding: 0 !important; height
 .transparent {
     background: transparent;
 }
-td > [class*='status-'] {
+td > .status {
     display: block;
 }
-[class*='status-'] {
+.status {
     padding: 10px 2px;
 }
-[class*='tag-'] {
+.tag {
     padding: 2px;
 }
 .collapsible, .collapsible-header {
@@ -138,11 +138,6 @@ span.badge {
 #toolsModal label {
     display: block;
 }
-/**
- * faggotry */
-span.badge[class*='tag-'] {
-    float: none !important;
-}
 .collapsible-header { height: auto !important; line-height: normal !important; }
 .collapsible .row .col { padding: 0 !important; }
 
@@ -152,20 +147,19 @@ img { width: 50%; cursor: zoom-in }
 /**
  * goddam */
 #list { height: 100%; }
-#list li { margin-bottom: 12px; /*1em*/  }
+#list li { margin-bottom: 1em;/* margin-bottom: 12px; /*1em*/  }
 #list li .row { margin: 0 !important }
 #list .collapsible-header {/* margin-bottom: 1em; */ cursor: row-resize; box-shadow: none !important;  }
 #list .collapsible-header i[class*="icon"]:before { font-size: 1rem; }
 #list .collapsible-header > .row { /*padding: 0.5em 1em 0 1em;*/ }
 #list .collapsible-header a:hover { text-decoration: underline; cursor: pointer; color: #2962FF; }
-#list .subject-line a { line-height: 2rem; display: inline-block; max-width: 66.6667%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#list li:nth-child(even) .collapsible-header { background: #ccc; color: #000 !important; }
-#list li:nth-child(odd) .collapsible-header { background: #fff; color: #000 !important;  }
-#list blockquote, #report blockquote { padding-right: 1rem; margin: 0 1rem; border-left-color: currentColor !important; border-left-style: dotted }
+#list .subject-line a { line-height: 2rem; display: inline-block; max-width: calc(100vw - 5em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/*#list li:nth-child(even) .subject-line { background: #ccc; color: #000 !important; }
+#list li:nth-child(odd) .subject-line { background: #fff; color: #000 !important;  }*/
 #list .divider { margin: 1rem 0; }
 #list span.small { padding: 0.5em; }
 #list span { cursor: default }
-
+#list .subject-line a { font-size: larger; text-align: justify; }
 #list .btn-flat.asc i::before {
     content: '\e845';
 }
@@ -205,7 +199,6 @@ img { width: 50%; cursor: zoom-in }
 #gn-menu nav ul a, #gn-menu nav * {
 }
 
-#gn-menu input[type] { width: auto !important; }
 /*#fuck, #fuck * { background: #888 !important; /* only dreams now~ } */
 
 .section { padding: 1em; }
@@ -259,7 +252,7 @@ textarea ~ a[href="#toolsModal"] { position: absolute; right: 0; top: 0; opacity
 textarea:focus ~ a[href="#toolsModal"] { opacity: 1; top: -2em; }
 #withToolsModal div.input-field { position: relative; }
 
-a:not([class*='tag-']):not([class*='category-']), .btn-floating i { color: inherit !important; }
+/*a:not([class*='tag-']):not([class*='category-']), .btn-floating i { color: inherit !important; }*/
 p { margin: 0; }
 p.tooltipped { cursor: help; }
 header section.primary-base > * { margin: 0 !important; }
@@ -340,3 +333,5 @@ input:checked ~ label { color: #4eb3de !important; }
 
 blockquote { width: calc(100% - 3em); padding: 0 0.5rem 1rem 0.5rem; overflow-x: auto; }
 blockquote pre { width: 100%; margin: 0; }
+
+[class*='priority-'] { font-size: xx-small !important; }

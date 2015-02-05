@@ -20,7 +20,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 
 <!--        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>-->
 <!--        <link rel='stylesheet' href='/bunzilla/material/materialize.min.css'>-->
-        <link rel='stylesheet' href='/bunzilla/tpl/material/matfix03.css'>
+        <link rel='stylesheet' href='/bunzilla/tpl/material/assets/css/materialize.min.css'>
 
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
@@ -53,7 +53,15 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 -->
                         <ul class="gn-menu">
                             <li class="gn-search-item">
-                                <a class="gn-icon icon-search"><span>Search</span><input placeholder="Search" type="text" class="gn-search"></a>
+                                <form action="<?= BUNZ_HTTP_DIR ?>search" method="get">
+                                <button type="submit" title="Search!" class="btn btn-floating right secondary-base gone" id="searchsubmit" style="margin-top: 0.5em; margin-right: 1em">&#8617;</button>
+                                <div class="input-field">
+                                    <i class="gn-icon icon-search">
+                                    <span>Search</span></i>
+                                    <input placeholder="Search" type="text" name="q" class="gn-search" onfocus="document.getElementById('searchsubmit').classList.remove('gone')" onblur="if(this.value === ''){document.getElementById('searchsubmit').classList.add('gone')}">
+                                    <span class="material-input"></span>
+                                </div>
+                                </form>
                             </li>
 <!--
     ex:
@@ -91,16 +99,36 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 <!--
     ~brand~ of our ~product~
 -->
-            <li>
-                    <a href='<?= BUNZ_HTTP_DIR ?>?material'>bunzilla<?php // $_BUNNIES[array_rand($_BUNNIES)] ?></a>
-
+            <li class="gn-multiline">
+                    <a title="<?= $_BUNNIES[array_rand($_BUNNIES)] ?>" href='<?= BUNZ_HTTP_DIR ?>'><?= BUNZ_PROJECT_TITLE ?><small><?= BUNZ_SIGNATURE ?></small></a>
             </li>
 
+<?php
+/* todo
             <li class="hide-on-small-only"><a href="#" class="icon-home">Bread</a></li>
             <li class="hide-on-small-only"><a href="#" class="icon-list-dl">Crumb</a></li>
             <li class="hide-on-small-only"><a href="#" class="icon-bug">Trail</a></li>
-
-            <li class="hide-on-small-only"><a href="<?= BUNZ_HTTP_DIR ?>?material&login" class="icon-key">Login</a></li>
+*/
+?>
+<?php
+if($this->auth())
+{
+?>
+            <li class="gn-multiline right">
+                <a href="?logout" class="icon-logout">Logout<small><?= $_SERVER['PHP_AUTH_USER'] ?></small></a>
+            </li>
+            <li class="hide-on-small-only right">
+                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class="icon-cog-alt">Cpanel</a>
+            </li>
+<?php
+} else {
+?>
+            <li>
+                <a href="?login" class="icon-key">Login</a>
+            </li>
+<?php
+}
+?>
         </ul>
         </header>
 

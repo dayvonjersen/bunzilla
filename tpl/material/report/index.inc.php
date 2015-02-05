@@ -12,7 +12,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
         <article class="col s12 m6">
 
             <header class="section no-pad-bot">
-                <section class="primary-base z-depth-5 waves-effect tooltipped"
+                <section class="section primary-base z-depth-5 waves-effect tooltipped"
                          data-tooltip="Go to project website: <?= BUNZ_PROJECT_WEBSITE ?>"
                          onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?= BUNZ_PROJECT_WEBSITE ?>'; }})(event);">
                     <h1><?= BUNZ_PROJECT_TITLE ?></h1>
@@ -32,6 +32,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 <li class="tab"><a href="#recent" class="waves-effect shade-base icon-history"><span class="hide-on-med-and-down">Recent Activity</span></a></li>
                 <li class="tab"><a href="#changelog" class="waves-effect secondary-base icon-doc-text-inv"><span class="hide-on-med-and-down">Changelog</span></a></li>
                 <li class="tab"><a href="#tagCloud" class="waves-effect primary-darken-2 icon-tags"><span class="hide-on-med-and-down">Popular Tags</span></a></li>
+                <li class="tab"><a href="#" class="active waves-effect red icon-cancel"></a></li>
             </ul>
             <section id="recent" class="section shade-base z-depth-5" >
                 <div class="section shade-lighten-3" style="max-height: 14em; overflow-y: auto">
@@ -139,7 +140,7 @@ if(empty($this->data['categories']))
                 <!--
                     actions
                 -->
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" class="waves-effect btn btn-floating z-depth-5 right category-<?= $cat['id'] ?>-base" title="submit new"><i class="icon-plus"></i></a>
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="waves-effect btn btn-floating z-depth-5 right category-<?= $cat['id'] ?>-base" title="submit new"><i class="icon-plus"></i></a>
                 <!-- 
                     title 
                 -->
@@ -159,29 +160,29 @@ if(empty($this->data['categories']))
         if($stats['last_activity'])
         {
 ?>
-                <p class="col category-<?= $cat['id'] ?>-lighten-1 s3 z-depth-2 tooltipped" 
+                <p class="section col category-<?= $cat['id'] ?>-lighten-1 s3 z-depth-2 tooltipped" 
                           data-tooltip="<?= $stats['open_issues'] ?> open issue<?= 
                             $stats['open_issues'] == 1 ? '' : 's' ?>">
                     <span class="icon-unlock"><?= $stats['open_issues'] ?></span>
                 </p>
 
-                <p class="col category-<?= $cat['id'] ?>-lighten-2 s3 z-depth-3 tooltipped"
+                <p class="section col category-<?= $cat['id'] ?>-lighten-2 s3 z-depth-3 tooltipped"
                           data-tooltip="percentage resolved: <?= $stats['percent_resolved'] ?>">
                     <span class="icon-ok"><?= $stats['percent_resolved']?></span>
                 </p>
 
-                <p class="col category-<?= $cat['id'] ?>-lighten-3 s3 z-depth-4 tooltipped" 
+                <p class="section col category-<?= $cat['id'] ?>-lighten-3 s3 z-depth-4 tooltipped" 
                           data-tooltip="<?= $stats['total_issues'] ?> total issue<?= 
                             $stats['total_issues'] == 1 ? '' : 's' ?>">
                     <span class="icon-doc-text-inv"><?= $stats['total_issues'] ?></span>
                 </p>
 
-                <p class="col category-<?= $cat['id'] ?>-lighten-4 s3 z-depth-5 tooltipped" 
+                <p class="section col category-<?= $cat['id'] ?>-lighten-4 s3 z-depth-5 tooltipped" 
                           data-tooltip="<?= $stats['unique_posters'] ?> unique poster<?= 
                             $stats['unique_posters'] == 1 ? '' : 's' ?>">
                     <span class="icon-users"><?= $stats['unique_posters'] ?></span>
                 </p>
-                <p class="col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-5 tooltipped"
+                <p class="section col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-5 tooltipped"
                           data-tooltip="last activity">
                     <span class="icon-time"><?= datef($stats['last_activity']) ?></span>
                 </p>
