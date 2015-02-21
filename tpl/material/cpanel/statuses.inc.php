@@ -73,28 +73,7 @@ if(!empty($this->data['statuses']))
                 <input id="add-status-title" type="text" name="title" maxlength="255"/>
                 <span class="material-input"></span>
                 <label for="add-status-title">Title</label>
-            </div>
-            <div class="input-field">
-                <input id="add-status-caption" type="text" name="caption" maxlength="255"/>
-                <span class="material-input"></span>
-                <label for="add-status-caption">Caption</label>
-            </div>
-            <div class="input-field">
-                <input type="checkbox" id="add-status-desc" name="description" value="1"/>
-                <label for="add-status-desc">Require Description</label>
-            </div>
-            <div class="input-field">
-                <input type="checkbox" id="add-status-repr" name="reproduce" value="1"/>
-                <label for="add-status-repr">Require Reproduce</label>
-            </div>
-            <div class="input-field">
-                <input type="checkbox" id="add-status-expe" name="expected" value="1"/>
-                <label for="add-status-expe">Require Expected</label>
-            </div>
-            <div class="input-field">
-                <input type="checkbox" id="add-status-actu" name="actual" value="1"/>
-                <label for="add-status-actu">Require Actual</label>
-            </div>
+            </div> 
             <div class="row">
                 <div class="input-field col s6">
                     <h5>Color</h5>
