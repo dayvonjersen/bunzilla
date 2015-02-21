@@ -32,7 +32,20 @@ if(!empty($this->data['categories']))
             <!--
                 actions
             -->
-                <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="waves-effect btn btn-floating z-depth-5 right category-<?= $cat['id'] ?>-base" title="submit new"><i class="icon-plus"></i></a>
+
+                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
+                       class="right btn btn-floating z-depth-5 danger-base" 
+                       title="delete category"><i class="icon-delete"></i></a>
+
+
+                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
+                       class="right btn btn-floating z-depth-5 alert-base" 
+                       title="merge category"><i class="icon-move"></i></a>
+
+                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
+                       class="right btn btn-floating z-depth-5 success-base" 
+                       title="edit category"><i class="icon-pencil-alt"></i></a>
+
             <!-- 
                 title 
             -->

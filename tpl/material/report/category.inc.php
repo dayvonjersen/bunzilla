@@ -32,7 +32,7 @@ if($this->auth())
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
                        class="right btn btn-floating z-depth-5 transparent" 
-                       title="submit new"><i class="green-text darken-2 icon-pencil-alt"></i></a>
+                       title="edit category"><i class="green-text darken-2 icon-pencil-alt"></i></a>
 <?php
 }
 ?>

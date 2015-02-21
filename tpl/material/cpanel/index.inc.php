@@ -60,18 +60,10 @@ foreach($this->data['changelog'] as $ln)
                 </section> 
 <?php
 include 'categories.inc.php';
+include 'statuses.inc.php';
+include 'tags.inc.php';
+include 'priorities.inc.php';
 ?>
-                <section id="statuses">
-<pre><?= print_r($this->data['statuses'],1) ?></pre>
-                </section>
-
-                <section id="tags">
-<pre><?= print_r($this->data['tags'],1) ?></pre>
-                </section>
-
-                <section id="priorities">
-<pre><?= print_r($this->data['priorities'],1) ?></pre>
-                </section>
             </div>
         </section>
     </header>

@@ -140,6 +140,9 @@ if(file_exists(BUNZ_RES_DIR.'settings.ini'))
     $filt->addString('primary_color');
     $filt->addString('secondary_color');
     $filt->addString('shade_color');
+    $filt->addString('alert_color');
+    $filt->addString('danger_color');
+    $filt->addString('success_color');
     $cfg['theme'] = $filt->var_array($cfg['theme']);
 /*
     filter_var_array($cfg['bunzilla'], [

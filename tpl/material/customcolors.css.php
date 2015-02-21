@@ -45,7 +45,7 @@ function createShades( $className, $color )
 $_ = [];
 /**
  * defined in res/settings.ini */
-foreach(['primary','secondary','shade'] as $className)
+foreach(['primary','secondary','shade', 'alert', 'danger', 'success'] as $className)
 {
     if(defined('BUNZ_THEME_'.strtoupper($className).'_COLOR'))
         $_ += createShades(
