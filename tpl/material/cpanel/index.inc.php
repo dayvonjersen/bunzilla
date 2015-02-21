@@ -1,14 +1,15 @@
 <?php
 $pageTitle = 'cpanel';
-
+$background = 'primary-base';
 require_once BUNZ_TPL_DIR . 'header.inc.php';
 ?>
-<article class="container pink">
+<script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
+<article class=" primary-text">
     <header class="row">
         <h1><?= BUNZ_PROJECT_TITLE, ' :: ', $pageTitle ?></h1>
 
         <section class="col s12">
-            <div class="row">
+            <div class="row secondary-text">
                 <ul class="tabs">
                     <li class="tab col s2"><a class="icon-chart" href="#statistics">Statistics</a></li>
                     <li class="tab col s2"><a class="icon-doc-text-inv" href="#changelog">Changelog</a></li>
@@ -24,58 +25,42 @@ require_once BUNZ_TPL_DIR . 'header.inc.php';
                 </ul>
 
                 <section id="statistics">
-<pre><?= print_r($this->data['statistics'],1) ?></pre>
+                    <img src="/pfsc/picturesforsadchildren/00000263.png" alt="[insert pointless graph here]"/>
                 </section>
 
                 <section id="changelog">
-<pre><?= print_r($this->data['changelog'],1) ?></pre>
-                </section>
-
-                <section id="categories" class="col s12">
-                    <ul class="tabs">
-                        <li class="tab col s6"><a href="#viewCategories" class="icon-flashlight">View All</a></li>
-                        <li class="tab col s6"><a href="#createCategory" class="icon-plus">Create New Category</a></li>
-                    </ul>
-                    <section id="viewCategories">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Title and caption</th>
-                                <th># reports</th>
-                                <th>last activity</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <nav>
+                        <a href="#" class="dropdown-button btn" data-activates="changelog-exports">Export as</a>
+                        <ul id="changelog-exports" class="dropdown-content">
+                            <li><a href="#" class="icon-html">HTML</a></li>
+                            <li><a href="#" class="icon-list-dl">Markdown</a></li>
+                            <li><a href="#" class="icon-ol">Plain text</a></li>
+                        </ul>
+                        <a href="#" class="dropdown-button btn" data-activates="changelog-versions">View version</a>
+                        <ul id="changelog-versions" class="dropdown-content">
+                            <li><a href="#">All</a></li>
+                            <li><a href="#">1.0</a></li>
+                            <li><a href="#">2.0</a></li>
+                            <li><a href="#">...</a></li>
+                        </ul>
+                    </nav>
+<form>
+<h1 class="icon-pencil-alt">Edit changelog</h1>
+<ol>
 <?php
-foreach($this->data['categories'] as $cat)
+foreach($this->data['changelog'] as $ln)
 {
-?>
-                            <tr>
-                                <td><a href="<?= BUNZ_HTTP_DIR ?>report/category/<?= $cat['id'] ?>"
-                                        class="category-<?= $cat['id']?>-text"><?=$cat['title']?></a><br>
-<?= $cat['caption'] ?>
-                                </td>
-                                <td>9001</td>
-                                <td><?= datef() ?></td>
-                                <td>Edit /Move / Delete</td>
-                            </tr>
-<?php
+    $ln = current($ln);
+    echo '<li class="input-field"><input type="text" value="',htmlspecialchars($ln),'"/><span class="material-input"></span></li>';
 }
 ?>
-                        </tbody>
-                    </table>
-                    </section>
-                    <section id="createCategory">
-                        <form>
-                            <div class="input-field">
-                                <input>
-                                <label>Things</label>
-                            </div>
-                        </form>
-                    </section>
-                </section>
-
+</ol>
+                    <p class="input-field"><input type="text" placeholder="Add a line..."/><span class="material-input"></span><button class="btn btn-floating left" type="submit"><i class="icon-plus"></i></button></p>
+</form>
+                </section> 
+<?php
+include 'categories.inc.php';
+?>
                 <section id="statuses">
 <pre><?= print_r($this->data['statuses'],1) ?></pre>
                 </section>

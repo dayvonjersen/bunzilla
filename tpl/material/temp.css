@@ -138,7 +138,7 @@ span.badge {
 #toolsModal label {
     display: block;
 }
-.collapsible-header { height: auto !important; line-height: normal !important; }
+.collapsible-header { height: auto !important; line-height: 1em; }
 .collapsible .row .col { padding: 0 !important; }
 
 img { width: 50%; cursor: zoom-in }
@@ -174,6 +174,8 @@ img { width: 50%; cursor: zoom-in }
 
 .row { margin-bottom: 0 !important; }
 
+#list .collapsible-header { z-index: 100; }
+#list .collapsible-body { z-index: 99; }
 /*
 [class*='waves-'] {
     overflow: visible !important;
@@ -335,3 +337,6 @@ blockquote { width: calc(100% - 3em); padding: 0 0.5rem 1rem 0.5rem; overflow-x:
 blockquote pre { width: 100%; margin: 0; }
 
 [class*='priority-'] { font-size: xx-small !important; }
+
+.active .collapsible-body { overflow: visible; }
+

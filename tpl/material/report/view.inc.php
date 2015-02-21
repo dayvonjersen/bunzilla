@@ -124,14 +124,14 @@ if($this->auth())
            <!--
                 admin actions : update status
             -->        
-            <section class="section col s12 light-blue" id="update">
+            <section class="section col s12 secondary-base" id="update">
                 <h5 class="white-text">update status to</h5>
 
-                <form class="category-<?=$cat['id']?>-lighten-5 z-depth-5 section" 
+                <form class="category-<?=$cat['id']?>-text z-depth-5 section" 
                       action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>?material" 
                       method="post">
 
-                    <fieldset class="row">
+                    <div class="row">
                         <div class="input-field col s12 m6">
                             <p>Status:</p>
                             <?= statusDropdown($report['status']) ?>
@@ -163,7 +163,7 @@ count($this->data['priorities'])
                                     value="1">AND <?= $report['closed'] ? 'Open' : 'Close' ?> This Report</button>
                             <button type="reset" class="btn-flat icon-cancel">Reset Form</button>
                         </div>
-                    </fieldset>
+                    </div>
                 </form>
             </section>
 

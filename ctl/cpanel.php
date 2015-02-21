@@ -21,7 +21,7 @@ class cpanel extends Controller
             'prolific_user' => db()->query('SELECT email FROM reports ORDER BY RAND() LIMIT 1')->fetchColumn()
         ];
 
-        $this->data['changelog'] = 'stuff';
+        $this->data['changelog'] = db()->query('SELECT message FROM change_log ORDER BY time DESC')->fetchAll(PDO::FETCH_NUM);
 
 /*        
         $this->data

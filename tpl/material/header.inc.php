@@ -123,7 +123,7 @@ if($this->auth())
 <?php
 } else {
 ?>
-            <li>
+            <li class="right">
                 <a href="?login" class="icon-key">Login</a>
             </li>
 <?php

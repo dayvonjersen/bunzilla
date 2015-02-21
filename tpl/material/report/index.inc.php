@@ -163,33 +163,33 @@ if(empty($this->data['categories']))
                 <p class="section col category-<?= $cat['id'] ?>-lighten-1 s3 z-depth-2 tooltipped" 
                           data-tooltip="<?= $stats['open_issues'] ?> open issue<?= 
                             $stats['open_issues'] == 1 ? '' : 's' ?>">
-                    <span class="icon-unlock"><?= $stats['open_issues'] ?></span>
+                    <span><i class="icon-unlock"></i><br/><?= $stats['open_issues'] ?></span>
                 </p>
 
                 <p class="section col category-<?= $cat['id'] ?>-lighten-2 s3 z-depth-3 tooltipped"
                           data-tooltip="percentage resolved: <?= $stats['percent_resolved'] ?>">
-                    <span class="icon-ok"><?= $stats['percent_resolved']?></span>
+                    <span><i class="icon-ok"></i><br/><?= $stats['percent_resolved']?></span>
                 </p>
 
                 <p class="section col category-<?= $cat['id'] ?>-lighten-3 s3 z-depth-4 tooltipped" 
                           data-tooltip="<?= $stats['total_issues'] ?> total issue<?= 
                             $stats['total_issues'] == 1 ? '' : 's' ?>">
-                    <span class="icon-doc-text-inv"><?= $stats['total_issues'] ?></span>
+                    <span><i class="icon-doc-text-inv"></i><br/><?= $stats['total_issues'] ?></span>
                 </p>
 
                 <p class="section col category-<?= $cat['id'] ?>-lighten-4 s3 z-depth-5 tooltipped" 
                           data-tooltip="<?= $stats['unique_posters'] ?> unique poster<?= 
                             $stats['unique_posters'] == 1 ? '' : 's' ?>">
-                    <span class="icon-users"><?= $stats['unique_posters'] ?></span>
+                    <span><i class="icon-users"></i><br/><?= $stats['unique_posters'] ?></span>
                 </p>
                 <p class="section col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-5 tooltipped"
                           data-tooltip="last activity">
-                    <span class="icon-time"><?= datef($stats['last_activity']) ?></span>
+                    <span class="icon-time"></i><br/><?= datef($stats['last_activity']) ?></span>
                 </p>
 <?php
         } else {
 ?>
-                <p class="col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-1"><em>Nothing has been posted here yet!</em></p>
+                <p class="section col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-1"><em>Nothing has been posted here yet!</em></p>
 <?php
     }
 ?>

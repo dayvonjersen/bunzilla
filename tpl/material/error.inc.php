@@ -3,7 +3,7 @@ ob_clean();
 
 $pageTitle = 'Whoops!';
 
-require BUNZ_TPL_DIR .'header.inc.php';
+//require BUNZ_TPL_DIR .'header.inc.php';
 
 if(isset($_ERROR))
 {

@@ -1,11 +1,31 @@
         </main>
 </div>
-        <footer class="footer">
-<a style="position: fixed; bottom: 2em; right: 2em; " class="btn-floating black white-text" title="helo r u lost" href="#"><i class="icon-up-open-mini"></i></a>
+        <footer class="footer shade-darken-4">
+            <a style="position: fixed; bottom: 2em; right: 2em; " class="btn-floating black white-text" title="helo r u lost" href="#"><i class="icon-up-open-mini"></i></a>
                 <div class="row">
-                    <div class="col 16 s12">
-                        <h5><?= $_BUNNIES[array_rand($_BUNNIES)] ?></h5>
-                        <p class="grey-text text-lighten-4">I have no idea what I'm doing anymore</p>
+                    <div class="section col s12 m4">
+                        <h1><?=$_BUNNIES[array_rand($_BUNNIES)]?></h1>
+                        <h6><?= BUNZ_SIGNATURE ?> version <?= BUNZ_VERSION ?></h6>
+                    </div>
+                    <div class="section col s12 m4 right-align hide-on-small-only">
+                        <ul class="">
+                            <li class='icon-github'>
+                                <a href="https://github.com/generaltso/bunzilla">on github</a>
+                            </li>
+                            <li class='icon-person'>
+                                <a href="https://var.abl.cl/">at home</a>
+                            </li>
+                            <li class='icon-emo-happy'>
+                                <a href="http://japaneseemoticons.net/rabbit-emoticons">bunny emoticons</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="section col s12 m4 hide-on-small-only">
+                        <ul class="">
+                            <li class='icon-mail'><a href="mailto:țšō@țėķńĭķ.ı0?subject=remove+accents">tell me what you think</a></li>
+                            <li class='icon-bug'>x_x</li>
+                            <li class='icon-magic'><?= round(microtime(1) - BUNZ_START_TIME,4) ?>s</li>
+                        </ul>
                     </div>
                 </div>
         </footer>

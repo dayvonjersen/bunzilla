@@ -3,6 +3,18 @@
 // functions for to displaying the things
 //
 
+function ftime( $time, $amount, $unit )
+{
+    if($time >= $amount)
+        return [
+            sprintf("%d $unit%s", 
+                $time/$amount, 
+                (int)($time/$amount) == 1 ? '':'s'
+            ),
+            $time%$amount
+        ];
+    return [false, $time];
+}
 /**
  * formatted date for web 2.0 
  * relative > exact according to the kids
@@ -17,25 +29,19 @@ function datef( $time = -1 )
 
     $diff = time() - $time;
 
-    /**
-     * todo: maybe expand this to days/months/years
-     * maybe that's overkill */
-    if($diff < 86400)
-    {
-        if($diff < 60)
-            $unit =  'second';
-        elseif($diff < 3600)
-        {
-            $diff = (int)($diff/60);
-            $unit = 'minute';
-        } else {
-            $diff = (int)($diff/3600);
-            $unit = 'hour';
-        }
-        return sprintf('%d %s%s ago', $diff, $unit, ($diff == 1 ? '' : 's'));
-    }
-
-    return date(BUNZ_BUNZILLA_DATE_FORMAT, $time);
+    $ret = [];
+    list($ret[], $diff) = ftime($diff, 31536000, 'year');
+    list($ret[], $diff) = ftime($diff, 2592000, 'month');
+    list($ret[], $diff) = ftime($diff, 604800, 'week');
+    list($ret[], $diff) = ftime($diff, 86400, 'day');
+    list($ret[], $diff) = ftime($diff, 3600, 'hour');
+    list($ret[], $diff) = ftime($diff, 60, 'minute');
+    list($ret[], $diff) = ftime($diff, 1, 'second');
+    return sprintf('<time title="%s">%s ago</time>',
+        date(BUNZ_BUNZILLA_DATE_FORMAT, $time),
+        implode(', ',array_filter($ret,function($val){return $val;}))
+    );
+    //return ;
 }
 
 /**
