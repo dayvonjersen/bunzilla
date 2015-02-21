@@ -22,7 +22,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 
             <section class="section row no-pad-top">
                 <p class="z-depth-5 col s4 section primary-lighten-3">version <?= BUNZ_PROJECT_VERSION ?></p>
-                <p class="z-depth-5 col s8 section primary-lighten-5 right-align tooltipped" 
+                <p class="z-depth-5 col s8 section primary-text right-align tooltipped" 
                    data-tooltip="mission statement"><em><?= BUNZ_PROJECT_MISSION_STATEMENT ?></em></p>
             </section>
 

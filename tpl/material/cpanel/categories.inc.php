@@ -72,15 +72,15 @@ if(!empty($this->data['categories']))
                 <label for="add-category-desc">Require Description</label>
             </div>
             <div class="input-field">
-                <input type="checkbox" id="add-category-repr" name="description" value="1"/>
+                <input type="checkbox" id="add-category-repr" name="reproduce" value="1"/>
                 <label for="add-category-repr">Require Reproduce</label>
             </div>
             <div class="input-field">
-                <input type="checkbox" id="add-category-expe" name="description" value="1"/>
+                <input type="checkbox" id="add-category-expe" name="expected" value="1"/>
                 <label for="add-category-expe">Require Expected</label>
             </div>
             <div class="input-field">
-                <input type="checkbox" id="add-category-actu" name="description" value="1"/>
+                <input type="checkbox" id="add-category-actu" name="actual" value="1"/>
                 <label for="add-category-actu">Require Actual</label>
             </div>
             <div class="row">

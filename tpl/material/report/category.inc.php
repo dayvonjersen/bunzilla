@@ -23,14 +23,14 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 -->
                 <section class='section no-pad-top col s12 z-depth-5 category-<?=$cat['id']?>-base'>
 
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>?material" 
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
                        class="right btn btn-floating z-depth-5 transparent" 
                        title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
 <?php
 if($this->auth())
 {
 ?>
-                    <a href="<?=BUNZ_HTTP_DIR,'admin/edit/category/',$cat['id']?>" 
+                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
                        class="right btn btn-floating z-depth-5 transparent" 
                        title="submit new"><i class="green-text darken-2 icon-pencil-alt"></i></a>
 <?php
@@ -56,7 +56,7 @@ if(empty($this->data['reports']))
         <!--
             consistency++
         -->
-        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>?material">Submit Something!</a></div>
+        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>">Submit Something!</a></div>
 <?php
 } else {
 
@@ -177,7 +177,7 @@ document.body.onload = function(){
                         <?= $report['closed'] ? '<span class="right">'.status($report['status']).'</span>' : '' ?>
 
                         <span class="badge right blue-text" title="comments">
-                            <a class=" icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'?material#comments'?>"><?= $report['comments'] ?></a>
+                            <a class=" icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#comments'?>"><?= $report['comments'] ?></a>
                         </span>
 
 <?php // no point in redundancy ?>

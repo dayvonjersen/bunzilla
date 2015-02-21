@@ -128,7 +128,7 @@ if($this->auth())
                 <h5 class="white-text">update status to</h5>
 
                 <form class="category-<?=$cat['id']?>-text z-depth-5 section" 
-                      action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>?material" 
+                      action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>" 
                       method="post">
 
                     <div class="row">
