@@ -2192,7 +2192,7 @@ function update_indicator($index, $prev_index) {
         $('body').append(options);
         // Check if section element is disabled
         if (!$select.is(':disabled')) {
-          $newSelect.dropdown({"hover": false});
+          $newSelect.dropdown({"hover": false, "constrain_width": false});
         }
         $select.addClass('initialized');
 

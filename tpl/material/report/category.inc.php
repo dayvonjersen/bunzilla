@@ -80,6 +80,10 @@ document.body.onload = function(){
 };
 </script>
 
+<?= pagination( BUNZ_HTTP_DIR.'report/category/'.$cat['id'], 
+        selectCount('reports','category = '.$cat['id']),
+        $this->data['page_offset']
+    ) ?>
 <!--
     dear god
 -->

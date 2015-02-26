@@ -104,6 +104,8 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
             </li>
 
 <?php
+if(isset($this->breadcrumbs))
+    breadcrumb($this->breadcrumbs, $this->tpl, isset($this->data['category']) ? $this->data['category']['id'] : 0);
 /* todo
             <li class="hide-on-small-only"><a href="#" class="icon-home">Bread</a></li>
             <li class="hide-on-small-only"><a href="#" class="icon-list-dl">Crumb</a></li>

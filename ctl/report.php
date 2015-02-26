@@ -30,6 +30,27 @@ class report extends Controller
         return $field;
     }
 
+    public $breadcrumbs = [];
+    public function setBreadcrumbs($method)
+    {
+        $this->breadcrumbs[] = ['href' => 'report/index', 
+                                'title' => 'Category Listing',
+                                'icon'  => 'icon-ul'];
+        if($method == 'index')
+            return;
+
+        $this->breadcrumbs[] = ['href' => 'report/category/'.$this->data['category']['id'],
+                                'title' => $this->data['category']['title'],
+                                'icon' => $this->data['category']['icon']];
+        if($method == 'category')
+            return;
+
+        $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['report']['id'],
+                                'title' => $this->data['report']['subject'],
+                                'icon' => $this->data['report']['closed'] ? 'icon-lock' : 'icon-doc-text-inv'];
+        return;
+    }
+
     public function index()
     {
         $this->tpl .= '/index';
@@ -58,6 +79,7 @@ class report extends Controller
             $stats[$id]['open_issues'] = selectCount('reports','closed = 0 AND category = '.$id);
         }
         $this->data['stats'] = $stats;
+        $this->setBreadcrumbs(__FUNCTION__);
     }
 
     // should implement this kind of abstraction in more places
@@ -106,6 +128,7 @@ class report extends Controller
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['category_id'] = $this->data['report']['category'];
+        $this->setBreadcrumbs(__FUNCTION__);
         exit;
     }
 
@@ -115,7 +138,7 @@ class report extends Controller
         if(!selectCount('categories','id = '.(int)$id))
             $this->abort('No such category.');
 
-        $offset = abs($offset);
+        $offset = ((int) abs($offset)) * 50;
         if($offset && $offset > selectCount('reports', 'category = '.(int) $id))
             $this->abort('Stop that.');
 
@@ -158,6 +181,8 @@ class report extends Controller
         }
 
         $this->data['category_id'] = (int)$id;
+        $this->data['page_offset'] = ceil($offset / 50);
+        $this->setBreadcrumbs(__FUNCTION__);
     }
 
     // moderation actions

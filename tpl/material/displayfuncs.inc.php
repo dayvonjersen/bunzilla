@@ -95,12 +95,14 @@ function priority( $id, $badge = true ) {
 
 /**
  * ditto for <select> dropdowns */
-function dropdown( $fieldName, $values, $selected = false, $disableKey = false )
+function dropdown( $fieldName, $values, $selected = false, $disableKey = false, $onchange = null )
 {
     if($disableKey !== false && isset($values[$disableKey]))
         unset($values[$disableKey]);
 
-    $ret = "<select name='$fieldName'>\n";
+    $onchange = isset($onchange) ? " onchange='$onchange'" : '';
+
+    $ret = "<select$onchange name='$fieldName'>\n";
     foreach($values as $opt)
     {
         $ret .= "\t<option value='{$opt['id']}' class='{$fieldName}-{$opt['id']}' data-icon='{$opt['icon']}'".($selected === $opt['id'] ? ' selected' : '').">{$opt['title']}</option>\n";
@@ -110,8 +112,8 @@ function dropdown( $fieldName, $values, $selected = false, $disableKey = false )
 function statusDropdown( $selected, $disableId = false ) { 
     return dropdown('status',Cache::read('statuses'),$selected, $disableId);
 }
-function categoryDropdown( $selected, $disableId = false ) { 
-    return dropdown('category', Cache::read('categories'), $selected, $disableId);
+function categoryDropdown( $selected, $disableId = false, $onchange = null ) { 
+    return dropdown('category', Cache::read('categories'), $selected, $disableId, $onchange);
 }
 
 /**
@@ -152,4 +154,59 @@ function unfiltermessage($msg)
     $msg = str_replace('>','&gt;',$msg);
 
     return $msg;
+}
+
+function pagination( $url, $total, $curPage )
+{
+    if($total < 50)
+        return '';
+
+    $curPage += 1;
+    $pages = ceil($total/50);
+
+    $return = '<article class="z-depth-5 row center">'
+             .'<section class="section no-pad-bot col s12 secondary-darken-4">'
+             ."<em class='h2'>Page $curPage of $pages</em>"
+             .'</section>';
+
+    $classList = 'z-depth-1 section col s1 primary-text';
+
+    if($curPage != 1)
+        $return .= "<a href='$url' class='$classList'>First</a>";
+    
+    if($curPage > 2)
+        $return .= "<a href='$url/".($curPage - 1)
+                ."' class='$classList'>Previous</a>";
+
+    for($i = 1; $i <= $pages; $i++)
+        $return .= '<'.($i == $curPage ? 'section' : "a href='$url/".($i-1)."'")
+                    ." class='$classList".($i == $curPage ? ' z-depth-5' : '')."'>$i</"
+                    .($i == $curPage ? 'section' : 'a')
+                    .'>';
+
+    if($curPage <= $pages - 2)
+        $return .= "<a href='$url/".($curPage+1)
+                    ."' class='$classList'>Next</a>";
+
+    if($curPage != $pages)
+       $return .= "<a href='$url/".($pages-1)."' class='$classList'>Last</a>";
+
+    return "$return</article>";
+}
+
+// this is the hardest thing ever I swear to god
+// I am literally just pressing keys
+function breadcrumb($crumbs, $youarehere, $categoryId)
+{   
+    foreach($crumbs as $crumb)
+    {
+        if(strstr($crumb['href'],'report/category'))
+        {
+            echo '<li>',categoryDropdown($categoryId,false,'window.location="'.BUNZ_HTTP_DIR.'report/category/" + this.value'),'</li>';
+        } elseif(strstr($crumb['href'],$youarehere)) {
+            echo '<li class="gn-multiline"><i class="',$crumb['icon'],'"></i><em>',$crumb['title'],'</em><small>&rarr;you are here&larr;</small></li>';
+        } else {
+            echo '<li><a href="',BUNZ_HTTP_DIR,$crumb['href'],'"', isset($crumb['icon']) ? " class='{$crumb['icon']}'" : '','>',$crumb['title'],'</a></li>',"\n";
+        }
+    }
 }
