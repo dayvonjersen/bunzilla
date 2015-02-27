@@ -42,7 +42,7 @@ class Filter
         return $const; // no options exist without flags
     }
 
-    protected $options = [];
+    public $options = [];
 
     public function __construct(){}
 

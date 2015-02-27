@@ -68,7 +68,6 @@ class post extends Controller
         $this->tpl .= '/edit';
         $this->checkReport($reportId);
         $reportId = (int)$reportId;
-        $this->data['tags'] = db()->query('SELECT id FROM tags ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
         $this->data['params'] = current(db()->query(
             'SELECT category, subject'.($commentId===false?', description, reproduce, expected, actual, ip':'').'
              FROM reports
@@ -89,7 +88,14 @@ class post extends Controller
 
             $this->data['params']['comment_id'] = $commentId;
             $this->data['category']['message'] = true; // shut up
-        } 
+        } else {
+            $this->data['params']['tags'] = [];
+            foreach(db()->query(
+            'SELECT tag
+             FROM tag_joins 
+             WHERE report = '.$reportId)->fetchAll(PDO::FETCH_NUM) as $tag)
+                $this->data['params']['tags'][] = $tag[0];
+        }
 
         $this->data['params']['report_id'] = $reportId;
 
@@ -99,8 +105,12 @@ class post extends Controller
 
         if(!empty($_POST))
         {
+/***
+XXX ::: what the fuck stop being a lazy shit
+***/
+            $filtOpts__obj = $this->getFilterOptions($commentId === false ? 'report' : 'comment');
             $filtOpts = array_intersect_key(
-                $this->getFilterOptions($commentId === false ? 'report' : 'comment'), $this->data['params']);
+                $filtOpts__obj->options, $this->data['params']);
             $changes = filter_input_array(INPUT_POST, $filtOpts);
             $set = [];
             foreach($this->data['params'] as $field => $value)
