@@ -269,6 +269,7 @@ jQuery.extend( jQuery.easing,
           var elem = object.get()[0];
           setTimeout(function(){
             elem.scrollIntoView({behavior: "smooth"});
+            object.siblings('.collapsible-body').addClass('fuckityfuckfuck');
           },350);
 /* idk xxx              i = 0, intval;
           intval = setInterval(function(){
@@ -282,6 +283,7 @@ jQuery.extend( jQuery.easing,
         else{
 //          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
           object.siblings('.collapsible-body').removeClass('animated');
+          object.siblings('.collapsible-body').removeClass('fuckityfuckfuck');
         }
         $panel_headers.not(object).parent().removeClass('active');
 //        $panel_headers.not(object).parent().children('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
@@ -298,6 +300,7 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
           var elem = object.get()[0];
           setTimeout(function(){
             elem.scrollIntoView({behavior: "smooth"});
+            object.siblings('.collapsible-body').addClass('fuckityfuckfuck');
           },350);
 /* idk xxx              i = 0, intval;
           intval = setInterval(function(){
@@ -311,6 +314,7 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
         else{
 //          object.siblings('.collapsible-body').stop(true,false).slideUp({ duration: 350, easing: "easeOutQuart", queue: false});
           object.siblings('.collapsible-body').removeClass('animated');
+          object.siblings('.collapsible-body').removeClass('fuckityfuckfuck');
         }
       }
 

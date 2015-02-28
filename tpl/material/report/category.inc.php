@@ -4,7 +4,7 @@
 //
 $cat = $this->data['categories'][$this->data['category_id']];
 $pageTitle = $cat['title'];
-$background="category-{$cat['id']}-lighten-5";
+$background="category-{$cat['id']}-base";
 //'transparent';
 
 require BUNZ_TPL_DIR . 'header.inc.php';
@@ -168,7 +168,7 @@ document.body.onload = function(){
             </div>
 
 <?php // it looks like a lot of markup because it is. ?>
-            <div class="collapsible-header no-select <?= $report['closed'] ? 'shade-text' : 'category-'.$cat['id'].'-darken-3' ?>">
+            <div class="collapsible-header no-select <?= $report['closed'] ? 'shade-text' : 'category-'.$cat['id'].'-lighten-1' ?>">
 
 <?php // [icon] subject line blablabla [status] ?>
 
@@ -187,7 +187,7 @@ document.body.onload = function(){
 <?php // no point in redundancy ?>
 <?= 
 ($report['last_active'] == $report['time']) ? '' 
-: '<span class="icon-time small right" title="last active">'.datef($report['last_active']).'</span>' 
+: '<span class="lastactive icon-time small right" title="last active">'.datef($report['last_active']).'</span>' 
 ?>
  <span class="submitted icon-history small right" title="submitted at"><?= datef($report['time']) ?></span>
 
@@ -209,8 +209,8 @@ document.body.onload = function(){
             echo priority($report['priority']),'</div>';
         }
 ?>
-                        <div class="z-depth-3 subject-line<?= $report['closed'] ? '  transparent' : ' category-'.$cat['id'].'-text" style="clear: both'?>" title="<?= $report['subject'] ?>">
-                            <a class="subject icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv'?>" 
+                        <div class="z-depth-3 subject-line transparent"<?= $report['closed'] ? '' : ' style="clear: both"'?> title="<?= $report['subject'] ?>">
+                            <a class="subject h4 icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
                                href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>"><?= $report['subject'] ?></a>
 
                         <?= $report['closed'] ? '' : '<span class="right">'.status($report['status']).'</span>' ?>
