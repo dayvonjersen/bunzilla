@@ -329,7 +329,7 @@ input:checked ~ label { color: #4eb3de !important; }
 
 @media (max-width: 601px) {
     .section { padding-left: 0; padding-right: 0; }
-    #list .lastactive, #list .submitted { float: none !important; }
+    #list .time_lastactive, #list .time_submitted { float: none !important; }
     time { font-size: 0px }
     time:after { content: attr(title); font-size: 0.6667rem !important; line-height: 0.73337rem; }
 }

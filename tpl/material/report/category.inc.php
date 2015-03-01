@@ -187,9 +187,9 @@ document.body.onload = function(){
 <?php // no point in redundancy ?>
 <?= 
 ($report['last_active'] == $report['time']) ? '' 
-: '<span class="lastactive icon-time small right" title="last active">'.datef($report['last_active']).'</span>' 
+: '<span class="time_lastactive icon-time small right" title="last active">'.datef($report['last_active']).'</span>' 
 ?>
- <span class="submitted icon-history small right" title="submitted at"><?= datef($report['time']) ?></span>
+ <span class="time_submitted icon-history small right" title="submitted at"><?= datef($report['time']) ?></span>
 
 <?php // x comments | 4 hours ago | [php] [DIVitis] ?>
 

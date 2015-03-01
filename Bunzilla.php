@@ -227,17 +227,23 @@ class Controller
 
     protected function setTemplate()
     {
-        $tpl = BUNZ_THEME_DEFAULT_TEMPLATE;
+        $tpl = isset($_SESSION['tpl']) ? basename($_SESSION['tpl']) : BUNZ_THEME_DEFAULT_TEMPLATE;
         if(isset($_GET['json']))
             $tpl = 'json';
         elseif(isset($_GET['rss']))
             $tpl = 'rss';
         elseif(isset($_GET['nofrills']))
             $tpl = 'nofrills';
+        elseif(isset($_GET['material']))
+            $tpl = 'material';
 
         if(!is_dir(BUNZ_TPL_BASE_DIR . $tpl))
+        {
+            unset($_SESSION['tpl']);
             exit("fux.");
+        }
 
+        $_SESSION['tpl'] = $tpl;
         define('BUNZ_TPL_DIR', BUNZ_TPL_BASE_DIR . $tpl . '/');
     }
 
