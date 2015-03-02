@@ -2,7 +2,11 @@
  * activate materialize.js components */
 //$(document).ready(function(){
 $(window).load(function(){
-    $(".dropdown-button").dropdown();
+    $(".dropdown-button").dropdown(
+{
+    constrain_width: true,
+    belowOrigin: true
+});
     $(".collapsible").collapsible();
     $('select').material_select();
     $('ul.tabs').tabs();

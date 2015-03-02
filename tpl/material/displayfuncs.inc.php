@@ -165,11 +165,11 @@ function pagination( $url, $total, $curPage )
     $pages = ceil($total/50);
 
     $return = '<article class="z-depth-5 row center">'
-             .'<section class="section no-pad-bot col s12 secondary-darken-4">'
-             ."<em class='h2'>Page $curPage of $pages</em>"
+             .'<section class="section no-pad-top no-pad-bot col s12 secondary-darken-4">'
+             ."<em class='h5'>Page $curPage of $pages</em>"
              .'</section>';
 
-    $classList = 'z-depth-1 section col s1 primary-text';
+    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
 
     if($curPage != 1)
         $return .= "<a href='$url' class='$classList'>First</a>";
@@ -198,15 +198,18 @@ function pagination( $url, $total, $curPage )
 // I am literally just pressing keys
 function breadcrumb($crumbs, $youarehere, $categoryId)
 {   
+    if(!count($crumbs))
+        return;
+    $style = ' style="padding: 0 1em;width: '.round(66.6667/count($crumbs), 4).'%" ';
     foreach($crumbs as $crumb)
     {
         if(strstr($crumb['href'],'report/category'))
         {
-            echo '<li>',categoryDropdown($categoryId,false,'window.location="'.BUNZ_HTTP_DIR.'report/category/" + this.value'),'</li>';
+            echo '<li class="hide-overflow-text hide-on-small-only',strstr($crumb['href'],$youarehere) ? ' secondary-text"' : '"',$style,'>',categoryDropdown($categoryId,false,'window.location="'.BUNZ_HTTP_DIR.'report/category/" + this.value'),'</li>';
         } elseif(strstr($crumb['href'],$youarehere)) {
-            echo '<li class="gn-multiline"><i class="',$crumb['icon'],'"></i><em>',$crumb['title'],'</em><small>&rarr;you are here&larr;</small></li>';
+            echo '<li',$style,' class="secondary-text gn-multiline hide-overflow-text hide-on-small-only"><i class="',$crumb['icon'],'"></i><em>',$crumb['title'],'</em><small>&rarr;you are here&larr;</small></li>';
         } else {
-            echo '<li><a href="',BUNZ_HTTP_DIR,$crumb['href'],'"', isset($crumb['icon']) ? " class='{$crumb['icon']}'" : '','>',$crumb['title'],'</a></li>',"\n";
+            echo '<li',$style,' class="hide-overflow-text hide-on-small-only"><a href="',BUNZ_HTTP_DIR,$crumb['href'],'"', isset($crumb['icon']) ? " class='{$crumb['icon']}'" : '','>',$crumb['title'],'</a></li>',"\n";
         }
     }
 }

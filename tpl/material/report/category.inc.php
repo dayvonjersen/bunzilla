@@ -4,8 +4,7 @@
 //
 $cat = $this->data['categories'][$this->data['category_id']];
 $pageTitle = $cat['title'];
-$background="category-{$cat['id']}-base";
-//'transparent';
+$background='transparent';
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
@@ -56,7 +55,7 @@ if(empty($this->data['reports']))
         <!--
             consistency++
         -->
-        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>">Submit Something!</a></div>
+        <div class="z-depth-5 alert-text section flow-text icon-attention center-align blue-text">Nothing here yet! <a class="btn-flat icon-plus" href="<?= BUNZ_HTTP_DIR,'post/category/',$cat['id'] ?>">Submit Something!</a></div>
 <?php
 } else {
 
@@ -168,7 +167,7 @@ document.body.onload = function(){
             </div>
 
 <?php // it looks like a lot of markup because it is. ?>
-            <div class="collapsible-header no-select <?= $report['closed'] ? 'shade-text' : 'category-'.$cat['id'].'-lighten-1' ?>">
+            <div class="collapsible-header no-select <?= $report['closed'] ? 'shade-text' : 'category-'.$cat['id'].'-text' ?>">
 
 <?php // [icon] subject line blablabla [status] ?>
 
@@ -209,7 +208,7 @@ document.body.onload = function(){
             echo priority($report['priority']),'</div>';
         }
 ?>
-                        <div class="z-depth-3 subject-line transparent"<?= $report['closed'] ? '' : ' style="clear: both"'?> title="<?= $report['subject'] ?>">
+                        <div class="z-depth-3 subject-line"<?= $report['closed'] ? '' : ' style="clear: both"'?> title="<?= $report['subject'] ?>">
                             <a class="subject h4 icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
                                href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>"><?= $report['subject'] ?></a>
 

@@ -52,6 +52,37 @@ class cpanel extends Controller
         ];*/
     }
 
+    private function __NOTWORKING_crontab()
+    {
+        /**
+         * harmful */
+        $user = system('whoami', $exit_code);
+        if($exit_code != 0)
+            echo 'whoami doesn\'t work';
+        unset($exit_code);
+
+        $cron = system('crontab -u '.$user.' -l',$exit_code);
+        $test = '# This is a test';
+
+        if($exit_code == 127)
+            echo 'crontab not installed';
+
+        if(preg_match('/^no crontab/', $cron))
+        {
+            $cron = $test;
+        } else {
+            $cron .= "\n$test";
+        }
+
+        unset($exit_code);
+
+        $temp = tempnam('/tmp', 'cron-');
+        file_put_contents($temp, $cron);
+
+        echo system('crontab -u '.$user.' '.$temp, $exit_code);
+        echo "\n$exit_code";
+    }
+
     /**
      * INSERT */
     public function add( )

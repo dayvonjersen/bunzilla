@@ -285,10 +285,12 @@ class Controller
         $this->data['categories'] = Cache::read('categories');
         $this->data['statuses']   = Cache::read('statuses');
         $this->data['tags']       = Cache::read('tags');
-        $this->data['priorities']       = Cache::read('priorities');
+        $this->data['priorities'] = Cache::read('priorities');
 
-        if(isset($this->tpl))
+        if(isset($this->tpl) && file_exists(BUNZ_TPL_DIR . $this->tpl . '.inc.php'))
             require_once BUNZ_TPL_DIR . $this->tpl . '.inc.php';
+        else
+            trigger_error('Missing template.',E_USER_DEPRECATED);
     }
 
     public function abort($error = false)

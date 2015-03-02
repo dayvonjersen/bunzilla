@@ -30,7 +30,7 @@
 .gn-menu-main ul {
 		margin: 0;
 		padding: 0;
-		background: rgba(255,255,255,0.95);
+		background: transparent;
 		color: #000;
 		list-style: none;
 		font-weight: 300;
@@ -48,9 +48,9 @@
 }
 
 .gn-menu-main a {
-		display: block;
+/*		display: block;
 		height: 100%;
-		text-decoration: none;
+		text-decoration: none;*/
 		cursor: pointer;
 }
 
@@ -65,6 +65,9 @@
 		display: block;
 		height: 100%;
 		text-align: center;
+}
+
+.gn-menu-main li:not(.bc-parent) {
 }
 
 .gn-menu-main > li:not(.right) {
@@ -140,11 +143,6 @@
 .gn-submenu li a {
 }
 
-.gn-menu-main a:hover { 
-/*background:  rgba(249,85,168,0.5);
-*/
-background: #f955a8;
- color: #fff ; }
 
 input.gn-search {
 		position: absolute;
@@ -266,7 +264,6 @@ input.gn-search:focus {
 }
 
 .gn-multiline small {
-     font-size: 12px;
      color: #888;
      line-height: normal;
      position: absolute;
@@ -276,7 +273,7 @@ input.gn-search:focus {
      font-variant: small-caps;
 }
 
-.gn-multiline a[title]::before {
+.gn-menu-main li[title]::before {
     content: attr(title);
     position: fixed;
     font-size: xx-large;
