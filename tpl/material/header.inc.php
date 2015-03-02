@@ -150,11 +150,11 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
 **/
             $currentCat = $this->data['categories'][$this->data['category']['id']];
             echo '<a href="',BUNZ_HTTP_DIR,'report/category/',$this->data['category']['id'],'"
-class="waves-effect waves-light hide-overflow-text ',$currentCat['icon'],'"><span class="hide-on-med-and-down">',$currentCat['title'],'</span></a>
+class="waves-effect  hide-overflow-text ',$currentCat['icon'],'"><span class="hide-on-med-and-down">',$currentCat['title'],'</span></a>
 <a class="dropdown-button btn ',$className,'" data-activates="bc-catlist">&nbsp;</a>';
         } else {
             echo '<a href="',BUNZ_HTTP_DIR,$crumb['href'],
-            '" class="waves-effect waves-light hide-overflow-text ',
+            '" class="waves-effect  hide-overflow-text ',
             isset($crumb['icon']) ? $crumb['icon'] : '',
             '"><span class="hide-on-med-and-down">',$crumb['title'],'</span></a>',"\n";
         }
@@ -200,7 +200,7 @@ if(isset($currentCat))
         if($c['id'] == $currentCat['id'])
             continue;
 
-        echo '<li class=""><a href="',BUNZ_HTTP_DIR,'report/category/',$c['id'],'" class="',$c['icon'], ' category-',$c['id'],'-base" title="',$c['caption'],'">',$c['title'],'</a></li>';
+        echo '<li class=""><a href="',BUNZ_HTTP_DIR,'report/category/',$c['id'],'" class="waves-effect  ',$c['icon'], ' category-',$c['id'],'-base" title="',$c['caption'],'">',$c['title'],'</a></li>';
     }
     unset($c);
     echo '</ul>';

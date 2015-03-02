@@ -28,6 +28,9 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 
         </article>
         <article class="section col s12 m6">
+            <div class="row alert-base">(insert useful information here)<div>
+<?php
+/**
             <ul class="tabs z-depth-3">
                 <li class="tab"><a href="#recent" class="waves-effect shade-base icon-history"><span class="hide-on-med-and-down">Recent Activity</span></a></li>
                 <li class="tab"><a href="#changelog" class="waves-effect secondary-base icon-doc-text-inv"><span class="hide-on-med-and-down">Changelog</span></a></li>
@@ -36,7 +39,9 @@ require BUNZ_TPL_DIR . 'header.inc.php';
             </ul>
             <section id="recent" class="section shade-base z-depth-5" >
                 <div class="section shade-lighten-3" style="max-height: 14em; overflow-y: auto">
+**/?>
 <?php
+/**
 if(empty($this->data['recent_activity']))
     echo '<p><em>Nothing yet!</em></p>';
 
@@ -73,20 +78,25 @@ foreach($this->data['recent_activity'] as $log)
             isset($href) ? '</a>' : '',
         '</p>',"\n";
 }
-?>
+**/
+?><!--
                 </div>
             </section>
             <section id="changelog" class="section secondary-base z-depth-5">
-                <pre class="section secondary-lighten-3" style="max-height: 14em; overflow-y: auto">
+                <pre class="section secondary-lighten-3" style="max-height: 14em; overflow-y: auto">-->
 <?php
+/**
 foreach(db()->query('SELECT message FROM change_log ORDER BY time DESC')->fetchAll(PDO::FETCH_NUM) as $msg)
                 echo " - {$msg[0]}\n";
-?>
+**/
+?><!--
                 </pre>
             </section>
             <section id="tagCloud" class="section primary-darken-2 z-depth-5">
                 <div class="section primary-lighten-4 center" style="max-height: 14em; overflow-y: auto">
+-->
 <?php
+/**
 require_once BUNZ_CTL_DIR . 'search.php';
 $tags = search::getTagCloud();
 $unused = [];
@@ -108,9 +118,9 @@ if(!empty($unused))
         echo isset($this->data['tags'][$id]) ? tag($id) : "[MISSING_TAG_id#$id]";}
     echo '</p>';
 }
-?>
+**/?><!--
                 </div>
-            </section>
+            </section>-->
         </article>
 </div>
 <!--

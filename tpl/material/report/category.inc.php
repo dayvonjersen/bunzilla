@@ -209,7 +209,7 @@ document.body.onload = function(){
         }
 ?>
                         <div class="z-depth-3 subject-line"<?= $report['closed'] ? '' : ' style="clear: both"'?> title="<?= $report['subject'] ?>">
-                            <a class="subject h4 icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
+                            <a class="waves-effect subject h4 icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
                                href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>"><?= $report['subject'] ?></a>
 
                         <?= $report['closed'] ? '' : '<span class="right">'.status($report['status']).'</span>' ?>

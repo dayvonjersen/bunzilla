@@ -28,6 +28,7 @@ require_once BUNZ_TPL_DIR . 'color.php';
         <!--
             tab toolbar thing
         -->
+<?php if($this->auth()) { ?>
         <section class="col s12 z-depth-5">
             <div class="row">
             <ul class="tabs z-depth-3">
@@ -199,6 +200,7 @@ count($this->data['priorities'])
 ?>
         </div>
         </section>
+<?php } ?>
 
         
     
