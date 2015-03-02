@@ -132,7 +132,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
         {
             /**
              * just go with it */
-            unset($offset);
+            $offset = 0;
             list($what,$why) = strpos($prevClassName, 'text') !== false ? ['text','base'] : ['base','text'];
             echo '<div class="bc-triangle ', str_replace($what, $why, $prevClassName) ,'"></div>',"\n";
         }
@@ -150,11 +150,11 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
 **/
             $currentCat = $this->data['categories'][$this->data['category']['id']];
             echo '<a href="',BUNZ_HTTP_DIR,'report/category/',$this->data['category']['id'],'"
-class="',$currentCat['icon'],'"><span class="hide-on-med-and-down">',$currentCat['title'],'</span></a>
-<a class="dropdown-button btn" data-activates="bc-catlist"><i class="icon-down-open-mini"></i></a>';
+class="waves-effect waves-light hide-overflow-text ',$currentCat['icon'],'"><span class="hide-on-med-and-down">',$currentCat['title'],'</span></a>
+<a class="dropdown-button btn ',$className,'" data-activates="bc-catlist">&nbsp;</a>';
         } else {
             echo '<a href="',BUNZ_HTTP_DIR,$crumb['href'],
-            '" class="',
+            '" class="waves-effect waves-light hide-overflow-text ',
             isset($crumb['icon']) ? $crumb['icon'] : '',
             '"><span class="hide-on-med-and-down">',$crumb['title'],'</span></a>',"\n";
         }

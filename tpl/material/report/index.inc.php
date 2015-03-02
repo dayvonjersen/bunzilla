@@ -133,7 +133,7 @@ if(empty($this->data['categories']))
             : 'n/a';
 ?>
 <?= $i == 0 ? '<div class="row">' : '' ?>
-    <div class="col s12 m6 l3">
+    <div class="col s12 m6">
         <article>
             <div class="section no-pad-top">
                 <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base waves-effect' onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>'; }})(event);">

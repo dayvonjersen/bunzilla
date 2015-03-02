@@ -20,7 +20,7 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 <!-- 
                     title 
                 -->
-                <section class='section no-pad-top col s12 z-depth-5 category-<?=$cat['id']?>-base'>
+                <section class='section col s12 z-depth-5 category-<?=$cat['id']?>-base'>
 
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
                        class="right btn btn-floating z-depth-5 transparent" 
@@ -252,6 +252,11 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.
 ?>
     </ul>
 </div>
+
+<?= pagination( BUNZ_HTTP_DIR.'report/category/'.$cat['id'], 
+        selectCount('reports','category = '.$cat['id']),
+        $this->data['page_offset']
+    ) ?>
 <?php
 }
 ?>
