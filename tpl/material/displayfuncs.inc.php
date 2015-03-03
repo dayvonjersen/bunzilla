@@ -162,36 +162,39 @@ function pagination( $url, $total, $curPage )
         return '';
 
     $curPage += 1;
-    $pages = ceil($total/50);
+    $pages = 10; ceil($total/50);
 
-    $return = '<article class="z-depth-5 row center">'
-             .'<section class="section no-pad-top no-pad-bot col s12 secondary-darken-4">'
-             ."<em class='h5'>Page $curPage of $pages</em>"
-             .'</section>';
+    $return = '<article class="small center collapsible">';
+    $return .= '<div class="collapsible-header valign-wrapper secondary-darken-4">';
 
-    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
+//    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
+    $classList = 'btn btn-floating btn-flat waves-effect';
 
     if($curPage != 1)
-        $return .= "<a href='$url' class='$classList'>First</a>";
+        $return .= "<a href='$url' class='$classList' title='First Page' style='font-variant: small-caps'>1<sup>ST</sup></a>";
     
     if($curPage > 2)
         $return .= "<a href='$url/".($curPage - 1)
-                ."' class='$classList'>Previous</a>";
+                ."' class='$classList' title='Previous Page'><i class='icon-left-open-mini'></i></a>";
+
+    $return .= "<h4 class='' style='display: inline'>Page $curPage of $pages</h4>";
+    
+    if($curPage <= $pages - 2)
+        $return .= "<a href='$url/".($curPage+1)
+                    ."' class='$classList' title='Next Page'><i class='icon-right-open-mini'></i></a>";
+
+    if($curPage != $pages)
+       $return .= "<a href='$url/".($pages-1)."' class='$classList' title='Last'><small style='font-variant: small-caps'>END</small></a>";
+
+    $return .= '</div><div class="collapsible-body">';
 
     for($i = 1; $i <= $pages; $i++)
         $return .= '<'.($i == $curPage ? 'section' : "a href='$url/".($i-1)."'")
-                    ." class='$classList".($i == $curPage ? ' z-depth-5' : '')."'>$i</"
+                    ." class='$classList".($i == $curPage ? ' secondary-text z-depth-5' : '')."'>$i</"
                     .($i == $curPage ? 'section' : 'a')
                     .'>';
 
-    if($curPage <= $pages - 2)
-        $return .= "<a href='$url/".($curPage+1)
-                    ."' class='$classList'>Next</a>";
-
-    if($curPage != $pages)
-       $return .= "<a href='$url/".($pages-1)."' class='$classList'>Last</a>";
-
-    return "$return</article>";
+    return "$return</div></article>";
 }
 
 // this is the hardest thing ever I swear to god
