@@ -12,7 +12,12 @@
 Options -MultiViews
 
 RewriteEngine On
-RewriteBase /bunzilla
+#<IfDefine SO_META>
+#    RewriteBase /
+#</IfDefine>
+#<IfDefine !SO_META>
+    RewriteBase /bunzilla
+#</IfDefine>
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f

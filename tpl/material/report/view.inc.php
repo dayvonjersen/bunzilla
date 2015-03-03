@@ -1,75 +1,71 @@
 <?php
 //
-// individual reports : yay
+// individual reports : the only page that actually matters
 //
+/**
+ * 3/3/2015 11:51:10 AM
+ * OK this page and category.inc.php have gotten way out of hand
+ * in terms of complexity and bullshit
+ */
 
-$cat = $this->data['categories'][$this->data['category_id']];
+$cat    = $this->data['categories'][$this->data['category_id']];
 $report = $this->data['report'];
 
 $pageTitle = $report['subject'];
-$background = 'transparent';//"category-{$cat['id']}-base";
+$background = 'transparent';
 require BUNZ_TPL_DIR . 'header.inc.php';
-//require BUNZ_TPL_DIR . 'post/utils.inc.php';
 require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 require_once BUNZ_TPL_DIR . 'color.php';
-
 ?>
-<script src="<?= BUNZ_JS_DIR,'highlight.js' ?>"></script>
+<script src="<?= BUNZ_JS_DIR, 'highlight.js' ?>"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-
-
-<!--
-    report view
--->
-
 <article>
     <header class="row">
-
         <!--
             tab toolbar thing
         -->
-<?php if($this->auth()) { ?>
+<?php 
+/**
+ * 3/3/2015 11:51:16 AM
+ * tab toolbar now only for admins
+ * we will merge status_log history into the comments section
+ * (how github does it) */
+if($this->auth())
+{ 
+?>
         <section class="col s12 z-depth-5">
             <div class="row">
             <ul class="tabs z-depth-3">
-                <!-- default yet-as-unnamed tab -->
-                <li class="tab col s2"><a href="#status" class="waves-effect active icon-doc-text-inv category-<?=$cat['id']?>-text"></a></li>
-                <!-- status log -->
-                <li class="tab col s2">
-                    <a href="#history" class="waves-effect icon-history grey white-text"><span class="hide-on-small-only">History</span></a>
+                <li class="tab col s3">
+                    <a href="#status" 
+                       class="waves-effect active icon-doc-text-inv category-<?=$cat['id']?>-text"><span class="hide-on-med-and-down">Details</span></a>
                 </li>
-<?php
-if($this->auth())
-{
-?>
-                <!-- admin actions -->
-                <li class="tab col s2">
-                    <a href="#update" class="waves-effect icon-magic light-blue white-text"><span class="hide-on-small-only">Update</span></a>
+                <li class="tab col s3">
+                    <a href="#update" class="waves-effect icon-magic secondary-text"><span class="hide-on-med-and-down">Update</span></a>
                 </li>
-                <li class="tab col s2">
-                    <a href="#move" class=" waves-effect icon-move yellow black-text"><span class="hide-on-small-only">Move</span></a>
+                <li class="tab col s3">
+                    <a href="#move" class=" waves-effect icon-move alert-base"><span class="hide-on-med-and-down">Move</span></a>
                 </li>
-                <li class="tab col s2">
-                    <a href="#delete" class="waves-effect icon-delete red white-text"><span class="hide-on-small-only">Delete</span></a>
+                <li class="tab col s3">
+                    <a href="#delete" class="waves-effect icon-delete danger-text"><span class="hide-on-med-and-down">Delete</span></a>
                 </li>
+            </ul>
 <?php
 }
 ?>
-            </ul>
-
             <!--
-                about: time, edits + actions: edit and reply
+                DETAILS: time, edits + actions: edit and reply
             -->
-            <section class="section col s12 category-<?= $cat['id'] ?>-base" id="status">
+            <section class="section no-pad-bot col s12 category-<?= $cat['id'] ?>-base" id="status">
                 <!--
                     author and time
                 -->
-                <section class="section col s8 m8 z-depth-3 category-<?=$cat['id']?>-text">
+                <section class="section no-pad-bot col s8 m8 z-depth-3 category-<?=$cat['id']?>-text">
                     <!--
                         email and authlevel
                     -->
                     <p class="icon-mail"><?= $report['email'], 
-$report['epenis'] ? ' <span class="badge blue white-text" style="color: white !important">## Developer</span>' : '' ?></p>
+$report['epenis'] ? ' <span class="badge secondary-base"><i class="icon-person"></i>Developer</span>' : '' ?></p>
                     <!--
                         submission and edit time
                     -->
@@ -85,39 +81,19 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.
                 <section class="section col s4 m4 transparent ">
 
                      <!-- nice javascript m8 -->
-                     <a href="#comment" onclick="(function(evt){evt.preventDefault();document.getElementById('comment').focus()})(event)" class="waves-effect z-depth-5 btn-large btn-floating blue right" title="post a comment!"><i class="icon-chat"></i></a>
+                     <a href="#comment" onclick="(function(evt){evt.preventDefault();document.getElementById('comment').focus()})(event)" class="waves-effect z-depth-5 btn-large btn-floating secondary-base right" title="post a comment!"><i class="icon-chat"></i></a>
 
 <?php
 if($this->auth() || compareIP($report['ip']))
 {
 ?>
                      <!-- edit post -->
-                    <a href="<?= BUNZ_HTTP_DIR ?>post/edit/<?= $report['id'] ?>" class="btn-floating green black-text z-depth-4 right waves-effect " style="margin-right: 2px" title="edit this report"><i class="icon-pencil-alt"></i></a>
+                    <a href="<?= BUNZ_HTTP_DIR ?>post/edit/<?= $report['id'] ?>" class="btn-floating success-base z-depth-4 right waves-effect " title="edit this report"><i class="icon-pencil-alt"></i></a>
 <?php
 }
 ?>
                 </section>
             </section>
-
-            <!--
-                status log
-            -->
-            <section class="section col s12 grey" id="history">
-                    <div class="white section grey-text">
-<?php
-if(empty($this->data['status_log']))
-    echo '<p><em>No history for this report!</em></p>';
-
-foreach($this->data['status_log'] as $log)
-{
-?>
-                        <p><strong><?= $log['who'] ?></strong> <?= $log['message'] ?><br><small><?=datef($log['time'])?></small></p>
-<?php
-}
-?>
-                    </div>
-            </section>
-
 <?php
 if($this->auth())
 {
@@ -126,19 +102,17 @@ if($this->auth())
                 admin actions : update status
             -->        
             <section class="section col s12 secondary-base" id="update">
-                <h5 class="white-text">update status to</h5>
-
                 <form class="category-<?=$cat['id']?>-text z-depth-5 section" 
                       action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>" 
                       method="post">
 
                     <div class="row">
-                        <div class="input-field col s12 m6">
+                        <div class="input-field col s12 m6 section">
                             <p>Status:</p>
                             <?= statusDropdown($report['status']) ?>
                         </div>
 
-                        <div class="input-field col s12 m6">
+                        <div class="input-field col s12 m6 section">
                             <p>Priority:</p>
                             <div class="range-field">
                                 <?= rangeOptions(Cache::read('priorities')) ?>
@@ -157,12 +131,12 @@ count($this->data['priorities'])
                             <button type="submit"
                                     name="updateStatus" 
                                     value="1"
-                                    class="btn pink icon-ok">Make Changes</button>
+                                    class="waves-effect btn success-base icon-ok">Make Changes</button>
                             <button type="submit" 
                                     name="toggleClosed" 
-                                    class="btn icon-<?= $report['closed'] ? 'unlock light-blue' : 'lock grey' ?>"
+                                    class="waves-effect btn icon-<?= $report['closed'] ? 'unlock success-text' : 'lock shade-base' ?>"
                                     value="1">AND <?= $report['closed'] ? 'Open' : 'Close' ?> This Report</button>
-                            <button type="reset" class="btn-flat icon-cancel">Reset Form</button>
+                            <button type="reset" class="waves-effect waves-light btn-flat transparent shade-text icon-cancel">Reset Form</button>
                         </div>
                     </div>
                 </form>
@@ -171,10 +145,9 @@ count($this->data['priorities'])
             <!--
                 admin actions : move (todo: consolidate)
             -->   
-            <section class="section col s12 yellow" id="move">
-                <h5 class="black-text">move report to</h5>
-                <form class="white z-depth-5 section grey-text">
-                    <h1><em>Coming soon!</em></h1>
+            <section class="section col s12 alert-base" id="move">
+                <form class="z-depth-5 section">
+                    <h4>Coming soon: move to another category and consolidate into another report</h4>
 <?php
 /*
 <?= categoryDropdown(false,$cat['id']) ?>
@@ -188,11 +161,11 @@ count($this->data['priorities'])
             <!--
                 admin actions : delete 
             -->   
-            <section class="col s12 red" id="delete">
-                <form class="white z-depth-5 center section"
+            <section class="col s12 danger-lighten-5" id="delete">
+                <form class="z-depth-5 center section"
                       action="<?= BUNZ_HTTP_DIR ?>report/action/<?= $report['id'] ?>" 
                       method="post">
-                    <button name="delete" class="btn red icon-delete waves-red" onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this report and all associated comments?')) evt.preventDefault();})(event);">Delete (no undo)</button>
+                    <button name="delete" class="btn danger-base icon-delete waves-red" onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this report and all associated comments?')) evt.preventDefault();})(event);">Delete (no undo)</button>
                 </form>
             </section>
 <?php
@@ -200,16 +173,15 @@ count($this->data['priorities'])
 ?>
         </div>
         </section>
-<?php } ?>
 
         
     
         <!--
             subject
         -->
-        <section class='section no-pad-top no-pad-bot col s12'>
+        <section class='section category-<?=$cat['id']?>-base no-pad-bot col s12'>
 
-            <section class="z-depth-1 category-<?=$cat['id']?>-text">
+            <section class="z-depth-5 category-<?=$cat['id']?>-text">
 
 <?php
 
@@ -221,7 +193,7 @@ if(!empty($report['tags']))
     // tags!
     //
     foreach($report['tags'] as $tag)
-        echo tag($tag[0],0);
+        echo tag($tag,0);
 }
 ?>
 
@@ -235,8 +207,8 @@ if(!empty($report['tags']))
 -->
         <?= status($report['status']) ?>
 
-                <span class="badge right z-depth-2 white-text icon-<?= 
-$this->data['closed'] ? 'lock grey' : 'unlock light-blue'?>" title="
+                <span class="badge right z-depth-2 icon-<?= 
+$this->data['closed'] ? 'lock shade-base' : 'unlock secondary-base'?>" title="
 <?= 
 $this->data['closed'] ? 'closed' : 'open'?>"><span class="hide-on-small-only"><?=
 $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
@@ -253,7 +225,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
     <!--
         description reproduce expected actual
     -->
-    <main id="report" class="section no-pad-top no-pad-bot">
+    <main id="report" class="section category-<?=$cat['id']?>-base">
 <?php
 $d = 5;
 foreach(['description','reproduce','expected','actual'] as $field)
@@ -261,7 +233,7 @@ foreach(['description','reproduce','expected','actual'] as $field)
     if($cat[$field])
     {
 ?>
-<section class="section no-pad z-depth-<?= $d-- ?> category-<?=$cat['id']?>-text">
+<section class="section z-depth-<?= $d-- ?> category-<?=$cat['id']?>-text">
         <blockquote id="<?=$field?>">
             <a href="#<?=$field?>" title="<?=$field?>" class="small left"><em><?=$field?></em>:</a><br>
             <?= $report[$field] ?>
@@ -279,15 +251,59 @@ foreach(['description','reproduce','expected','actual'] as $field)
     <footer id="comments" class="section no-pad-top no-pad-bot" style="text-align: left !important">
         
 <?php
-if(!empty($this->data['comments']))
+foreach($this->data['status_log'] as $log)
 {
-    $i = 0;
+?>
+                        
+<?php
+}
+
+/**
+ * all aboard the failtrain
+ * 3/3/2015 12:55:51 PM */
+if(!empty($this->data['timeline']))
+{
+    $statuslog_ids = $statuslog = [];
+    foreach($this->data['status_log'] as $log_entry)
+    {
+        $statuslog_ids[] = $log_entry['id'];
+        $statuslog[$log_entry['id']] = $log_entry;
+    }
+    $comment_ids = $comments = [];
     foreach($this->data['comments'] as $comment)
     {
+        $comment_ids[] = $comment['id'];
+        $comments[$comment['id']] = $comment;
+    }
+    $i = 0;
+    foreach($this->data['timeline'] as $eh)
+    {
+        /**
+         * choo choo */
+        if(in_array($eh['id'], $statuslog_ids) && in_array($eh['id'],$comment_ids))
+            throw new RuntimeException("IT HAPPENED. FUCK. DEFCON9\n\nahem. a status and a comment share the same id. tell tso.");
+
+        if(in_array($eh['id'], $statuslog_ids))
+        {
+            $log = $statuslog[$eh['id']];
+?>
+            <section class="section no-pad shade-text z-depth-2" style="margin: 0 1em;">
+                <header class="section no-pad-top no-pad-bot">
+                    <p class="small" style="margin: 10px 0"><?=datef($log['time'])?></p>
+                </header>
+                <blockquote>
+                    <p class="valign-wrapper">
+                        <strong><?= $log['who'] ?>&emsp;&emsp;</strong>
+                        <em class="center"><?= $log['message'] ?></em>
+                </blockquote>
+            </section>
+<?php
+        } else {
+            $comment = $comments[$eh['id']];
 ?>
             <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
                 <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
-                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge light-blue white-text left">## Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
+                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge secondary-base left"><i class="icon-person"></i>Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
 
 <?php
 if($this->auth() || compareIP($comment['ip']))
@@ -309,6 +325,7 @@ if($comment['edit_time'])
             </section>
                 
 <?php
+        }
     }
 ?>
 <?php

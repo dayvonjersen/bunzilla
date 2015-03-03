@@ -33,15 +33,19 @@ class report extends Controller
     public $breadcrumbs = [];
     public function setBreadcrumbs($method)
     {
+        
         $this->breadcrumbs[] = ['href' => 'report/index', 
                                 'title' => 'Category Listing',
                                 'icon'  => 'icon-ul'];
         if($method == 'index')
             return;
 
-        $this->breadcrumbs[] = ['href' => 'report/category/'.$this->data['category']['id'],
-                                'title' => $this->data['category']['title'],
-                                'icon' => $this->data['category']['icon']];
+        $category = Cache::read('categories')[$this->data['category_id']];
+
+        $this->breadcrumbs[] = ['href' => 'report/category/'.$category['id'],
+                                'title' => $category['title'],
+                                'icon' => $category['icon']
+        ];
         if($method == 'category')
             return;
 
@@ -110,21 +114,27 @@ class report extends Controller
 //todo: remove xxx
         $this->data += $this->data['report'];
 
-        $this->data['comments'] = selectCount('comments','report = '.$this->id)             ? db()->query('SELECT * FROM comments WHERE report = '.$this->id
+        $this->data['comments'] = selectCount('comments','report = '.$this->id) ? db()->query('SELECT * FROM comments WHERE report = '.$this->id
                 )->fetchAll(PDO::FETCH_ASSOC) 
-            : null;
-//todo: remove xxx
-        $this->data['category'] =  current(db()->query(
-                'SELECT * FROM categories WHERE id = '.(int)$this->data['category']
-            )->fetchAll(PDO::FETCH_ASSOC));
+            : [];
+
+        // this is not great because the chance of 
+        // a status_log and and a comment sharing the same ID is possible
+        // but eh
+        $this->data['timeline'] = db()->query(
+            '(SELECT id, time FROM status_log WHERE report = '.$this->id.')
+             UNION
+             (SELECT id, time FROM comments WHERE report = '.$this->id.')
+             ORDER BY time ASC'
+        )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['report']['tags'] = db()->query(
             'SELECT tag
              FROM tag_joins 
-             WHERE report = '.$this->id)->fetchAll(PDO::FETCH_NUM);
+             WHERE report = '.$this->id)->fetchAll(PDO::FETCH_COLUMN);
 
         $this->data['status_log'] = db()->query(
-            'SELECT who,message,time FROM status_log WHERE report = '.$this->id.' ORDER BY time DESC'
+            'SELECT id,who,message,time FROM status_log WHERE report = '.$this->id
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['category_id'] = $this->data['report']['category'];
@@ -203,7 +213,7 @@ class report extends Controller
         }
 
         $_SESSION['flash'] = serialize($this->flash);
-        header('Location: '.BUNZ_HTTP_DIR.$location.'?material');
+        header('Location: '.BUNZ_HTTP_DIR.$location);
         exit;
     }
 

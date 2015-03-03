@@ -20,14 +20,14 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 
 <!--        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>-->
 <!--        <link rel='stylesheet' href='/bunzilla/material/materialize.min.css'>-->
-        <link rel='stylesheet' href='/bunzilla/tpl/material/assets/css/materialize.min.css'>
+        <link rel='stylesheet' href='<?= str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>assets/css/materialize.min.css'>
 
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
-        <link rel='stylesheet' href='/bunzilla/tpl/material/temp.css'>
-        <link rel='stylesheet' type='text/css' href='/bunzilla/tpl/material/customcolors.css.php'>
+        <link rel='stylesheet' href='<?= str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>temp.css'>
+        <link rel='stylesheet' type='text/css' href='<?=  str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>customcolors.css.php'>
 
-        <link rel='stylesheet' href='/bunzilla/tpl/material/gn-codrops.css'>
+        <link rel='stylesheet' href='<?=  str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>gn-codrops.css'>
     </head>
 
 <!-- 
@@ -104,6 +104,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 <?php
 if(isset($this->breadcrumbs) && count($this->breadcrumbs))
 {
+    $category = $this->data['categories'][$this->data['category_id']];
     echo "\t\t\t",'<li class="hide-on-small-only bc-parent">',"\n",
         "\t\t\t\t",'<div class="row section no-pad z-depth-3 bc-container">',"\n";
 
@@ -119,7 +120,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
     {
         $prevClassName = isset($className) ? $className : null;
         $className = strpos($crumb['href'],'report/category') === 0
-                ? "category-{$this->data['category']['id']}-base" 
+                ? "category-{$category['id']}-base" 
                 : (strpos($crumb['href'],$this->tpl) === 0 ? 'secondary-text' : 'primary-text');
         echo "\t\t\t\t\t",
             '<div class="bc-item col s',$colSize,
@@ -143,13 +144,13 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
     ;_;
 
             echo categoryDropdown(
-                isset($this->data['category']) ? $this->data['category']['id'] : 0,
+                isset($category) ? $category['id'] : 0,
                 false,
                 'window.location="'.BUNZ_HTTP_DIR.'report/category/" + this.value'
             );
 **/
-            $currentCat = $this->data['categories'][$this->data['category']['id']];
-            echo '<a href="',BUNZ_HTTP_DIR,'report/category/',$this->data['category']['id'],'"
+            $currentCat = $this->data['categories'][$category['id']];
+            echo '<a href="',BUNZ_HTTP_DIR,'report/category/',$category['id'],'"
 class="waves-effect  hide-overflow-text ',$currentCat['icon'],'"><span class="hide-on-med-and-down">',$currentCat['title'],'</span></a>
 <a class="dropdown-button btn ',$className,'" data-activates="bc-catlist">&nbsp;</a>';
         } else {
@@ -162,7 +163,7 @@ class="waves-effect  hide-overflow-text ',$currentCat['icon'],'"><span class="hi
     }
     echo "\t\t\t\t</div>\n\t\t\t\t</li>\n\n";
 }
-//    breadcrumb($this->breadcrumbs, $this->tpl, isset($this->data['category']) ? $this->data['category']['id'] : 0);
+//    breadcrumb($this->breadcrumbs, $this->tpl, isset($category) ? $category['id'] : 0);
 /* todo
             <li class="hide-on-small-only"><a href="#" class="icon-home">Bread</a></li>
             <li class="hide-on-small-only"><a href="#" class="icon-list-dl">Crumb</a></li>
