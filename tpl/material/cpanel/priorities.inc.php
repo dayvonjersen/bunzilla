@@ -1,17 +1,17 @@
-<section id="priorities" class="col s12">
+<section id="priorities" class="col s12 primary-text">
     <ul class="tabs">
 <?php
 if(!empty($this->data['priorities']))
 {
 ?>
         <li class="tab col s6">
-            <a href="#viewPriorities" class="icon-flashlight">View All</a>
+            <a href="#viewPriorities" class="secondary-text icon-flashlight">View All</a>
         </li>
 <?php
 }
 ?>
         <li class="tab col s6">
-            <a href="#createPriority" class="icon-plus">Create New Status</a>
+            <a href="#createPriority" class="success-text icon-plus">Create New Priority</a>
         </li>
     </ul>
   
@@ -19,51 +19,62 @@ if(!empty($this->data['priorities']))
 if(!empty($this->data['priorities']))
 {
 ?>  
-    <section id="viewPriorities">
+    <section id="viewPriorities" class="section">
+        <div class="section z-depth-5 alert-base">
+            <p>Priorities should be limited. A maximum of 128 are allowed.</p>
+            <p> Their ids determine their urgency (greater = more important)</p>
+            <p>Say something about default...<p>
+        </div>
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority" method="post" class="section z-depth-3">
+            <div class="row">
+                <div class="right-align col s1"><i class="icon-chart"></i><span class="hide-on-med-and-down">Usage</span></div>
+                <div class="center col s1"><i class="icon-ok"></i><span class="hide-on-med-and-down">Default</span></div>
+                <div class="center col s4"><i class="icon-attention"></i> Priority</div>
+                <div class="right-align col s4"><i class="icon-cog"></i> Actions</div>
+            </div>
+            <div class="divider"></div>
 <?php
     $i = 0;
-    foreach($this->data['priorities'] as $cat)
+    ($total_reports = selectCount('reports')) || ($total_reports = 1);
+    foreach($this->data['priorities'] as $p)
     {
-        echo $i == 0 ? '<div class="row">' : '';
+        $usage = round(selectCount('reports', 'priority = '.$p['id'])/$total_reports, 2)*100;
 ?>
-    <div class="col s12 m6 l3">
-        <div class="section no-pad-top">
-            <section class='section col s12 z-depth-5 priority-<?= $cat['id'] ?>-base waves-effect' onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?=BUNZ_HTTP_DIR,'report/status/',$cat['id']?>'; }})(event);">
-            <!--
-                actions
-            -->
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 danger-base" 
-                       title="delete priority"><i class="icon-delete"></i></a>
-
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 alert-base" 
-                       title="merge priority"><i class="icon-move"></i></a>
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 success-base" 
-                       title="edit priority"><i class="icon-pencil-alt"></i></a>
-
-            <!-- 
-                title 
-            -->
-                <h2><a href="<?=BUNZ_HTTP_DIR,'report/priority/',$cat['id']?>" class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></a></h2>
-            </section>
-
-        </div>
-    </div>
+            <div class="row">
+                <div class="col s1 right-align large" style="padding-top: 7px"><?= $usage ?>%</div>
+                <div class="col s5 input-field" style="position: relative; z-index: 10000;">
+                    <p style="margin: 0">
+                        <input type="radio" name="default_priority" value="<?= $p['id'] ?>" id="default_priority_<?= $p['id'] ?>" <?= $p['default'] ? 'checked' : ''?>>
+                        <label for="default_priority_<?= $p['id'] ?>" style="position: relative; z-index: 10000"><?= priority($p['id']) ?><!--: <?= $p['title'] ?>--></label>
+                    </p>
+                    <div class="priority-<?=$p['id']?> no-select" style="width: <?=$usage?>%; height: 100%; position: absolute; left: 0; top: 12px; z-index: 0">
+                        <div class="align-right small" style="position: relative"><?= $usage ?>%</div>
+                    </div>
+                </div>
+                <div class="col s1">
+                    <a href="<?=BUNZ_HTTP_DIR,'search/priority:',$p['id']?>" 
+                               class="btn btn-flat btn-floating large secondary-text" 
+                               title="search priority"><i class="icon-search"></i></a>
+                </div>
+                <div class="col s5"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/priority/',$p['id']?>" 
+                               class="right btn btn-flat z-depth-5 danger-text" 
+                               title="delete priority"><i class="icon-delete"></i><span class="hide-on-med-and-down"> Delete</span></a>&emsp;
+                            <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$p['id']?>" 
+                               class="right btn btn-flat z-depth-5 success-text" 
+                               title="edit priority"><i class="icon-pencil-alt"></i><span class="hide-on-med-and-down"> Edit</span></a>
+                </div>
+            </div>
 <?php
-        if($i++ >= 5 || end($this->data['priorities']) === $cat)
-        {
-            echo '</div>';
-            $i = 0;
-        } else
-            $i++;
     }
 }
 ?>
+            <div class="row">
+                <div  class="col offset-s1 s11">
+                    <button type="submit" class="btn btn-flat secondary-text"><i class="icon-ok"></i>Change Default Priority</button>
+                    <button type="reset" class="btn btn-flat icon-cancel secondary-text">Reset</button>
+                </div>
+            </div>
+        </form>
     </section>
 
     <section id="createPriority" class="secondary-base section no-pad-top no-pad-bot">

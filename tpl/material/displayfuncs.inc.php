@@ -166,10 +166,10 @@ function pagination( $url, $total, $curPage )
         return '';
 
     $curPage += 1;
-    $pages = 10; ceil($total/50);
+    $pages = ceil($total/50);
 
-    $return = '<article class="small center collapsible">';
-    $return .= '<div class="collapsible-header valign-wrapper secondary-darken-4">';
+    $return = '<article class="small center ">';
+    $return .= '<div class=" valign-wrapper secondary-darken-4">';
 
 //    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
     $classList = 'btn btn-floating btn-flat waves-effect';
@@ -190,7 +190,7 @@ function pagination( $url, $total, $curPage )
     if($curPage != $pages)
        $return .= "<a href='$url/".($pages-1)."' class='$classList' title='Last'><small style='font-variant: small-caps'>END</small></a>";
 
-    $return .= '</div><div class="collapsible-body">';
+    $return .= '</div><div class="">';
 
     for($i = 1; $i <= $pages; $i++)
         $return .= '<'.($i == $curPage ? 'section' : "a href='$url/".($i-1)."'")

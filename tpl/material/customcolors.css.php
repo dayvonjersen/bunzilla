@@ -48,10 +48,15 @@ $_ = [];
 foreach(['primary','secondary','shade', 'alert', 'danger', 'success'] as $className)
 {
     if(defined('BUNZ_THEME_'.strtoupper($className).'_COLOR'))
+    {
         $_ += createShades(
                 $className,
                 constant('BUNZ_THEME_'.strtoupper($className).'_COLOR')
         );
+        // hax 
+        if($className != 'primary')
+            unset($_["$className-text"]['background-color']);
+    }
 }
 /**
  * weeee */

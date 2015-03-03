@@ -336,7 +336,6 @@ input:checked ~ label { color: #4eb3de !important; }
 blockquote { width: calc(100% - 3em); padding: 0 0.5rem 1rem 0.5rem; overflow-x: auto; }
 blockquote pre { width: 100%; margin: 0; }
 
-[class*='priority-'] { font-size: xx-small !important; }
 
 .active .collapsible-body.fuckityfuckfuck { overflow: visible; }*/
 
@@ -435,3 +434,6 @@ blockquote pre { width: 100%; margin: 0; }
     margin-top: -30px;
     max-height: 30px;
 }
+
+.btn:not(.btn-floating) { padding: 0 0.5em !important }
+.btn-flat { background: transparent; }
