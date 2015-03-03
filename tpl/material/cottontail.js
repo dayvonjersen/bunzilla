@@ -12,6 +12,20 @@ $(window).load(function(){
     $('ul.tabs').tabs();
     $('img').materialbox();
     $('.tooltipped').tooltip({"delay": 50});
+
+/**
+ * let me tell you why ... */
+    function bullshit(that){
+        var text_val = $(that).val();
+        if(text_val === '')
+            $(that).siblings('label').removeClass('active');
+        else
+            $(that).siblings('label').addClass('active');
+    }
+    $('.input-field input').each(function(){bullshit(this)});
+    $('.input-field textarea').each(function(){bullshit(this)}); 
+    $('.input-field input').focusout(function(){bullshit(this)});
+    $('.input-field textarea').focusout(function(){bullshit(this)});
 /**
  * codrops google nexus 7 menu 
  * http://tympanus.net/codrops/?p=16030
