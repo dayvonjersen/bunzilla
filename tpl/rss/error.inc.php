@@ -1,15 +1,14 @@
 <?php
-header('Content-Type: application/xml');
-echo '<?xml version="1.0"?>',"\n";
+if(isset($_ERROR))
+{
+    header('Content-Type: text/plain');
+    print_r($_ERROR);
+    exit;
+}
+
+header('HTTP/1.1 503 Service Unavailable');
 ?>
-<rss version="2.0">
-    <channel>
-        <title>bunzilla rss feeds!</title>
-        <link>http://<?= $_SERVER['HTTP_HOST'] ?></link>
-        <description>yay</description>
-        <item>
-            <title>hi</title>
-            <description>/(^_^)\</description>
-        </item>
-    </channel>
-</rss>
+<h1>There is no RSS feed available for the requested URL.</h1>
+<h2>Sorry about that.</h2>
+
+<p>If you feel you have received this page in error, please report it!</p>
