@@ -270,12 +270,23 @@ if(!empty($this->data['timeline']))
         $statuslog_ids[] = $log_entry['id'];
         $statuslog[$log_entry['id']] = $log_entry;
     }
-    $comment_ids = $comments = [];
+    $comment_ids = $comments = $nested = [];
     foreach($this->data['comments'] as $comment)
     {
-        $comment_ids[] = $comment['id'];
+        /** 3/3/2015 2:09:26 PM
+         * this is what started all this in the first place */
+        if(isset($comment['reply_to']) && in_array($comment['reply_to'], $comment_ids))
+        {
+            if(isset($nested[$comment['reply_to']]))
+                $nested[$comment['reply_to']][] = $comment['id'];
+            else
+                $nested[$comment['reply_to']] = [$comment['id']];
+        } else {
+            $comment_ids[] = $comment['id'];
+        }
         $comments[$comment['id']] = $comment;
     }
+
     $i = 0;
     foreach($this->data['timeline'] as $eh)
     {
@@ -299,7 +310,7 @@ if(!empty($this->data['timeline']))
                 </blockquote>
             </section>
 <?php
-        } else {
+        } elseif(in_array($eh['id'],$comment_ids)) {
             $comment = $comments[$eh['id']];
 ?>
             <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
@@ -323,6 +334,58 @@ if($comment['edit_time'])
 <?php
 }
 ?></blockquote>
+<?php
+/**
+ * nested view; only 1 deep right now */
+if(isset($nested[$comment['id']]))
+{
+    $reply_to = $comment['id'];
+?>
+                <footer class="section z-depth-3"><h1>&#8600;</h1>
+<?php
+    $j = 0;
+    foreach($nested[$reply_to] as $reply)
+    {
+        $comment = $comments[$reply];
+?>
+            <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
+                <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
+                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge secondary-base left"><i class="icon-person"></i>Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$j++?></a>
+
+<?php
+if($this->auth() || compareIP($comment['ip']))
+{
+?>
+                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='badge small green-text right' title="edit this comment"><i class='icon-pencil-alt'></i></a>
+<?php
+}
+?></p>
+                </header>
+                <blockquote><?= $comment['message'] ?><?php
+if($comment['edit_time'])
+{
+?>
+                <span class="badge right icon-pencil-alt"><em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></span>
+<?php
+}
+?>
+                </blockquote>
+            </section>
+<?php
+    }
+?>
+                    
+
+                <a href="#reply-<?=$reply_to?>" 
+                   onclick="(function(evt){evt.preventDefault();document.getElementById('comment').value = '&gt;&gt;<?= $reply_to?>';document.getElementById('comment').focus()})(event)"
+                   class="waves-effect z-depth-5 btn-large btn-floating secondary-base large tooltipped"
+                   data-tooltip="quotereply: use with caution"
+                   data-position="right">&#8618;</a>
+            </footer>
+<?php
+}
+ /** fucking shoot me 3/3/2015 2:20:42 PM */
+?>
             </section>
                 
 <?php

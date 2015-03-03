@@ -110,10 +110,6 @@ span.badge {
     line-height: 2em !important;
     text-transform: none !important;
 }
-/** DELETE THIS **/
-:target {
-    box-shadow: 0px 0px 10px #fff;
-}
 /** FUCKERS **/
 .thumb {
     display: inline-block;

@@ -215,6 +215,27 @@ XXX ::: what the fuck stop being a lazy shit
         $this->data['params']['ip'] = remoteAddr();
 
         $this->data['params']['epenis'] = (int)$this->auth();
+        /**
+         * advanced quote replies (tm) */
+        if(preg_match_all('/\&gt;\&gt;(\d+)/ms', $this->data['params']['message'], $quotes, PREG_SET_ORDER))
+        {
+            if(count($quotes) > 1)
+                $this->flash[] = 'At this time, you can only reply to one comment at a time (sorry!)';
+            else {
+            foreach($quotes as $quote)
+            {
+                $reply_to = (int)$quote[1];
+                if(selectCount('comments', 'id = '.$reply_to))
+                {
+                    $this->data['params']['message'] = str_replace(
+                        $quote[0],
+                        '<a href="#reply-'.$reply_to.'">&gt;&gt;'.$reply_to.'</a>',
+                        $this->data['params']['message']
+                    );
+                    $this->data['params']['reply_to'] = $reply_to;
+                }
+            }}
+        }
         $sql = 'INSERT INTO comments 
 
          (id,time,'.implode(',',array_keys($this->data['params'])).')
@@ -224,7 +245,7 @@ XXX ::: what the fuck stop being a lazy shit
          (\'\',UNIX_TIMESTAMP(),:'.implode(',:',
             array_keys($this->data['params'])).')';
 
-        $location = BUNZ_HTTP_DIR.'report/view/'.(int)$id.'?material';
+        $location = BUNZ_HTTP_DIR.'report/view/'.(int)$id;
         if(!empty($_POST))
         {
             if($this->createReport($sql))
@@ -299,7 +320,7 @@ XXX ::: what the fuck stop being a lazy shit
                 $this->handleTags($reportId);
                 $this->flash[] = 'Report submitted!';
                 $_SESSION['flash'] = serialize($this->flash);
-                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId.'?material');
+                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId);
             }
         }
     }

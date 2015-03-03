@@ -29,6 +29,9 @@ function datef( $time = -1 )
 
     $diff = time() - $time;
 
+    if($diff < 1)
+        return '<time><em>just now!</em></time>';
+
     $ret = [];
     list($ret[], $diff) = ftime($diff, 31536000, 'year');
     list($ret[], $diff) = ftime($diff, 2592000, 'month');
@@ -37,6 +40,7 @@ function datef( $time = -1 )
     list($ret[], $diff) = ftime($diff, 3600, 'hour');
     list($ret[], $diff) = ftime($diff, 60, 'minute');
     list($ret[], $diff) = ftime($diff, 1, 'second');
+
     return sprintf('<time title="%s">%s ago</time>',
         date(BUNZ_BUNZILLA_DATE_FORMAT, $time),
         implode(', ',array_filter($ret,function($val){return $val;}))
