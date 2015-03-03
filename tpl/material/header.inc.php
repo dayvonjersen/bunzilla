@@ -104,7 +104,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 <?php
 if(isset($this->breadcrumbs) && count($this->breadcrumbs))
 {
-    $category = $this->data['categories'][$this->data['category_id']];
+    $category = isset($this->data['category_id']) ? $this->data['categories'][$this->data['category_id']] : null;
     echo "\t\t\t",'<li class="hide-on-small-only bc-parent">',"\n",
         "\t\t\t\t",'<div class="row section no-pad z-depth-3 bc-container">',"\n";
 

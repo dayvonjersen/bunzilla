@@ -56,7 +56,7 @@ if($this->auth())
             <!--
                 DETAILS: time, edits + actions: edit and reply
             -->
-            <section class="section no-pad-bot col s12 category-<?= $cat['id'] ?>-base" id="status">
+            <section class="section no-pad-bot col s12 category-<?= $cat['id'] ?>-darken-1" id="status">
                 <!--
                     author and time
                 -->
@@ -179,9 +179,9 @@ count($this->data['priorities'])
         <!--
             subject
         -->
-        <section class='section category-<?=$cat['id']?>-base no-pad-bot col s12'>
+        <section class='section category-<?=$cat['id']?>-base col s12'>
 
-            <section class="z-depth-5 category-<?=$cat['id']?>-text">
+            <section class="z-depth-5 category-<?=$cat['id']?>-text no-pad-bot">
 
 <?php
 
@@ -215,7 +215,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
  <!-- actual subject text -->
 <div style="clear: both;"></div>
             <a href="#subject" title="subject" class="small left"><em>subject</em>:</a><br>
-            <h2 id="subject" class="" style="margin: 0 1em; clear: both"><?= $report['subject'] ?></h2>
+            <h2 id="subject" class="" style="margin: 0 1em; padding-bottom: 1em; clear: both"><?= $report['subject'] ?></h2>
 
 
 
@@ -225,30 +225,31 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
     <!--
         description reproduce expected actual
     -->
-    <main id="report" class="section category-<?=$cat['id']?>-base">
+    <main id="report" class="section no-pad-top category-<?=$cat['id']?>-base">
+        <div class=" z-depth-5">
 <?php
-$d = 5;
 foreach(['description','reproduce','expected','actual'] as $field)
 {
     if($cat[$field])
     {
 ?>
-<section class="section z-depth-<?= $d-- ?> category-<?=$cat['id']?>-text">
+    <section class="section category-<?=$cat['id']?>-text">
         <blockquote id="<?=$field?>">
             <a href="#<?=$field?>" title="<?=$field?>" class="small left"><em><?=$field?></em>:</a><br>
             <?= $report[$field] ?>
         </blockquote>
-</section>
+    </section>
 <?php
     }
 }
 ?>
+        </div>
     </main>
 
     <!--
         comments
     -->
-    <footer id="comments" class="section no-pad-top no-pad-bot" style="text-align: left !important">
+    <footer id="comments" class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-lighten-1" style="text-align: left !important; margin-top: -1em;">
         
 <?php
 foreach($this->data['status_log'] as $log)
