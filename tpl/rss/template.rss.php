@@ -1,5 +1,5 @@
 <?php
-//header('Content-Type: text/plain');
+header('Content-Type: text/plain');
 header('Content-Type: application/rss+xml; charset=utf-8');
 
 echo '<?xml version="1.0" encoding="utf-8"?>',"\n";
@@ -8,7 +8,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>',"\n";
     <channel>
         <!--required-->
         <title><?= $pageTitle ?></title>
-        <link><?= SITE_URL ?></link>
+        <link><?= SITE_URL, $thisPage ?></link>
         <description><?= BUNZ_HTTP_DIR ?></description>
 
         <!--optional-->

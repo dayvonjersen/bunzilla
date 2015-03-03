@@ -23,18 +23,22 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 <section class='section col s12 z-depth-5 category-<?=$cat['id']?>-base'>
 
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 transparent" 
+                       class="right waves-effect btn btn-floating z-depth-5 transparent" 
                        title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
 <?php
 if($this->auth())
 {
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 transparent" 
-                       title="edit category"><i class="green-text darken-2 icon-pencil-alt"></i></a>
+                       class="right waves-effect btn btn-floating success-base" 
+                       title="edit category"><i class="icon-pencil-alt"></i></a>
 <?php
 }
 ?>
+                    <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?rss" 
+                       class="right btn btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
+                       title="subscribe!"><i class="icon-rss-squared"></i></a>
+
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
                     <h6><?= $cat['caption'] ?></h6>
 
@@ -203,7 +207,7 @@ document.body.onload = function(){
             if(!empty($report['tags']))
             {
                 foreach($report['tags'] as $tag)
-                    echo tag($tag[0],0);
+                    echo tag($tag,0);
             }
             echo priority($report['priority']),'</div>';
         }

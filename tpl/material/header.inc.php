@@ -173,11 +173,9 @@ class="waves-effect  hide-overflow-text ',$currentCat['icon'],'"><span class="hi
 if($this->auth())
 {
 ?>
-            <li class="gn-multiline right">
-                <a href="?logout" class="btn icon-logout">Logout<small><?= $_SERVER['PHP_AUTH_USER'] ?></small></a>
-            </li>
-            <li class="hide-on-small-only right">
-                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class="btn icon-cog-alt">Cpanel</a>
+            <li class="gone gn-multiline right">
+                <a href="?logout" class="btn "><i class=" icon-logout"></i><!--Logout<small><?= $_SERVER['PHP_AUTH_USER'] ?></small>--></a>
+                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class="btn"><i class=" icon-cog-alt"></i><!--Cpanel--></a>
             </li>
 <?php
 } else {

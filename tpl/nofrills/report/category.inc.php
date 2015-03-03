@@ -51,7 +51,7 @@ foreach($this->data['reports'] as $report)
     $report['last_active'] = max($report['time'],$report['updated_at'],$report['edit_time']);
     $tags = [];
     foreach($report['tags'] as $tag)
-        $tags[] = $this->data['tags'][$tag[0]]['title'];
+        $tags[] = $this->data['tags'][$tag]['title'];
 ?>
                 <li>
                     [<?= $report['closed'] ? 'CLOSED' : $this->data['priorities'][$report['priority']]['title'] ?>]

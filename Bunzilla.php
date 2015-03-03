@@ -243,7 +243,10 @@ class Controller
             exit("fux.");
         }
 
-        $_SESSION['tpl'] = $tpl;
+        // persistence++
+        if(in_array($tpl,['nofrills','material']))
+            $_SESSION['tpl'] = $tpl;
+
         define('BUNZ_TPL_DIR', BUNZ_TPL_BASE_DIR . $tpl . '/');
     }
 

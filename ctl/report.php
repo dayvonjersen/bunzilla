@@ -174,7 +174,7 @@ class report extends Controller
             $this->data['reports'][$i]['tags'] = db()->query(
                 'SELECT tag
                  FROM tag_joins 
-                 WHERE report = '.$report['id'])->fetchAll(PDO::FETCH_NUM);
+                 WHERE report = '.$report['id'])->fetchAll(PDO::FETCH_COLUMN);
             $this->data['reports'][$i]['comments'] = selectCount(
                 'comments','report = '.$report['id']
             );

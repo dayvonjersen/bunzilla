@@ -1,5 +1,5 @@
 <?php
-if(isset($_ERROR))
+if(isset($_ERROR) && $_ERROR['severity'] != 'DEPRECATED.')
 {
     header('Content-Type: text/plain');
     print_r($_ERROR);

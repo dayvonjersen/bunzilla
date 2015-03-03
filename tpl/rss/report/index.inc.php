@@ -1,7 +1,8 @@
 <?php
 require BUNZ_TPL_DIR . 'constants.inc.php';
 
-$pageTitle = 'Overview Feed Or Something';
+$pageTitle = 'Overview Feed Coming Shortly! For now have some links...';
+$thisPage = 'report/index';
 
 $rss = [];
 foreach($this->data['categories'] as $category)
@@ -17,7 +18,7 @@ foreach($this->data['categories'] as $category)
 //  $item['comments'] = 'nothing'
     $item['guid'] = SITE_URL . "report/category/{$category['id']}";
     $item['pubDate'] = date(RSS_DATE_FORMAT, $this->data['stats'][$category['id']]['last_activity']);
-    $item['source'] = SITE_URL . "report/index?rss";
+    $item['source'] = SITE_URL . "$thisPage?rss";
     $rss[] = $item;
 }
 
