@@ -24,6 +24,8 @@ $(window).load(function(){
     }
     $('.input-field input').each(function(){bullshit(this)});
     $('.input-field textarea').each(function(){bullshit(this)}); 
+    $('.input-field input').change(function(){bullshit(this)});
+    $('.input-field textarea').change(function(){bullshit(this)});
     $('.input-field input').focusout(function(){bullshit(this)});
     $('.input-field textarea').focusout(function(){bullshit(this)});
 /**
