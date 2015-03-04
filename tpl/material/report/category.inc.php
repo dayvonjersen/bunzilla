@@ -24,19 +24,19 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
                        class="right waves-effect btn btn-floating z-depth-5 transparent" 
-                       title="submit new"><i class="green-text darken-2 icon-plus"></i></a>
+                       title="submit new"><i class="icon-plus"></i></a>
 <?php
 if($this->auth())
 {
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
-                       class="right waves-effect btn btn-floating success-base" 
+                       class="right small z-depth-4 waves-effect btn btn-floating success-base" 
                        title="edit category"><i class="icon-pencil-alt"></i></a>
 <?php
 }
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?rss" 
-                       class="right btn btn-floating waves-effect waves-orange" style="background: #f86e00; color: #000"
+                       class="right small z-depth-3 btn btn-floating waves-effect waves-orange" style="background: #000; color: #f86e00;"
                        title="subscribe!"><i class="icon-rss-squared"></i></a>
 
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
@@ -90,7 +90,7 @@ document.body.onload = function(){
 <!--
     dear god
 -->
-<div class="section" id="list">
+<div class="section no-pad-top" id="list">
     <div class="no-pad-bot ">
     <div class="row z-depth-5 shade-darken-4 secondary-text"  id="fuck"><!-- me -->
     <div class="col s12 m4 ">
@@ -162,6 +162,7 @@ document.body.onload = function(){
         <li>
 <?php // these values are hidden by/for purely presentational purposes ?>
             <div class="gone">
+            <span class="subject"><?= $report['subject'] ?></span>
             <span class="closed"><?= $report['closed'] ?></span>
             <span class="priority"><?= $report['priority'] ?></span>
             <span class="status"><?= $this->data['statuses'][$report['status']]['title'] ?></span>
@@ -220,8 +221,7 @@ document.body.onload = function(){
                         </div>
             </div>
             <div class="collapsible-body">
-                <blockquote class="z-depth-5 category-<?= $cat['id'] ?>-text z-depth-1 icon-article-alt">
-<!--<span class="subject"><?= $report['subject'] ?></span>--><?=
+                <blockquote class="z-depth-5 category-<?= $cat['id'] ?>-text z-depth-1 icon-article-alt"><?=
 $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.BUNZ_DIFF_DIR.'reports/'.$report['id'].'">'.datef($report['edit_time']).'</a></p>' : '' 
 ?>
 <?php

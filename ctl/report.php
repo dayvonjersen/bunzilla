@@ -173,9 +173,9 @@ class report extends Controller
                  WHERE category = '.(int)$id.'
                  ORDER BY closed ASC,
                     priority DESC,
+                    time ASC,
                     updated_at DESC,
-                    edit_time DESC,
-                    time DESC
+                    edit_time DESC
                  LIMIT '.$offset.',50'
             )->fetchALL(PDO::FETCH_ASSOC)
         ];

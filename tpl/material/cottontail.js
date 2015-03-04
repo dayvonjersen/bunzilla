@@ -28,6 +28,8 @@ $(window).load(function(){
     $('.input-field textarea').change(function(){bullshit(this)});
     $('.input-field input').focusout(function(){bullshit(this)});
     $('.input-field textarea').focusout(function(){bullshit(this)});
+    $('.input-field input').keypress(function(){bullshit(this)});
+    $('.input-field textarea').keypress(function(){bullshit(this)});
 /**
  * codrops google nexus 7 menu 
  * http://tympanus.net/codrops/?p=16030

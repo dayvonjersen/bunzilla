@@ -194,7 +194,7 @@ img { width: 50%; cursor: zoom-in }
 
 /*#fuck, #fuck * { background: #888 !important; /* only dreams now~ } */
 
-.section { padding: 1em; }
+.section { padding: 1rem; }
 
 
 .collapsible-body {
@@ -439,6 +439,7 @@ blockquote pre { width: 100%; margin: 0; }
 .btn-flat { background: transparent; }
 
 /** FRAMEWORKS MAKE EVERYTHING BETTER AMIRITE */
+input[autofocus] + label,
 label.active {
     font-size: 0.8rem;
     -webkit-transform: translateY(-130%);
@@ -447,4 +448,15 @@ label.active {
     -o-transform: translateY(-130%);
     transform: translateY(-130%);
     color: #0af;
+}
+
+[data-textlabel] { position: relative; }
+
+[data-textlabel]::before {
+    content: attr(data-textlabel);
+    color: #888;
+    position: absolute;
+    left: 0;
+    top: -1rem;
+    font-size: 0.8889rem;
 }

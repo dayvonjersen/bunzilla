@@ -168,11 +168,12 @@ function pagination( $url, $total, $curPage )
     $curPage += 1;
     $pages = ceil($total/50);
 
-    $return = '<article class="small center secondary-base">';
+    $return = '<article class="center section bz-paginate">
+        <div class="z-depth-3 secondary-base" data-textlabel="Page '."$curPage of $pages".'">';
 //    $return .= '<div class=" valign-wrapper">';
 
 //    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
-    $classList = 'btn btn-floating btn-flat waves-effect small';
+    $classList = 'btn btn-floating btn-flat waves-effect ';
 
 /**
     if($curPage != 1)
@@ -201,7 +202,7 @@ function pagination( $url, $total, $curPage )
     if($curPage != $pages)
        $return .= "<a href='$url/".($pages-1)."' class='$classList' title='Last'><small style='font-variant: small-caps'>END</small></a>";
 **/
-    return "$return</article>";
+    return "$return</div></article>";
 }
 
 // this is the hardest thing ever I swear to god
