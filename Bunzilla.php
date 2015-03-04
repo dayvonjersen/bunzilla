@@ -301,6 +301,8 @@ class Controller
         if($error)
             $this->flash[] = $error;
         $this->tpl = 'error';
+        if(!defined('BUNZ_TPL_DIR'))
+            $this->setTemplate();
         exit;
     }
 
@@ -340,7 +342,7 @@ class Controller
             $_SESSION['login_attempts'] = 0;
 
         if($_SESSION['login_attempts'] >= 4)
-            $this->abort('Please wait a while before trying to log in again.');
+            $this->flash[] = 'Please wait a while before trying to log in again.';
 
         if(!$this->auth())
         {

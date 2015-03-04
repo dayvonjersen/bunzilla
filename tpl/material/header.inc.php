@@ -63,6 +63,26 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
                                 </div>
                                 </form>
                             </li>
+<?php
+if($this->auth())
+{ 
+?>
+                            <li class="hide-on-small-only">
+                                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class=" waves-effect gn-icon icon-cog-alt">Cpanel</a>
+                            </li>
+                            <li class="hide-on-small-only waves-effect">
+                                <a href="?logout" class="  waves-effect gn-icon icon-logout">Logout <?= $_SERVER['PHP_AUTH_USER'] ?></a>
+                            </li>
+<?php
+} else {
+?>
+                            <li class="hide-on-small-only">
+                                <a href="?login" class=" waves-effect gn-icon icon-key">Login</a>
+                            </li>
+<?php
+}
+?>
+                            
 <!--
     ex:
 
@@ -168,26 +188,22 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
     }
     echo "\t\t\t\t</div>\n\t\t\t\t</li>\n\n";
 }
-//    breadcrumb($this->breadcrumbs, $this->tpl, isset($category) ? $category['id'] : 0);
-/* todo
-            <li class="hide-on-small-only"><a href="#" class="icon-home">Bread</a></li>
-            <li class="hide-on-small-only"><a href="#" class="icon-list-dl">Crumb</a></li>
-            <li class="hide-on-small-only"><a href="#" class="icon-bug">Trail</a></li>
-*/
 ?>
 <?php
 if($this->auth())
 {
 ?>
-            <li class="gone gn-multiline right">
-                <a href="?logout" class="btn "><i class=" icon-logout"></i><!--Logout<small><?= $_SERVER['PHP_AUTH_USER'] ?></small>--></a>
-                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class="btn"><i class=" icon-cog-alt"></i><!--Cpanel--></a>
+            <li class="gn-multiline right hide-on-med-and-up">
+                <a href="?logout" class=" waves-effect "><i class=" icon-logout"></i><small>logout</small></a>
+            </li>
+            <li class="gn-multiline right hide-on-med-and-up">
+                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class=" waves-effect"><i class=" icon-cog-alt"></i><small>cpanel</small></a>
             </li>
 <?php
 } else {
 ?>
-            <li class="right">
-                <a href="?login" class="btn secondary-darken-4 icon-key"><span class="hide-on-med-only">Login</span></a>
+            <li class="gn-multiline right hide-on-med-and-up">
+                <a href="?login" class="waves-effect"><i class="icon-key"></i><small>Login</small></a>
             </li>
 <?php
 }
@@ -211,6 +227,8 @@ if(isset($currentCat))
 }
 ?>
         </header>
+
+        <h1 class="gone">DON'T LOOK I'M HIDEOUS D: (seriously don't use this without CSS enabled)</h1>
 
         <noscript>
             <aside class="yellow h1">

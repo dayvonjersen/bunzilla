@@ -3,11 +3,11 @@
         <footer class="footer shade-darken-4">
             <a style="position: fixed; bottom: 2em; right: 2em; " class="btn-floating black white-text" title="helo r u lost" href="#"><i class="icon-up-open-mini"></i></a>
                 <div class="row">
-                    <div class="section col s12 m4">
+                    <div class="section col s6 m4">
                         <h1><?=$_BUNNIES[array_rand($_BUNNIES)]?></h1>
                         <h6><?= BUNZ_SIGNATURE ?> version <?= BUNZ_VERSION ?></h6>
                     </div>
-                    <div class="section col s12 m4 right-align hide-on-small-only">
+                    <div class="section col s6 m4 right-align">
                         <ul class="">
                             <li class='icon-github'>
                                 <a href="https://github.com/generaltso/bunzilla">on github</a>
@@ -15,12 +15,14 @@
                             <li class='icon-person'>
                                 <a href="https://var.abl.cl/">at home</a>
                             </li>
-                            <li class='icon-emo-happy'>
+                            <li class='hide-on-small-only icon-emo-happy'>
                                 <a href="http://japaneseemoticons.net/rabbit-emoticons">bunny emoticons</a>
                             </li>
+                            <li class='hide-on-med-and-up icon-mail'><a href="mailto:țšō@țėķńĭķ.ı0?subject=remove+accents">tell me what you think</a></li>
+                            <li class='hide-on-med-and-up icon-magic'><?= round(microtime(1) - BUNZ_START_TIME,4) ?>s</li>
                         </ul>
                     </div>
-                    <div class="section col s12 m4 hide-on-small-only">
+                    <div class="section col m4 hide-on-small-only">
                         <ul class="">
                             <li class='icon-mail'><a href="mailto:țšō@țėķńĭķ.ı0?subject=remove+accents">tell me what you think</a></li>
                             <li class='icon-bug'>x_x</li>
