@@ -106,7 +106,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
 {
     $category = isset($this->data['category_id']) ? $this->data['categories'][$this->data['category_id']] : null;
     echo "\t\t\t",'<li class="hide-on-small-only bc-parent">',"\n",
-        "\t\t\t\t",'<div class="row section no-pad z-depth-3 bc-container">',"\n";
+        "\t\t\t\t",'<div class="row section no-pad z-depth-',count($this->breadcrumbs),' bc-container">',"\n";
 
     $colSize = 12 / count($this->breadcrumbs);
     $offset  = 0;
@@ -150,14 +150,19 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
             );
 **/
             $currentCat = $this->data['categories'][$category['id']];
-            echo '<a href="',BUNZ_HTTP_DIR,'report/category/',$category['id'],'"
-class="waves-effect  hide-overflow-text ',$currentCat['icon'],'"><span class="hide-on-med-and-down">',$currentCat['title'],'</span></a>
-<a class="dropdown-button btn ',$className,'" data-activates="bc-catlist">&nbsp;</a>';
+            echo '<i class="icon-down-open-mini right"></i>',
+                  '<a href="',BUNZ_HTTP_DIR,'report/category/',$category['id'],
+                  '" class="waves-effect hide-overflow-text ',$currentCat['icon'],
+                  '" style="width: 100%"><span class="hide-on-med-and-down">',
+                  $currentCat['title'],'</span></a>',
+                  '<a class="dropdown-button btn ',$className,
+                  '" data-activates="bc-catlist">&nbsp;</a>';
         } else {
             echo '<a href="',BUNZ_HTTP_DIR,$crumb['href'],
-            '" class="waves-effect  hide-overflow-text ',
-            isset($crumb['icon']) ? $crumb['icon'] : '',
-            '"><span class="hide-on-med-and-down">',$crumb['title'],'</span></a>',"\n";
+                 '" class="waves-effect  hide-overflow-text ',
+                 isset($crumb['icon']) ? $crumb['icon'] : '',
+                 '" style="width: 100%"><span class="hide-on-med-and-down">',
+                 $crumb['title'],'</span></a>',"\n";
         }
         echo "\t\t\t\t\t</div>\n";
     }

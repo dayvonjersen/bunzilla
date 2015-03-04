@@ -50,6 +50,8 @@ if($this->auth())
                     <a href="#delete" class="waves-effect icon-delete danger-text"><span class="hide-on-med-and-down">Delete</span></a>
                 </li>
             </ul>
+            </div>
+        </section>
 <?php
 }
 ?>
@@ -171,8 +173,6 @@ count($this->data['priorities'])
 <?php
 }
 ?>
-        </div>
-        </section>
 
         
     

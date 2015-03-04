@@ -83,7 +83,7 @@ class Color {
 
     /**
      * http://stackoverflow.com/a/9733420 */
-    const CONTRAST_RATIO = 3;
+    const CONTRAST_RATIO = 2;
 
     public static function luminanace( $rgb )
     {

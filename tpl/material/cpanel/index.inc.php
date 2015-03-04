@@ -6,22 +6,21 @@ require_once BUNZ_TPL_DIR . 'header.inc.php';
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
 <article class=" primary-text">
     <header class="row">
-        <h1><?= BUNZ_PROJECT_TITLE, ' :: ', $pageTitle ?></h1>
 
         <section class="col s12">
             <div class="row secondary-text">
                 <ul class="tabs">
-                    <li class="tab col s2"><a class="icon-chart" href="#statistics">Statistics</a></li>
-                    <li class="tab col s2"><a class="icon-doc-text-inv" href="#changelog">Changelog</a></li>
-                    <li class="tab col s2"><a class="icon-cog" href="#cron">Cron Settings</a></li>
+                    <li class="tab col s2"><a class="icon-chart" href="#statistics"><span class="hide-on-med-and-down">Statistics</span></a></li>
+                    <li class="tab col s2"><a class="icon-doc-text-inv" href="#changelog"><span class="hide-on-med-and-down">Changelog</span></a></li>
+                    <li class="tab col s2"><a class="icon-cog" href="#cron"><span class="hide-on-med-and-down">Cron Settings</span></a></li>
 
-                    <li class="tab col s1"><a class="icon-list-dl" href="#categories">Categories</a></li>
-                    <li class="tab col s1"><a class="icon-pinboard" href="#statuses">Statuses</a></li>
-                    <li class="tab col s1"><a class="icon-tags" href="#tags">Tags</a></li>
-                    <li class="tab col s1"><a class="icon-attention" href="#priorities">Priorities</a></li>
+                    <li class="tab col s1"><a class="icon-list-dl" href="#categories"><span class="hide-on-med-and-down">Categories</span></a></li>
+                    <li class="tab col s1"><a class="icon-pinboard" href="#statuses"><span class="hide-on-med-and-down">Statuses</span></a></li>
+                    <li class="tab col s1"><a class="icon-tags" href="#tags"><span class="hide-on-med-and-down">Tags</span></a></li>
+                    <li class="tab col s1"><a class="icon-attention" href="#priorities"><span class="hide-on-med-and-down">Priorities</span></a></li>
 
-                    <li class="tab col s1"><a class="icon-delete" href="#purge">Purge</a></li>
-                    <li class="tab col s1"><a class="icon-database" href="#export">Export</a></li>
+                    <li class="tab col s1"><a class="icon-delete" href="#purge"><span class="hide-on-med-and-down">Purge</span></a></li>
+                    <li class="tab col s1"><a class="icon-database" href="#export"><span class="hide-on-med-and-down">Export</span></a></li>
                 </ul>
 <?php
 /**

@@ -8,7 +8,33 @@ class cpanel extends Controller
         parent::__construct();
         $this->requireLogin();
     }
+    public $breadcrumbs = [];
+    public function setBreadcrumbs($method)
+    {
+        $this->breadcrumbs[] = ['href' => '', 
+                                'title' => BUNZ_PROJECT_TITLE,
+                                'icon'  => 'icon-home'];
 
+        $this->breadcrumbs[] = ['href' => 'cpanel/index', 
+                                'title' => 'cpanel',
+                                'icon'  => 'icon-cog'];
+        if($method == 'index')
+            return;
+
+        $category = Cache::read('categories')[$this->data['category_id']];
+
+        $this->breadcrumbs[] = ['href' => 'report/category/'.$category['id'],
+                                'title' => $category['title'],
+                                'icon' => $category['icon']
+        ];
+        if($method == 'category')
+            return;
+
+        $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['report']['id'],
+                                'title' => $this->data['report']['subject'],
+                                'icon' => $this->data['report']['closed'] ? 'icon-lock' : 'icon-doc-text-inv'];
+        return;
+    }
     /**
      * The cpanel itself */
     public function index()
@@ -50,6 +76,8 @@ class cpanel extends Controller
                 ORDER BY t.title ASC'
                 )->fetchAll(PDO::FETCH_ASSOC) : null
         ];*/
+
+        $this->setBreadcrumbs(__FUNCTION__);
     }
 
     private function __NOTWORKING_crontab()

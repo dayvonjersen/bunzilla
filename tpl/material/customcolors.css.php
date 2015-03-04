@@ -54,7 +54,7 @@ foreach(['primary','secondary','shade', 'alert', 'danger', 'success'] as $classN
                 constant('BUNZ_THEME_'.strtoupper($className).'_COLOR')
         );
         // hax 
-        if($className != 'primary')
+        if(!in_array($className,['primary','shade']))
             unset($_["$className-text"]['background-color']);
     }
 }

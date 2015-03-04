@@ -168,37 +168,40 @@ function pagination( $url, $total, $curPage )
     $curPage += 1;
     $pages = ceil($total/50);
 
-    $return = '<article class="small center ">';
-    $return .= '<div class=" valign-wrapper secondary-darken-4">';
+    $return = '<article class="small center secondary-base">';
+//    $return .= '<div class=" valign-wrapper">';
 
 //    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
-    $classList = 'btn btn-floating btn-flat waves-effect';
+    $classList = 'btn btn-floating btn-flat waves-effect small';
 
+/**
     if($curPage != 1)
         $return .= "<a href='$url' class='$classList' title='First Page' style='font-variant: small-caps'>1<sup>ST</sup></a>";
     
     if($curPage > 2)
         $return .= "<a href='$url/".($curPage - 1)
                 ."' class='$classList' title='Previous Page'><i class='icon-left-open-mini'></i></a>";
+**/
+//    $return .= "<h4 class='' style='display: inline'>Page $curPage of $pages</h4>";
 
-    $return .= "<h4 class='' style='display: inline'>Page $curPage of $pages</h4>";
-    
+//    $return .= '</div><div class="">';
+
+    for($i = 1; $i <= $pages; $i++)
+    {
+        $return .= '<'.($i == $curPage ? 'section' : "a href='$url/".($i-1)."'")
+                    ." class='$classList".($i == $curPage ? ' shade-darken-4 z-depth-5' : '')."'>$i</"
+                    .($i == $curPage ? 'section' : 'a')
+                    .'>';
+    }
+/**    
     if($curPage <= $pages - 2)
         $return .= "<a href='$url/".($curPage+1)
                     ."' class='$classList' title='Next Page'><i class='icon-right-open-mini'></i></a>";
 
     if($curPage != $pages)
        $return .= "<a href='$url/".($pages-1)."' class='$classList' title='Last'><small style='font-variant: small-caps'>END</small></a>";
-
-    $return .= '</div><div class="">';
-
-    for($i = 1; $i <= $pages; $i++)
-        $return .= '<'.($i == $curPage ? 'section' : "a href='$url/".($i-1)."'")
-                    ." class='$classList".($i == $curPage ? ' secondary-text z-depth-5' : '')."'>$i</"
-                    .($i == $curPage ? 'section' : 'a')
-                    .'>';
-
-    return "$return</div></article>";
+**/
+    return "$return</article>";
 }
 
 // this is the hardest thing ever I swear to god

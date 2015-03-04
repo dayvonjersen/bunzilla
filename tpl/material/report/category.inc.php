@@ -36,7 +36,7 @@ if($this->auth())
 }
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?rss" 
-                       class="right btn btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
+                       class="right btn btn-floating waves-effect waves-orange" style="background: #f86e00; color: #000"
                        title="subscribe!"><i class="icon-rss-squared"></i></a>
 
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
@@ -92,7 +92,7 @@ document.body.onload = function(){
 -->
 <div class="section" id="list">
     <div class="no-pad-bot ">
-    <div class="row z-depth-5 secondary-text"  id="fuck"><!-- me -->
+    <div class="row z-depth-5 shade-darken-4 secondary-text"  id="fuck"><!-- me -->
     <div class="col s12 m4 ">
 
         <div class="col s3  right-align">

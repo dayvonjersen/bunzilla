@@ -452,7 +452,11 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
       });
 
     // Click
-    } else {
+/**
+    3/4/2015 6:59:15 AM
+    no idea why this was an if-else
+**/
+    }// else {
       var open = false;
 
       // Click handler to show dropdown
@@ -480,7 +484,7 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
         });
       });
 
-    } // End else
+//    } // End else
 
     // Window Resize Reposition
     $(document).on('resize', function(){
@@ -977,7 +981,9 @@ function update_indicator($index, $prev_index) {
       update_indicator($index,$prev_index); 
 
       // Prevent the anchor's default click action
-      e.preventDefault();
+/**
+ * 3/4/2015 8:14:37 AM no fuck you */
+      //e.preventDefault();
     });
   });
 
