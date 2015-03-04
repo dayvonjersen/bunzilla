@@ -29,7 +29,9 @@ require_once BUNZ_TPL_DIR . 'color.php';
  * 3/3/2015 11:51:16 AM
  * tab toolbar now only for admins
  * we will merge status_log history into the comments section
- * (how github does it) */
+ * (how github does it) 
+ *
+ * 3/4/2015 6:00:02 PM that's been done btw */
 if($this->auth())
 { 
 ?>
@@ -148,15 +150,63 @@ count($this->data['priorities'])
                 admin actions : move (todo: consolidate)
             -->   
             <section class="section col s12 alert-base" id="move">
-                <form class="z-depth-5 section">
-                    <h4>Coming soon: move to another category and consolidate into another report</h4>
-<?php
-/*
-<?= categoryDropdown(false,$cat['id']) ?>
-<button class="btn yellow black-text waves-effect icon-move">Move</button>
-                           
-*/
-?>
+                <form class="category-<?=$cat['id']?>-text z-depth-5 section" 
+                      action="<?= BUNZ_HTTP_DIR ?>report/move/<?= $report['id'] ?>" 
+                      method="post">
+
+                    <div class="row">
+                        <div class="input-field col s12 m6 section">
+                            <p>Move to:</p>
+                            <?= categoryDropdown(null, $cat['id']) ?>
+                        </div>
+
+                        <div class="input-field col s12 center">
+                            <button type="submit"
+                                    name="zig" 
+                                    value="1"
+                                    class="waves-effect btn alert-base icon-move">Move</button>
+                        </div>
+                    </div>
+                </form>
+                <form class="category-<?=$cat['id']?>-text z-depth-5 section" 
+                      action="<?= BUNZ_HTTP_DIR ?>report/merge/<?= $report['id'] ?>" 
+                      method="post">
+
+                    <div class="row">
+<div class='col s12 section z-depth-5 shade-lighten-4'><p><i class='icon-move'></i><em class='h2'>Merge is an experimental feature. Its behaviour is untested and subject to change at any time. Please be cautious.</em><p>If you have any suggestions, feedback, or concerns please leave a message on <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.<p>Thank you and have a <em>very</em> safe and productive day.</div>
+                        <div class="input-field col s12 m6 section">
+                            <p>Merge Entire Report Into:</p>
+                            <input type="text" name="report" maxlength="4" placeholder="yes you have to type the id manually right now"/>
+                        </div>
+
+                        <div class="input-field col s12">
+                            <input type="checkbox" disabled>
+                            <label>Include Subject</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input type="checkbox" disabled>
+                            <label>Include Description</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input type="checkbox" disabled>
+                            <label>Include Comments</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input type="checkbox" disabled>
+                            <label>Delete Original</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input type="checkbox" disabled>
+                            <label>Et cetera, just thinking out loud</label>
+                        </div>
+
+                        <div class="input-field col s12 center">
+                            <button type="submit"
+                                    name="zig" 
+                                    value="1"
+                                    class="waves-effect btn danger-base icon-move">Merge</button>
+                        </div>
+                    </div>
                 </form>
             </section>
 
