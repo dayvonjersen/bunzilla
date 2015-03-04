@@ -1,13 +1,15 @@
 <?php
-$pageTitle = 'Edit &quot;'.$this->data['status']['title'].'&quot;';
+$pageTitle = 'Edit Status &quot;'.$this->data['status']['title'].'&quot;';
+$background='shade-base';
 require BUNZ_TPL_DIR . 'header.inc.php';
 
 $cat = $this->data['status'];
 ?>
 <script src="<?= BUNZ_JS_DIR ?>jscolor.js"></script>
-   <section id="editStatus" class="secondary-base section no-pad-top no-pad-bot">
-        <form class="secondary-text z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status/<?=$cat['id']?>" method="post">
-            <h1 class="icon-pencil-alt">Edit <?= $cat['title'] ?></h1>
+   <section id="editStatus" class="shade-text section no-pad-top no-pad-bot">
+            <h1 class="icon-pencil-alt">Edit Status &quot;<?= $cat['title'] ?>&quot;</h1>
+        <form class="z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status/<?=$cat['id']?>" method="post">
+            <?= status($cat['id']) ?>
             <div class="input-field">
                 <input id="edit-status-title" type="text" name="title" maxlength="255" value="<?= $cat['title'] ?>"/>
                 <span class="material-input"></span>

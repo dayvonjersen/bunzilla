@@ -1,13 +1,13 @@
 <?php
-$pageTitle = 'Edit &quot;'.$this->data['category']['title'].'&quot;';
+$pageTitle = 'Edit Category &quot;'.$this->data['category']['title'].'&quot;';
+$background = 'primary-base';
 require BUNZ_TPL_DIR . 'header.inc.php';
-
 $cat = $this->data['category'];
 ?>
 <script src="<?= BUNZ_JS_DIR ?>jscolor.js"></script>
-   <section id="editCategory" class="secondary-base section no-pad-top no-pad-bot">
-        <form class="secondary-text z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/category/<?=$cat['id']?>" method="post">
-            <h1 class="icon-pencil-alt">Edit <?= $cat['title'] ?></h1>
+   <section id="editCategory" class="shade-text section">
+        <form class="secondary-text z-depth-5 section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/category/<?=$cat['id']?>" method="post">
+            <h1 class="icon-pencil-alt"><?= $pageTitle ?></h1>
             <div class="input-field">
                 <input id="edit-category-title" type="text" name="title" maxlength="255" value="<?= $cat['title'] ?>"/>
                 <span class="material-input"></span>

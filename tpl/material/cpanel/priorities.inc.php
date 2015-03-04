@@ -1,10 +1,10 @@
-<section id="priorities" class="col s12 primary-text">
+<section id="priorities" class="col s12 primary-text alert-base section">
   
 <?php
 if(!empty($this->data['priorities']))
 {
 ?>  
-    <section id="viewPriorities" class="section">
+    <section id="viewPriorities" class="section primary-text z-depth-3">
         <h1 class="icon-attention">Priorities</h1>
         <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority" method="post" class="section z-depth-3">
             <div class="row">
@@ -83,13 +83,13 @@ if(!empty($this->data['priorities']))
         </form>
     </section>
 
-        <div class="section z-depth-5 alert-base">
+        <div class="section">
             <p>Priorities should be limited. A maximum of 128 are allowed.</p>
             <p> Their ids determine their urgency (greater = more important)</p>
             <p>Say something about default...<p>
         </div>
 
-    <section id="createPriority" class="row secondary-text section ">
+    <section id="createPriority" class="row section primary-text z-depth-3">
         <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/priority" method="post">
             <h1 class="icon-plus">Create New Priority</h1>
             <div class="input-field">

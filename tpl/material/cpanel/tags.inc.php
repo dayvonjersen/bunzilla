@@ -1,73 +1,88 @@
-<section id="tags" class="col s12">
-    <ul class="tabs">
-<?php
-if(!empty($this->data['tags']))
-{
-?>
-        <li class="tab col s6">
-            <a href="#viewTags" class="icon-flashlight">View All</a>
-        </li>
-<?php
-}
-?>
-        <li class="tab col s6">
-            <a href="#createTag" class="icon-plus">Create New Status</a>
-        </li>
-    </ul>
+<section id="tags" class="col s12 primary-text secondary-base section">
   
 <?php
 if(!empty($this->data['tags']))
 {
 ?>  
-    <section id="viewTags">
+    <section id="viewTags" class="section primary-text z-depth-3">
+        <h1 class="icon-tags">Tags</h1>
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/tag" method="post" class="section z-depth-3">
+            <div class="row">
+                <div class="right-align col s2">
+                    <span class="hide-on-med-and-down">Usage</span>
+                    <i class="icon-chart"></i>
+                </div>
+                <div class="left-align col s6">
+                <i class="icon-tags"></i> Tag <span class="hide-on-med-and-down">Icon, Title, and Color</span></div>
+                <div class="right-align col s4"><i class="icon-cog"></i> Actions</div>
+            </div>
+            
+            <div class="divider"></div>
 <?php
     $i = 0;
-    foreach($this->data['tags'] as $cat)
+    ($total_reports = selectCount('reports')) || ($total_reports = 1);
+    $total_tags = count($this->data['tags']);
+    foreach($this->data['tags'] as $p)
     {
-        echo $i == 0 ? '<div class="row">' : '';
+        $usage = round(selectCount('tag_joins', 'tag = '.$p['id'])/$total_reports, 2)*100;
 ?>
-    <div class="col s12 m6 l3">
-        <div class="section no-pad-top">
-            <section class='section col s12 z-depth-5 tag-<?= $cat['id'] ?>-base waves-effect' onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?=BUNZ_HTTP_DIR,'report/status/',$cat['id']?>'; }})(event);">
-            <!--
-                actions
-            -->
+            <div class="row">
 
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 danger-base" 
-                       title="delete tag"><i class="icon-delete"></i></a>
-
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 alert-base" 
-                       title="merge tag"><i class="icon-move"></i></a>
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 success-base" 
-                       title="edit tag"><i class="icon-pencil-alt"></i></a>
-
-            <!-- 
-                title 
-            -->
-                <h2><a href="<?=BUNZ_HTTP_DIR,'report/tag/',$cat['id']?>" class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></a></h2>
-            </section>
-
-        </div>
-    </div>
+                <div class="col s1">
+                    <a href="<?=BUNZ_HTTP_DIR,'search/tag:',$p['id']?>" 
+                               class="right btn btn-flat btn-floating secondary-text" 
+                               title="Search for where this tag is used">
+                        <i class="icon-search"></i></a>
+                </div>
+                <div class="col s1 right-align <?= $usage/100 > 1/$total_tags ? 'large' : 'small' ?>"><?= $usage ?>%</div>
+                <div class="col s6 input-field" style="position: relative;">
+                        <div>&nbsp;
+                            <span class="tag-<?= $p['id'] ?> <?= $p['icon'] ?>"
+                                  style="padding: 0 0.5em;
+                                         max-height: 1.5em; margin-top: .75rem;
+                                         opacity: <?= 0.5 + $usage/200 ?>;
+                                         display: inline-block; 
+                                         height: 100%;
+                                         position: absolute;
+                                         z-index: 1">
+                                <?= $p['title'] ?>
+                            </span>
+                        </div>
+                    <div class="tag-<?=$p['id']?> no-select" 
+                         style="width: <?=$usage?>%; 
+                                height: 1.5em; margin-top: .75rem;
+                                
+                                position: absolute; 
+                                left: 7px; top: 0; 
+                                pointer-events: none"></div>&nbsp;
+                </div>
+                <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/tag/',$p['id']?>" 
+                               class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
+                               title="delete tag"><i class="icon-delete"></i></a>&emsp;
+                            <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$p['id']?>" 
+                               class="waves-effect right btn btn-flat btn-floating success-base" 
+                               title="edit tag"><i class="icon-pencil-alt"></i></a>
+                </div>
+            </div>
 <?php
-        if($i++ >= 5 || end($this->data['tags']) === $cat)
-        {
-            echo '</div>';
-            $i = 0;
-        } else
-            $i++;
     }
 }
 ?>
+            <div class="row">
+                <div  class="col offset-s2 s10">
+                    <button type="submit" class="waves-effect btn btn-flat secondary-text"><i class="icon-ok"></i>Change Default</button>
+                    <button type="reset" class="waves-effect waves-light btn btn-flat icon-cancel secondary-text transparent">Reset</button>
+                </div>
+            </div>
+        </form>
     </section>
 
-    <section id="createTag" class="secondary-base section no-pad-top no-pad-bot">
-        <form class="secondary-text z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/tag" method="post">
+        <div class="section">
+            <p>Tags do things.</p>
+        </div>
+
+    <section id="createTag" class="row section primary-text z-depth-3">
+        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/tag" method="post">
             <h1 class="icon-plus">Create New Tag</h1>
             <div class="input-field">
                 <input id="add-tag-title" type="text" name="title" maxlength="255"/>
@@ -84,11 +99,14 @@ if(!empty($this->data['tags']))
                     <?= dropdown('icon', Cache::getIconList() ) ?>
                 </div>
             </div>
-            <div class="input-field col s12 center">
-                <button type="submit" class="btn secondary-base icon-plus">Create Tag!</button>
-                <button type="reset" class="btn btn-flat icon-cancel secondary-text">Clear Form</button>
+            <div class="row">
+            <div class="input-field col s12">
+                <button type="submit" class="btn secondary-base icon-plus waves-effect">Create!</button>
+                <button type="reset" class="btn btn-flat icon-cancel waves-effect transparent secondary-text">Clear Form</button>
+            </div>
             </div>
         </form>
     </section>
 </section>
+
 

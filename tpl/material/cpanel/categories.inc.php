@@ -1,25 +1,14 @@
-<section id="categories" class="col s12">
-    <ul class="tabs">
-<?php
-if(!empty($this->data['categories']))
-{
-?>
-        <li class="tab col s6">
-            <a href="#viewCategories" class="icon-flashlight">View All</a>
-        </li>
-<?php
-}
-?>
-        <li class="tab col s6">
-            <a href="#createCategory" class="icon-plus">Create New Category</a>
-        </li>
-    </ul>
+<section id="categories" class="col s12 primary-base">
   
 <?php
 if(!empty($this->data['categories']))
 {
 ?>  
     <section id="viewCategories">
+        <section class="section shade-text">
+            <h1>Categories</h1>
+            <p>blabla organize urself blabla productivity blabla carrots</p>
+        </section>
 <?php
     $i = 0;
     foreach($this->data['categories'] as $cat)
@@ -67,9 +56,9 @@ if(!empty($this->data['categories']))
 ?>
     </section>
 
-    <section id="createCategory" class="secondary-base section no-pad-top no-pad-bot">
-        <form class="secondary-text z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/category" method="post">
-            <h1 class="icon-plus">Create New Category</h1>
+    <section id="createCategory" class="shade-text section">
+        <form class=" z-depth-5 section" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/category" method="post">
+            <h1 class="icon-plus secondary-text">Create New Category</h1>
             <div class="input-field">
                 <input id="add-category-title" type="text" name="title" maxlength="255"/>
                 <span class="material-input"></span>
@@ -105,11 +94,11 @@ if(!empty($this->data['categories']))
                     <h5>Icon</h5>
                     <?= dropdown('icon', Cache::getIconList() ) ?>
                 </div>
-            </div>
+            </div><div class="row">
             <div class="input-field col s12 center">
                 <button type="submit" class="btn secondary-base icon-plus">Create Category!</button>
                 <button type="reset" class="btn btn-flat icon-cancel secondary-text">Clear Form</button>
-            </div>
+            </div></div>
         </form>
     </section>
 </section>

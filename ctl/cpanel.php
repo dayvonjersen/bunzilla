@@ -18,21 +18,16 @@ class cpanel extends Controller
         $this->breadcrumbs[] = ['href' => 'cpanel/index', 
                                 'title' => 'cpanel',
                                 'icon'  => 'icon-cog'];
-        if($method == 'index')
-            return;
 
-        $category = Cache::read('categories')[$this->data['category_id']];
+        switch($method)
+        {
+            case 'tagEdit':
+                $this->breadcrumbs[] = ['href' => 'cpanel#tags',
+                                        'title' => 'Tags',
+                                        'icon' => 'icon-tags'];
+                return;                
+        }
 
-        $this->breadcrumbs[] = ['href' => 'report/category/'.$category['id'],
-                                'title' => $category['title'],
-                                'icon' => $category['icon']
-        ];
-        if($method == 'category')
-            return;
-
-        $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['report']['id'],
-                                'title' => $this->data['report']['subject'],
-                                'icon' => $this->data['report']['closed'] ? 'icon-lock' : 'icon-doc-text-inv'];
         return;
     }
     /**
@@ -448,6 +443,7 @@ class cpanel extends Controller
         if(empty($_POST))
         {
             $this->tpl .= '/tagEdit';
+            $this->setBreadcrumbs(__FUNCTION__);
             exit;
         }
 
@@ -477,6 +473,6 @@ class cpanel extends Controller
         $sql = 'UPDATE tags SET '.implode(',',$set).' WHERE id = '.(int)$id;
 
         if($this->_exec($sql,$params))
-            $this->flash[] = 'Status updated.';
+            $this->flash[] = 'Tag updated.';
     }
 }

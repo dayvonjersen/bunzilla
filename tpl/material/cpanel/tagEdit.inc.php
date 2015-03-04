@@ -1,13 +1,14 @@
 <?php
 $pageTitle = 'Edit &quot;'.$this->data['tag']['title'].'&quot;';
+$background='secondary-base';
 require BUNZ_TPL_DIR . 'header.inc.php';
 
 $cat = $this->data['tag'];
 ?>
 <script src="<?= BUNZ_JS_DIR ?>jscolor.js"></script>
-   <section id="editTag" class="secondary-base section no-pad-top no-pad-bot">
-        <form class="secondary-text z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/tag/<?=$cat['id']?>" method="post">
-            <h1 class="icon-pencil-alt">Edit <?= $cat['title'] ?></h1>
+   <section id="editTag" class="shade-text section no-pad-top no-pad-bot">
+        <h1 class="icon-pencil-alt success-text">Edit <?= $cat['title'] ?> : 
+        <form class="z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/tag/<?=$cat['id']?>" method="post"><?= tag($cat['id']) ?></h1>
             <div class="input-field">
                 <input id="edit-tag-title" type="text" name="title" maxlength="255" value="<?= $cat['title'] ?>"/>
                 <span class="material-input"></span>
@@ -24,8 +25,8 @@ $cat = $this->data['tag'];
                 </div>
             </div>
             <div class="input-field col s12 center">
-                <button type="submit" class="btn secondary-base icon-pencil-alt">Edit Tag!</button>
-                <button type="reset" class="btn btn-flat icon-cancel secondary-text">Clear Form</button>
+                <button type="submit" class="btn success-base waves-effect icon-pencil-alt">Edit Tag!</button>
+                <button type="reset" class="btn btn-flat icon-cancel secondary-text waves-effect">Clear Form</button>
             </div>
         </form>
     </section>

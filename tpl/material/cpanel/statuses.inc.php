@@ -1,73 +1,94 @@
-<section id="statuses" class="col s12">
-    <ul class="tabs">
-<?php
-if(!empty($this->data['statuses']))
-{
-?>
-        <li class="tab col s6">
-            <a href="#viewStatuses" class="icon-flashlight">View All</a>
-        </li>
-<?php
-}
-?>
-        <li class="tab col s6">
-            <a href="#createStatus" class="icon-plus">Create New Status</a>
-        </li>
-    </ul>
+<section id="statuses" class="col s12 primary-text shade-base section">
   
 <?php
 if(!empty($this->data['statuses']))
 {
 ?>  
-    <section id="viewStatuses">
+    <section id="viewStatuses" class="section primary-text z-depth-3">
+        <h1 class="icon-pinboard">Statuses</h1>
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status" method="post" class="section z-depth-3">
+            <div class="row">
+                <div class="right-align col s2">
+                    <span class="hide-on-med-and-down">Usage</span>
+                    <i class="icon-chart"></i>
+                </div>
+                <div class="left-align col s6"><small>&nbsp;<i class="icon-ok"></i><span class="hide-on-med-and-down">Default</span></small>
+                <i class="icon-attention"></i> Status <span class="hide-on-med-and-down">Icon, Title, and Color</span></div>
+                <div class="right-align col s4"><i class="icon-cog"></i> Actions</div>
+            </div>
+            
+            <div class="divider"></div>
 <?php
     $i = 0;
-    foreach($this->data['statuses'] as $cat)
+    ($total_reports = selectCount('reports')) || ($total_reports = 1);
+    $total_statuses = count($this->data['statuses']);
+    foreach($this->data['statuses'] as $p)
     {
-        echo $i == 0 ? '<div class="row">' : '';
+        $usage = round(selectCount('reports', 'status = '.$p['id'])/$total_reports, 2)*100;
 ?>
-    <div class="col s12 m6 l3">
-        <div class="section no-pad-top">
-            <section class='section col s12 z-depth-5 status-<?= $cat['id'] ?>-base waves-effect' onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?=BUNZ_HTTP_DIR,'report/status/',$cat['id']?>'; }})(event);">
-            <!--
-                actions
-            -->
+            <div class="row">
 
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/status/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 danger-base" 
-                       title="delete status"><i class="icon-delete"></i></a>
-
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/status/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 alert-base" 
-                       title="merge status"><i class="icon-move"></i></a>
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/status/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 success-base" 
-                       title="edit status"><i class="icon-pencil-alt"></i></a>
-
-            <!-- 
-                title 
-            -->
-                <h2><a href="<?=BUNZ_HTTP_DIR,'report/status/',$cat['id']?>" class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></a></h2>
-            </section>
-
-        </div>
-    </div>
+                <div class="col s1">
+                    <a href="<?=BUNZ_HTTP_DIR,'search/status:',$p['id']?>" 
+                               class="right btn btn-flat btn-floating secondary-text" 
+                               title="Search for where this status is used">
+                        <i class="icon-search"></i></a>
+                </div>
+                <div class="col s1 right-align <?= $usage/100 > 1/$total_statuses ? 'large' : 'small' ?>"><?= $usage ?>%</div>
+                <div class="col s6 input-field" style="position: relative;">
+                    <p style="margin: 0">
+                        <input type="radio" 
+                               name="default_status" 
+                               value="<?= $p['id'] ?>" 
+                               id="default_status_<?= $p['id'] ?>"
+                               <?= $p['default'] ? 'checked' : ''?>>
+                        <label for="default_status_<?= $p['id'] ?>" 
+                               style="position: static; transform: none; z-index: 1000;">
+                            <span class="status-<?= $p['id'] ?> <?= $p['icon'] ?>"
+                                  style="padding: 0 0.5em; 
+                                         opacity: <?= 0.5 + $usage/200 ?>;
+                                         display: inline-block; 
+                                         height: 100%;
+                                         position: absolute;
+                                         z-index: 1">
+                                <?= $p['title'] ?>
+                            </span>
+                        </label>
+                    </p>
+                    <div class="status-<?=$p['id']?> no-select" 
+                         style="width: <?=$usage?>%; 
+                                height: 100%; 
+                                position: absolute; 
+                                left: 35px; top: 0; 
+                                pointer-events: none"></div>
+                </div>
+                <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/status/',$p['id']?>" 
+                               class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
+                               title="delete status"><i class="icon-delete"></i></a>&emsp;
+                            <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/status/',$p['id']?>" 
+                               class="waves-effect right btn btn-flat btn-floating success-base" 
+                               title="edit status"><i class="icon-pencil-alt"></i></a>
+                </div>
+            </div>
 <?php
-        if($i++ >= 5 || end($this->data['statuses']) === $cat)
-        {
-            echo '</div>';
-            $i = 0;
-        } else
-            $i++;
     }
 }
 ?>
+            <div class="row">
+                <div  class="col offset-s2 s10">
+                    <button type="submit" class="waves-effect btn btn-flat secondary-text"><i class="icon-ok"></i>Change Default</button>
+                    <button type="reset" class="waves-effect waves-light btn btn-flat icon-cancel secondary-text transparent">Reset</button>
+                </div>
+            </div>
+        </form>
     </section>
 
-    <section id="createStatus" class="secondary-base section no-pad-top no-pad-bot">
-        <form class="secondary-text z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/status" method="post">
+        <div class="section">
+            <p>Statuses do things.</p>
+        </div>
+
+    <section id="createStatus" class="row section primary-text z-depth-3">
+        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/status" method="post">
             <h1 class="icon-plus">Create New Status</h1>
             <div class="input-field">
                 <input id="add-status-title" type="text" name="title" maxlength="255"/>
@@ -84,11 +105,14 @@ if(!empty($this->data['statuses']))
                     <?= dropdown('icon', Cache::getIconList() ) ?>
                 </div>
             </div>
-            <div class="input-field col s12 center">
-                <button type="submit" class="btn secondary-base icon-plus">Create Status!</button>
-                <button type="reset" class="btn btn-flat icon-cancel secondary-text">Clear Form</button>
+            <div class="row">
+            <div class="input-field col s12">
+                <button type="submit" class="btn secondary-base icon-plus waves-effect">Create!</button>
+                <button type="reset" class="btn btn-flat icon-cancel waves-effect transparent secondary-text">Clear Form</button>
+            </div>
             </div>
         </form>
     </section>
 </section>
+
 
