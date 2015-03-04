@@ -144,7 +144,7 @@ img { width: 50%; cursor: zoom-in }
 #list { height: 100%; }
 #list li { margin-bottom: 12px; }
 #list li .row { margin: 0 !important }
-#list .collapsible-header {  cursor: row-resize; box-shadow: none !important;  }
+#list .collapsible-header {  cursor: row-resize; box-shadow: none !important; line-height: 1 !important; }
 #list .collapsible-header i[class*="icon"]:before { font-size: 1rem; }
 #list .collapsible-header > .row { /*padding: 0.5em 1em 0 1em;*/ }
 #list .collapsible-header a:hover { text-decoration: underline; cursor: pointer; color: #2962FF; }

@@ -141,7 +141,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
         $prevClassName = isset($className) ? $className : null;
         $className = strpos($crumb['href'],'report/category') === 0
                 ? "category-{$category['id']}-base" 
-                : (strpos($crumb['href'],$this->tpl) === 0 ? 'secondary-text' : 'primary-text');
+                : (strpos($crumb['href'],$this->tpl) === 0 || $i == count($this->breadcrumbs) - 1 ? 'secondary-text' : 'primary-text');
         echo "\t\t\t\t\t",
             '<div class="bc-item col s',$colSize,
             $offset ? " offset-s$offset" : '',

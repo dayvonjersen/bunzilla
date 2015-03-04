@@ -28,12 +28,13 @@ if(isset($_ERROR))
     exit;
 }
 ?>
-<article class="container section alert-text">
-    <hgroup class="section z-depth-5">
-        <h1>HTTP/1.1 404: Duck Season</h1>
-        <h2>That's an error</h2>
-        <h3>That's all we know</h3>
-        <h6>I hope that isn't copyrighted</h6>
+<article class="container section">
+    <img src="<?= BUNZ_HTTP_DIR ?>/tpl/material/assets/css/img/00.jpg" alt="/(x.x)\" class="left z-depth-5 circle responsive-img">
+    <hgroup class="section shade-text z-depth-5">
+        <h1 class="alert-text">HTTP/1.1 404: Duck Season</h1>
+        <h2 class="secondary-text">That's an error</h2>
+        <h2 class="secondary-text">That's all we know</h2>
+        <h6><em>I hope that isn't copyrighted<em></h6>
     </hgroup>
 </article>
 
