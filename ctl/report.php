@@ -172,9 +172,10 @@ class report extends Controller
                  FROM reports
                  WHERE category = '.(int)$id.'
                  ORDER BY closed ASC,
-                    time DESC,
+                    priority DESC,
                     updated_at DESC,
-                    edit_time DESC
+                    edit_time DESC,
+                    time DESC
                  LIMIT '.$offset.',50'
             )->fetchALL(PDO::FETCH_ASSOC)
         ];

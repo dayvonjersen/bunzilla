@@ -125,6 +125,10 @@ class cpanel extends Controller
                 $tbl = 'tags';
                 break;
 
+            case 'priority':
+                $tbl = 'priorities';
+                break;
+
             default:
                 $this->abort('Unsupported action!');
         }
@@ -148,24 +152,17 @@ class cpanel extends Controller
                 break;
 
             case 'status':
-                if(isset($_POST['default_status']))
-                {
-                    $id = (int)$_POST['default_status'];
-                    if(!selectCount('statuses','id = '.$id))
-                        $this->abort('invalid status');
-                    db()->query('UPDATE statuses SET `default` = 1 WHERE id = '.$id);
-                    db()->query('UPDATE statuses SET `default` = 0 WHERE id != '.$id);
-                    Statuslog::create('status', $id, 'is now the default status');
-                    Cache::clear('statuses');
-                    $this->flash[] = 'default status updated';
-                    $this->index();
-                    exit;
-                }
                 $tbl = 'statuses';
+                $this->handleSetDefault($mode,$tbl);
                 break;
 
             case 'tag':
                 $tbl = 'tags';
+                break;
+
+            case 'priority':
+                $tbl = 'priorities';
+                $this->handleSetDefault($mode,$tbl);
                 break;
 
             default:
@@ -175,6 +172,23 @@ class cpanel extends Controller
         Statuslog::create($mode, (int)$args[0], 'modified');
         Cache::clear($tbl);
         $this->index();
+    }
+
+    private function handleSetDefault($field, $tbl)
+    {
+        if(isset($_POST['set_default']))
+        {
+            $id = (int)$_POST['set_default'];
+            if(!selectCount($tbl,"id = $id"))
+                $this->abort("invalid $field");
+            db()->query("UPDATE $tbl SET `default` = 1 WHERE id = $id");
+            db()->query("UPDATE $tbl SET `default` = 0 WHERE id != $id");
+            Statuslog::create($field, $id, 'is now the default '.$field);
+            Cache::clear($tbl);
+            $this->flash[] = 'Default '.$field.' updated.';
+            $this->index();
+            exit;
+        }
     }
 
     /**
@@ -320,6 +334,26 @@ class cpanel extends Controller
             $this->flash[] = 'Status added';
     }
 
+    private function priorityAdd()
+    {
+        $params = filter_input_array(INPUT_POST, [
+            'id'    => filterOptions(0, 'number_int'),
+            'title' => filterOptions(0,'full_special_chars'),
+            'color' => filterOptions(1,'regexp',null,
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
+            'icon' => filterOptions(0,'full_special_chars')
+        ]);
+        $params['def'] = !selectCount('priority') ? 1 : 0;
+        $sql = 
+            'INSERT INTO priority
+                (id,title,color,icon,`default`)
+            VALUES
+                (\'\',:title,:color,:icon,:def)';
+        if($this->_exec($sql,$params))
+            $this->flash[] = 'Priority added';
+    }
+
+
     private function tagAdd()
     {
         $params = filter_input_array(INPUT_POST, [
@@ -429,6 +463,51 @@ class cpanel extends Controller
 
         if($this->_exec($sql,$params))
             $this->flash[] = 'Status updated.';
+    }
+
+    private function priorityEdit($id)
+    {
+        if(!selectCount('priorities','id = '.(int)$id))
+            $this->abort('No such priority!');
+       
+        $this->data['priority'] = current(db()->query(
+            'SELECT * FROM priorities WHERE id = '.(int)$id
+        )->fetchAll(PDO::FETCH_ASSOC));
+
+        if(empty($_POST))
+        {
+            $this->tpl .= '/priorityEdit';
+            exit;
+        }
+
+        $params = filter_input_array(INPUT_POST, [
+            'id'    => filterOptions(0, 'number_int'),
+            'title' => filterOptions(0,'full_special_chars','null_on_failure'),
+            'color' => filterOptions(1,'regexp','null_on_failure',
+                ['regexp'=>'/^[0-9a-f]{6}/i']),
+            'icon' => filterOptions(0,'full_special_chars','null_on_failure')
+        ]);
+
+        $set = [];
+        foreach($params as $field => $value)
+        {
+            if($value === null)
+                unset($params[$field]);
+            else
+                $set[] = $field .' = :'. $field;
+        }
+
+        if(empty($params))
+        {
+            $this->flash[] = 'No changes made.';
+            $this->index();
+            exit;
+        }
+
+        $sql = 'UPDATE priorities SET '.implode(',',$set).' WHERE id = '.(int)$id;
+
+        if($this->_exec($sql,$params))
+            $this->flash[] = 'Priority updated.';
     }
 
     private function tagEdit($id)

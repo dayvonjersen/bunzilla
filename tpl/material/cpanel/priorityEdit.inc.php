@@ -1,13 +1,15 @@
 <?php
-$pageTitle = 'Edit &quot;'.$this->data['priority']['title'].'&quot;';
+$pageTitle = 'Edit Priority &quot;'.$this->data['priority']['title'].'&quot;';
+$background = 'alert-base';
 require BUNZ_TPL_DIR . 'header.inc.php';
 
 $cat = $this->data['priority'];
 ?>
 <script src="<?= BUNZ_JS_DIR ?>jscolor.js"></script>
-   <section id="editPriority" class="secondary-base section no-pad-top no-pad-bot">
-        <form class="secondary-text z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority/<?=$cat['id']?>" method="post">
-            <h1 class="icon-pencil-alt">Edit <?= $cat['title'] ?></h1>
+   <section id="editPriority" class="shade-text section">
+            <h1 class="icon-pencil-alt"><?= $pageTitle ?></h1>
+            <div>&nbsp;        <?= priority($cat['id']) ?></div>
+        <form class=" z-depth-5 section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority/<?=$cat['id']?>" method="post">
             <div class="input-field">
                 <input id="edit-priority-title" type="text" name="title" maxlength="255" value="<?= $cat['title'] ?>"/>
                 <span class="material-input"></span>

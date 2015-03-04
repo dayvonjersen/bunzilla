@@ -109,7 +109,7 @@ function dropdown( $fieldName, $values, $selected = false, $disableKey = false, 
     $ret = "<select$onchange name='$fieldName'>\n";
     foreach($values as $opt)
     {
-        $ret .= "\t<option value='{$opt['id']}' class='{$fieldName}-{$opt['id']}' data-icon='{$opt['icon']}'".($selected === $opt['id'] ? ' selected' : '').">{$opt['title']}</option>\n";
+        $ret .= "\t<option value='".($fieldName == 'icon' ? $opt['icon'] : $opt['id'])."' class='{$fieldName}-{$opt['id']}' data-icon='{$opt['icon']}'".($selected === $opt['id'] ? ' selected' : '').">{$opt['title']}</option>\n";
     }
     return "$ret</select>";
 }
