@@ -285,9 +285,9 @@ class report extends Controller
         $destination_report = isset($_POST['zig'],$_POST['report'])
             ? (int) $_POST['report'] : -1;
         $this->checkId($destination_report);
-        $dest = $this->id;
+        $dest = (int)$destination_report;
         $this->checkId($id);
-        $curr = $this->id;
+        $curr = (int)$id;
 
         $results = [];
         foreach(db()->query("SELECT * FROM reports WHERE id IN($curr,$dest)")->fetchAll(PDO::FETCH_ASSOC) as $report)
@@ -300,10 +300,6 @@ class report extends Controller
         
         if($current_report['category'] != $destination_report['category'])
         {
-        throw new Exception(
-            print_r($current_report,1).
-            print_r($destination_report,1));
-            exit;
             $this->flash[] = 'Merge is experimental; Please try again now that the report has moved.';
             $this->move($curr,$dest);
         }
@@ -317,10 +313,10 @@ class report extends Controller
         )->fetchAll(PDO::FETCH_COLUMN);
 
         $stmt = db()->prepare(
-            'INSERT INTO comments (report,email,epenis,time,ip,message,reply_to) VALUES (:report,:email,:epenis,UNIX_TIMESTAMP(),:ip,:message,:reply_to)');
+            'INSERT INTO comments (report,email,epenis,time,ip,message,reply_to) VALUES (:report,:email,:epenis,:time,:ip,:message,:reply_to)');
 
-        $makeInsert = function($report,$email,$epenis,$ip,$message,$reply_to){
-            return ['report'=>$report,'email'=>$email,'epenis'=>$epenis,'ip'=>$ip,'message'=>$message,'reply_to'=>$reply_to];
+        $makeInsert = function($report,$email,$epenis,$ip,$message,$time,$reply_to){
+            return ['report'=>$report,'email'=>$email,'epenis'=>$epenis,'ip'=>$ip,'message'=>$message,'time'=>$time,'reply_to'=>$reply_to];
         };
 
         $stmt->execute($makeInsert($dest,__METHOD__,1,dtr_pton('127.0.0.1'),nl2br(
@@ -332,31 +328,33 @@ subject: {$current_report['subject']}
 priority: ".Cache::read('priorities')[$current_report['priority']]['title']."
 status: ".Cache::read('statuses')[$current_report['status']]['title']."\n"
 .(empty($current_report['tags']) ? '' : 'tagged: '.implode(', ',$current_report['tags'])."\n")),
-
-null));
+time(),null));
         $reply_to = db()->lastInsertId();
         $inserts = [];
         foreach(['description','reproduce','expected','actual'] as $field)
         {
             if($current_report[$field])
             {
-                $inserts[] = $makeInsert($dest,$current_report['email'],$current_report['epenis'],$current_report['ip'],"<h4>$field</h4>".$current_report[$field],$reply_to);
+                $inserts[] = $makeInsert($dest,$current_report['email'],$current_report['epenis'],$current_report['ip'],"<h3>$field</h3>".$current_report[$field],$current_report['time'],$reply_to);
             }
         }
         if($current_report['edit_time'])
         {
-            if(!file_exists(BUNZ_DIFF_DIR.'reports/'.$curr))
+            if(!file_exists(BUNZ_DIR.'diff/reports/'.$curr))
                 throw new RuntimeException;
 
-            $inserts[] = $makeInsert($dest,$current_report['email'],$current_report['epenis'],$current_report['ip'],"<h1>diff</h1>".nl2br(htmlentities(file_get_contents(BUNZ_DIFF_DIR.'reports/'.$curr))),$reply_to);
+            $inserts[] = $makeInsert($dest,$current_report['email'],$current_report['epenis'],$current_report['ip'],"<h3>diff</h3>".nl2br(htmlentities(file_get_contents(BUNZ_DIR.'diff/reports/'.$curr))),$current_report['edit_time'],$reply_to);
         }
 
         foreach($inserts as $values)
             $stmt->execute($values);
 
-        db()->query('UPDATE comments SET report = '.$dest.', reply_to = '.$reply_to.' WHERE report = '.$curr);
+        db()->query('UPDATE comments SET time = UNIX_TIMESTAMP(), report = '.$dest.', reply_to = '.$reply_to.' WHERE report = '.$curr) or die(print_r(db()->errorInfo(),1));
 
         $this->flash[] = 'well, THAT happened.';
+
+        $this->id = $curr;
+        $this->delete();
 
         $_SESSION['flash'] = serialize($this->flash);
         header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$dest);
