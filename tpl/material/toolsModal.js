@@ -54,7 +54,7 @@ var toolsModal = (function()
     function blurField()
     {
         if(textbox)
-            textbox.removeEventListener(tabtestidk);
+            textbox.removeEventListener('keydown', tabtestidk);
       //  textbox ? textbox.blur() : undefined;
       //  textbox = null;
     }
