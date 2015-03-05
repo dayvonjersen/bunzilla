@@ -4,7 +4,7 @@
       method="post"
       class="section">
 
-    <div class="section category-<?= $cat['id'] ?>-text" style="padding-top: 1em;">
+    <div class="section category-<?= $cat['id'] ?>-text z-depth-3">
 <?php
 if($pageMode == 'new')
 {
@@ -64,26 +64,39 @@ foreach($fields as $name => $placeholder)
                       required 
                       name='<?= $name ?>'><?= isset($this->data['params']) ? unfiltermessage($this->data['params'][$name]) : '' ?></textarea>
             <span class="material-input"></span>
-            <a href="#toolsModal" data-for="<?= $name ?>" class="modal-trigger btn-floating green" onclick="(function(evt){evt.preventDefault()})(event)"><i class="icon-code"></i></a>
             <label for="<?= $name ?>"><?= $name, ': ', $placeholder ?></label>
         </div>
 <?php
 }
 ?>
+
+<div class="" style="margin: 1em 0"></div>
+
         <p class="input-field">
-            <i class="icon-paragraph prefix" style="text-decoration: line-through"></i>
             <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) || (empty($_POST) && $pageMode == 'edit') ? ' checked' : ''?>>
-            <label for="disable_nlbr">Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
+            <label for="disable_nlbr">
+            <i class="icon-paragraph" style="text-decoration: line-through"></i>Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
         </p>
 <?php
 if(!isset($this->data['params']['comment_id']))
 {
 ?>
-        <div class="input-field collapsible no-select section" id="tagz">
-            <i class="icon-tags prefix"></i>
-            <div class="collapsible-header center large">Tags! <span class="icon-down-open-mini"></span></div>
-            <div class="collapsible-body section">
+        <div class="input-field collapsible no-select section" id="tagz" style="padding: 1em;">
+            <div class="collapsible-header" style="position: absolute; z-index: 1000; width: 75%">
+                <i class="icon-tags prefix hide-on-small-only" style="margin: -1rem 0 0 -2rem"></i>
+                <i class="icon-tags prefix hide-on-med-and-up" style="margin: -1rem 0 0 -1rem"></i>
+                <p style="margin: -1rem 0 0 2rem; line-height: 3">Tag this post... 
+                    <span class="icon-down-open-mini hide-on-active"></span>
+                    <span class="icon-up-open-mini hide-on-inactive"></span>
+                </p>
+            </div>
+
+            <div class="collapsible-body section z-depth-2 " style="margin: -1rem -1rem 0">
+            <div style="padding-top: 1rem">&nbsp;</div>
             <div class="row section">
+                <div class="divider" style="margin-bottom: 1rem"></div>
+            </div>
+            <div class="row section no-pad-top no-pad-bot">
 <?php
 //
 // todo: figure out Javascript solution for this
@@ -99,13 +112,13 @@ if(!isset($this->data['params']['comment_id']))
     foreach($this->data['tags'] as $id => $tag)
     {
 ?>
-    <div class="input-field col s6 m3">
+    <div class="input-field col s6 m3 l1">
         <input type="checkbox" name="tags[]" id="tag_<?= $id ?>" value="<?= $id ?>"<?= in_array($id, $checked) ? ' checked' : ''?>>
-        <label for="tag_<?= $id ?>"><?= $tag['title'] ?></label>
+        <label for="tag_<?= $id ?>"><small><?= $tag['title'] ?></small></label>
     </div>
 <?php
-        if($i%4 == 0 || $tag === end($this->data['tags']))
-            echo '</div>', $tag !== end($this->data['tags']) ? '<div class="row section">' : '';
+        if($i%12 == 0 || $tag === end($this->data['tags']))
+            echo '</div>', $tag !== end($this->data['tags']) ? '<div class="row section no-pad-top no-pad-bot">' : '';
         $i++;
     }
 ?>
@@ -115,13 +128,14 @@ if(!isset($this->data['params']['comment_id']))
 }
 ?>
         <div class="input-field center">
-            <button type="reset" class="btn-flat white grey-text icon-cancel waves-effect"<?php
+            <a href="#toolsModal" data-for="<?= $name ?>" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
+            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect"<?php
 if($pageMode == 'new' && empty($_POST))
  echo <<<JAVASCRIPT
 onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
 JAVASCRIPT;
 ?>><?= $pageMode == 'new' && empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
-            <button type="submit" class="btn icon-plus light-blue white-text waves-effect">Submit</button>
+            <button type="submit" class="btn icon-plus waves-effect category-<?= $cat['id'] ?>-base">Submit</button>
         </div>
     </div>
 </form>

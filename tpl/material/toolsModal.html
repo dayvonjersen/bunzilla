@@ -1,38 +1,39 @@
 <!--
     begin toolsModal postFormat widget thing
 -->
-        <div class="modal z-depth-5" id="toolsModal">
-         <div class="row center flow-text" >
-			<p class="col s12 m6 l4 waves-effect waves-blue">
+        <div class="md-modal md-effect-7 z-depth-5" id="toolsModal">
+         <div class="md-content shade-text section" >
+            <div class="row center">
+			<p class="col s12 m3 l2">
                 <label>text style</label>
-				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<b>bold</b>" data-markup="b" title="bold"><i class="icon-bold"></i></i></button>
-				<button class="btn-floating btn tooltipped" data-markup="i" data-position="bottom" data-tooltip="<i>italic</i>" title="italic"><i class="icon-italic"></i></button>
-				<button class="btn-floating btn tooltipped" data-markup="u" data-position="bottom" data-tooltip="<u>underline</u>" data-markup="u" title="underline"><i class="icon-underline"></i></button>
-				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<s>strikethrough</s>" data-markup="s" title="strikethrough"><i class="icon-strike"></i></button>
+				<button class="btn-flat btn-floating shade-text btn tooltipped waves-effect" data-position="bottom" data-tooltip="<b>bold</b>" data-markup="b" title="bold"><i class="icon-bold"></i></i></button>
+				<button class="btn-flat btn-floating shade-text btn tooltipped waves-effect" data-markup="i" data-position="bottom" data-tooltip="<i>italic</i>" title="italic"><i class="icon-italic"></i></button>
+				<button class="btn-flat btn-floating shade-text btn tooltipped waves-effect" data-markup="u" data-position="bottom" data-tooltip="<u>underline</u>" data-markup="u" title="underline"><i class="icon-underline"></i></button>
+				<button class="btn-flat btn-floating shade-text btn tooltipped waves-effect" data-position="bottom" data-tooltip="<s>strikethrough</s>" data-markup="s" title="strikethrough"><i class="icon-strike"></i></button>
 			</p>
-			<p class="col s12 m6 l4 waves-effect waves-light-blue">
+			<p class="col s12 m3 l2">
                 <label>font size</label>
-				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<big>bigger</big>" data-markup="big" title="bigger"><i class="icon-fontsize-large"></i></button>
-				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="<small>smaller</small>" data-markup="small" title="smaller"><i class="icon-fontsize-small"></i></button>
-				<button class="btn-floating btn tooltipped" data-position="bottom" data-tooltip="super<sup>script</sup>" data-markup="sup" title="superscript"><i class="icon-superscript"></i></button>
-				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="sub<sub>script</sub>" data-markup="sub" title="subscript"><i class="icon-subscript"></i></button>
+				<button class="btn-flat btn-floating shade-text btn tooltipped waves-effect" data-position="bottom" data-tooltip="<big>bigger</big>" data-markup="big" title="bigger"><i class="icon-fontsize-large"></i></button>
+				<button class="btn-flat btn-floating shade-text btn tooltipped waves-effect" data-position="bottom" data-tooltip="<small>smaller</small>" data-markup="small" title="smaller"><i class="icon-fontsize-small"></i></button>
+				<button class="btn-flat btn-floating shade-text btn tooltipped waves-effect" data-position="bottom" data-tooltip="super<sup>script</sup>" data-markup="sup" title="superscript"><i class="icon-superscript"></i></button>
+				<button class="btn-flat btn-floating shade-text btn  tooltipped waves-effect" data-position="bottom" data-tooltip="sub<sub>script</sub>" data-markup="sub" title="subscript"><i class="icon-subscript"></i></button>
 			</p>
-			<p class="col s12 m6 l4 waves-effect waves-blue">
+			<p class="col s12 m3 l2 ">
                 <label>lists, links, and images</label>
-				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<ul><li>unordered</li><li>list</li></ul>" data-markup="ul" title="unordered list"><i class="icon-ul"></i></button>
-				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<ol><li>ordered</li><li>list</li></ol>" data-markup="ol" title="ordered list"><i class="icon-ol"></i></button>
-				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<a href=#>hyperlink</a>" data-markup="link" title="insert link"><i class="icon-link"></i></button>
-				<button class="btn-floating btn  tooltipped" data-position="bottom" data-tooltip="<img src=something alt=image>" data-markup="image" title="insert image"><i class="icon-picture"></i></button>			</p>
-            <div class="waves-effect waves-blue col s12 m6 l6">
-			<p class="col s4 tooltipped" data-position="bottom" data-tooltip="yay code highlighting">
-                <label>code</label>
-                <button class="btn-floating btn" data-markup="code" title="insert code">
+				<button class="btn-flat btn-floating shade-text btn  tooltipped waves-effect" data-position="bottom" data-tooltip="<ul><li>unordered</li><li>list</li></ul>" data-markup="ul" title="unordered list"><i class="icon-ul"></i></button>
+				<button class="btn-flat btn-floating shade-text btn  tooltipped waves-effect" data-position="bottom" data-tooltip="<ol><li>ordered</li><li>list</li></ol>" data-markup="ol" title="ordered list"><i class="icon-ol"></i></button>
+				<button class="btn-flat btn-floating shade-text btn  tooltipped waves-effect" data-position="bottom" data-tooltip="<a href=#>hyperlink</a>" data-markup="link" title="insert link"><i class="icon-link"></i></button>
+				<button class="btn-flat btn-floating shade-text btn  tooltipped waves-effect" data-position="bottom" data-tooltip="<img src=something alt=image>" data-markup="image" title="insert image"><i class="icon-picture"></i></button>			</p>
+            <div class="col s12 m3 l2">
+<div class="row">
+			<p class="col s4 m6 tooltipped" data-position="bottom" data-tooltip="yay code highlighting">
+                <label>insert code</label>
+                <button class="btn-flat btn-floating shade-text btn" data-markup="code" title="insert code">
                     <i class="icon-code"></i>
                 </button>
-            </p>
-			<p class="col s8">
+            </p><p class="col s8 m6">
                     <label>language (optional)</label>
-        				<select id="codelang" class="browser-default">
+        				<select id="codelang" class="secondary-text  browser-default">
 <!--
     if this is your copy of bunzilla:
 
@@ -156,19 +157,40 @@
 	<option value='xl'>xl</option>
 	<option value='xml'>xml</option>
         				</select>
-                </p>
+                </p></div>
             </div>
-			<p class="col s12 m12 l6 waves-effect waves-blue   tooltipped" data-position="bottom" data-tooltip="<del>oldtext</del><ins>new text!</ins>">
+			<p class="col s6 l2 tooltipped" data-position="bottom" data-tooltip="<del>oldtext</del><ins>new text!</ins>">
                 <label>quick edit</label>
-				<button class="btn-floating btn" data-markup="delins" title="delete and insert"><i class="icon-pencil-alt"></i></button>
+				<button class="btn-flat btn-floating shade-text btn waves-effect" data-markup="delins" title="delete and insert"><i class="icon-pencil-alt"></i></button>
             </p>
+            <div class="col s6 l2"><button class="btn btn-flat danger-base waves-effect waves-red icon-cancel" onclick="toggleModal(event)">Close</button></div>
+            </div>
         </div>
 </div>
 <script src="/bunzilla/tpl/material/toolsModal.js"></script>
+<style>@import '/bunzilla/tpl/material/modal-alt.css';</style>
 <script>
 document.body.onload = (function(){
     toolsModal.init(document.forms["withToolsModal"]);
 
+    window.toggleModal = function(evt)
+    {
+        if(evt)
+            evt.preventDefault();
+        
+        $('#toolsModal').toggleClass('md-show');
+    }
+
+/**
+    document.body.addEventListener('click', function(evt){
+        var modal = document.getElementById('toolsModal'),
+            form  = document.getElementById('withToolsModal');
+        if(evt.target && !(evt.target instanceof HTMLAnchorElement) && evt.target != modal && evt.target != form)
+            $('#toolsModal').removeClass('md-show');
+    });
+**/
+
+if(0){
     $('.modal-trigger').leanModal({
         opacity: .1,
         in_duration: 225,
@@ -179,7 +201,7 @@ document.body.onload = (function(){
         posBottom: 0,
     });
 //    $('.tooltipped').tooltip({"delay": 50});
-
+}
     
 });
 </script>

@@ -17,6 +17,39 @@ class post extends Controller
         !BUNZ_BUNZILLA_ALLOW_ANONYMOUS && $this->requireLogin();
     }
 
+    public $breadcrumbs = [];
+    public function setBreadcrumbs($method)
+    {
+        
+        $this->breadcrumbs[] = ['href' => 'report/index', 
+                                'title' => 'Category Listing',
+                                'icon'  => 'icon-ul'];
+
+        $category = $this->data['category'];
+        $this->data['category_id'] = $category['id'];
+
+        $this->breadcrumbs[] = ['href' => 'report/category/'.$category['id'],
+                                'title' => $category['title'],
+                                'icon' => $category['icon']
+        ];
+
+        if($method == 'category')
+        {
+            $this->breadcrumbs[] = ['href' => 'post/category/'.$category['id'],
+                                'title' => 'Submit New',
+                                'icon' => 'icon-plus'];
+        } else {
+
+            $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['params']['report_id'],
+                                    'title' => $this->data['params']['subject'],
+                                    'icon' => 'icon-doc-text-inv'];
+            $this->breadcrumbs[] = ['href' => 'post/edit/'.$this->data['params']['report_id'],
+                                    'title' => 'Edit',
+                                    'icon' => 'icon-pencil-alt'];
+        }
+        return;
+    }
+
     private function spamCheck()
     {
         if(!empty($_POST) && !$this->auth())
@@ -146,6 +179,7 @@ XXX ::: what the fuck stop being a lazy shit
             }
         }
            
+        $this->setBreadcrumbs(__FUNCTION__);
     }
 
     private function checkReport($id)
@@ -323,6 +357,7 @@ XXX ::: what the fuck stop being a lazy shit
                 header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId);
             }
         }
+        $this->setBreadcrumbs(__FUNCTION__);
     }
 
     /**

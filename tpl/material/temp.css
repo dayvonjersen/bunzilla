@@ -137,7 +137,6 @@ span.badge {
 .collapsible .row .col { padding: 0 !important; }
 
 img { width: 50%; cursor: zoom-in }
-.small { font-size: x-small; }
 
 /**
  * goddam */
@@ -244,8 +243,6 @@ img { width: 50%; cursor: zoom-in }
 
 }
 
-#toolsModal, #toolsModal *, [class*='waves-'] { overflow: hidden; }
-#toolsModal .btn { background: #4eb3de; }
 textarea ~ a[href="#toolsModal"] { position: absolute; right: 0; top: 0; opacity: 0; transition: all 0.2s ease-in}
 textarea:focus ~ a[href="#toolsModal"] { opacity: 1; top: -2em; }
 #withToolsModal div.input-field { position: relative; }
@@ -322,8 +319,7 @@ textarea:focus ~ .material-input:after
 
 /** some radical notion **/
 input, textarea, textarea:focus { border: 0 !important; box-shadow: none !important }
-.input-field label.active,
-input:checked ~ label { color: #4eb3de !important; }
+input:checked ~ label { color: #0af; }
 
 @media (max-width: 601px) {
     .section { padding-left: 0; padding-right: 0; }
@@ -427,19 +423,19 @@ blockquote pre { width: 100%; margin: 0; }
     z-index: 10000 !important;
 }
 
-#gn-menu a.dropdown-button {
+/*#gn-menu a.dropdown-button {
     box-shadow: none !important;
     display: block;
     margin-top: -30px;
     max-height: 30px;
-}
+}*/
 
 .btn:not(.btn-floating) { padding: 0 0.5em !important }
 .btn-flat { background: transparent; }
 
 /** FRAMEWORKS MAKE EVERYTHING BETTER AMIRITE */
 input[autofocus] + label,
-label.active {
+input:not([type='checkbox']):not([type='radio']) + label.active {
     font-size: 0.8rem;
     -webkit-transform: translateY(-130%);
     -moz-transform: translateY(-130%);
@@ -459,3 +455,15 @@ label.active {
     top: -1rem;
     font-size: 0.8889rem;
 }
+
+#gn-menu a.waves-effect { display: block !important; }
+#gn-menu .bc-item a { max-height: 30px }
+select.browser-default {
+    height: auto !important;
+    padding: 0 !important;
+}
+.material-tooltip { z-index: 10000 }
+
+.active .hide-on-active, .hide-on-inactive { font-size: 0; visibility: hidden; }
+.active .hide-on-inactive { font-size: 1rem; visibility: visible; }
+.collapsible-body:not(.animated) { box-shadow: none }

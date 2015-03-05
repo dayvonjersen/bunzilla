@@ -434,7 +434,8 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
       });
 
       // Document click handler
-      activates.on('mouseleave', function(e){ // Mouse out
+
+      function __mouseout(e){ // Mouse out
         activates.velocity(
           {
             opacity: 0
@@ -449,7 +450,9 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
               });
             }
           });
-      });
+      }
+      activates.on('mouseleave', function(e){__mouseout(e)});
+//      activates.on('mouseout', function(e){__mouseout(e)});
 
     // Click
 /**
@@ -2202,7 +2205,7 @@ function update_indicator($index, $prev_index) {
         $('body').append(options);
         // Check if section element is disabled
         if (!$select.is(':disabled')) {
-          $newSelect.dropdown({"hover": true, "constrain_width": false});
+          $newSelect.dropdown({"hover": false, "constrain_width": false});
         }
         $select.addClass('initialized');
 

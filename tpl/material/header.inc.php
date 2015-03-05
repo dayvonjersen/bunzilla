@@ -63,6 +63,9 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
                                 </div>
                                 </form>
                             </li>
+                            <li>
+                                <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index</a>
+                            </li>
 <?php
 if($this->auth())
 { 
@@ -157,7 +160,11 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
             list($what,$why) = strpos($prevClassName, 'text') !== false ? ['text','base'] : ['base','text'];
             echo '<div class="bc-triangle ', str_replace($what, $why, $prevClassName) ,'"></div>',"\n";
         }
-        if(strpos($crumb['href'],'report/category') === 0)
+        if(strpos($crumb['href'],'report/index') === 0)
+        {
+            echo '<a href="#" class="waves-effect dropdown-button primary-text" data-activates="bc-catlist">Category Listing <i class="icon-down-open-mini"></i></a>';
+        } 
+        elseif(strpos($crumb['href'],'report/category') === 0)
         {
 /**
 
@@ -170,19 +177,20 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
             );
 **/
             $currentCat = $this->data['categories'][$category['id']];
-            echo '<i class="icon-down-open-mini right"></i>',
+            echo 
+//'<i onclick="document.getElementById(\'__xx\').dispatchEvent(new Event(\'click\'))" class="icon-down-open-mini right" style="margin-right: 1em; cursor: pointer"></i>',
                   '<a href="',BUNZ_HTTP_DIR,'report/category/',$category['id'],
-                  '" class="waves-effect hide-overflow-text ',$currentCat['icon'],
-                  '" style="width: 100%"><span class="hide-on-med-and-down">',
-                  $currentCat['title'],'</span></a>',
-                  '<a class="dropdown-button btn ',$className,
-                  '" data-activates="bc-catlist">&nbsp;</a>';
+                  '" class="waves-effect"',// dropdown-button" data-activates="bc-catlist"',
+                  '"><span class="hide-overflow-text"><i class="',$currentCat['icon'],'"></i><span class="hide-on-med-and-down">',
+                  $currentCat['title'],'</span></span></a>';/*,
+                  '<a id="__xx" class="waves-effect hax dropdown-button  ',$className,
+                  '" style="width: 25%" data-activates="bc-catlist"><i class="icon-down-open-mini"></i></a>';*/
         } else {
             echo '<a href="',BUNZ_HTTP_DIR,$crumb['href'],
-                 '" class="waves-effect  hide-overflow-text ',
-                 isset($crumb['icon']) ? $crumb['icon'] : '',
-                 '" style="width: 100%"><span class="hide-on-med-and-down">',
-                 $crumb['title'],'</span></a>',"\n";
+                 '" class="waves-effect "><span class="hide-overflow-text"> ',
+                 isset($crumb['icon']) ? "<i class='{$crumb['icon']}'></i>" : '',
+                 '<span class="hide-on-med-and-down">',
+                 $crumb['title'],'</span></span></a>',"\n";
         }
         echo "\t\t\t\t\t</div>\n";
     }

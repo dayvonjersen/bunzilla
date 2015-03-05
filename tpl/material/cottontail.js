@@ -4,8 +4,9 @@
 $(window).load(function(){
     $(".dropdown-button").dropdown(
 {
+    hover: false,
     constrain_width: true,
-    belowOrigin: false
+    belowOrigin: true
 });
     $(".collapsible").collapsible();
     $('select').material_select();
