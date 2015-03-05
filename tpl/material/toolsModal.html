@@ -171,7 +171,7 @@
 <style>@import '/bunzilla/tpl/material/modal-alt.css';</style>
 <script>
 document.body.onload = (function(){
-    toolsModal.init(document.forms["withToolsModal"]);
+    toolsModal.init(document.getElementById("withToolsModal"));
 
     window.toggleModal = function(evt)
     {
@@ -179,6 +179,10 @@ document.body.onload = (function(){
             evt.preventDefault();
         
         $('#toolsModal').toggleClass('md-show');
+        if($('#toolsModal').hasClass('md-show'))
+            toolsModal.activate();
+        else
+            toolsModal.deactivate();
     }
 
 /**

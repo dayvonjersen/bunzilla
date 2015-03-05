@@ -8,6 +8,24 @@
  * in terms of complexity and bullshit
  */
 
+/**
+ * 3/5/2015 10:13:32 AM
+ * BUT LETS KEEP GOING AND SEE WHAT HAPPENS */
+function epenis($epenis)
+{
+    switch($epenis)
+    {
+        default: return '';
+        case 1:
+            $q = ['secondary-base', 'icon-person', 'Developer'];
+            break;
+        case 2:
+            $q = ['alert-base', 'icon-terminal', 'System'];
+            break;
+    }
+    return vsprintf('<span class="badge %s left"><i class="%s"></i>%s</span>',$q);
+}
+
 $cat    = $this->data['categories'][$this->data['category_id']];
 $report = $this->data['report'];
 
@@ -69,7 +87,7 @@ if($this->auth())
                         email and authlevel
                     -->
                     <p class="icon-mail"><?= $report['email'], 
-$report['epenis'] ? ' <span class="badge secondary-base"><i class="icon-person"></i>Developer</span>' : '' ?></p>
+epenis($report['epenis'])?></p>
                     <!--
                         submission and edit time
                     -->
@@ -365,7 +383,7 @@ if(!empty($this->data['timeline']))
 ?>
             <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
                 <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
-                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge secondary-base left"><i class="icon-person"></i>Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
+                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], epenis($comment['epenis']) ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
 
 <?php
 if($this->auth() || compareIP($comment['ip']))
@@ -400,7 +418,7 @@ if(isset($nested[$comment['id']]))
 ?>
             <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
                 <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
-                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], $comment['epenis'] ? '<span class="badge secondary-base left"><i class="icon-person"></i>Developer</span>' : '' ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$j++?></a>
+                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], epenis($comment['epenis']) ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$j++?></a>
 
 <?php
 if($this->auth() || compareIP($comment['ip']))

@@ -319,7 +319,7 @@ class report extends Controller
             return ['report'=>$report,'email'=>$email,'epenis'=>$epenis,'ip'=>$ip,'message'=>$message,'time'=>$time,'reply_to'=>$reply_to];
         };
 
-        $stmt->execute($makeInsert($dest,__METHOD__,1,dtr_pton('127.0.0.1'),nl2br(
+        $stmt->execute($makeInsert($dest,__METHOD__,2,dtr_pton('127.0.0.1'),nl2br(
 "<div class='section z-depth-5 shade-lighten-4'><p><i class='icon-attention'></i><em class='h2'>Merge is an experimental feature. Its behaviour is untested and subject to change at any time. Please be cautious.</em><p>If you have any suggestions, feedback, or concerns please leave a message on <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.<p>Thank you and have a very safe and productive day.</div>
 
 submitted: ".date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['time'])."\n"

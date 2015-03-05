@@ -3,12 +3,15 @@ var toolsModal = (function()
 {
     var validFields = [], // things to apply this widget to
         textbox,          // target <textarea>
-        widgetbox;        // the actual toolbar #toolsModal
+        widgetbox,        // the actual toolbar #toolsModal
+        keepfocus;        // hax
 
     /**
      * update stuff on :focus */
-    function focusField( element )
+    function focusField( element, stealFocus  )
     {
+        stealFocus = typeof stealFocus !== 'undefined' ? stealFocus : true;
+
         if(element !== textbox)
         {
             blurField();
@@ -21,15 +24,20 @@ var toolsModal = (function()
                 }
             }
         }
-        textbox.focus();
+        if(stealFocus)
+        {
+            setTimeout(function(){
+                textbox.focus()
+            },20);
+        }
     }
 
     /**
      * housekeeping */
     function blurField()
     {
-        textbox ? textbox.blur() : undefined;
-        textbox = null;
+      //  textbox ? textbox.blur() : undefined;
+      //  textbox = null;
     }
 
     /**
@@ -46,31 +54,43 @@ var toolsModal = (function()
                 form[i].addEventListener('focus',function(evt){
                 // activate is a bit of a misnomer
                 // merely "sets" the target for tags inserted
-                    activate();
+                    activate(false);
                 },false);
-                //activate();
+                activate(false);
             }
         }
     }
 
     /**
      * wax on */
-    function activate()
+    function activate(stealfocus)
     {
+        stealfocus = typeof stealfocus !== 'undefined' ? stealfocus : true;
+
         widgetbox.addEventListener('click',insertHandler,false);
         
         if(document.activeElement instanceof HTMLTextAreaElement)
             focusField(document.activeElement);
         else if(!textbox)
-            focusField(validFields[0]);
+            focusField(validFields[0],stealfocus);
+
+        if(stealfocus)
+        {
+            keepfocus = setInterval(function(){
+                if(document.activeElement != textbox)
+                    textbox.focus();
+            }, 20);
+        }
     }
+
 
     /**
      * wax off */
     function deactivate()
     {
         widgetbox.removeEventListener('click',insertHandler,false);
-        blurField();
+        focusField(textbox);
+        clearInterval(keepfocus);
     }
 
     /**
@@ -87,13 +107,27 @@ var toolsModal = (function()
      * thanks to developer.mozilla.org */
     function insertHandler(evt)
     {
+        var myTarget = evt.target;
         if(!textbox || (!(evt.target instanceof HTMLButtonElement) ))
-            return;
-console.log(evt);
-        //textbox.focus();
-//        evt.target.preventDefault();
+        {
+            if(evt.target.parentElement instanceof HTMLButtonElement)
+            {
+                console.log("Chrome is garbage.");
+                myTarget = evt.target.parentElement;
+            } else {
+                return;
+            }
+        }
+            
 
-        var markup = evt.target.dataset.markup,
+        setTimeout(function(){
+            textbox.focus()
+        },20);
+        //console.log(evt);
+        //textbox.focus();
+        //evt.target.preventDefault();
+
+        var markup = myTarget.dataset.markup,
             url, title,
             codelang = document.getElementById('codelang'),
 
@@ -149,7 +183,7 @@ console.log(evt);
 
             case "delins":
                 startTag = "<del>"
-                endTag = "</del><ins>[InsertYourEditHere]</ins>";
+                endTag = "</del><ins>Type your edit here.</ins>";
                 break;
 
             case "code":
@@ -158,9 +192,19 @@ console.log(evt);
                 endTag =  "</" + markup + ">";
         }
 
-        // I don't know why this works but it does :D
         textbox.value = oldText.substring(0,selectionStart) + startTag + oldText.substring(selectionStart,selectionEnd) + endTag + oldText.substring(selectionEnd);
-        textbox.setSelectionRange(selectionEmpty ? selectionStart + startTag.length : selectionStart, selectionEnd + startTag.length);
+        if(markup == "delins")
+            textbox.setSelectionRange(
+                selectionStart + startTag.length + (selectionEnd - selectionStart) + 11,
+                selectionStart + startTag.length + (selectionEnd - selectionStart) + 11 + 20
+            );
+        else if(markup == "image" || markup == "code" || markup == "link")
+        {
+            var noselect = selectionStart + startTag.length + (selectionEnd - selectionStart) + endTag.length;
+            textbox.setSelectionRange(noselect,noselect);
+        }
+        else
+            textbox.setSelectionRange(selectionStart + startTag.length, selectionEnd + startTag.length);
         textbox.focus();
     }
 

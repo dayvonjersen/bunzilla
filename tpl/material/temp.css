@@ -221,6 +221,7 @@ img { width: 50%; cursor: zoom-in }
 #gn-menu.headroom--pinned {
     width: 100%;
     background: #fff;
+    z-index: 1;
 }
 
 #gn-menu.headroom--unpinned > li:not([class^="gn-trigger"]) {

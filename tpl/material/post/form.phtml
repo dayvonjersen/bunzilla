@@ -1,3 +1,26 @@
+<?php
+if(basename($_SERVER['PHP_SELF']) === basename(__FILE__))
+{
+/**
+ * 3/5/2015 11:29:09 AM
+ * Please ignore awful debug code I needed to live edit the Javascript
+ * and this is how I thought to do it. Everything marked with :
+
+/**
+ * XXX */
+
+/* Should be removed or something. */
+ 
+    define('FUX',true);
+    error_reporting(0);
+    ini_set('display_errors', 1);
+    define('BUNZ_HTTP_DIR', '/bunzilla/');
+    define('BUNZ_TPL_DIR', '../');
+    $pageIcon = $pageTitle = $pageAction = $pageMode = '';
+    $cat = ['description'=>1,'reproduce'=>1,'expected'=>1,'actual'=>1];
+    echo '<html><body style="background: #fff !important; margin-top: 150px">';
+}
+?>
 <h1 class="<?= $pageIcon ?>"><?= $pageTitle ?></h1>
 <form action="<?= BUNZ_HTTP_DIR, $pageAction ?>"
       id="withToolsModal"
@@ -8,6 +31,8 @@
 <?php
 if($pageMode == 'new')
 {
+/**
+ * XXX */
 ?>
          <div class="input-field">
             <i class="icon-mail prefix"></i>
@@ -16,7 +41,7 @@ if($pageMode == 'new')
                     maxlength='255' 
                     name='email' 
                     value=<?= 
-$this->auth() 
+!defined('FUX') && $this->auth() 
 ? '"' . $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'" disabled' 
 : '"' . (isset($this->data['params']) ? $this->data['params']['email'] : '') . '" required' ?>>
             <span class="material-input"></span>
@@ -24,7 +49,9 @@ $this->auth()
         </div>
 <?php
 }
-if($pageMode == 'new' || !isset($this->data['params']['comment_id']))
+/**
+ * XXX */
+if(!defined('FUX') && ($pageMode == 'new' || !isset($this->data['params']['comment_id'])))
 {
 ?>
         <div class="input-field">
@@ -62,7 +89,7 @@ foreach($fields as $name => $placeholder)
             <textarea id="<?= $name ?>"
                       class="materialize-textarea" 
                       required 
-                      name='<?= $name ?>'><?= isset($this->data['params']) ? unfiltermessage($this->data['params'][$name]) : '' ?></textarea>
+                      name='<?= $name ?>'><?= !defined('FUX') && isset($this->data['params']) ? unfiltermessage($this->data['params'][$name]) : '' ?></textarea>
             <span class="material-input"></span>
             <label for="<?= $name ?>"><?= $name, ': ', $placeholder ?></label>
         </div>
@@ -78,11 +105,13 @@ foreach($fields as $name => $placeholder)
             <i class="icon-paragraph" style="text-decoration: line-through"></i>Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
         </p>
 <?php
-if(!isset($this->data['params']['comment_id']))
+/**
+ * XXX */
+if(!defined('FUX') && !isset($this->data['params']['comment_id']))
 {
 ?>
         <div class="input-field collapsible no-select section" id="tagz" style="padding: 1em;">
-            <div class="collapsible-header" style="position: absolute; z-index: 1000; width: 75%">
+            <div class="collapsible-header" style="position: absolute; width: 75%; z-index: 1">
                 <i class="icon-tags prefix hide-on-small-only" style="margin: -1rem 0 0 -2rem"></i>
                 <i class="icon-tags prefix hide-on-med-and-up" style="margin: -1rem 0 0 -1rem"></i>
                 <p style="margin: -1rem 0 0 2rem; line-height: 3">Tag this post... 
@@ -102,13 +131,18 @@ if(!isset($this->data['params']['comment_id']))
 // todo: figure out Javascript solution for this
 // either <menu> or asJSON to do it
 //
+/**
+ * XXX */
     $checked = isset($_POST['tags']) && is_array($_POST['tags']) 
              ? $_POST['tags'] 
-             : (isset($this->data['params']['tags']) 
+             : (!defined('FUX') && isset($this->data['params']['tags']) 
                ? $this->data['params']['tags'] 
                : []
              );
     $i = 1;
+/**
+ * XXX */
+    if(!defined('FUX')) {
     foreach($this->data['tags'] as $id => $tag)
     {
 ?>
@@ -120,7 +154,7 @@ if(!isset($this->data['params']['comment_id']))
         if($i%12 == 0 || $tag === end($this->data['tags']))
             echo '</div>', $tag !== end($this->data['tags']) ? '<div class="row section no-pad-top no-pad-bot">' : '';
         $i++;
-    }
+    }}
 ?>
         </div>
         </div>
@@ -140,4 +174,12 @@ JAVASCRIPT;
     </div>
 </form>
 <?php
-require BUNZ_TPL_DIR .'footer.inc.php';
+/**
+ * XXX */
+if(defined('FUX'))
+{
+    require '../toolsModal.html';
+    echo '<script src="../jquery-2.1.3.min.js"></script><style>@import "../assets/css/materialize.min.css";label{display:none !important}button{background: #fff !important}textarea{height: 10em !important}</style></body></html>';
+} else {
+     require BUNZ_TPL_DIR .'footer.inc.php';
+}
