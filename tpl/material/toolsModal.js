@@ -1,4 +1,7 @@
 /* 2.0 */
+/**
+ * 3/5/2015 1:13:30 PM
+ * 2.0.1 */
 var toolsModal = (function()
 {
     var validFields = [], // things to apply this widget to
@@ -30,12 +33,28 @@ var toolsModal = (function()
                 textbox.focus()
             },20);
         }
+        textbox.addEventListener("keydown", tabtestidk);
+    }
+
+    function tabtestidk(evt) {
+        var keyCode = evt.keyCode || evt.which;
+        if(keyCode == 9)
+        {
+            evt.preventDefault();
+            var oldValue   = textbox.value,
+                caretStart = textbox.selectionStart,
+                caretEnd   = textbox.selectionEnd;
+            textbox.value = oldValue.substr(0, caretStart) + "\t" + oldValue.substr(caretEnd);
+            textbox.setSelectionRange(caretStart + 1, caretEnd + 1);
+        }
     }
 
     /**
      * housekeeping */
     function blurField()
     {
+        if(textbox)
+            textbox.removeEventListener(tabtestidk);
       //  textbox ? textbox.blur() : undefined;
       //  textbox = null;
     }

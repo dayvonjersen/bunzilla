@@ -370,6 +370,7 @@ blockquote pre { width: 100%; margin: 0; }
 
 .bc-triangle {
     position: relative;
+    z-index: 10;
 }
 
 .bc-triangle::before, 
