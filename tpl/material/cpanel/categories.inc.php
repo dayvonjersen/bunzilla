@@ -26,11 +26,6 @@ if(!empty($this->data['categories']))
                        class="right btn btn-floating z-depth-5 danger-base" 
                        title="delete category"><i class="icon-delete"></i></a>
 
-
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 alert-base" 
-                       title="merge category"><i class="icon-move"></i></a>
-
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
                        class="right btn btn-floating z-depth-5 success-base" 
                        title="edit category"><i class="icon-pencil-alt"></i></a>
@@ -55,6 +50,21 @@ if(!empty($this->data['categories']))
 }
 ?>
     </section>
+
+    <section id="moveCategory" class="alert-base">
+        <form class=" z-depth-5 shade-text section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/category" method="post">
+            <h1 class="icon-move">Move All Reports</h1>
+            <div class="input-field col s12 m6 section">
+            <p>From:</p>
+                <?= categoryDropdown(null, null, null, 'from') ?>
+            </div>
+            <div class="input-field col s12 m6 section">
+                <p>To:</p>
+                <?= categoryDropdown(null, null, null, 'to') ?>
+            </div>
+            <button type="submit" name="move" class="btn alert-base icon-move">Move `Zig`</button>
+        </form>
+    </section>        
 
     <section id="createCategory" class="shade-text section">
         <form class=" z-depth-5 section" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/category" method="post">

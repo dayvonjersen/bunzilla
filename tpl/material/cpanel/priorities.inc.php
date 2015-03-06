@@ -62,7 +62,9 @@ if(!empty($this->data['priorities']))
                                 left: 35px; top: 0; 
                                 pointer-events: none"></div>
                 </div>
-                <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/priority/',$p['id']?>" 
+                <div class="col s4"> <input type="text" disabled value="<?=$p['id']?>"/>
+
+                            <a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/priority/',$p['id']?>" 
                                class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
                                title="delete priority"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$p['id']?>" 
@@ -92,6 +94,11 @@ if(!empty($this->data['priorities']))
     <section id="createPriority" class="row section primary-text z-depth-3">
         <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/priority" method="post">
             <h1 class="icon-plus">Create New Priority</h1>
+            <div class="input-field">
+                <input id="add-priority-id" type="text" name="id" maxlength="3"/>
+                <span class="material-input"></span>
+                <label for="add-priority-id">ID</label>
+            </div> 
             <div class="input-field">
                 <input id="add-priority-title" type="text" name="title" maxlength="255"/>
                 <span class="material-input"></span>

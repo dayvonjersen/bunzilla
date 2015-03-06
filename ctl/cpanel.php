@@ -149,6 +149,8 @@ class cpanel extends Controller
         {
             case 'category':
                 $tbl = 'categories';
+                if(isset($_POST['move']))
+                    $this->handleMove();
                 break;
 
             case 'status':
@@ -252,7 +254,43 @@ class cpanel extends Controller
 
     /**
      * for to consolidating the reports */
-    public function move( $from, $to )
+    private function handleMove()
+    {   
+        if(!isset($_POST['from'],$_POST['to']))
+            return;
+
+        $from = (int)$_POST['from'];
+        $to   = (int)$_POST['to'];
+
+        if(selectCount('categories',"id IN ($from,$to)") != 2)
+        {
+            $this->flash[] = 'Invalid parameter';
+        } else {
+            $reports = db()->query(
+                'SELECT id, category, description, reproduce, expected, actual
+                 FROM reports
+                 WHERE category = '.$from
+            )->fetchAll(PDO::FETCH_ASSOC);
+            
+            require_once BUNZ_CTL_DIR . 'report.php';
+
+            if(report::moveBulk($reports,$from,$to))
+            {
+                $categories = Cache::read('categories');
+                Statuslog::create('category',$to,sprintf(
+                    'All reports in category "%s" were moved to "%s"',
+                    $categories[$from]['title'],
+                    $categories[$to]['title']
+                ));
+                $this->flash[] = count($reports) .' were moved to ' . $categories[$to]['title'];
+            } else {
+                $this->abort('Something bad happened.');
+            }
+        }
+        $this->index();
+        exit;
+    }
+    protected function move( $from, $to )
     {
         $reports = db()->query('UPDATE reports SET category = '.(int)$to.' WHERE category = '.(int)$from)->rowCount();
         $cats = Cache::read('categories');

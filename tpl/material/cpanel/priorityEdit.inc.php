@@ -11,6 +11,11 @@ $cat = $this->data['priority'];
             <div>&nbsp;        <?= priority($cat['id']) ?></div>
         <form class=" z-depth-5 section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority/<?=$cat['id']?>" method="post">
             <div class="input-field">
+                <input id="add-priority-id" type="text" name="id" maxlength="3" value="<?=$cat['id']?>"/>
+                <span class="material-input"></span>
+                <label for="add-priority-id">ID</label>
+            </div> 
+            <div class="input-field">
                 <input id="edit-priority-title" type="text" name="title" maxlength="255" value="<?= $cat['title'] ?>"/>
                 <span class="material-input"></span>
                 <label for="edit-priority-title">Title</label>

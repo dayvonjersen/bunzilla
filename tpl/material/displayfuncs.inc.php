@@ -116,8 +116,8 @@ function dropdown( $fieldName, $values, $selected = false, $disableKey = false, 
 function statusDropdown( $selected, $disableId = false ) { 
     return dropdown('status',Cache::read('statuses'),$selected, $disableId);
 }
-function categoryDropdown( $selected, $disableId = false, $onchange = null ) { 
-    return dropdown('category', Cache::read('categories'), $selected, $disableId, $onchange);
+function categoryDropdown( $selected, $disableId = false, $onchange = null, $spec_field = false ) { 
+    return dropdown($spec_field ? $spec_field : 'category', Cache::read('categories'), $selected, $disableId, $onchange);
 }
 
 /**

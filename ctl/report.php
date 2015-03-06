@@ -122,7 +122,7 @@ class report extends Controller
         // a status_log and and a comment sharing the same ID is possible
         // but eh
         $this->data['timeline'] = db()->query(
-            '(SELECT id, time FROM status_log WHERE report = '.$this->id.')
+            '(SELECT id, time FROM status_log WHERE report = '.$this->id.' OR category = '.$this->data['report']['category'].')
              UNION
              (SELECT id, time FROM comments WHERE report = '.$this->id.')
              ORDER BY time ASC'
@@ -134,7 +134,7 @@ class report extends Controller
              WHERE report = '.$this->id)->fetchAll(PDO::FETCH_COLUMN);
 
         $this->data['status_log'] = db()->query(
-            'SELECT id,who,message,time FROM status_log WHERE report = '.$this->id
+            'SELECT id,who,message,time FROM status_log WHERE report = '.$this->id.' OR category = '.$this->data['report']['category']
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['category_id'] = $this->data['report']['category'];
@@ -240,34 +240,11 @@ class report extends Controller
             $this->flash[] = 'I\'m afraid I can\'t let you do that, Dave.';
         } else {
             $categories = Cache::read('categories');
-            $current_category     = $categories[$report['category']];
-            $destination_category = $categories[(int)$destination_category];
 
-            foreach(['description','reproduce','expected','actual'] as $field)
-            {
-                if($current_category[$field] == $destination_category[$field])
-                    continue;
-                if($destination_category[$field] && !$report[$field])
-                    $report[$field] = '[Moved from '
-                                      .$current_category['title']
-                                      .' @ '.date(BUNZ_BUNZILLA_DATE_FORMAT)
-                                      .']';
-            }
-
-            $report['category'] = $destination_category['id'];
-            $stmt = db()->prepare(
-                'UPDATE reports 
-                 SET category = :category, 
-                     description = :description, 
-                     reproduce = :reproduce, 
-                     expected = :expected, 
-                     actual = :actual
-                 WHERE id = :id');
-
-            if($stmt->execute($report))
+            if(self::moveBulk([$report],$report['category'],$destination_category))
             {
                 $this->flash[] = 'Report moved to category &quot;'
-                    .$destination_category['title'].'&quot;';
+                    .$categories[(int)$destination_category]['title'].'&quot;';
                 StatusLog::create('report',$report['id'],end($this->flash),null);
             }
             else
@@ -278,6 +255,48 @@ class report extends Controller
         header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$report['id']);
         exit;        
     }
+
+    public static function moveBulk( $reports, $current_category, $destination_category )
+    {
+        $current_category = (int) $current_category;
+        $destination_category = (int) $destination_category;
+
+        if(selectCount('categories',"id IN ($current_category, $destination_category)") != 2)
+            throw new InvalidArgumentException('Invalid parameter.');
+
+        $categories = Cache::read('categories');
+
+        $stmt = db()->prepare(
+            'UPDATE reports 
+             SET category = :category, 
+                 description = :description, 
+                 reproduce = :reproduce, 
+                 expected = :expected, 
+                 actual = :actual
+             WHERE id = :id'
+        );
+
+        $destination_category = $categories[$destination_category];
+        foreach($reports as $report)
+        {
+            $current_category = $categories[$report['category']];
+            foreach(['description','reproduce','expected','actual'] as $field)
+            {
+                if($current_category[$field] == $destination_category[$field])
+                    continue;
+                if($destination_category[$field] && !$report[$field])
+                    $report[$field] = '[Moved from '
+                                      .$current_category['title']
+                                      .' @ '.date(BUNZ_BUNZILLA_DATE_FORMAT)
+                                      .']';
+            }
+            $report['category'] = $destination_category['id'];
+            if(!$stmt->execute($report))
+                return false;
+        }
+        return true;
+    }
+
 
     public function merge($id)
     {
