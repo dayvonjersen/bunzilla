@@ -4,7 +4,7 @@
 //
 $cat = $this->data['categories'][$this->data['category_id']];
 $pageTitle = $cat['title'];
-$background='transparent';
+$background='category-'.$cat['id'].'-base'; //'transparent';
 
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>

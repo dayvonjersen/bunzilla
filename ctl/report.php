@@ -80,6 +80,17 @@ class report extends Controller
              WHERE category = '.$id
             )->fetchAll(PDO::FETCH_ASSOC));
 
+            $latest_comment = db()->query(
+                'SELECT MAX(c.time) 
+                 FROM comments AS c
+                 LEFT JOIN reports AS r
+                    ON c.report = r.id
+                 WHERE r.category = '.$id.'
+                    AND c.time >= '.(int)$stats[$id]['last_activity']
+            )->fetch(PDO::FETCH_COLUMN);
+            if($latest_comment)
+                $stats[$id]['last_activity'] = $latest_comment;
+            
             $stats[$id]['open_issues'] = selectCount('reports','closed = 0 AND category = '.$id);
         }
         $this->data['stats'] = $stats;
