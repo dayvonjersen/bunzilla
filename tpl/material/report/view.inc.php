@@ -114,6 +114,9 @@ if($this->auth() || compareIP($report['ip']))
 <?php
 }
 ?>
+                    <a href="<?=BUNZ_HTTP_DIR,'report/view/',$report['id']?>?rss" 
+                       class="left small z-depth-3 btn btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
+                       title="subscribe!"><i class="icon-rss-squared"></i></a>
                 </section>
             </section>
 <?php
@@ -320,13 +323,6 @@ foreach(['description','reproduce','expected','actual'] as $field)
     <footer id="comments" class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-lighten-1" style="text-align: left !important; margin-top: -1em;">
         
 <?php
-foreach($this->data['status_log'] as $log)
-{
-?>
-                        
-<?php
-}
-
 /**
  * all aboard the failtrain
  * 3/3/2015 12:55:51 PM */

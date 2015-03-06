@@ -36,7 +36,7 @@ if($this->auth())
 }
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?rss" 
-                       class="right small z-depth-3 btn btn-floating waves-effect waves-orange" style="background: #000; color: #f86e00;"
+                       class="left small z-depth-3 btn btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
                        title="subscribe!"><i class="icon-rss-squared"></i></a>
 
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>

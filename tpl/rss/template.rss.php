@@ -1,6 +1,8 @@
 <?php
-header('Content-Type: text/plain');
-header('Content-Type: application/rss+xml; charset=utf-8');
+if(isset($_GET['debug_text_view']))
+    header('Content-Type: text/plain');
+else
+    header('Content-Type: application/rss+xml; charset=utf-8');
 
 echo '<?xml version="1.0" encoding="utf-8"?>',"\n";
 ?>

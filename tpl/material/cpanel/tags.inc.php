@@ -6,7 +6,6 @@ if(!empty($this->data['tags']))
 ?>  
     <section id="viewTags" class="section primary-text z-depth-3">
         <h1 class="icon-tags">Tags</h1>
-        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/tag" method="post" class="section z-depth-3">
             <div class="row">
                 <div class="right-align col s2">
                     <span class="hide-on-med-and-down">Usage</span>
@@ -68,13 +67,6 @@ if(!empty($this->data['tags']))
     }
 }
 ?>
-            <div class="row">
-                <div  class="col offset-s2 s10">
-                    <button type="submit" class="waves-effect btn btn-flat secondary-text"><i class="icon-ok"></i>Change Default</button>
-                    <button type="reset" class="waves-effect waves-light btn btn-flat icon-cancel secondary-text transparent">Reset</button>
-                </div>
-            </div>
-        </form>
     </section>
 
         <div class="section">
