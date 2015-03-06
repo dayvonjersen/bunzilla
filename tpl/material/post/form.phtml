@@ -97,13 +97,23 @@ foreach($fields as $name => $placeholder)
 }
 ?>
 
-<div class="" style="margin: 1em 0"></div>
+<div class="" style="margin: 1em 0 2em 0"></div>
 
         <p class="input-field">
             <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) || (empty($_POST) && $pageMode == 'edit') ? ' checked' : ''?>>
             <label for="disable_nlbr">
             <i class="icon-paragraph" style="text-decoration: line-through"></i>Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
         </p>
+        <div class="input-field center" style="margin-bottom: 1em">
+            <a href="#toolsModal" data-for="<?= $name ?>" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
+            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect"<?php
+if($pageMode == 'new' && empty($_POST))
+ echo <<<JAVASCRIPT
+onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
+JAVASCRIPT;
+?>><?= $pageMode == 'new' && empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
+            <button type="submit" class="btn icon-plus waves-effect category-<?= $cat['id'] ?>-base">Submit</button>
+        </div>
 <?php
 /**
  * XXX */
@@ -161,16 +171,6 @@ if(!defined('FUX') && !isset($this->data['params']['comment_id']))
 <?php
 }
 ?>
-        <div class="input-field center">
-            <a href="#toolsModal" data-for="<?= $name ?>" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
-            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect"<?php
-if($pageMode == 'new' && empty($_POST))
- echo <<<JAVASCRIPT
-onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
-JAVASCRIPT;
-?>><?= $pageMode == 'new' && empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
-            <button type="submit" class="btn icon-plus waves-effect category-<?= $cat['id'] ?>-base">Submit</button>
-        </div>
     </div>
 </form>
 <?php

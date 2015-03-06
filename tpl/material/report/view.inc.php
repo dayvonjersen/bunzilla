@@ -483,28 +483,28 @@ require BUNZ_TPL_DIR .'toolsModal.html';
                     <div class="input-field">
                         <i class="icon-chat prefix"></i>
                         <textarea id="comment" class="materialize-textarea" required name='message'><?= empty($_POST) ? '' : unfiltermessage($this->data['params']['message']) ?></textarea>
-<a href="#toolsModal" data-for="message" class="modal-trigger btn-flat waves-effect secondary-lighten-2" onclick="(function(evt){evt.preventDefault()})(event)" title="insert html into your post"><i class="icon-code"></i><span class="hide-on-small-only">insert html</span></a>
                         <label for="comment">your insight on this issue</label>
                         <span class="material-input"></span>
                     </div>
-         <p class="input-field">
-            <i class="icon-paragraph prefix" style="text-decoration: line-through"></i>
+         <p class="input-field" style="margin-top: 1em">
             <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) ? ' checked' : ''?>>
-            <label for="disable_nlbr">Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
+            <label for="disable_nlbr">
+            <i class="icon-paragraph" style="text-decoration: line-through"></i>Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
         </p>
 <?php
 if($this->auth())
 {
 ?>
         <p class="input-field">
-            <i class="icon-ok prefix"></i>
             <input type="checkbox" id="changelog" name="changelog" value=1"<?= isset($_POST['changelog']) ? ' checked' : ''?>>
-            <label for="changelog">Update Changelog With this Comment</label>
+            <label for="changelog">
+            <i class="icon-ok"></i>Update Changelog With this Comment</label>
         </p>
 <?php
 }
 ?>
         <div class="input-field center">
+            <a href="#toolsModal" data-for="message" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
             <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect"<?php
 if(empty($_POST))
  echo <<<JAVASCRIPT
