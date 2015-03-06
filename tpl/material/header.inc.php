@@ -217,6 +217,7 @@ if($this->auth())
 }
 ?>
         </ul>
+        <a id="back-to-top" class="btn-floating primary-text" title="helo r u lost" href="#"><i class="icon-up-open-mini"></i></a>
 <?php
 if(isset($currentCat))
 {

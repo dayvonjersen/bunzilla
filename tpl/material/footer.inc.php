@@ -2,7 +2,6 @@
 </div>
 <div class="md-overlay"></div>
         <footer class="footer shade-darken-4">
-            <a style="position: fixed; bottom: 2em; right: 2em; " class="btn-floating black white-text" title="helo r u lost" href="#"><i class="icon-up-open-mini"></i></a>
                 <div class="row">
                     <div class="section col s6 m4">
                         <h1><?=$_BUNNIES[array_rand($_BUNNIES)]?></h1>

@@ -244,6 +244,21 @@ img { width: 50%; cursor: zoom-in }
 
 }
 
+#back-to-top {
+    position: fixed; bottom: 2em; right: 2em;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.8, 0, 0.2, 1) 0s;
+}
+
+#back-to-top:hover {
+    opacity: 1;
+}
+
+.headroom--unpinned + #back-to-top:not(:hover) {
+    opacity: 0.5;
+}
+
 textarea ~ a[href="#toolsModal"] { position: absolute; right: 0; top: 0; opacity: 0; transition: all 0.2s ease-in}
 textarea:focus ~ a[href="#toolsModal"] { opacity: 1; top: -2em; }
 #withToolsModal div.input-field { position: relative; }
@@ -345,7 +360,7 @@ blockquote pre { width: 100%; margin: 0; }
 .bc-container::before {
     content: "\21b6 you are here";
     position: fixed;
-    right: 13em;
+    right: 1em;
     top: -5px;
     font-size: smaller;
     letter-spacing: 0px;
