@@ -2050,24 +2050,52 @@ function update_indicator($index, $prev_index) {
     });
 
 
-    // Textarea Auto Resize
-    if ($('.hiddendiv').length === 0) {
-      var hiddenDiv = $('<div class="hiddendiv common"></div>'),
-        content = null;
-        $('body').append(hiddenDiv);
-    }
-    var hiddendiv = $('.hiddendiv');
-    var text_area_selector = '.materialize-textarea';
-    function textareaResize(that) {
-        // console.log($(this).val());
-        content = $(that).val();
-        content = content.replace(/\n/g, '<br>');
-        hiddenDiv.html(content + '<br>');
-        // console.log(hiddenDiv.html());
-        $(that).css('height', hiddenDiv.height());
-      }
-      $('body').on('keyup keydown focus',text_area_selector , function(){ textareaResize(this)});     // window.textareaResize = textareaResize;
+ // Textarea Auto Resize
+var hiddenDiv = $('.hiddendiv').first();
+if (!hiddenDiv.length) {
+hiddenDiv = $('<div class="hiddendiv common"></div>');
+$('body').append(hiddenDiv);
+}
+var text_area_selector = '.materialize-textarea';
+function textareaAutoResize($textarea) {
+hiddenDiv.text($textarea.val() + '\n');
+var content = hiddenDiv.html().replace(/\n/g, '<br>');
+hiddenDiv.html(content);
+// When textarea is hidden, width goes crazy.
+// Approximate with half of window size
+if ($textarea.is(':visible')) {
+hiddenDiv.css('width', $textarea.width());
+}
+else {
+hiddenDiv.css('width', $(window).width()/2);
+}
+$textarea.css('height', hiddenDiv.height());
+//hiddenDiv.val('');
+}
+$(text_area_selector).each(function () {
+var $textarea = $(this);
+if ($textarea.val().length) {
+textareaAutoResize($textarea);
+}
+});
+$('body').on('keyup keydown click mouseout touchstart', text_area_selector, function () {
+textareaAutoResize($(this));
+});
 
+if(toolsModal)
+{
+    $('#toolsModal').on('click', 'button, i', function(){
+        var textbox = toolsModal.textbox();
+        textareaAutoResize($(textbox));
+    });
+    $('form#withToolsModal').on('reset', null, function(){
+        var textbox = toolsModal.textbox();
+        textareaAutoResize($(textbox));
+    });
+    
+}
+
+  
 
 
     // Range Input

@@ -227,17 +227,18 @@ var toolsModal = (function()
         textbox.focus();
     }
 
-/** shitty debugging 
+  // shitty debugging 
     function getTextbox()
-    { return textbox; }
+    { return textbox; } 
+
     function getvalidFields()
-    { return validFields; } **/
+    { return validFields; } 
 
     return {
         init: init,
         activate: activate,
-        deactivate: deactivate//,
-        //textbox: getTextbox,
-        //validFields: getvalidFields
+        deactivate: deactivate,
+        textbox: getTextbox,
+        validFields: getvalidFields
     };
 })(); // dog balls
