@@ -12,14 +12,19 @@
 Options -MultiViews
 
 RewriteEngine On
-#<IfDefine SO_META>
-#    RewriteBase /
-#</IfDefine>
-#<IfDefine !SO_META>
-    RewriteBase /bunzilla
-#</IfDefine>
+#
+# mod_rewrite is ~fun~
+#
+# so you probably want to just uncomment this line:
+#RewriteBase /bunzilla
 
+# and comment all of these out, unless you're me or something
+RewriteCond %{HTTP_HOST} ^meta\.bunzilla\.ga$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+)$ /index.php?url=$1 [QSA,NC,L]
 
-RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+RewriteCond %{HTTP_HOST} ^var\.abl\.cl$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+)$ /bunzilla/index.php?url=$1 [QSA,NC,L]
