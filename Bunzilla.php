@@ -183,7 +183,6 @@ class Bunzilla
         if(file_exists(BUNZ_CTL_DIR.$url[0].'.php'))
         {
             $this->controller = $url[0];
-            unset($url[0]);
         }
 
         require_once BUNZ_CTL_DIR.$this->controller.'.php';
@@ -195,7 +194,13 @@ class Bunzilla
             if(method_exists($this->controller, $url[1]))
             {
                 $this->method = $url[1];
-                unset($url[1]);
+
+                // SECURITY IS FUN
+                // ...
+                $method = (new ReflectionClass($url[0]))->getMethod($url[1]);
+                if($method->isStatic() || !$method->isPublic())
+                    $this->controller->abort('Nice try.');
+                unset($url[0],$url[1]);
             }
         }
 

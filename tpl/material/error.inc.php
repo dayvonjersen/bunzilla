@@ -35,7 +35,7 @@ if(isset($_ERROR))
         <h1 class="alert-text">HTTP/1.1 404: Duck Season</h1>
         <h2 class="secondary-text">That's an error</h2>
         <h2 class="secondary-text">That's all we know</h2>
-        <h6><em>I hope that isn't copyrighted<em></h6>
+        <h6><em>I hope that isn't copyrighted</em></h6>
     </hgroup>
 </article>
 
