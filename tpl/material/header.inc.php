@@ -54,7 +54,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
                         <ul class="gn-menu">
                             <li class="gn-search-item">
                                 <form action="<?= BUNZ_HTTP_DIR ?>search" method="get">
-                                <button type="submit" title="Search!" class="btn btn-floating right secondary-base gone" id="searchsubmit" style="margin-top: 0.5em; margin-right: 1em">&#8617;</button>
+                                <button type="submit" title="Search!" class="btn btn-floating right transparent gone" id="searchsubmit" style="margin-top: 0.5em; margin-right: 1em"><i class="icon-search"></i></button>
                                 <div class="input-field">
                                     <i class="gn-icon icon-search">
                                     <span>Search</span></i>
@@ -65,6 +65,9 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
                             </li>
                             <li>
                                 <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index</a>
+                            </li>
+                            <li>
+                                <a href="<?= BUNZ_HTTP_DIR ?>changelog" class="waves-effect gn-icon icon-history" title=""><?= BUNZ_PROJECT_TITLE ?> Changelog</a>
                             </li>
 <?php
 if($this->auth())

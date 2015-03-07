@@ -8,7 +8,8 @@ $(window).load(function(){
     constrain_width: true,
     belowOrigin: true
 });
-    $(".collapsible").collapsible();
+    $(".collapsible").collapsible(
+    {accordion: $(this).data("collapsible") == "expandable"});
     $('select').material_select();
     $('ul.tabs').tabs();
     $('img').materialbox();

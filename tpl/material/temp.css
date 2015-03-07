@@ -447,7 +447,7 @@ blockquote pre { width: 100%; margin: 0; }
     max-height: 30px;
 }*/
 
-.btn:not(.btn-floating) { padding: 0 0.5em !important }
+.btn-flat, .btn:not(.btn-floating) { padding: 0 0.5em !important }
 .btn-flat { background: transparent; }
 
 /** FRAMEWORKS MAKE EVERYTHING BETTER AMIRITE */

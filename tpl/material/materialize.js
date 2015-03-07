@@ -2082,7 +2082,7 @@ $('body').on('keyup keydown click mouseout touchstart', text_area_selector, func
 textareaAutoResize($(this));
 });
 
-if(toolsModal)
+if(typeof(toolsModal) != 'undefined')
 {
     $('#toolsModal').on('click', 'button, i', function(){
         var textbox = toolsModal.textbox();
