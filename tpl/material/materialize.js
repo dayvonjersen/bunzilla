@@ -2078,7 +2078,8 @@ if ($textarea.val().length) {
 textareaAutoResize($textarea);
 }
 });
-$('body').on('keyup keydown click mouseout touchstart', text_area_selector, function () {
+$('body').on('keyup keydown click touchstart', text_area_selector, function () {
+alert('Fire!');
 textareaAutoResize($(this));
 });
 

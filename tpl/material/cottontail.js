@@ -65,8 +65,14 @@ $(window).load(function(){
     seven.addEventListener('click',muhClosures,false);
     seven.addEventListener('touchstart',muhClosures,false);
 
+
     if(window.scrollY != 0)
-        headroom.unpin();    
+        headroom.unpin();
+
+    setTimeout(function(){
+    if(window.scrollY != 0)
+        headroom.unpin();
+    }, 400);   
 });
 /*
 ***************
