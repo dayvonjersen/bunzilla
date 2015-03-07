@@ -64,7 +64,9 @@ $(window).load(function(){
     seven.addEventListener('mouseover',muhClosures,false);
     seven.addEventListener('click',muhClosures,false);
     seven.addEventListener('touchstart',muhClosures,false);
-    
+
+    if(window.scrollY != 0)
+        headroom.unpin();    
 });
 /*
 ***************

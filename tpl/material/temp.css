@@ -447,7 +447,7 @@ blockquote pre { width: 100%; margin: 0; }
     max-height: 30px;
 }*/
 
-.btn-flat, .btn:not(.btn-floating) { padding: 0 0.5em !important }
+.btn-flat:not(.btn-floating), .btn:not(.btn-floating) { padding: 0 0.5em !important }
 .btn-flat { background: transparent; }
 
 /** FRAMEWORKS MAKE EVERYTHING BETTER AMIRITE */
@@ -484,3 +484,9 @@ select.browser-default {
 .active .hide-on-active, .hide-on-inactive { font-size: 0; visibility: hidden; }
 .active .hide-on-inactive { font-size: 1rem; visibility: visible; }
 .collapsible-body:not(.animated) { box-shadow: none }
+
+.btn-large i { font-size: 2.6rem !important; }
+.btn-small i { font-size: 1.25rem !important;
+    position: absolute;
+    left: 0; /** ¯\_(ツ)_/¯ **/
+}

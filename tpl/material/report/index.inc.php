@@ -150,7 +150,7 @@ if(empty($this->data['categories']))
                 <!--
                     actions
                 -->
-                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="waves-effect btn btn-floating z-depth-5 right category-<?= $cat['id'] ?>-base" title="submit new"><i class="icon-plus"></i></a>
+                    <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" class="btn-large waves-effect btn btn-floating z-depth-5 right category-<?= $cat['id'] ?>-base" title="submit new"><i class="icon-plus"></i></a>
                 <!-- 
                     title 
                 -->

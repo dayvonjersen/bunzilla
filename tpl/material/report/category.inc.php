@@ -23,20 +23,20 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                 <section class='section col s12 z-depth-5 category-<?=$cat['id']?>-base'>
 
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
-                       class="right waves-effect btn btn-floating z-depth-5 transparent" 
+                       class="right btn-large waves-effect btn btn-floating z-depth-5 transparent" 
                        title="submit new"><i class="icon-plus"></i></a>
 <?php
 if($this->auth())
 {
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
-                       class="right small z-depth-4 waves-effect btn btn-floating success-base" 
+                       class="right btn-small z-depth-4 waves-effect btn btn-floating success-base" 
                        title="edit category"><i class="icon-pencil-alt"></i></a>
 <?php
 }
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>?rss" 
-                       class="left small z-depth-3 btn btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
+                       class="right btn-small z-depth-3 btn btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
                        title="subscribe!"><i class="icon-rss-squared"></i></a>
 
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
@@ -246,8 +246,18 @@ $report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.
             echo "<p>{$report['preview_text']}</p>";
         }  
 ?>
-                    <p class="section no-pad-bot"><a class="icon-doc-text-inv btn-flat category-<?= $cat['id'] ?>-darken-2 waves-effect" 
-                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>">Full Report &rarr;</a></p>
+                    <p class="section no-pad-bot">
+<a class="icon-doc-text-inv btn-flat category-<?= $cat['id'] ?>-darken-2 waves-effect" 
+                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>">Full Report &rarr;</a>
+<?php if($this->auth()) { ?>
+<a class="icon-magic btn-flat secondary-base waves-effect" 
+                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#update">Update</a>
+<a class="icon-move btn-flat alert-text waves-effect" 
+                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#move">Move/Merge</a>
+<a class="icon-delete btn-flat danger-base waves-effect" 
+                          href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#delete">Delete</a>
+</p>
+<?php } ?>
                 </blockquote>
             </div>
         </li>       

@@ -61,13 +61,13 @@ if($this->auth())
                        class="waves-effect active icon-doc-text-inv category-<?=$cat['id']?>-text"><span class="hide-on-med-and-down">Details</span></a>
                 </li>
                 <li class="tab col s3">
-                    <a href="#update" class="waves-effect icon-magic secondary-text"><span class="hide-on-med-and-down">Update</span></a>
+                    <a href="#update" class="waves-effect icon-magic secondary-base"><span class="hide-on-med-and-down">Update</span></a>
                 </li>
                 <li class="tab col s3">
-                    <a href="#move" class=" waves-effect icon-move alert-base"><span class="hide-on-med-and-down">Move</span></a>
+                    <a href="#move" class=" waves-effect icon-move alert-text"><span class="hide-on-med-and-down">Move</span></a>
                 </li>
                 <li class="tab col s3">
-                    <a href="#delete" class="waves-effect icon-delete danger-text"><span class="hide-on-med-and-down">Delete</span></a>
+                    <a href="#delete" class="waves-effect icon-delete danger-base"><span class="hide-on-med-and-down">Delete</span></a>
                 </li>
             </ul>
             </div>
@@ -110,12 +110,12 @@ if($this->auth() || compareIP($report['ip']))
 {
 ?>
                      <!-- edit post -->
-                    <a href="<?= BUNZ_HTTP_DIR ?>post/edit/<?= $report['id'] ?>" class="btn-floating success-base z-depth-4 right waves-effect " title="edit this report"><i class="icon-pencil-alt"></i></a>
+                    <a href="<?= BUNZ_HTTP_DIR ?>post/edit/<?= $report['id'] ?>" class="btn-small btn btn-floating success-base z-depth-4 right waves-effect " title="edit this report"><i class="icon-pencil-alt"></i></a>
 <?php
 }
 ?>
                     <a href="<?=BUNZ_HTTP_DIR,'report/view/',$report['id']?>?rss" 
-                       class="left small z-depth-3 btn btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
+                       class="right z-depth-3 btn btn-small btn-floating waves-effect waves-orange" style="background: #fff; color: #f86e00;"
                        title="subscribe!"><i class="icon-rss-squared"></i></a>
                 </section>
             </section>
@@ -363,38 +363,46 @@ if(!empty($this->data['timeline']))
         {
             $log = $statuslog[$eh['id']];
 ?>
-            <section class="section no-pad shade-text z-depth-2" style="margin: 0 1em;">
-                <header class="section no-pad-top no-pad-bot">
-                    <p class="small" style="margin: 10px 0"><?=datef($log['time'])?></p>
-                </header>
-                <blockquote>
-                    <p class="valign-wrapper">
+            <section class="section no-pad shade-text z-depth-2" style="margin: 10px 1em 0 1em">
+                <blockquote class="small">
+                    <span class="right" ><?=datef($log['time'])?></span>
                         <strong><?= $log['who'] ?>&emsp;&emsp;</strong>
-                        <em class="center"><?= $log['message'] ?></em>
+                        <p><?= $log['message'] ?></p>
                 </blockquote>
             </section>
 <?php
         } elseif(in_array($eh['id'],$comment_ids)) {
             $comment = $comments[$eh['id']];
 ?>
-            <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
-                <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
-                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], epenis($comment['epenis']) ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$i++?></a>
+            <section class="category-<?=$cat['id']?>-text z-depth-5" 
+                     id="reply-<?=$comment['id']?>" 
+                     style="margin: 0 1em;">
 
+                <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
+
+                    <p style="margin: 10px 0"><?= $comment['email'], epenis($comment['epenis']) ?> 
+
+                        <a class="right" href="#reply-<?= $comment['id'] ?>"> #<?=$i++?></a>
+                        <span class="right small"><?= datef($comment['time']) ?>&emsp;&emsp;</span>
+                    </p>
+
+                </header>
+                <blockquote>
 <?php
 if($this->auth() || compareIP($comment['ip']))
 {
 ?>
-                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='badge small green-text right' title="edit this comment"><i class='icon-pencil-alt'></i></a>
+                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" 
+                           class='btn btn-floating btn-small waves-effect waves-green right' 
+                           title="edit this comment" position: absolute; right: 2rem;"><i class='icon-pencil-alt'></i></a>
 <?php
 }
-?></p>
-                </header>
-                <blockquote><?= $comment['message'] ?><?php
+?><?= $comment['message'] ?><?php
 if($comment['edit_time'])
 {
 ?>
-                <span class="badge right icon-pencil-alt"><em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></span>
+                <div class="divider"></div>
+                <p class="icon-pencil-alt"><strong>edit</strong> <em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></p>
 <?php
 }
 ?></blockquote>
@@ -405,7 +413,7 @@ if(isset($nested[$comment['id']]))
 {
     $reply_to = $comment['id'];
 ?>
-                <footer class="section z-depth-3"><h1>&#8600;</h1>
+                <footer class="section no-pad-top no-pad-bot z-depth-3"><span class="h1 hide-on-small-only">&#8600;</span>
 <?php
     $j = 0;
     foreach($nested[$reply_to] as $reply)
@@ -413,23 +421,28 @@ if(isset($nested[$comment['id']]))
         $comment = $comments[$reply];
 ?>
             <section class="category-<?=$cat['id']?>-text z-depth-5" id="reply-<?=$comment['id']?>" style="margin: 0 1em;">
-                <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
-                    <p class="icon-chat" style="margin: 10px 0"><?= $comment['email'], epenis($comment['epenis']) ?> <a class="right" href="#reply-<?= $comment['id'] ?>"><?= datef($comment['time']) ?> #<?=$j++?></a>
 
-<?php
+                <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
+                    <p style="margin: 10px 0">
+                        <?= $comment['email'], epenis($comment['epenis']) ?> 
+                        <a class="right" href="#reply-<?= $comment['id'] ?>"> #<?=$j++?></a>
+                        <span class="right small"><?= datef($comment['time']) ?>&emsp;&emsp;</span>
+                    </p>
+                </header>
+
+                <blockquote><?php
 if($this->auth() || compareIP($comment['ip']))
 {
 ?>
-                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='badge small green-text right' title="edit this comment"><i class='icon-pencil-alt'></i></a>
+                        <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='btn btn-floating btn-small waves-effect waves-green right' title="edit this comment" position: absolute; right: 4rem;"><i class='icon-pencil-alt'></i></a>
 <?php
 }
-?></p>
-                </header>
-                <blockquote><?= $comment['message'] ?><?php
+?><?= $comment['message'] ?><?php
 if($comment['edit_time'])
 {
 ?>
-                <span class="badge right icon-pencil-alt"><em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></span>
+                <div class="divider"></div>
+                <p class="icon-pencil-alt"><strong>edit</strong> <em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></p>
 <?php
 }
 ?>
@@ -442,7 +455,8 @@ if($comment['edit_time'])
 
                 <a href="#reply-<?=$reply_to?>" 
                    onclick="(function(evt){evt.preventDefault();document.getElementById('comment').value = '&gt;&gt;<?= $reply_to?>';document.getElementById('comment').focus()})(event)"
-                   class="waves-effect z-depth-5 btn-large btn-floating secondary-base large tooltipped"
+                   style="margin-left: 1rem"
+                   class="waves-effect z-depth-5 large center btn-floating secondary-base tooltipped"
                    data-tooltip="quotereply: use with caution"
                    data-position="right">&#8618;</a>
             </footer>

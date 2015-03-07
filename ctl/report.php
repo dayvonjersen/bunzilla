@@ -420,7 +420,7 @@ time(),null));
             'SELECT category FROM reports WHERE id = '.$this->id
         )->fetchColumn(0);
 
-        Statuslog::create('category', $catid, 'deleted a report');
+//        Statuslog::create('category', $catid, 'deleted a report');
 
         db()->query('DELETE FROM comments WHERE report = '.$this->id);
         db()->query('DELETE FROM tag_joins WHERE report = '.$this->id);
