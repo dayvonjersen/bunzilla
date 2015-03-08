@@ -180,6 +180,9 @@ class Bunzilla
     {
         $url = $this->parseUrl();
 
+        if(!preg_match('/^[a-z]+$/',$this->controller))
+            exit('fuk u');
+
         if(file_exists(BUNZ_CTL_DIR.$url[0].'.php'))
         {
             $this->controller = $url[0];

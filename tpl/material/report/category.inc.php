@@ -68,7 +68,7 @@ if(empty($this->data['reports']))
             kill me now
             ok I will
         -->
-<script src="/bunzilla/tpl/material/list.min.js"></script>
+<script src="<?= str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>list.min.js"></script>
 <script>
 //
 // list.js! http://listjs.com
