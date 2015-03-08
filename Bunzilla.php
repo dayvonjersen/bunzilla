@@ -254,8 +254,8 @@ class Controller
 
         define('BUNZ_TPL_DIR', BUNZ_TPL_BASE_DIR . $tpl . '/');
         define('BUNZ_TPL_HTTP_DIR', str_replace(BUNZ_DIR, BUNZ_HTTP_DIR, BUNZ_TPL_DIR));
-        define('BUNZ_CSS_DIR', BUNZ_TPL_HTTP_DIR . '/assets/css/');
-        define('BUNZ_JS_DIR',  BUNZ_TPL_HTTP_DIR . '/assets/js/');
+        define('BUNZ_CSS_DIR', BUNZ_TPL_HTTP_DIR . 'assets/css/');
+        define('BUNZ_JS_DIR',  BUNZ_TPL_HTTP_DIR . 'assets/js/');
     }
 
     public function __construct()
