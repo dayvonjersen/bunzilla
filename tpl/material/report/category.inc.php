@@ -64,7 +64,7 @@ if(empty($this->data['reports']))
         selectCount('reports','category = '.$cat['id']),
         $this->data['page_offset']
     ) ?>
-<script src="<?= str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>list.min.js"></script>
+<script src="<?= BUNZ_JS_DIR ?>list.min.js"></script>
 <script>
 //
 // list.js! http://listjs.com

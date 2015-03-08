@@ -20,14 +20,14 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 
 <!--        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>-->
 <!--        <link rel='stylesheet' href='/bunzilla/material/materialize.min.css'>-->
-        <link rel='stylesheet' href='<?= str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>assets/css/materialize.min.css'>
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>
 
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
-        <link rel='stylesheet' href='<?= str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>temp.css'>
-        <link rel='stylesheet' type='text/css' href='<?=  str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>customcolors.css.php'>
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>temp.css'>
+        <link rel='stylesheet' type='text/css' href='<?=  BUNZ_TPL_HTTP_DIR ?>customcolors.css.php'>
 
-        <link rel='stylesheet' href='<?=  str_replace(BUNZ_DIR,BUNZ_HTTP_DIR,BUNZ_TPL_DIR) ?>gn-codrops.css'>
+        <link rel='stylesheet' href='<?=  BUNZ_CSS_DIR ?>gn-codrops.css'>
     </head>
 
 <!-- 

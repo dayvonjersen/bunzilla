@@ -31,11 +31,11 @@
                     </div>
                 </div>
         </footer>
-        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>jquery-2.1.3.min.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>materialize.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>gnmenu.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>headroom.js"></script>
-        <script src="<?= BUNZ_HTTP_DIR,'tpl/material/' ?>cottontail.js"></script>
+        <script src="<?= BUNZ_JS_DIR ?>jquery-2.1.3.min.js"></script>
+        <script src="<?= BUNZ_JS_DIR ?>materialize.js"></script>
+        <script src="<?= BUNZ_JS_DIR ?>gnmenu.js"></script>
+        <script src="<?= BUNZ_JS_DIR ?>headroom.js"></script>
+        <script src="<?= BUNZ_JS_DIR ?>cottontail.js"></script>
 <?php
 if(!empty($this->flash))
 {
