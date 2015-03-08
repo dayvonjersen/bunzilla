@@ -259,18 +259,23 @@ jQuery.extend( jQuery.easing,
       var $panel_headers = $(this).find('.collapsible-header');
 
       // Accordion Open
-      function accordionOpen(object) {
+      function accordionOpen(object,firstRun) {
+
+        firstRun = typeof(firstRun) !== 'undefined' ? firstRun : false;
+
         object.parent().toggleClass('active');
         if (object.parent().hasClass('active')){
 //          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
           object.siblings('.collapsible-body').addClass('animated');
 
-
+         if(!firstRun)
+         {
           var elem = object.get()[0];
           setTimeout(function(){
             elem.scrollIntoView({behavior: "smooth"});
             object.siblings('.collapsible-body').addClass('fuckityfuckfuck');
           },350);
+         }
 /* idk xxx              i = 0, intval;
           intval = setInterval(function(){
             elem.scrollIntoView({behavior: "smooth"})
@@ -291,17 +296,21 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
       }
 
       // Collapsible Open
-      function collapsibleOpen(object) {
+      function collapsibleOpen(object,firstRun) {
+        firstRun = typeof(firstRun) !== 'undefined' ? firstRun : false;
         object.parent().toggleClass('active');
         if (object.parent().hasClass('active')){
 //          object.siblings('.collapsible-body').stop(true,false).slideDown({ duration: 350, easing: "easeOutQuart", queue: false});
           object.siblings('.collapsible-body').addClass('animated');
 
-          var elem = object.get()[0];
-          setTimeout(function(){
-            elem.scrollIntoView({behavior: "smooth"});
-            object.siblings('.collapsible-body').addClass('fuckityfuckfuck');
-          },350);
+            if(!firstRun)
+            {
+              var elem = object.get()[0];
+              setTimeout(function(){
+                elem.scrollIntoView({behavior: "smooth"});
+                object.siblings('.collapsible-body').addClass('fuckityfuckfuck');
+              },350);
+            }
 /* idk xxx              i = 0, intval;
           intval = setInterval(function(){
             elem.scrollIntoView({behavior: "smooth"})
@@ -328,14 +337,14 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
         });
 
         // Open first active
-        accordionOpen($panel_headers.filter('.active').first());
+        accordionOpen($panel_headers.filter('.active').first(),true);
       }
       else {
         $panel_headers.each(function () {
 
           // Open any bodies that have the active class
           if ($(this).hasClass('active')) {
-            collapsibleOpen($(this));
+            collapsibleOpen($(this),true);
           }
 
           $(this).click(function (event) {

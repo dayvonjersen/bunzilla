@@ -95,8 +95,6 @@ define('BUNZ_CACHE_DIR', BUNZ_DIR . 'cache/');
 /**
  * External */
 define('BUNZ_HTTP_DIR', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/').'/');
-define('BUNZ_CSS_DIR', BUNZ_HTTP_DIR . 'css/');
-define('BUNZ_JS_DIR',  BUNZ_HTTP_DIR . 'js/');
 
 // bad ideas++
 define('BUNZ_DIFF_DIR', BUNZ_HTTP_DIR . 'diff/');
@@ -256,6 +254,12 @@ class Controller
             $_SESSION['tpl'] = $tpl;
 
         define('BUNZ_TPL_DIR', BUNZ_TPL_BASE_DIR . $tpl . '/');
+#       define('BUNZ_TPL_HTTP_DIR', str_replace(BUNZ_DIR, BUNZ_HTTP_DIR, BUNZ_TPL_DIR));
+#       define('BUNZ_CSS_DIR', BUNZ_TPL_HTTP_DIR . $tpl . '/assets/css/');
+#       define('BUNZ_JS_DIR',  BUNZ_TPL_HTTP_DIR . $tpl . '/assets/js/');
+        define('BUNZ_CSS_DIR', BUNZ_HTTP_DIR . 'css/');
+        define('BUNZ_JS_DIR', BUNZ_HTTP_DIR . 'js/');
+
     }
 
     public function __construct()

@@ -58,9 +58,35 @@ class search extends Controller
 
         if(!empty($specific))
         {
-            $this->data['test']['query'] = 'SELECT id, subject FROM reports WHERE '.implode(' AND ', $specific);
+            $this->data['test']['query'] = 'SELECT * FROM reports WHERE '.implode(' AND ', $specific);
             $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_ASSOC);    
         }
+
+/** XXX SUPER TEMPORARY **/
+        $this->data['categories'] = [13 => ['id' => 13,
+            'title' => 'SUPER TEMPORARY SEARCH PAGE',
+            'caption' => '<form action="'.BUNZ_HTTP_DIR.'search" method="get"><div class="input-field"><input type="text" name="q"><label>ENTER TEXT HERE</label><span class="material-input"></span><input type="submit"></form>',
+            'icon' => 'icon-search',
+            'color' => 'ffffff']];
+        $this->data['category_id'] = 13;
+$this->data['reports'] = count($this->data['test']) ? $this->data['test']['results'] : [];
+$this->data['page_offset'] = 0;
+$this->data['statuses'] = Cache::read('statuses');
+$this->data['tags'] = Cache::read('tags');
+$this->data['priorities'] = Cache::read('priorities');
+        foreach($this->data['reports'] as $i => $report)
+        {
+            $this->data['reports'][$i]['tags'] = db()->query(
+                'SELECT tag
+                 FROM tag_joins 
+                 WHERE report = '.$report['id'])->fetchAll(PDO::FETCH_COLUMN);
+            $this->data['reports'][$i]['comments'] = selectCount(
+                'comments','report = '.$report['id']
+            );
+            $this->data['reports'][$i]['preview_text'] = 'Nothing to see here...';
+        }
+
+require_once BUNZ_DIR . 'tpl/material/report/category.inc.php';
     }
 
     private static function getIds( $tbl, $array )
