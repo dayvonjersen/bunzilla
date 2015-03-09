@@ -18,6 +18,8 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 
         <title><?= isset($pageTitle) ? "$pageTitle :: " : '',BUNZ_PROJECT_TITLE, ' :: tracked by Bunzilla' ?></title>
 
+<?php
+/**
 <!--        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>-->
 <!--        <link rel='stylesheet' href='/bunzilla/material/materialize.min.css'>-->
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>
@@ -27,7 +29,17 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>temp.css'>
         <link rel='stylesheet' type='text/css' href='<?=  BUNZ_TPL_HTTP_DIR ?>customcolors.css.php'>
 
-        <link rel='stylesheet' href='<?=  BUNZ_CSS_DIR ?>gn-codrops.css'>
+        <link rel='stylesheet' href='<?=  BUNZ_CSS_DIR ?>gn-codrops.css'>**/ ?>
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>all.min.css'>
+        <link rel='stylesheet' href='<?= BUNZ_TPL_HTTP_DIR ?>customcolors.css.php'>
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
+<?php
+$dir = dir(BUNZ_TPL_DIR.'assets/css/highlight.js');
+while(($file = $dir->read()) !== false)
+    if(preg_match('/\.css$/',$file))
+        echo '<link rel="alternate stylesheet" href="',BUNZ_CSS_DIR,'highlight.js/',$file,'" title="',$file,'">',"\n";
+$dir->close();
+?>
     </head>
 
 <!-- 
