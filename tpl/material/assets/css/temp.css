@@ -520,16 +520,15 @@ select.browser-default {
 .tag::after {
     position: absolute;
     top: 0px;
-    right: -11px;
+    right: -12px;
     content: '';
-    height: 7px;
+    height: 0;
     width: 0;
-    border-top: 9px transparent solid;
+    border-top: 12px transparent solid;
     border-right: none;
-    border-bottom: 8px transparent solid;
-    border-left-width: 11px;
+    border-bottom: 12px transparent solid;
+    border-left-width: 12px;
     border-left-style: solid;
-    border-radius: 0 100% 100% 0;
 }
 span.priority {
     font-size: 0.8889rem !important;
