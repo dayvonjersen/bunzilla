@@ -152,7 +152,6 @@ img { width: 50%; cursor: zoom-in }
 /*#list li:nth-child(even) .subject-line { background: #ccc; color: #000 !important; }
 #list li:nth-child(odd) .subject-line { background: #fff; color: #000 !important;  }*/
 #list .divider { margin: 1rem 0; }
-#list span { cursor: default }
 #list .btn-flat.asc i::before {
     content: '\e845';
 }
@@ -168,7 +167,7 @@ img { width: 50%; cursor: zoom-in }
 .row { margin-bottom: 0 !important; }
 
 #list .collapsible-header { position: relative; z-index: 100; padding: 4px 0; }
-#list .collapsible-body { z-index: 99; margin-top: -4px; }
+#list .collapsible-body { z-index: 99; margin-top: -8px; }
 /*
 [class*='waves-'] {
     overflow: visible !important;
@@ -342,10 +341,6 @@ input:checked ~ label { color: #0af; }
 
 @media (max-width: 601px) {
     .section { padding-left: 0; padding-right: 0; }
-    #list .time_lastactive, #list .time_submitted { float: none !important; }
-    time { font-size: 0px }
-    time:after { content: attr(title); 
-    font-size: 0.8889rem !important; line-height: 0.73337rem; }
 }
 
 blockquote { width: calc(100% - 3em); padding: 0 0.5rem 1rem 0.5rem; overflow-x: auto; }
@@ -499,14 +494,18 @@ select.browser-default {
 .tag {
     font-size: 12px !important;
     height: 24px;
-    z-index: 0;
-    
+    z-index: 3;
     position: relative;
     top: 3px;
     padding: 0.3333em 1em !important;
     box-shadow: none !important;
     min-width: 2rem !important;
 }
+
+#list span.tag {
+    z-index: -1;
+}
+
 @media(max-width: 600px)
 { 
 .tag::before {

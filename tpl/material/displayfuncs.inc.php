@@ -41,9 +41,10 @@ function datef( $time = -1 )
     list($ret[], $diff) = ftime($diff, 60, 'minute');
     list($ret[], $diff) = ftime($diff, 1, 'second');
 
-    return sprintf('<time title="%s">%s ago</time>',
-        date(BUNZ_BUNZILLA_DATE_FORMAT, $time),
-        implode(', ',array_filter($ret,function($val){return $val;}))
+    $text = implode(', ',array_filter($ret,function($val){return $val;}));
+    return sprintf('<time class="tooltipped" data-tooltip="%s ago">%s</time>',
+        $text,
+        date(BUNZ_BUNZILLA_DATE_FORMAT, $time)
     );
     //return ;
 }

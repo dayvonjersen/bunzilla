@@ -186,29 +186,29 @@ document.body.onload = function(){
             </div>
 
 <?php // Click-to-expand-style heading ?>
-            <div class="collapsible-header waves-effect waves-light-blue no-select <?= $report['closed'] ? 'shade-base' : '' ?>">
+            <div class="collapsible-header waves-effect waves-light-blue no-select">
 
-<?php // Status badge for closed reports ?>
-                <?= $report['closed'] ? '<span class="right">'.status($report['status']).'</span>' : '' ?>
-
-<?php // Link to comments section ?>
-                <span class="badge right blue-text" title="comments">
-                    <a class="icon-chat"
-                       href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#comments'?>">
-                        <?= $report['comments'] ?></a>
-                </span>
-
-<?php // Last Activity ?>
+<?php // timestamps ?>
 <?php if($report['last_active'] != $report['time']) { ?>
-                <span class="time_lastactive icon-time small right" title="last active">
-                    <?= datef($report['last_active']) ?>
+                <div class="right right-align" style="clear: both;">
+                    <span class="time_lastactive icon-time">
+                        <?= datef($report['last_active']) ?>
+                    </span>
+                    <span class="time_submitted icon-history">
+                        <?= datef($report['time']) ?>
+                    </span>
+                </div>
+<?php }  else {
+       // Submission Time
+    echo '<div class="right right-align time_submitted icon-time">',datef($report['time']),'</div>';
+}
+?>
+<?php // Link to comments section ?>
+<?php if($report['comments']) { ?>
+                <span class="<?= $report['closed'] ? 'left' : 'large'?>">
+                    <a class="icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#comments'?>"><?= $report['comments'] ?></a>
                 </span>
 <?php } ?>
-
-<?php // Submission Time ?>
-                <span class="time_submitted icon-history small right" title="submitted at">
-                    <?= datef($report['time']) ?>
-                </span>
 <?php // Tags and Priority ?>
 <?php
         if(!$report['closed'])
@@ -224,13 +224,12 @@ document.body.onload = function(){
 ?>
 
 <?php // Subject ?>
-                <div class="z-depth-3 subject-line  <?= $report['closed'] ? 'shade-darken-1' : 'category-'.$cat['id'].'-text' ?>"
-                    <?= $report['closed'] ? '' : ' style="clear: both"'?>
+                <div class="z-depth-3 subject-line <?= $report['closed'] ? 'shade-text' : "category-{$cat['id']}-text" ?>" style="clear: both"
                     title="<?= $report['subject'] ?>">
                     <a class="waves-effect h4 icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
                        href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>">
                         <?= $report['subject'] ?></a>
-<?= $report['closed'] ? '' : '<span class="right">'.status($report['status']).'</span>' ?>
+                        <span class="right"><?=status($report['status'])?></span>
                 </div>
             </div>
 
