@@ -155,7 +155,7 @@ document.body.onload = function(){
         </div>
     </div>
 
-    <ul class="list collapsible section no-pad-top">
+    <ul class="list collapsible section no-pad-top" data-collapsible="accordion">
 <?php
 //
 // tidy can be used to fix up html from truncated message "previews"
@@ -186,7 +186,7 @@ document.body.onload = function(){
             </div>
 
 <?php // Click-to-expand-style heading ?>
-            <div class="collapsible-header no-select <?= $report['closed'] ? 'shade-text' : 'category-'.$cat['id'].'-text' ?>">
+            <div class="collapsible-header waves-effect waves-light-blue no-select <?= $report['closed'] ? 'shade-base' : '' ?>">
 
 <?php // Status badge for closed reports ?>
                 <?= $report['closed'] ? '<span class="right">'.status($report['status']).'</span>' : '' ?>
@@ -213,7 +213,7 @@ document.body.onload = function(){
 <?php
         if(!$report['closed'])
         {
-            echo '<div class="left',empty($report['tags']) ? '' : ' icon-tags','">';
+            echo '<div class="left">';
             if(!empty($report['tags']))
             {
                 foreach($report['tags'] as $tag)
@@ -224,7 +224,7 @@ document.body.onload = function(){
 ?>
 
 <?php // Subject ?>
-                <div class="z-depth-3 subject-line"
+                <div class="z-depth-3 subject-line  <?= $report['closed'] ? 'shade-darken-1' : 'category-'.$cat['id'].'-text' ?>"
                     <?= $report['closed'] ? '' : ' style="clear: both"'?>
                     title="<?= $report['subject'] ?>">
                     <a class="waves-effect h4 icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
@@ -273,11 +273,11 @@ if($report['edit_time']) {
                            href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>">Full Report &rarr;</a>
 <?php if($this->auth()) { ?>
                         <a class="icon-magic btn-flat secondary-base waves-effect" 
-                           href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#update">Update</a>
+                           href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#update"><span class="hide-on-small-only">Update</span></a>
                         <a class="icon-move btn-flat alert-text waves-effect" 
-                           href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#move">Move/Merge</a>
+                           href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#move"><span class="hide-on-small-only">Move/Merge</span></a>
                         <a class="icon-delete btn-flat danger-base waves-effect" 
-                           href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#delete">Delete</a>
+                           href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>#delete"><span class="hide-on-small-only">Delete</span></a>
 <?php } ?>
                     </p>
                 </blockquote>

@@ -9,7 +9,7 @@ $(window).load(function(){
     belowOrigin: true
 });
     $(".collapsible").collapsible(
-    {accordion: $(this).data("collapsible") == "expandable"});
+    {accordion: !($(".collapsible").data("collapsible") == "expandable")});
     $('select').material_select();
     $('ul.tabs').tabs();
     $('img').materialbox();

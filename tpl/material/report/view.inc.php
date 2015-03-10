@@ -30,7 +30,7 @@ $cat    = $this->data['categories'][$this->data['category_id']];
 $report = $this->data['report'];
 
 $pageTitle = $report['subject'];
-$background = 'transparent';
+$background = 'category-'.$cat['id'].'-base';
 require BUNZ_TPL_DIR . 'header.inc.php';
 require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 require_once BUNZ_TPL_DIR . 'color.php';
@@ -259,7 +259,6 @@ count($this->data['priorities'])
     echo '<p class="left">';
 if(!empty($report['tags']))
 {
-    echo '<i class="icon-tags"></i>';
     //
     // tags!
     //

@@ -30,7 +30,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
         <link rel='stylesheet' type='text/css' href='<?=  BUNZ_TPL_HTTP_DIR ?>customcolors.css.php'>
 
         <link rel='stylesheet' href='<?=  BUNZ_CSS_DIR ?>gn-codrops.css'>**/ ?>
-        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>all.min.css'>
+        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>all.css'>
         <link rel='stylesheet' href='<?= BUNZ_TPL_HTTP_DIR ?>customcolors.css.php'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
 <?php

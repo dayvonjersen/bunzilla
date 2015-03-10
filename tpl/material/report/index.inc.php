@@ -194,7 +194,7 @@ if(empty($this->data['categories']))
                 </p>
                 <p class="section col category-<?= $cat['id'] ?>-lighten-5 s12 z-depth-5 tooltipped"
                           data-tooltip="last activity">
-                    <span class="icon-time"></i><br/><?= datef($stats['last_activity']) ?></span>
+                    <span class="icon-time"></i><?= datef($stats['last_activity']) ?></span>
                 </p>
 <?php
         } else {
@@ -208,7 +208,7 @@ if(empty($this->data['categories']))
 </div> 
 <?php
         // configure rows if you want or something
-        if($i++ >= 5 || end($this->data['categories']) === $cat)
+        if($i++ == 1 || end($this->data['categories']) === $cat)
         {
             echo '</div>';
             $i = 0;

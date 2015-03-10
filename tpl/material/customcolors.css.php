@@ -64,7 +64,11 @@ foreach(Cache::read('statuses') as $id => $data)
     $_ += createCSSRule("status-$id",$data['color']);
 
 foreach(Cache::read('tags') as $id => $data)
-    $_ += createCSSRule("tag-$id",$data['color']);
+{
+    $tag = createCSSRule("tag-$id",$data['color']);
+    $tag["tag-$id::after"]['border-left-color'] = '#'.$data['color'];
+    $_ += $tag;
+}
 
 foreach(Cache::read('priorities') as $id => $data)
     $_ += createCSSRule("priority-$id",$data['color']);

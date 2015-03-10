@@ -260,7 +260,6 @@ input.gn-search:focus {
 
 .gn-multiline {
     position: relative;
-    z-index: -1;
 }
 
 .gn-multiline small {

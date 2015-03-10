@@ -93,7 +93,7 @@ function priority( $id, $badge = true ) {
 //    return sprintf('<i class="%s priority-%d" title="%s"></i>', $p['icon'],$p['id'],$p['title']);
 
     //$z = round(($id/count($pryor))*5);
-    return '<span class="left badge '.($badge ? 'badge ' : '').'z-depth-5 tag priority-'.$id.'" title="Priority '.$id.' out of '.count($pryor).'"><span class="hide-on-small-only">Priority: </span><strong class="'.$p['icon'].'">'.$p['title'].'</strong></span>';
+    return '<span class="left '.($badge ? 'badge ' : '').'z-depth-5 priority priority-'.$id.'" title="Priority '.$id.' out of '.count($pryor).'"><strong class="'.$p['icon'].'">'.$p['title'].'</strong></span>';
 }
 
 
@@ -169,11 +169,11 @@ function pagination( $url, $total, $curPage )
     $pages = ceil($total/50);
 
     $return = '<article class="center section bz-paginate">
-        <div class="z-depth-3 secondary-base" data-textlabel="Page '."$curPage of $pages".'">';
+        <div data-textlabel="Page '."$curPage of $pages".'">';
 //    $return .= '<div class=" valign-wrapper">';
 
 //    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
-    $classList = 'btn btn-floating btn-flat waves-effect ';
+    $classList = 'btn btn-floating z-depth-2 waves-effect';
 
 /**
     if($curPage != 1)
@@ -189,9 +189,24 @@ function pagination( $url, $total, $curPage )
 
     for($i = 1; $i <= $pages; $i++)
     {
-        $return .= '<'.($i == $curPage ? 'section' : "a href='$url/".($i-1)."'")
-                    ." class='$classList".($i == $curPage ? ' shade-darken-4 z-depth-5' : '')."'>$i</"
-                    .($i == $curPage ? 'section' : 'a')
+        switch($i)
+        {
+            case 1:
+                $text = '<span style="font-variant: small-caps">1<sup>ST</sup></span>'; break;
+            case $pages:
+                $text = '<span style="font-variant: small-caps">END</span>';
+                break;
+            case ($curPage - 1):
+                $text = '<i class="icon-left-open-mini"></i>';
+                break;
+            case ($curPage + 1):
+                $text = '<i class="icon-right-open-mini"></i>';
+                break;
+            default: $text = $i;
+        }
+        $return .= '<'.($i == $curPage ? 'em' : "a href='$url/".($i-1)."'").' style="margin: 0 0.5rem"'
+                    ." class='$classList".($i == $curPage ? ' secondary-darken-4 z-depth-5' : ' shade-lighten-5 secondary-text')."'>$text</"
+                    .($i == $curPage ? 'em' : 'a')
                     .'>';
     }
 /**    
