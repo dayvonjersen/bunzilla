@@ -186,7 +186,7 @@ input.gn-search {
 input.gn-search:focus {
 		cursor: text;
         left: 1em;
-        width: 75%;
+        width: 66.6667%;
 }
 
 .no-touch .gn-menu li.gn-search-item:hover input.gn-search {

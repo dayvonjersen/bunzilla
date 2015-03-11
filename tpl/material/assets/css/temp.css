@@ -147,7 +147,7 @@ img { width: 50%; cursor: zoom-in }
 #list .collapsible-header i[class*="icon"]:before { font-size: 1rem; }
 #list .collapsible-header > .row { /*padding: 0.5em 1em 0 1em;*/ }
 #list .collapsible-header a:hover { text-decoration: underline; cursor: pointer; color: #2962FF; }
-#list .subject-line { z-index: 110; }
+#list .subject-line { z-index: 110; font-size: 16px; }
 #list .subject-line a { margin: 0; line-height: 1.874em; display:inline-block; max-width: calc(100vw - 10em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: justify;  }
 /*#list li:nth-child(even) .subject-line { background: #ccc; color: #000 !important; }
 #list li:nth-child(odd) .subject-line { background: #fff; color: #000 !important;  }*/
@@ -188,7 +188,7 @@ img { width: 50%; cursor: zoom-in }
 #gn-menu ul { line-height: 60px !important; }
 
 #gn-menu nav ul a, #gn-menu nav * {
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 /*#fuck, #fuck * { background: #888 !important; /* only dreams now~ } */

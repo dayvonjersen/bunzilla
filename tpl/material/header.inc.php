@@ -66,7 +66,7 @@ $dir->close();
                         <ul class="gn-menu">
                             <li class="gn-search-item">
                                 <form action="<?= BUNZ_HTTP_DIR ?>search" method="get">
-                                <button type="submit" title="Search!" class="btn btn-floating right transparent gone" id="searchsubmit" style="margin-top: 0.5em; margin-right: 1em"><i class="icon-search"></i></button>
+                                <button type="submit" title="Search!" class="btn btn-floating right transparent gone" id="searchsubmit" style="margin-top: 0.5em; margin-right: 2em"><i class="icon-search"></i></button>
                                 <div class="input-field">
                                     <i class="gn-icon icon-search">
                                     <span>Search</span></i>
