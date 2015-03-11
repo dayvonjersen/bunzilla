@@ -227,8 +227,7 @@ document.body.onload = function(){
                 <div class="z-depth-3 subject-line <?= $report['closed'] ? 'shade-text' : "category-{$cat['id']}-text" ?>" style="clear: both"
                     title="<?= $report['subject'] ?>">
                     <a class="waves-effect flow-text icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
-                       href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>">
-                        <?= $report['subject'] ?></a>
+                       href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>"><?= $report['subject'] ?></a>
                         <span class="right"><?=status($report['status'])?></span>
                 </div>
             </div>

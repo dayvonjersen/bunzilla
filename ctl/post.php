@@ -368,9 +368,13 @@ XXX ::: what the fuck stop being a lazy shit
     {
         $msg = htmlspecialchars($msg);
         $msg = trim(str_replace([chr(7),chr(160),chr(173)], '', $msg));
-        $msg = preg_replace(
-            '/(&lt;|\[)(\/)?('.self::ALLOWED_HTML.')(&gt;|\])/i','<$2$3>',$msg
-        );
+        if(isset($_POST['disable_html']))
+            return $msg;
+
+        while(preg_match('/(&lt;|\[)('.self::ALLOWED_HTML.')(&gt;|\])(.*?)\1\/\2\3/misu',$msg))
+            $msg = preg_replace(
+                '/(&lt;|\[)('.self::ALLOWED_HTML.')(&gt;|\])(.*?)\1\/\2\3/misu','<$2>$4</$2>',$msg
+            );
 
         /**
          * Images!
