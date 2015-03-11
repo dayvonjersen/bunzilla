@@ -602,11 +602,17 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
     }
   });
 })(jQuery);
-;(function ($) {
+(function ($) {
 
   $.fn.materialbox = function () {
 
     return this.each(function() {
+
+      if ($(this).hasClass('intialized')) {
+        return;
+      }
+
+      $(this).addClass('intialized');
 
       var overlayActive = false;
       var doneAnimating = true;
@@ -616,24 +622,27 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
       var placeholder = $('<div></div>').addClass('material-placeholder');
       var originalWidth = 0;
       var originalHeight = 0;
-
       origin.wrap(placeholder);
+      
+      
       origin.on('click', function(){
-
         var placeholder = origin.parent('.material-placeholder');
         var windowWidth = window.innerWidth;
         var windowHeight = window.innerHeight;
         var originalWidth = origin.width();
         var originalHeight = origin.height();
+        
 
         // If already modal, return to original
         if (doneAnimating === false) {
+          returnToOriginal();
           return false;
         }
         else if (overlayActive && doneAnimating===true) {
           returnToOriginal();
           return false;
         }
+        
 
         // Set states
         doneAnimating = false;
@@ -645,10 +654,10 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
         placeholder.css({
           width: placeholder[0].getBoundingClientRect().width,
           height: placeholder[0].getBoundingClientRect().height,
-          position: 'relative',
-          top: 0,
-          left: 0
-        })
+          position: 'fixed'
+        });
+        
+        
 
         // Set css on origin
         origin.css({position: 'absolute', 'z-index': 1000})
@@ -672,7 +681,7 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
 
         // Add and animate caption if it exists
         if (origin.data('caption') !== "") {
-          var $photo_caption = $('<div class="materialbox-caption"></div');
+          var $photo_caption = $('<div class="materialbox-caption"></div>');
           $photo_caption.text(origin.data('caption'));
           $('body').append($photo_caption);
           $photo_caption.css({ "display": "inline" });
@@ -701,6 +710,12 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
 
         // Animate image + set z-index
         if(origin.hasClass('responsive-img')) {
+          var leftPos = $(document).scrollLeft() + windowWidth/2 - origin.parent('.material-placeholder').offset().left - newWidth/2,
+              topPos = $(document).scrollTop() + windowHeight/2 - origin.parent('.material-placeholder').offset().top - newHeight/ 2;
+          placeholder.css({
+            left: leftPos,
+            top: topPos
+            });
           origin.velocity({'max-width': newWidth, 'width': originalWidth}, {duration: 0, queue: false,
             complete: function(){
               origin.css({left: 0, top: 0})
@@ -708,8 +723,8 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
                 {
                   height: newHeight,
                   width: newWidth,
-                  left: $(document).scrollLeft() + windowWidth/2 - origin.parent('.material-placeholder').offset().left - newWidth/2,
-                  top: $(document).scrollTop() + windowHeight/2 - origin.parent('.material-placeholder').offset().top - newHeight/ 2
+                  left: leftPos,
+                  top: topPos
                 },
                 {
                   duration: inDuration,
@@ -771,12 +786,20 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
           var windowHeight = window.innerHeight;
           var originalWidth = origin.data('width');
           var originalHeight = origin.data('height');
+       
+          origin.velocity("stop", true);
+          $('#materialbox-overlay').velocity("stop", true);
+          $('.materialbox-caption').velocity("stop", true);
 
 
-          $('#materialbox-overlay').fadeOut(outDuration, function(){
-            // Remove Overlay
-            overlayActive = false;
-            $(this).remove();
+          $('#materialbox-overlay').velocity({opacity: 0}, {
+            duration: outDuration, // Delay prevents animation overlapping
+            queue: false, easing: 'easeOutQuad',
+            complete: function(){
+              // Remove Overlay
+              overlayActive = false;
+              $(this).remove();
+            }
           });
 
           // Resize Image
@@ -795,7 +818,7 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
 
           // Remove Caption + reset css settings on image
           $('.materialbox-caption').velocity({opacity: 0}, {
-            duration: outDuration + 200, // Delay prevents animation overlapping
+            duration: outDuration, // Delay prevents animation overlapping
             queue: false, easing: 'easeOutQuad',
             complete: function(){
               placeholder.css({
@@ -808,7 +831,6 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
 
               origin.css({
                 height: '',
-                position: '',
                 top: '',
                 left: '',
                 width: '',
@@ -827,6 +849,11 @@ $panel_headers.not(object).parent().children('.collapsible-body').removeClass('a
         }
         });
 };
+
+$(document).ready(function(){
+  $('.materialboxed').materialbox();
+});
+
 }( jQuery ));;(function ($) {
 
     $.fn.parallax = function () {

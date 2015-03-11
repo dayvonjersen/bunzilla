@@ -12,7 +12,7 @@ foreach($this->data['reports'] as $report)
     $item['link'] = $item['guid'] = SITE_URL . "report/view/{$report['id']}";
     if(isset($report['preview_text']))
     {
-        $item['description']  = substr(strip_tags($report['preview_text']),0,100);
+        $item['description']  = '<![CDATA['.htmlentities(substr(strip_tags($report['preview_text']),0,100)).']]>';
     }
     
     $item['author'] = $report['email'];

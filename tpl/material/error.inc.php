@@ -3,7 +3,7 @@ ob_clean();
 
 /**
  * sometimes this file is called outside of object context */
-if(defined('BUNZ_TPL_DIR') && isset($this) && $this instanceof Controller)
+if(defined('BUNZ_TPL_DIR') && isset($this) && $this instanceof Controller && !is_null($this->auth))
 {
     $pageTitle = 'Whoops!';
     $this->breadcrumbs[] = ['href' => BUNZ_HTTP_DIR,

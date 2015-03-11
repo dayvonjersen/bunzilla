@@ -18,7 +18,7 @@ body#bunzilla { margin: 60px 0 0 0 !important; }
 #page-wrap { min-height: 100% !important; margin-bottom: -150px; }
 #page-wrap::after { content: ""; display: block; }
 body#bunzilla > footer.footer, #page-wrap::after { padding: 0 !important; height: 150px !important; }
-
+#page-wrap > header { position: absolute; z-index: 1000; }
 
 .mp-pushed .mp-menu {
     position: fixed;
@@ -536,3 +536,8 @@ span.priority {
     margin: 3px 1rem 0 0;
 }
 .small { font-size: 0.8889rem !important; }
+
+
+#materialbox-overlay { z-index: 1000 !important; }
+.materialbox-caption, .material-placeholder[style] { z-index: 1001 !important; padding: 0 !important; }
+img.intialized.active { cursor: zoom-out }

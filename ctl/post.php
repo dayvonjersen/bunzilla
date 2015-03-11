@@ -369,7 +369,7 @@ XXX ::: what the fuck stop being a lazy shit
         $msg = htmlspecialchars($msg);
         $msg = trim(str_replace([chr(7),chr(160),chr(173)], '', $msg));
         $msg = preg_replace(
-            '/&lt;(\/)?('.self::ALLOWED_HTML.')&gt;/i','<$1$2>',$msg
+            '/(&lt;|\[)(\/)?('.self::ALLOWED_HTML.')(&gt;|\])/i','<$2$3>',$msg
         );
 
         /**
@@ -387,7 +387,7 @@ XXX ::: what the fuck stop being a lazy shit
                     $image[0],
                 (   preg_match('/^http(s)?:\/\//', $image[1]) 
 
-                ?   '<img src="'.$image[1].'" alt="Image could not be loaded.">'
+                ?   '<img src="'.$image[1].'" alt="Image could not be loaded." data-caption="'.$image[1].'">'
 
                 :   '&lt;!-- Invalid Image URL! --&gt;'
 

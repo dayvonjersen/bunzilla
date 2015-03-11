@@ -133,6 +133,17 @@ var toolsModal = (function()
             {
                 console.log("Chrome is garbage.");
                 myTarget = evt.target.parentElement;
+            } else if(evt.target instanceof HTMLSelectElement || evt.target == document.getElementById('selectBoxesAreHard')) {
+                // hacky but it works sorta
+                deactivate();
+                if(evt.target == document.getElementById('selectBoxesAreHard'))
+                    evt.target = document.getElementById('codelang');
+                evt.target.addEventListener('change',function(){
+                    activate();
+                    var fakeEvent = {"target": document.querySelector('button[data-markup="code"]')};
+                    insertHandler(fakeEvent);
+                });
+                return;
             } else {
                 return;
             }
@@ -217,7 +228,7 @@ var toolsModal = (function()
                 selectionStart + startTag.length + (selectionEnd - selectionStart) + 11,
                 selectionStart + startTag.length + (selectionEnd - selectionStart) + 11 + 20
             );
-        else if(markup == "image" || markup == "code" || markup == "link")
+        else if((markup == "image" || markup == "link" || markup == "code") && !selectionEmpty)
         {
             var noselect = selectionStart + startTag.length + (selectionEnd - selectionStart) + endTag.length;
             textbox.setSelectionRange(noselect,noselect);
