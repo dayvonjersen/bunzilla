@@ -30,7 +30,7 @@ class search extends Controller
         /**
          * search by meta-data */
         preg_match_all(
-            '/([!\-])?(category|status|tag|priority):(\w+)/i', 
+            '/([!\-])?(category|status|tag|priority)%3A(\w+)/i', 
             $search, $matches, PREG_SET_ORDER
         );
         $require = $include = $exclude = [];
@@ -123,13 +123,27 @@ class search extends Controller
                     $query .= ' OR id IN('.implode(',',$comments).') ';
                 unset($fields['comment']);
             }
-            $query = !empty($search) ? 'MATCH('.implode(',',array_keys($fields)).') AGAINST ('.db()->quote($search).') '.$query : preg_replace('/^\s+(AND|OR)/','',$query);
         }
+        if(empty($search))
+            $query =  preg_replace('/^\s+(AND|OR)/','',$query);
+        else {
+            $temp = [];
+            foreach(array_keys($fields) as $field)
+                $temp[] = "MATCH($field) AGAINST(".db()->quote($search).") ";
+            $query = implode(' OR ', $temp) . $query;
+        }
+    
+
+        $query == '' ? $query = 0 : '';
 
         $this->data['reports'] = [];
-        $this->data['test']['query'] = 'SELECT id,subject FROM reports WHERE '.$query;
+        $this->data['test']['term']  = $search;
+        $this->data['test']['query'] = 'SELECT * FROM reports WHERE '.$query;
+        $benchmark_it = microtime(1);
         $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_ASSOC);    
-        $this->__TEMP();
+        $benchmark_it = microtime(1) - $benchmark_it;
+        $this->data['test']['time'] =  $benchmark_it;
+      //  $this->__TEMP();
     }
 
     private function dostuff( $array )
@@ -216,11 +230,11 @@ class search extends Controller
 
     private function __TEMP()
     {
-header('Content-Type: text/plain');
+/**header('Content-Type: text/plain');
 print_r($this->data['test']);
 echo "\n", file_get_contents(__FILE__);
 exit;
-
+*/
 /** XXX SUPER TEMPORARY please ignore to EOF **/
         $this->data['categories'] = [13 => ['id' => 13,
             'title' => 'SUPER TEMPORARY SEARCH PAGE',
@@ -245,6 +259,7 @@ $this->data['priorities'] = Cache::read('priorities');
             $this->data['reports'][$i]['preview_text'] = 'Nothing to see here...';
         }
 
+//$this->tpl = BUNZ_DIR . 'tpl/material/report/category'; exit;
 require_once BUNZ_DIR . 'tpl/material/report/category.inc.php';
 
     }

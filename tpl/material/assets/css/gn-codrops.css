@@ -275,6 +275,7 @@ input.gn-search:focus {
 .gn-menu-main li[title]::before {
     content: attr(title);
     position: fixed;
+    z-index: -1;
     font-size: xx-large;
     top: 0;
     left: 2em;

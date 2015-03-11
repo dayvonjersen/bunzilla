@@ -3,7 +3,7 @@
 
 // random bunny emotes
 // http://japaneseemoticons.net/ <- go there, highly recommended
-require_once BUNZ_TPL_DIR . 'bunnies.php';
+require BUNZ_TPL_DIR . 'bunnies.php';
 require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 ?>
 <!DOCTYPE html>
@@ -76,9 +76,6 @@ $dir->close();
                                 </form>
                             </li>
                             <li>
-                                <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index</a>
-                            </li>
-                            <li>
                                 <a href="<?= BUNZ_HTTP_DIR ?>changelog" class="waves-effect gn-icon icon-history" title=""><?= BUNZ_PROJECT_TITLE ?> Changelog</a>
                             </li>
 <?php
@@ -100,36 +97,29 @@ if($this->auth())
 <?php
 }
 ?>
-                            
-<!--
-    ex:
+                            <li>
+<?php
+if(isset($this->breadcrumbs) && count($this->breadcrumbs))
+{
+    echo "\t\t\t\t",'<ul class="gn-submenu">',"\n";
 
-    <li>
-        <a class="icon-whatever">Heading</a>
-        <ul class="gn-submenu"><li><a>etc</li></ul>
-    </li>
+    $bread = $this->breadcrumbs;
+    foreach($bread as $crumb)
+    {
+        printf("\t\t\t\t\t<li><a class='waves-effect gn-icon %s' href='%s'>%s</a></li>\n",
+            $crumb['icon'], BUNZ_HTTP_DIR.$crumb['href'], 
+            $crumb == end($bread) ? "<abbr data-textlabel='you are here &#10548;'>{$crumb['title']}</abbr>" : $crumb['title']
+        );
+    }
 
-                            <li>
-                                <a class="gn-icon icon-male">test</a>
-                                <ul class="gn-submenu"><li class="gn-icon icon-person">test</li></ul>
+    echo "\t\t\t\t</ul>\n\t\t\t</li>\n";
+} else {
+?>
+                                <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index Page</a>
+<?php
+}
+?>
                             </li>
-                            <li>
-                                <a class="gn-icon icon-male">test</a>
-                                <ul class="gn-submenu"><li class="gn-icon icon-person">test</li></ul>
-                            </li>
-                            <li>
-                                <a class="gn-icon icon-male">test</a>
-                                <ul class="gn-submenu"><li class="gn-icon icon-person">test</li></ul>
-                            </li>
-                            <li>
-                                <a class="gn-icon icon-male">test</a>
-                                <ul class="gn-submenu"><li class="gn-icon icon-person">test</li></ul>
-                            </li>
-                            <li>
-                                <a class="gn-icon icon-male">test</a>
-                                <ul class="gn-submenu"><li class="gn-icon icon-person">test</li></ul>
-                            </li>
--->
                         </ul>
                     </div>
                 </nav>

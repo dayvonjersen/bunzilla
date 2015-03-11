@@ -42,6 +42,9 @@ if($this->auth())
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
                     <h6><?= $cat['caption'] ?></h6>
                 </section>
+                <section class="section col s12">
+                    <button onclick="$('.time_submitted').toggleClass('gone');$('.time_lastactive').toggleClass('gone');">toggle timestamps on/off</button>
+                </section>
         </article>
     </div>
 </div>

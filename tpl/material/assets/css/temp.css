@@ -188,6 +188,7 @@ img { width: 50%; cursor: zoom-in }
 #gn-menu ul { line-height: 60px !important; }
 
 #gn-menu nav ul a, #gn-menu nav * {
+    overflow-x: hidden;
 }
 
 /*#fuck, #fuck * { background: #888 !important; /* only dreams now~ } */
@@ -466,11 +467,18 @@ input:not([type='checkbox']):not([type='radio']) + label.active {
 [data-textlabel]::before {
     content: attr(data-textlabel);
     color: currentColor;
-    font-style: italic;
+    text-transform: lowercase;
     position: absolute;
     left: 0;
-    top: -1rem;
-    font-size: 0.8889rem;
+    top: -5px;
+    font-size: 0.6667rem;
+    letter-spacing: 0px;
+    text-shadow: 0 4px rgba(0, 0, 0, 0.24), 0px 2px rgba(0, 0, 0, 0.19);
+}
+/** plox donut ask */
+#gn-menu abbr[data-textlabel]::before {
+    display: inline-block;
+    width: 100vw;
 }
 
 #gn-menu a.waves-effect { display: block !important; }
