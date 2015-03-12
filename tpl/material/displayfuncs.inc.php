@@ -169,8 +169,8 @@ function pagination( $url, $total, $curPage )
     $curPage += 1;
     $pages = ceil($total/50);
 
-    $return = '<article class="center section bz-paginate">
-        <div data-textlabel="Page '."$curPage of $pages".'">';
+    $return = '<article class="center section no-pad-top no-pad-bot bz-paginate" style="margin: 0.5em 0">
+        <div class="section no-pad-top no-pad-bot" data-textlabel="Page '."$curPage of $pages".'">';
 //    $return .= '<div class=" valign-wrapper">';
 
 //    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';

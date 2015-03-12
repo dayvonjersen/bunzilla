@@ -148,9 +148,7 @@ img { width: 50%; cursor: zoom-in }
 #list .collapsible-header > .row { /*padding: 0.5em 1em 0 1em;*/ }
 #list .collapsible-header a:hover { text-decoration: underline; cursor: pointer; color: #2962FF; }
 #list .subject-line { z-index: 110; font-size: 16px; }
-#list .subject-line a { margin: 0; line-height: 1.874em; display:inline-block; max-width: calc(100vw - 10em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: justify;  }
-/*#list li:nth-child(even) .subject-line { background: #ccc; color: #000 !important; }
-#list li:nth-child(odd) .subject-line { background: #fff; color: #000 !important;  }*/
+#list .subject-line a { margin: 0; line-height: 1.874em; display:inline-block; max-width: calc(100vw - 10em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: justify; width: 50% }
 #list .divider { margin: 1rem 0; }
 #list .btn-flat.asc i::before {
     content: '\e845';
@@ -540,12 +538,65 @@ select.browser-default {
 }
 span.priority {
     font-size: 0.8889rem !important;
-    padding: 4px 6px !important;
-    margin: 3px 1rem 0 0;
+    margin: 3px 0 0 0;
 }
+
+#list span.priority {    padding: 4px 6px !important; }
 .small { font-size: 0.8889rem !important; }
 
-
+/** don't worry about it */
 #materialbox-overlay { z-index: 1000 !important; }
 .materialbox-caption, .material-placeholder[style] { z-index: 1001 !important; padding: 0 !important; }
 img.intialized.active { cursor: zoom-out }
+
+/** I SAID DON'T WORRY ABOUT IT */
+.comment-badge {
+    border-radius: 0 1rem 1rem 0;
+    font-size: 0.6667rem;
+    margin-top: -1px;
+    padding: 6px 6px 6px 1em;
+    top: 4px;
+    position: relative;
+    z-index: -1;
+}
+.time_submitted, .time_lastactive {
+    font-size: 0.6667rem;
+    margin-top: -1px;
+    padding: 6px 6px 6px 1em;
+    z-index: -2;
+    position: absolute; 
+    top: 4px; 
+    margin-left: -8px;
+}
+.time_submitted::after,
+.time_lastactive::after,
+.dontworryaboutit::after {
+   content: "";
+    border: 12px #eee solid;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
+}
+.dontworryaboutit {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    z-index: -1;
+}
+span.dontworryaboutit::after {
+    border-left-color: #fff;
+    border-bottom-color: #fff;
+}
+.info-bar { height: 24px; position: relative; z-index: -1; /*afsdlkjsdafl;kjsadf*/
+border-top: 1px groove;
+border-bottom: 1px groove; }
+.info-bar > * {
+    border-bottom: 1px solid #fff;
+}
+time { z-index: 10001; }
+
+ul.list.section { padding-top: 0.5rem; }

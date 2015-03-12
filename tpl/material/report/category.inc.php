@@ -42,9 +42,7 @@ if($this->auth())
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
                     <h6><?= $cat['caption'] ?></h6>
                 </section>
-                <section class="section col s12">
-                    <button onclick="$('.time_submitted').toggleClass('gone');$('.time_lastactive').toggleClass('gone');">toggle timestamps on/off</button>
-                </section>
+                
         </article>
     </div>
 </div>
@@ -86,8 +84,8 @@ document.body.onload = function(){
 </script>
 
 <div class="section no-pad-top" id="list">
-    <div class="no-pad-bot">
-        <div class="row z-depth-5 shade-darken-4 secondary-text" id="fuck"><!-- me -->
+    <div class="">
+        <div class="row z-depth-5 category-<?=$cat['id']?>-text"  data-textlabel="sort by" id="fuck"><!-- me -->
             <div class="col s12 m4">
                 <div class="col s3 right-align">
                     <button
@@ -158,7 +156,7 @@ document.body.onload = function(){
         </div>
     </div>
 
-    <ul class="list collapsible section no-pad-top" data-collapsible="accordion">
+    <ul class="list collapsible section " data-collapsible="accordion" data-textlabel="reports">
 <?php
 //
 // tidy can be used to fix up html from truncated message "previews"
@@ -190,28 +188,23 @@ document.body.onload = function(){
 
 <?php // Click-to-expand-style heading ?>
             <div class="collapsible-header waves-effect waves-light-blue no-select">
-
-<?php // timestamps ?>
-<?php if($report['last_active'] != $report['time']) { ?>
-                <div class="right right-align" style="clear: both;">
-                    <span class="time_lastactive icon-time">
-                        <?= datef($report['last_active']) ?>
-                    </span>
-                    <span class="time_submitted icon-history">
-                        <?= datef($report['time']) ?>
-                    </span>
-                </div>
-<?php }  else {
-       // Submission Time
-    echo '<div class="right right-align time_submitted icon-time">',datef($report['time']),'</div>';
-}
-?>
+                <div class="info-bar">
 <?php // Link to comments section ?>
 <?php if($report['comments']) { ?>
-                <span class="<?= $report['closed'] ? 'left' : 'large'?>">
-                    <a class="icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#comments'?>"><?= $report['comments'] ?></a>
+                <span class="comment-badge secondary-darken-2 z-depth-2 waves-effect">
+                    <a class="icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#comments'?>"><?= $report['comments'] ?><span class="hide-on-small-only"> comment<?= $report['comments'] == 1 ? '' : 's' ?></span></a>
                 </span>
+<?php } else echo '&nbsp;' ?> <!-- don't worry about it -->
+
+<?php // timestamps ?>
+                    <span class="time_lastactive icon-time shade-text z-depth-2">
+<?php if($report['last_active'] != $report['time']) { ?>
+                        <span class="secondary-text"><span class="hide-on-med-and-down">last active: </span><?= datef($report['last_active']) ?></span>
+                        <div class="hide-on-med-and-up icon-time"></div>&nbsp;|&nbsp;
 <?php } ?>
+                        <span class="hide-on-med-and-down">submitted: </span><?= datef($report['time']) ?>
+                        <span class="dontworryaboutit"></span>
+                    </span>
 <?php // Tags and Priority ?>
 <?php
         if(!$report['closed'])
@@ -225,7 +218,7 @@ document.body.onload = function(){
             echo priority($report['priority']),'</div>';
         }
 ?>
-
+</div>
 <?php // Subject ?>
                 <div class="z-depth-3 subject-line <?= $report['closed'] ? 'shade-text' : "category-{$cat['id']}-text" ?>" style="clear: both"
                     title="<?= $report['subject'] ?>">
@@ -269,6 +262,7 @@ if($report['edit_time']) {
         }  
 ?>
 <?php // Quick Links to Actions ?>
+                    <div class="divider"></div>
                     <p class="section no-pad-bot">
                         <a class="icon-doc-text-inv btn-flat category-<?= $cat['id'] ?>-darken-2 waves-effect" 
                            href="<?= BUNZ_HTTP_DIR,'report/view/',$report['id']?>">Full Report &rarr;</a>
