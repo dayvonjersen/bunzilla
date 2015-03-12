@@ -557,7 +557,7 @@ img.intialized.active { cursor: zoom-out }
     padding: 6px 6px 6px 1em;
     top: 4px;
     position: relative;
-    z-index: -1;
+    z-index: 0;
 }
 .time_submitted, .time_lastactive {
     font-size: 0.6667rem;
@@ -598,5 +598,6 @@ border-bottom: 1px groove; }
     border-bottom: 1px solid #fff;
 }
 time { z-index: 10001; }
-
-ul.list.section { padding-top: 0.5rem; }
+.info-bar .tag:first-child::after {  border-bottom-width: 9px }
+.info-bar div.left { position: relative; z-index: 2 }
+ul.list.section { padding-top: 0.5rem; } /** SHOOT ME $12 **/
