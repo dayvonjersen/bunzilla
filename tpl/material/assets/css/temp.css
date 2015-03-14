@@ -13,9 +13,9 @@ html {
     overflow-x: hidden; 
     overflow-x: -moz-hidden-unscrollable;
 }
-html,body#bunzilla { height: 100% !important; }
+html,body#bunzilla { height: calc(100% - 60px) !important; }
 body#bunzilla { margin: 60px 0 0 0 !important; }
-#page-wrap { min-height: 100% !important; margin-bottom: -150px; }
+#page-wrap { min-height: calc(100% - 150px + 60px) !important; margin-bottom: 0px; }
 #page-wrap::after { content: ""; display: block; }
 body#bunzilla > footer.footer, #page-wrap::after { padding: 0 !important; height: 150px !important; }
 #page-wrap > header { position: absolute; z-index: 1000; }

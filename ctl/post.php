@@ -102,7 +102,7 @@ class post extends Controller
         $this->checkReport($reportId);
         $reportId = (int)$reportId;
         $this->data['params'] = current(db()->query(
-            'SELECT category, subject'.($commentId===false?', description, reproduce, expected, actual, ip':'').'
+            'SELECT category, subject'.($commentId===false?', description, reproduce, expected, actual, ip, email':'').'
              FROM reports
              WHERE id = '.$reportId
         )->fetchAll(PDO::FETCH_ASSOC));
@@ -116,7 +116,7 @@ class post extends Controller
                 $this->abort('No such comment!');
 
             $this->data['params'] += current(db()->query(
-                'SELECT ip, message FROM comments WHERE id = '.$commentId
+                'SELECT ip, message, email FROM comments WHERE id = '.$commentId
             )->fetchAll(PDO::FETCH_ASSOC));
 
             $this->data['params']['comment_id'] = $commentId;
@@ -135,7 +135,8 @@ class post extends Controller
         if(!$this->auth() && !compareIP($this->data['params']['ip']))
             $this->abort('Access denied.');
 
-
+        $usr = $this->data['params']['email'];
+        unset($this->data['params']['email']);
         if(!empty($_POST))
         {
 /***
@@ -170,7 +171,7 @@ XXX ::: what the fuck stop being a lazy shit
             if($this->createReport($sql))
             {
                 if($commentId === false)
-                    Statuslog::create('report', $reportId, 'made an edit');
+                    Statuslog::create('report', $reportId, 'made an edit', $this->auth() ? $_SERVER['PHP_AUTH_USER'] : $usr);
 
                 $this->flash[] = 'Your desired changes were made.';
                 $_SESSION['flash'] = serialize($this->flash);

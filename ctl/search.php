@@ -30,7 +30,7 @@ class search extends Controller
         /**
          * search by meta-data */
         preg_match_all(
-            '/([!\-])?(category|status|tag|priority)%3A(\w+)/i', 
+            '/([!\-])?(category|status|tag|priority)%3A([\w\d]+)/i', 
             $search, $matches, PREG_SET_ORDER
         );
         $require = $include = $exclude = [];
