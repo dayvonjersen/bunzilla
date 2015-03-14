@@ -15,7 +15,7 @@ if(!empty($this->data['categories']))
     {
         echo $i == 0 ? '<div class="row">' : '';
 ?>
-    <div class="col s12 m6 l3">
+    <div class="col s12 m6">
         <div class="section no-pad-top">
             <section class='section col s12 z-depth-5 category-<?= $cat['id'] ?>-base waves-effect' onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?=BUNZ_HTTP_DIR,'report/category/',$cat['id']?>'; }})(event);">
             <!--
@@ -40,7 +40,7 @@ if(!empty($this->data['categories']))
         </div>
     </div>
 <?php
-        if($i++ >= 5 || end($this->data['categories']) === $cat)
+        if($i++ >= 1 || end($this->data['categories']) === $cat)
         {
             echo '</div>';
             $i = 0;
@@ -51,7 +51,7 @@ if(!empty($this->data['categories']))
 ?>
     </section>
 
-    <section id="moveCategory" class="alert-base">
+    <section id="moveCategory" class="section alert-base">
         <form class=" z-depth-5 shade-text section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/category" method="post">
             <h1 class="icon-move">Move All Reports</h1>
             <div class="input-field col s12 m6 section">
@@ -66,8 +66,8 @@ if(!empty($this->data['categories']))
         </form>
     </section>        
 
-    <section id="createCategory" class="shade-text section">
-        <form class=" z-depth-5 section" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/category" method="post">
+    <section id="createCategory" class="secondary-base section">
+        <form class=" z-depth-5 section shade-text" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/category" method="post">
             <h1 class="icon-plus secondary-text">Create New Category</h1>
             <div class="input-field">
                 <input id="add-category-title" type="text" name="title" maxlength="255"/>

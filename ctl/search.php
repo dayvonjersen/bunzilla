@@ -23,26 +23,26 @@ class search extends Controller
         if(isset($_GET['q']))
             $criteria[] = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_ENCODED);
 
-        if(empty($criteria))
+        if(!count($criteria))
             exit;
 
         $search = implode(' ', $criteria);
         /**
          * search by meta-data */
         preg_match_all(
-            '/([!\-])?(category|status|tag|priority)%3A([\w\d]+)/i', 
+            '/([!\-])?(category|status|tag|priority)(%3A|:)([\w\d]+)/i', 
             $search, $matches, PREG_SET_ORDER
         );
         $require = $include = $exclude = [];
         foreach($matches as $match)
         {
             $col = strtolower($match[2]);
-            $match[3] = is_numeric($match[3]) ? (int)$match[3] : strtolower($match[3]);
+            $match[4] = is_numeric($match[3]) ? (int)$match[3] : strtolower($match[4]);
             switch($match[1])
             {
-                case '!': $require[$col][] = $match[3]; break;
-                case '-': $exclude[$col][] = $match[3]; break;
-                default:  $include[$col][] = $match[3]; 
+                case '!': $require[$col][] = $match[4]; break;
+                case '-': $exclude[$col][] = $match[4]; break;
+                default:  $include[$col][] = $match[4]; 
             }
             $search = trim(str_replace($match[0],'',$search));
         }
@@ -137,7 +137,7 @@ class search extends Controller
         $query == '' ? $query = 0 : '';
 
         $this->data['reports'] = [];
-        $this->data['test']['term']  = $search;
+        $this->data['test']['term']  = !strlen($search) ? implode(',', $criteria) : $search;
         $this->data['test']['query'] = 'SELECT * FROM reports WHERE '.$query;
         $benchmark_it = microtime(1);
         $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_ASSOC);    
@@ -179,7 +179,7 @@ class search extends Controller
     {
         $tags = self::getIds('tags', func_get_args());
 
-        return empty($tags) ? [] : db()->query(
+        return !count($tags) ? [] : db()->query(
             'SELECT report FROM tag_joins WHERE tag IN ('.$tags.')'
         )->fetchAll(PDO::FETCH_COLUMN);
     }
@@ -188,7 +188,7 @@ class search extends Controller
     {
         $statuses = self::getIds('statuses', func_get_args());
 
-        return empty($statuses) ? [] : db()->query(
+        return !count($statuses) ? [] : db()->query(
             'SELECT id FROM reports WHERE status IN ('.$statuses.')'
         )->fetchAll(PDO::FETCH_COLUMN);
     }
@@ -197,7 +197,7 @@ class search extends Controller
     {
         $categories = self::getIds('categories', func_get_args());
 
-        return empty($categories) ? [] : db()->query(
+        return !count($categories) ? [] : db()->query(
             'SELECT id FROM reports WHERE category IN ('.$categories.')'
         )->fetchAll(PDO::FETCH_COLUMN);
     }
@@ -206,8 +206,8 @@ class search extends Controller
     {
         $priorities = self::getIds('priorities', func_get_args());
 
-        return empty($priorities) ? [] : db()->query(
-            'SELECT report FROM tag_joins WHERE priority IN ('.$priorities.')'
+        return !count($priorities) ? [] : db()->query(
+            'SELECT id FROM reports WHERE priority IN ('.$priorities.')'
         )->fetchAll(PDO::FETCH_COLUMN);
     }
 
