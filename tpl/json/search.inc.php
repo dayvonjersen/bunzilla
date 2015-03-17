@@ -1,2 +1,4 @@
-<?php header('Content-Type: text/plain'); ?>
-<?= json_encode($this->data['test'], JSON_PRETTY_PRINT) ?>
+<?php
+define('RESPONSE', 200);
+$json = $this->data['test'];
+require BUNZ_TPL_DIR . 'template.inc.php';

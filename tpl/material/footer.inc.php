@@ -13,7 +13,7 @@
                                 <a href="https://github.com/generaltso/bunzilla">on github</a>
                             </li>
                             <li class='icon-person'>
-                                <a href="https://var.abl.cl/">at home</a>
+                                <a href="https://bunzilla.ga">at home</a>
                             </li>
                             <li class='hide-on-small-only icon-emo-happy'>
                                 <a href="http://japaneseemoticons.net/rabbit-emoticons">bunny emoticons</a>
