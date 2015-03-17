@@ -1,24 +1,33 @@
-#
-# 1. use res/generatepasswd.php
-# 1.5 uncomment the following lines
-# 2. ???
-# 3. HTTP authentication!
+### HTTP Authentication
+###
+### 1. use res/generatepasswd.php
+### 1.5 uncomment the following lines
+### 2. ???
+### 3. HTTP authentication!
 
 #AuthType Basic
 #AuthName "Bunzilla"
-#AuthUserFile /var/www/bunzilla/res/.htpasswd
+#AuthUserFile /path/to/bunzilla/res/.htpasswd
 #Require valid-user
+
+### End HTTP Authentication
 
 Options -MultiViews
 
-RewriteEngine On
-#
-# mod_rewrite is ~fun~
-#
-# so you probably want to just uncomment this line:
-#RewriteBase /bunzilla
+### 
+### Here is that mod_rewrite bit I was talking about
+### Just uncomment the following lines 
 
-# and comment all of these out, unless you're me or something
+#RewriteEngine On
+#RewriteBase /bunzilla
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-l
+#RewriteRule ^(.+)$ index.php?$1 [QSA,L]
+ 
+### and delete or comment out all of the following
+### unless you're actually me or something
+RewriteEngine On
 RewriteCond %{HTTP_HOST} ^meta\.bunzilla\.ga$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
