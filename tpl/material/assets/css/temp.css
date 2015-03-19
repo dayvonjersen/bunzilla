@@ -16,7 +16,7 @@ html {
 html,body#bunzilla { height: calc(100% - 60px) !important; }
 body#bunzilla { margin: 60px 0 0 0 !important; }
 #page-wrap { min-height: calc(100% - 150px + 60px) !important; margin-bottom: 0px; }
-#page-wrap::after { content: ""; display: block; }
+#page-wrap::after { content: none; display: block; }
 body#bunzilla > footer.footer, #page-wrap::after { padding: 0 !important; height: 150px !important; }
 #page-wrap > header { position: absolute; z-index: 1000; }
 
@@ -148,7 +148,7 @@ img { width: 50%; cursor: zoom-in }
 #list .collapsible-header > .row { /*padding: 0.5em 1em 0 1em;*/ }
 #list .collapsible-header a:hover { text-decoration: underline; cursor: pointer; color: #2962FF; }
 #list .subject-line { z-index: 110; font-size: 16px; }
-#list .subject-line a { margin: 0; line-height: 1.874em; display:inline-block; max-width: calc(100vw - 10em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: justify; width: 50% }
+#list .subject-line a { margin: 0 1em 0 0; line-height: 1.874em; display:inline-block; max-width: calc(100vw - 10em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: justify; }
 #list .divider { margin: 1rem 0; }
 #list .btn-flat.asc i::before {
     content: '\e845';
@@ -503,13 +503,13 @@ select.browser-default {
     z-index: 3;
     position: relative;
     top: 3px;
-    padding: 0.3333em 1em !important;
+    padding: 0.3333rem 1rem !important;
     box-shadow: none !important;
     min-width: 2rem !important;
 }
 
 #list span.tag {
-    z-index: -1;
+    z-index: -3;
 }
 
 @media(max-width: 600px)
@@ -598,6 +598,5 @@ border-bottom: 1px groove; }
     border-bottom: 1px solid #fff;
 }
 time { z-index: 10001; }
-.info-bar .tag:first-child::after {  border-bottom-width: 9px }
 .info-bar div.left { position: relative; z-index: 2 }
 ul.list.section { padding-top: 0.5rem; } /** SHOOT ME $12 **/

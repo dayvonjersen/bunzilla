@@ -187,12 +187,12 @@ document.body.onload = function(){
             </div>
 
 <?php // Click-to-expand-style heading ?>
-            <div class="collapsible-header waves-effect waves-light-blue no-select">
+            <div class="collapsible-header no-select">
                 <div class="info-bar">
 <?php // Link to comments section ?>
 <?php if($report['comments']) { ?>
                 <span class="comment-badge secondary-darken-2 z-depth-2 waves-effect">
-                    <a class="icon-chat" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#comments'?>"><?= $report['comments'] ?><span class="hide-on-small-only"> comment<?= $report['comments'] == 1 ? '' : 's' ?></span></a>
+                    <a class="icon-chat waves-effect" href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id'],'#comments'?>"><?= $report['comments'] ?><span class="hide-on-small-only"> comment<?= $report['comments'] == 1 ? '' : 's' ?></span></a>
                 </span>
 <?php } else echo '&nbsp;' ?> <!-- don't worry about it -->
 
