@@ -225,12 +225,12 @@ class cpanel extends Controller
                 {
                     $default_status = db()->query('SELECT id FROM statuses WHERE id != '.$id.' ORDER BY RAND() LIMIT 1')->fetchColumn();
                     db()->query('UPDATE statuses SET `default` = 1 WHERE id = '.$default_status);
-                    $this->flash[] = 'New default status is '.statusButton($default_status);
+                    $this->flash[] = 'New default status is '.Cache::read('statuses')[$default_status]['title'];
                 }
                 db()->query('UPDATE reports SET status = '.$default_status.' WHERE status = '.$id);
-                $stat = Cache::read('status');
+                $stat = Cache::read('statuses');
                 Statuslog::create('status', $default_status, 
-                    'all reports previously marked '.$stat[$id]['title'].' are now marked as '.$stat[$id]['title']
+                    'all reports previously marked '.$stat[$id]['title'].' are now marked as '.$stat[$default_status]['title']
                 );
                 break;
             case 'tag':
@@ -238,7 +238,33 @@ class cpanel extends Controller
                 $field = 'tag';
                 db()->query('DELETE FROM tag_joins WHERE tag = '.$id);
                 break;
-
+            case 'priority':
+                $table = 'priorities';
+                $field = 'priority';
+                $default_priority = db()->query('SELECT id FROM priorities WHERE `default` = 1')->fetchColumn();
+                if(selectCount('priorities') == 1)
+                    $this->abort('Can\'t delete the only priority! (Try editing it instead)');
+                if($default_priority == $id)
+                {
+                    if(selectCount('reports','priority != '.$id))
+                    {
+                        $default_priority = db()->query(
+                            'SELECT priority, COUNT(*) AS number_reports
+                             FROM reports 
+                             WHERE priority != '.$id.'
+                             GROUP BY priority
+                             ORDER BY number_reports
+                             LIMIT 1')->fetchColumn(0);
+                    } else {
+                        $default_priority = db()->query('SELECT id FROM priority WHERE id != '.$id);
+                    }
+                    db()->query('UPDATE priorities SET `default` = 1 WHERE id = '.$default_priority);
+                    $this->flash[] = 'New default priority set to '.Cache::read('priorities')[$default_priority]['title'];
+                }
+                db()->query('UPDATE reports SET priority = '.$default_priority.' WHERE priority = '.$id);
+                $prior = Cache::read('priorities');
+                StatusLog::create('priority', $default_priority, "all reports previously marked {$prior[$id]['title']} are now marked as {$prior[$default_priority]['title']}.");
+                break;
             default:
                 $this->abort('Unsupported action!');
         }
@@ -381,12 +407,12 @@ class cpanel extends Controller
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
             'icon' => filterOptions(0,'full_special_chars')
         ]);
-        $params['def'] = !selectCount('priority') ? 1 : 0;
+        $params['def'] = !selectCount('priorities') ? 1 : 0;
         $sql = 
-            'INSERT INTO priority
+            'INSERT INTO priorities
                 (id,title,color,icon,`default`)
             VALUES
-                (\'\',:title,:color,:icon,:def)';
+                (:id,:title,:color,:icon,:def)';
         if($this->_exec($sql,$params))
             $this->flash[] = 'Priority added';
     }

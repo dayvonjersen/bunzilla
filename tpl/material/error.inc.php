@@ -6,7 +6,7 @@ ob_clean();
 if(defined('BUNZ_TPL_DIR') && isset($this) && $this instanceof Controller && !is_null($this->auth))
 {
     $pageTitle = 'Whoops!';
-    $this->breadcrumbs[] = ['href' => BUNZ_HTTP_DIR,
+    $this->breadcrumbs[] = ['href' => '',
         'title' => BUNZ_PROJECT_TITLE,
         'icon' => 'icon-home'];
     $this->breadcrumbs[] = ['href' => '#',
@@ -30,7 +30,7 @@ if(isset($_ERROR))
 }
 ?>
 <article class="container section">
-    <img src="<?= BUNZ_HTTP_DIR ?>/tpl/material/assets/css/img/00.jpg" alt="/(x.x)\" class="left z-depth-5 circle responsive-img">
+    <img src="<?= BUNZ_HTTP_DIR ?>tpl/material/assets/css/img/00.jpg" alt="/(x.x)\" class="left z-depth-5 circle responsive-img">
     <hgroup class="section shade-text z-depth-5">
         <h1 class="alert-text">HTTP/1.1 404: Duck Season</h1>
         <h2 class="secondary-text">That's an error</h2>

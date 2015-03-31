@@ -38,7 +38,7 @@ if(!empty($this->data['statuses']))
                 <div class="col s6 input-field" style="position: relative;">
                     <p style="margin: 0">
                         <input type="radio" 
-                               name="default_status" 
+                               name="set_default" 
                                value="<?= $p['id'] ?>" 
                                id="default_status_<?= $p['id'] ?>"
                                <?= $p['default'] ? 'checked' : ''?>>

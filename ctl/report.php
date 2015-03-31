@@ -26,8 +26,8 @@ class report extends Controller
         elseif($cat['actual'])
             $field = 'actual';
         else
-            $field = false;
-        return $field;
+            return false;
+        return "r.$field";
     }
 
     public $breadcrumbs = [];
@@ -177,16 +177,21 @@ class report extends Controller
 
             'reports' => db()->query(
                 'SELECT 
-                    id, email, subject, '.$field.' 
-                    priority, status, closed,
-                    time, edit_time, updated_at
-                 FROM reports
-                 WHERE category = '.(int)$id.'
-                 ORDER BY closed ASC,
-                    priority DESC,
-                    time ASC,
-                    updated_at DESC,
-                    edit_time DESC
+                    r.id, r.email, r.subject, '.$field.' 
+                    r.priority, r.status, r.closed,
+                    r.time, r.edit_time, r.updated_at,
+                    COUNT(c.id) AS comment_count, MAX(c.time) AS last_comment
+                 FROM reports AS r
+                    LEFT JOIN comments AS c
+                    ON r.id = c.report
+                 WHERE r.category = '.(int)$id.'
+                 GROUP BY r.id
+                 ORDER BY r.closed ASC,
+                    last_comment DESC,
+                    r.priority DESC,
+                    r.updated_at DESC,
+                    r.edit_time DESC,
+                    r.time ASC
                  LIMIT '.$offset.',50'
             )->fetchALL(PDO::FETCH_ASSOC)
         ];
@@ -197,9 +202,8 @@ class report extends Controller
                 'SELECT tag
                  FROM tag_joins 
                  WHERE report = '.$report['id'])->fetchAll(PDO::FETCH_COLUMN);
-            $this->data['reports'][$i]['comments'] = selectCount(
-                'comments','report = '.$report['id']
-            );
+            $this->data['reports'][$i]['comments'] = $report['comment_count'];
+            $this->data['reports'][$i]['updated_at'] = max($report['updated_at'],$report['last_comment']);
         }
 
         $this->data['category_id'] = (int)$id;

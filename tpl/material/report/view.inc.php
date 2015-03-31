@@ -278,9 +278,8 @@ if(!empty($report['tags']))
         <?= status($report['status']) ?>
 
                 <span class="badge right z-depth-2 icon-<?= 
-$this->data['closed'] ? 'lock shade-base' : 'unlock secondary-base'?>" title="
-<?= 
-$this->data['closed'] ? 'closed' : 'open'?>"><span class="hide-on-small-only"><?=
+$this->data['closed'] ? 'lock shade-base' : 'unlock secondary-base'?>" title="<?= 
+$this->data['closed'] ? 'closed' : 'open'?>"><span class="hide-on-small-only"><?= 
 $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
  <!-- actual subject text -->
 <div style="clear: both;"></div>
@@ -355,9 +354,8 @@ if(!empty($this->data['timeline']))
     {
         /**
          * choo choo */
-        if(in_array($eh['id'], $statuslog_ids) && in_array($eh['id'],$comment_ids))
-            throw new RuntimeException("IT HAPPENED. FUCK. DEFCON9\n\nahem. a status and a comment share the same id. tell tso.");
-
+        // I guess it's fine if a comment and a statuslog message share the same ID
+        // but I might be wrong.
         if(in_array($eh['id'], $statuslog_ids))
         {
             $log = $statuslog[$eh['id']];
@@ -496,9 +494,19 @@ require BUNZ_TPL_DIR .'toolsModal.html';
                         <span class="material-input"></span>
                     </div>
          <p class="input-field" style="margin-top: 1em">
-            <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) ? ' checked' : ''?>>
+            <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value="1" <?= isset($_POST['disable_nlbr']) ? ' checked' : ''?>>
             <label for="disable_nlbr">
             <i class="icon-paragraph" style="text-decoration: line-through"></i>Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
+        </p>
+        <p class="input-field">
+            <input type="checkbox" id="literal_tabs" checked>
+            <label for="literal_tabs">
+            <i class="icon-tab"></i>Pressing the [TAB] key inserts &quot;\t&quot;</label>
+        </p>
+        <p class="input-field">
+            <input type="checkbox" id="disable_html" name="disable_html" value="1" <?= isset($_POST['disable_html']) ? ' checked' : ''?>>
+            <label for="disable_html">
+            <i class="icon-cancel"></i>Disable HTML/bbCode entirely</label>
         </p>
 <?php
 if($this->auth())

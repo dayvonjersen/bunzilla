@@ -100,9 +100,19 @@ foreach($fields as $name => $placeholder)
 <div class="" style="margin: 1em 0 2em 0"></div>
 
         <p class="input-field">
-            <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value=1"<?= isset($_POST['disable_nlbr']) || (empty($_POST) && $pageMode == 'edit') ? ' checked' : ''?>>
+            <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value="1" <?= isset($_POST['disable_nlbr']) || (empty($_POST) && $pageMode == 'edit') ? ' checked' : ''?>>
             <label for="disable_nlbr">
             <i class="icon-paragraph" style="text-decoration: line-through"></i>Disable insertion of automatic linebreaks (&lt;br/&gt;)</label>
+        </p>
+        <p class="input-field">
+            <input type="checkbox" id="literal_tabs" checked>
+            <label for="literal_tabs">
+            <i class="icon-tab"></i>Pressing the [TAB] key inserts &quot;\t&quot;</label>
+        </p>
+        <p class="input-field">
+            <input type="checkbox" id="disable_html" name="disable_html" value="1" <?= isset($_POST['disable_html']) ? ' checked' : ''?>>
+            <label for="disable_html">
+            <i class="icon-cancel"></i>Disable HTML/bbCode entirely</label>
         </p>
         <div class="input-field center" style="margin-bottom: 1em">
             <a href="#toolsModal" data-for="<?= $name ?>" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>

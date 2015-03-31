@@ -32,6 +32,10 @@ $(window).load(function(){
     $('.input-field textarea').focusout(function(){bullshit(this)});
     $('.input-field input').keypress(function(){bullshit(this)});
     $('.input-field textarea').keypress(function(){bullshit(this)});
+    $('.input-field input').keydown(function(){bullshit(this)});
+    $('.input-field textarea').keydown(function(){bullshit(this)});
+    $('.input-field input').keyup(function(){bullshit(this)});
+    $('.input-field textarea').keyup(function(){bullshit(this)});
 /**
  * codrops google nexus 7 menu 
  * http://tympanus.net/codrops/?p=16030

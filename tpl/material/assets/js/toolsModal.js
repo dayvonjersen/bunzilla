@@ -36,9 +36,11 @@ var toolsModal = (function()
         textbox.addEventListener("keydown", tabtestidk);
     }
 
+    /**
+     * fucking up my ~beautiful~ ~expressive~ javascript with this hacky crap */
     function tabtestidk(evt) {
         var keyCode = evt.keyCode || evt.which;
-        if(keyCode == 9)
+        if(keyCode == 9 && document.getElementById('literal_tabs').checked === true)
         {
             evt.preventDefault();
             var oldValue   = textbox.value,

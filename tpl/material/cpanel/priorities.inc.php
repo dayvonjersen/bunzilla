@@ -38,7 +38,7 @@ if(!empty($this->data['priorities']))
                 <div class="col s6 input-field" style="position: relative;">
                     <p style="margin: 0">
                         <input type="radio" 
-                               name="default_priority" 
+                               name="set_default" 
                                value="<?= $p['id'] ?>" 
                                id="default_priority_<?= $p['id'] ?>"
                                <?= $p['default'] ? 'checked' : ''?>>
