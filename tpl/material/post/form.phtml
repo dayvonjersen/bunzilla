@@ -247,7 +247,11 @@ function previewtest()
     formData.append('subject',document.getElementById('subject').value);
 <?php
     foreach($fields as $name => $not_used)
+    {
+        if(!$cat[$name])
+            continue;
         echo "\tformData.append('$name',document.getElementById('$name').value);\n";
+    }
 ?>
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '<?= BUNZ_HTTP_DIR, $pageAction ?>?json');
