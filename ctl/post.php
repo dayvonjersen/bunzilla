@@ -8,7 +8,7 @@ class post extends Controller
 {
     // php class constants cannot contain expressions :\
     // this is no longer even the longest line which is sad
-    const ALLOWED_HTML = 'b|i|kbd|del|ins|strike|s|u|ol|ul|li|dt|dd|dl|sup|sub|small|big|image|link';
+    const ALLOWED_HTML = 'b|i|kbd|del|ins|strike|s|u|ol|ul|li|dt|dd|dl|sup|sub|small|big|image|link|code';
 
     public function __construct()
     {
@@ -139,6 +139,7 @@ class post extends Controller
         unset($this->data['params']['email']);
         if(!empty($_POST))
         {
+            $this->previewReport();
 /***
 XXX ::: what the fuck stop being a lazy shit
 ***/
@@ -283,6 +284,7 @@ XXX ::: what the fuck stop being a lazy shit
         $location = BUNZ_HTTP_DIR.'report/view/'.(int)$id;
         if(!empty($_POST))
         {
+            $this->previewReport();
             if($this->createReport($sql))
             {
                 $this->flash[] = 'Comment added.';
@@ -322,10 +324,6 @@ XXX ::: what the fuck stop being a lazy shit
 
         $filtOpts = $this->getFilterOptions('report');
 
-       // throw new Exception(print_r($filtOpts,1));
-//        $q = filter_input_array(INPUT_POST,$filtOpts,true);
-//        $this->data['params'] = array_merge($q,array_combine(array_keys($filtOpts),array_fill(0,count($filtOpts),"")));
-
         $this->data['params'] = $filtOpts->input_array();
         // force identity for logged in developers
         if($this->auth())
@@ -338,17 +336,15 @@ XXX ::: what the fuck stop being a lazy shit
         $this->data['params']['epenis'] = (int)$this->auth();
         $this->data['params']['priority'] = db()->query('SELECT id FROM priorities WHERE `default` = 1')->fetchColumn();
 
-//throw new Exception(print_r($this->data['params'],1));
         $sql = 'INSERT INTO reports 
-
-        (id,time,'.implode(',',array_keys($this->data['params'])).')
-
+            (id,time,'.implode(',',array_keys($this->data['params'])).')
                 VALUES 
-
-(\'\',UNIX_TIMESTAMP(),:'.implode(',:',array_keys($this->data['params'])).')';
+            (\'\',UNIX_TIMESTAMP(),:'
+            .implode(',:',array_keys($this->data['params'])).')';
 
         if(!empty($_POST))
         {
+            $this->previewReport();
             if($this->createReport($sql))
             {
                 $reportId = db()->lastInsertId();
@@ -365,16 +361,16 @@ XXX ::: what the fuck stop being a lazy shit
      * Callback to format/filter posts 
      * Taken straight from forum software I made as a teenager
      */
-    public function messageFilter($msg)
+    public static function messageFilter($msg)
     {
         $msg = htmlspecialchars($msg);
         $msg = trim(str_replace([chr(7),chr(160),chr(173)], '', $msg));
         if(isset($_POST['disable_html']))
             return $msg;
 
-        while(preg_match('/(&lt;|\[)('.self::ALLOWED_HTML.')(&gt;|\])(.*?)\1\/\2\3/misu',$msg))
+        while(preg_match('/(\[|&lt;)('.self::ALLOWED_HTML.')(\]|&gt;)(.*?)\1\/\2\3/misu',$msg))
             $msg = preg_replace(
-                '/(&lt;|\[)('.self::ALLOWED_HTML.')(&gt;|\])(.*?)\1\/\2\3/misu','<$2>$4</$2>',$msg
+                '/(\[|&lt;)('.self::ALLOWED_HTML.')(\]|&gt;)(.*?)\1\/\2\3/misu','<$2>$4</$2>',$msg
             );
 
         /**
@@ -437,7 +433,7 @@ XXX ::: what the fuck stop being a lazy shit
          * @usage: <code php><?= 'hello, world' ?></code>
          * highlight.js does the hard stuff */
         preg_match_all(
-            '/\&lt;code(\s+[0-9a-z]+)?&gt;(.+?)\&lt;\/code\&gt;/ims',
+            '/\<code(\s+[0-9a-z]+)?\>(.+?)\<\/code\>/ims',
             $msg,$codes,PREG_SET_ORDER
         );
         foreach($codes as $code)
@@ -550,5 +546,16 @@ if(!$this->auth())
         // move zig
         $stmt = db()->prepare($sql);
         return($stmt->execute($this->data['params']));
+    }
+
+    /**
+     * let's see if I can shoehorn this in here */
+    private function previewReport()
+    {
+        if(isset($_POST['preview_report']))
+        {
+            $this->tpl = 'post/preview';
+            exit;
+        }
     }
 }

@@ -21,6 +21,9 @@ if(basename($_SERVER['PHP_SELF']) === basename(__FILE__))
     echo '<html><body style="background: #fff !important; margin-top: 150px">';
 }
 ?>
+<!-- necessary for preview -->
+<script src="<?= BUNZ_JS_DIR, 'highlight.js' ?>"></script>
+
 <h1 class="<?= $pageIcon ?>"><?= $pageTitle ?></h1>
 <form action="<?= BUNZ_HTTP_DIR, $pageAction ?>"
       id="withToolsModal"
@@ -115,14 +118,24 @@ foreach($fields as $name => $placeholder)
             <i class="icon-cancel"></i>Disable HTML/bbCode entirely</label>
         </p>
         <div class="input-field center" style="margin-bottom: 1em">
-            <a href="#toolsModal" data-for="<?= $name ?>" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
-            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect"<?php
+            <div class="row">
+                <a href="#toolsModal" 
+                   data-for="<?= $name ?>"
+                   class="col s6 m3 btn btn-flat waves-effect secondary-lighten-3 icon-code"
+                   onclick="toggleModal(event)">toggle toolbar</a>
+                <a href="#" class="col s6 m3 btn icon-magic waves-effect primary-base"
+                    onclick="previewtest();">Preview <sup class='primary-darken-4'>NEW!</sup></a>
+                <button type="reset" 
+                        class="col s6 m3 btn btn-flat white shade-text icon-cancel waves-effect" <?php
 if($pageMode == 'new' && empty($_POST))
  echo <<<JAVASCRIPT
 onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
 JAVASCRIPT;
 ?>><?= $pageMode == 'new' && empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
-            <button type="submit" class="btn icon-plus waves-effect category-<?= $cat['id'] ?>-base">Submit</button>
+                <button type="submit" 
+                        class="col s6 m3 btn icon-plus waves-effect category-<?= $cat['id'] ?>-base">Submit</button>
+            </div>
+
         </div>
 <?php
 /**
@@ -183,6 +196,77 @@ if(!defined('FUX') && !isset($this->data['params']['comment_id']))
 ?>
     </div>
 </form>
+<div class="md-modal md-effect-7 z-depth-5" style="height: 100vh" id="preview_modal">
+    <div class="md-content shade-text section" style="height: 100%; overflow: auto; ">
+        <h2>Preview:</h2>
+        <div id="preview_report"></div>
+        <div class="section center" style="margin-bottom: 2em">
+            <button class="btn btn-flat danger-base waves-effect waves-red icon-cancel" 
+                    onclick="togglePreviewModal()">Close</button>
+            <button id="fakesubmit" type="submit" class="btn icon-plus waves-effect category-<?= $cat['id'] ?>-base" onclick="document.forms['withToolsModal'].submit()">OK, Post This</button>
+        </div>
+    </div>
+</div>
+<script>
+function togglePreviewModal() {
+    var modal = document.getElementById('preview_modal').classList;
+    if(modal.contains('md-show'))
+    {
+        setTimeout(function(){
+            document.getElementById('preview_report').innerHTML = "";
+            document.getElementById('fakesubmit').disabled = false;
+        },1500);
+    }
+    modal.toggle('md-show');
+}
+function populateModal(field, value)
+{
+    var section = document.createElement('section'),
+        h6 = document.createElement('h6'),
+        blockquote = document.createElement('blockquote');
+
+    section.setAttribute('class', 'section category-<?=$cat['id']?>');
+    h6.appendChild(document.createTextNode(field));
+    if(!value)
+    {
+        blockquote.classList.add('alert-text');
+        blockquote.innerHTML = field + ' cannot be left blank!';
+        document.getElementById('fakesubmit').disabled = true;
+    } else {
+        blockquote.innerHTML = value;
+    }
+
+    section.appendChild(h6);
+    section.appendChild(blockquote);
+    document.getElementById('preview_report').appendChild(section);
+}
+function previewtest()
+{
+    var formData = new FormData();
+    formData.append('preview_report', true);
+    formData.append('subject',document.getElementById('subject').value);
+<?php
+    foreach($fields as $name => $not_used)
+        echo "\tformData.append('$name',document.getElementById('$name').value);\n";
+?>
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '<?= BUNZ_HTTP_DIR, $pageAction ?>?json');
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4)
+        {
+            var previewText = JSON.parse(xhr.responseText);
+            for(field in previewText)
+                populateModal(field, previewText[field]);
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+            togglePreviewModal();
+        }
+    };
+    xhr.send(formData);
+}
+
+</script>
 <?php
 /**
  * XXX */

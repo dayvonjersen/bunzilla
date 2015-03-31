@@ -17,19 +17,6 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
         <meta name='description' content='<?= BUNZ_PROJECT_MISSION_STATEMENT ?>'>
 
         <title><?= isset($pageTitle) ? "$pageTitle :: " : '',BUNZ_PROJECT_TITLE, ' :: tracked by Bunzilla' ?></title>
-
-<?php
-/**
-<!--        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>-->
-<!--        <link rel='stylesheet' href='/bunzilla/material/materialize.min.css'>-->
-        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>materialize.min.css'>
-
-        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>bunzilla-icons.css'>
-        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
-        <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>temp.css'>
-        <link rel='stylesheet' type='text/css' href='<?=  BUNZ_TPL_HTTP_DIR ?>customcolors.css.php'>
-
-        <link rel='stylesheet' href='<?=  BUNZ_CSS_DIR ?>gn-codrops.css'>**/ ?>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>all.css'>
         <link rel='stylesheet' href='<?= BUNZ_TPL_HTTP_DIR ?>customcolors.css.php'>
         <link rel='stylesheet' href='<?= BUNZ_CSS_DIR ?>highlight.js/foundation.css'>
@@ -37,7 +24,7 @@ require_once BUNZ_TPL_DIR . 'displayfuncs.inc.php';
 $dir = dir(BUNZ_TPL_DIR.'assets/css/highlight.js');
 while(($file = $dir->read()) !== false)
     if(preg_match('/\.css$/',$file))
-        echo '<link rel="alternate stylesheet" href="',BUNZ_CSS_DIR,'highlight.js/',$file,'" title="',$file,'">',"\n";
+        echo "\t\t",'<link rel="alternate stylesheet" href="',BUNZ_CSS_DIR,'highlight.js/',$file,'" title="',$file,'">',"\n";
 $dir->close();
 ?>
     </head>
@@ -101,18 +88,18 @@ if($this->auth())
 <?php
 if(isset($this->breadcrumbs) && count($this->breadcrumbs))
 {
-    echo "\t\t\t\t",'<ul class="gn-submenu">',"\n";
+    echo "\t\t\t\t\t\t\t",'<ul class="gn-submenu">',"\n";
 
     $bread = $this->breadcrumbs;
     foreach($bread as $crumb)
     {
-        printf("\t\t\t\t\t<li><a class='waves-effect gn-icon %s' href='%s'>%s</a></li>\n",
+        printf("\t\t\t\t\t\t\t\t<li><a class='waves-effect gn-icon %s' href='%s'>%s</a></li>\n",
             $crumb['icon'], BUNZ_HTTP_DIR.$crumb['href'], 
             $crumb == end($bread) ? "<abbr data-textlabel='you are here &#10548;'>{$crumb['title']}</abbr>" : $crumb['title']
         );
     }
 
-    echo "\t\t\t\t</ul>\n\t\t\t</li>\n";
+    echo "\t\t\t\t\t\t</ul>\n";
 } else {
 ?>
                                 <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index Page</a>
@@ -171,25 +158,11 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
         } 
         elseif(strpos($crumb['href'],'report/category') === 0)
         {
-/**
-
-    ;_;
-
-            echo categoryDropdown(
-                isset($category) ? $category['id'] : 0,
-                false,
-                'window.location="'.BUNZ_HTTP_DIR.'report/category/" + this.value'
-            );
-**/
             $currentCat = $this->data['categories'][$category['id']];
-            echo 
-//'<i onclick="document.getElementById(\'__xx\').dispatchEvent(new Event(\'click\'))" class="icon-down-open-mini right" style="margin-right: 1em; cursor: pointer"></i>',
-                  '<a href="',BUNZ_HTTP_DIR,'report/category/',$category['id'],
-                  '" class="waves-effect"',// dropdown-button" data-activates="bc-catlist"',
-                  '"><span class="hide-overflow-text"><i class="',$currentCat['icon'],'"></i><span class="hide-on-med-and-down">',
-                  $currentCat['title'],'</span></span></a>';/*,
-                  '<a id="__xx" class="waves-effect hax dropdown-button  ',$className,
-                  '" style="width: 25%" data-activates="bc-catlist"><i class="icon-down-open-mini"></i></a>';*/
+            echo  '<a href="',BUNZ_HTTP_DIR,'report/category/',$category['id'],
+                  '" class="waves-effect"',
+                  '><span class="hide-overflow-text"><i class="',$currentCat['icon'],'"></i><span class="hide-on-med-and-down">',
+                  $currentCat['title'],'</span></span></a>';
         } else {
             echo '<a href="',BUNZ_HTTP_DIR,$crumb['href'],
                  '" class="waves-effect "><span class="hide-overflow-text"> ',

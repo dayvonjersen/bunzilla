@@ -184,29 +184,6 @@ document.body.onload = (function(){
         else
             toolsModal.deactivate();
     }
-
-/**
-    document.body.addEventListener('click', function(evt){
-        var modal = document.getElementById('toolsModal'),
-            form  = document.getElementById('withToolsModal');
-        if(evt.target && !(evt.target instanceof HTMLAnchorElement) && evt.target != modal && evt.target != form)
-            $('#toolsModal').removeClass('md-show');
-    });
-**/
-
-if(0){
-    $('.modal-trigger').leanModal({
-        opacity: .1,
-        in_duration: 225,
-        out_duration: 500,
-        ready: function(){ document.getElementById('description').scrollIntoView(); toolsModal.activate() },
-        complete: function(){ toolsModal.deactivate() },
-        posTop: 0,
-        posBottom: 0,
-    });
-//    $('.tooltipped').tooltip({"delay": 50});
-}
-    
 });
 </script>
 <!--

@@ -287,7 +287,7 @@ $this->data['closed'] ? 'CLOSED' : 'OPEN'?></span></span>
             <h2 id="subject" class="" style="margin: 0 1em; padding-bottom: 1em; clear: both"><?= $report['subject'] ?></h2>
 
 
-
+            </section>
         </section>
     </header>
 
@@ -522,7 +522,7 @@ if($this->auth())
 ?>
         <div class="input-field center">
             <a href="#toolsModal" data-for="message" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
-            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect"<?php
+            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect" <?php
 if(empty($_POST))
  echo <<<JAVASCRIPT
 onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
