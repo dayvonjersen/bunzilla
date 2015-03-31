@@ -23,7 +23,7 @@ Options -MultiViews
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-l
-#RewriteRule ^(.+)$ index.php?$1 [QSA,L]
+#RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
  
 ### and delete or comment out all of the following
 ### unless you're actually me or something

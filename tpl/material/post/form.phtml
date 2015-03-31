@@ -140,7 +140,7 @@ JAVASCRIPT;
 <?php
 /**
  * XXX */
-if(!defined('FUX') && !isset($this->data['params']['comment_id']))
+if(!defined('FUX') && count($this->data['tags']) && !isset($this->data['params']['comment_id']))
 {
 ?>
         <div class="input-field collapsible no-select section" id="tagz" style="padding: 1em;">
@@ -154,11 +154,11 @@ if(!defined('FUX') && !isset($this->data['params']['comment_id']))
             </div>
 
             <div class="collapsible-body section z-depth-2 " style="margin: -1rem -1rem 0">
-            <div style="padding-top: 1rem">&nbsp;</div>
-            <div class="row section">
-                <div class="divider" style="margin-bottom: 1rem"></div>
-            </div>
-            <div class="row section no-pad-top no-pad-bot">
+                <div style="padding-top: 1rem">&nbsp;</div>
+                <div class="row section">
+                    <div class="divider" style="margin-bottom: 1rem"></div>
+                </div>
+                <div class="row section no-pad-top no-pad-bot">
 <?php
 //
 // todo: figure out Javascript solution for this
@@ -179,17 +179,17 @@ if(!defined('FUX') && !isset($this->data['params']['comment_id']))
     foreach($this->data['tags'] as $id => $tag)
     {
 ?>
-    <div class="input-field col s6 m3 l1">
-        <input type="checkbox" name="tags[]" id="tag_<?= $id ?>" value="<?= $id ?>"<?= in_array($id, $checked) ? ' checked' : ''?>>
-        <label for="tag_<?= $id ?>"><small><?= $tag['title'] ?></small></label>
-    </div>
+                    <div class="input-field col s6 m3 l1">
+                        <input type="checkbox" name="tags[]" id="tag_<?= $id ?>" value="<?= $id ?>"<?= in_array($id, $checked) ? ' checked' : ''?>>
+                        <label for="tag_<?= $id ?>"><small><?= $tag['title'] ?></small></label>
+                    </div>
 <?php
         if($i%12 == 0 || $tag === end($this->data['tags']))
             echo '</div>', $tag !== end($this->data['tags']) ? '<div class="row section no-pad-top no-pad-bot">' : '';
         $i++;
     }}
 ?>
-        </div>
+            </div>
         </div>
 <?php
 }
