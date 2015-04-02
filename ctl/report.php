@@ -74,7 +74,7 @@ class report extends Controller
             'SELECT
                 COUNT(*) AS total_issues,
                 COUNT(DISTINCT(email)) AS unique_posters,
-                GREATEST(MAX(edit_time),MAX(time),MAX(updated_at))
+                GREATEST(COALESCE(MAX(edit_time),0),MAX(time),COALESCE(MAX(updated_at),0))
                     AS last_activity
              FROM reports
              WHERE category = '.$id
