@@ -5,6 +5,7 @@
 *.txt
 res/.htpasswd
 res/settings.ini
+res/db.config.ini
 update.sh
 *.cache
 diff/reports/*

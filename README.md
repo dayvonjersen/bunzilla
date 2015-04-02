@@ -88,18 +88,21 @@ Put it in `tpl/material/assets/js/` as `highlight.js`
 
 2. Setup the DB and configure the db connection credentials
 `$ mysql -u root < bunzilla.sql`
-`$ vim res/db.config.ini`
+`$ vim res/example.db.config.ini`
+And save as **res/db.config.ini**
 
-3. Edit `res/settings.ini` and customize it to your liking, filling in your project's details.
+3. Edit `res/example.settings.ini` and customize it to your liking, filling in your project's details.
+And save as **res/settings.ini**
 
-4. Edit `.htaccess` for mod_rewrite, make sure it looks like this:
+4. Edit `example.htaccess` for mod_rewrite, make sure it looks like this:
 	`RewriteEngine On`
 	`# for http://example.com/bunzilla`
 	`RewriteBase /bunzilla`
 	`RewriteCond %{REQUEST_FILENAME} !-d`
 	`RewriteCond %{REQUEST_FILENAME} !-f`
 	`RewriteCond %{REQUEST_FILENAME} !-l`
-	`RewriteRule ^(.+)$ index.php?$1 [QSA,L]`
+	`RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]`
+And save as **.htaccess**
 
 4. **Right now all administrative access (login) is done through HTTP Authentication.**
 
@@ -119,6 +122,9 @@ Put it in `tpl/material/assets/js/` as `highlight.js`
 	But again, I must stress that this is optional. 
 	
 5. Open up bunzilla in your web browser, log in, go to the cpanel (link in the sidebar), add some categories, statuses, tags, and start posting some reports!
+
+**UPDATE Wed 01 Apr 2015 11:04:40 PM EDT**
+You should be able to upgrade bunzilla at any time with `git pull`
 
 ---
 
