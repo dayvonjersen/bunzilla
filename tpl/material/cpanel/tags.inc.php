@@ -65,9 +65,11 @@ if(!empty($this->data['tags']))
             </div>
 <?php
     }
-}
 ?>
     </section>
+<?php
+}
+?>
 
         <div class="section">
             <p>Tags do things.</p>
