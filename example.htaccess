@@ -1,0 +1,26 @@
+### HTTP Authentication
+###
+### 1. use res/generatepasswd.php
+### 1.5 uncomment the following lines
+### 2. ???
+### 3. HTTP authentication!
+
+#AuthType Basic
+#AuthName "Bunzilla"
+#AuthUserFile /path/to/bunzilla/res/.htpasswd
+#Require valid-user
+
+### End HTTP Authentication
+
+Options -MultiViews
+
+### Here is an example mod_rewrite configuration
+
+RewriteEngine On
+RewriteBase /bunzilla
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+ 
+### if that doesn't work read up on mod_rewrite 

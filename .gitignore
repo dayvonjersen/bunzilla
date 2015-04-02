@@ -4,7 +4,9 @@
 *.htm
 *.txt
 res/.htpasswd
+res/settings.ini
 update.sh
 *.cache
 diff/reports/*
 diff/comments/*
+.htaccess
