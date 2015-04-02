@@ -76,7 +76,24 @@ $(window).load(function(){
     setTimeout(function(){
     if(window.scrollY != 0)
         headroom.unpin();
-    }, 400);   
+    }, 400);
+
+    if(typeof diffModal !== "undefined"){
+    var regex = /\/diff\/(reports|comments)\/(\d+)/,
+        matches;
+    for(var i = 0; i < document.links.length; i++)
+    {
+        matches = regex.exec(document.links[i].pathname);
+        if(matches)
+        {
+            (function(anchor,url,type,id) {
+                anchor.addEventListener('click',function(evt){
+                    evt.preventDefault();
+                    diffModal(url,type,id);
+                });
+            })(document.links[i],document.links[i].href,matches[1],matches[2]);
+        }
+    }}
 });
 /*
 ***************

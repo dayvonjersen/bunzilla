@@ -1,0 +1,95 @@
+<!--
+    pretty diff viewer
+-->
+<style>@import '<?= BUNZ_CSS_DIR ?>modal-alt.css';</style>
+<div class="md-modal md-effect-10 " id="diff-modal" style="max-height: 50vh; box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.22), 0 -8px 10px 0 rgba(0, 0, 0, 0.2), 0 -4px 5px 0 rgba(0, 0, 0, 0.22);">
+    <div class="md-content shade-text section"
+         style="height: 100%; ">
+        <h2>Viewing diff for <a onclick="toggleDiffModal()" href="" id="diff-modal-link"></a></h2>
+        <div id="diff-modal-target" style="max-height: 33vh; overflow: auto;" data-diff=""></div>
+        <div class="section center row" style="margin-bottom: 2em">
+            <a href="" id="diff-raw-link" class="col s6 btn btn-flat shade-text waves-effect icon-article-alt" target="_blank">View Raw</a>
+            <a href="#" 
+               class="col s6 btn btn-flat danger-base waves-effect waves-red icon-cancel" 
+               onclick="event.preventDefault();toggleDiffModal()">Close</a>
+        </div>
+    </div>
+</div>
+<script>
+function toggleDiffModal(force) {
+    var modal = document.getElementById('diff-modal').classList;
+    if(typeof force !== "undefined")
+    {
+        if(force)
+            modal.add("md-show");
+        else
+            modal.remove("md-show");
+    } else
+        modal.toggle('md-show');
+}
+function diffModal(diffurl,difftype,diffid)
+{
+    var mymodal  = document.getElementById('diff-modal-target'),
+        datadiff = (new URL(diffurl)).pathname.substr(1).replace(/\/+/g,"-");
+
+    if(mymodal.dataset.diff == datadiff)
+    {
+        toggleDiffModal();
+        return;
+    } else if(document.querySelector('#diff-modal-text')) {
+        mymodal.removeChild(document.getElementById('diff-modal-text'));
+    }
+    mymodal.dataset.diff = datadiff;
+    document.getElementById('diff-raw-link').setAttribute('href',diffurl); 
+    var diffLink = document.getElementById('diff-modal-link');
+    switch(difftype)
+    {
+        case 'reports':
+            diffLink.setAttribute('href','<?= BUNZ_HTTP_DIR ?>report/view/'+diffid);
+            diffLink.innerHTML = "report #" + diffid;
+            break;
+        // note, comments will never appear on the reports/category listing
+        case 'comments':
+            diffLink.setAttribute('href','#reply-' +diffid);
+            diffLink.innerHTML = "comment #"+diffid;
+            break;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', diffurl);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4)
+        {
+            var lines = xhr.responseText.split("\n"),
+                diffregex = /^([\>\<\+\-@]+)/,
+                pre = document.createElement('pre');
+            pre.setAttribute('id', 'diff-modal-text');
+            for(var i = 0; i < lines.length; i++)
+            {
+                var diffsymbol = diffregex.exec(lines[i]),
+                    span = document.createElement('div'),
+                    color;
+                diffsymbol = !!diffsymbol ? diffsymbol[1] : 0;
+                switch(diffsymbol)
+                {
+                    case '+++': case '---': 
+                        if(lines[i].indexOf(diffsymbol + " /tmp/") !== -1)
+                            continue;
+                        color = diffsymbol === "+++" ? 'success-lighten-3' : 'danger-lighten-3';
+                        break;
+                    case '@@':  color = "secondary-lighten-3"; break;
+                    case '+': case '>': color = 'success-lighten-4';  break;
+                    case '-': case '<': color = 'danger-lighten-4'; break;
+                
+                    default: color = "shade-text";
+                }
+                span.setAttribute('class',color);
+                span.appendChild(document.createTextNode(lines[i]));
+                pre.appendChild(span);
+            }
+            mymodal.appendChild(pre);
+            toggleDiffModal(1);
+        }
+    }
+    xhr.send();
+}
+</script>

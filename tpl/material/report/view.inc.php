@@ -89,12 +89,9 @@ if($this->auth())
                     <p class="icon-mail"><?= $report['email'], 
 epenis($report['epenis'])?></p>
                     <!--
-                        submission and edit time
+                        submission time
                     -->
-                    <p class="icon-time" title="submitted at"><?= datef($report['time']) ?></p><?=
-$report['edit_time'] ? '<p class="icon-pencil-alt"><a class="icon-time" href="'.BUNZ_DIFF_DIR.'reports/'.$report['id'].'">'.datef($report['edit_time']).'</a></p>' : ''
-
-?>
+                    <p class="icon-time" title="submitted at"><?= datef($report['time']) ?></p>
                 </section>
 
                 <!--
@@ -311,6 +308,15 @@ foreach(['description','reproduce','expected','actual'] as $field)
 <?php
     }
 }
+if($report['edit_time'])
+{
+?>
+    <section class="section category-<?=$cat['id']?>-text">
+        <div class="divider"></div>
+        <p class="icon-pencil-alt"><strong>edit</strong> <em><a href="<?= BUNZ_DIFF_DIR ?>reports/<?= $report['id']?>"><?= datef($report['edit_time']) ?></a></em></p>
+    </section>
+<?php
+}
 ?>
         </div>
     </main>
@@ -394,7 +400,7 @@ if($this->auth() || compareIP($comment['ip']))
                            title="edit this comment" position: absolute; right: 2rem;"><i class='icon-pencil-alt'></i></a>
 <?php
 }
-?><?= $comment['message'] ?><?php
+?><?= $comment['message'] ?></blockquote><?php
 if($comment['edit_time'])
 {
 ?>
@@ -402,7 +408,7 @@ if($comment['edit_time'])
                 <p class="icon-pencil-alt"><strong>edit</strong> <em><a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>"><?= datef($comment['edit_time']) ?></a></em></p>
 <?php
 }
-?></blockquote>
+?>
 <?php
 /**
  * nested view; only 1 deep right now */
@@ -434,7 +440,7 @@ if($this->auth() || compareIP($comment['ip']))
                         <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='btn btn-floating btn-small waves-effect waves-green right' title="edit this comment" position: absolute; right: 4rem;"><i class='icon-pencil-alt'></i></a>
 <?php
 }
-?><?= $comment['message'] ?><?php
+?><?= $comment['message'] ?></blockquote><?php
 if($comment['edit_time'])
 {
 ?>
@@ -443,7 +449,7 @@ if($comment['edit_time'])
 <?php
 }
 ?>
-                </blockquote>
+
             </section>
 <?php
     }
@@ -521,14 +527,15 @@ if($this->auth())
 }
 ?>
         <div class="input-field center">
-            <a href="#toolsModal" data-for="message" class="btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
-            <button type="reset" class="btn-flat white shade-text icon-cancel waves-effect" <?php
+            <div class="row">
+            <a href="#toolsModal" data-for="message" class="col s4 btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
+            <button type="reset" class="col s4 btn-flat white shade-text icon-cancel waves-effect" <?php
 if(empty($_POST))
  echo <<<JAVASCRIPT
 onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
 JAVASCRIPT;
 ?>><?= empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
-                    <button type="submit" class="btn category-<?= $cat['id'] ?>-darken-4 icon-chat waves-effect">post!</button></div>
+                    <button type="submit" class="col s4 btn category-<?= $cat['id'] ?>-darken-4 icon-chat waves-effect">post!</button></div>
         </div>
             
                 </form>
@@ -538,7 +545,7 @@ JAVASCRIPT;
 ?>
         </footer>
     </article>
-
 <?php
+require BUNZ_TPL_DIR . 'diffModal.html';
 require BUNZ_TPL_DIR . 'footer.inc.php';
 ?>

@@ -89,7 +89,7 @@ class post extends Controller
         file_put_contents($edit, "$text2\n");
         file_put_contents(
             BUNZ_DIR . 'diff/'.$type.'/'.(int)$id,
-            "$what changed @ ".date('r')."\n".`diff $orig $edit`,
+            "$what changed @ ".date('r')."\n".`diff -u $orig $edit`,
             FILE_APPEND | LOCK_EX
         );
         unlink($orig);
@@ -139,7 +139,6 @@ class post extends Controller
         unset($this->data['params']['email']);
         if(!empty($_POST))
         {
-            $this->previewReport();
 /***
 XXX ::: what the fuck stop being a lazy shit
 ***/
@@ -149,13 +148,18 @@ XXX ::: what the fuck stop being a lazy shit
             $changes = filter_input_array(INPUT_POST, $filtOpts);
             $set = [];
             foreach($this->data['params'] as $field => $value)
+            {
                 if(!isset($changes[$field]) || $changes[$field] === $value)
-                    unset($this->data['params'][$field]);
-                else {
+                {    if(!isset($_POST['preview_report']))
+                        unset($this->data['params'][$field]);
+                }else {
                     $set[] = $field .' = :'.$field;
                     $this->data['params'][$field] = $changes[$field];
-                    $this->diff($field, $value, $changes[$field], $commentId === false ? 'reports' : 'comments', $commentId === false ? $reportId : $commentId);
+                    if(!isset($_POST['preview_report']))
+                        $this->diff($field, $value, $changes[$field], $commentId === false ? 'reports' : 'comments', $commentId === false ? $reportId : $commentId);
                 }
+            }
+            $this->previewReport();
 
             if(!count($set))
             {

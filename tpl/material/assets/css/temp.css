@@ -600,3 +600,5 @@ border-bottom: 1px groove; }
 time { z-index: 10001; }
 .info-bar div.left { position: relative; z-index: 2 }
 ul.list.section { padding-top: 0.5rem; } /** SHOOT ME $12 **/
+
+a:not([class]) { text-decoration: underline !important; }

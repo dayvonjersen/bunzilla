@@ -244,8 +244,9 @@ function previewtest()
 {
     var formData = new FormData();
     formData.append('preview_report', true);
-    formData.append('subject',document.getElementById('subject').value);
 <?php
+    if(!isset($this->data['params']['comment_id']))
+        echo "\tformData.append('subject',document.getElementById('subject').value);\n";
     foreach($fields as $name => $not_used)
     {
         if(!$cat[$name])

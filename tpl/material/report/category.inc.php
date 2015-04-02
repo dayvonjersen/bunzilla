@@ -292,5 +292,5 @@ if($report['edit_time']) {
 }
 
 // I'm glad it's over.
-
+require BUNZ_TPL_DIR .'diffModal.html';
 require BUNZ_TPL_DIR .'footer.inc.php';
