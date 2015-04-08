@@ -200,24 +200,24 @@ XXX ::: what the fuck stop being a lazy shit
         $filtOpts->addEmail();
 //        $filtOpts = [];
 
-//        $filtOpts['email'] = filterOptions(1,'email');
+//        $filtOpts['email'] = Filter::_filterOptions(1,'email');
 
         $callback = [$this,'messageFilter'];
         if($mode === 'comment')
         {
-//            $filtOpts['message'] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+//            $filtOpts['message'] = Filter::_filterOptions(0,'callback',null,[$this,'messageFilter']);
             $filtOpts->addCallback('message',$callback);
             return $filtOpts;
         }
 
-//        $filtOpts['subject'] = filterOptions(0,'full_special_chars');
+//        $filtOpts['subject'] = Filter::_filterOptions(0,'full_special_chars');
         $filtOpts->addString('subject');
-        //$filtOpts['status']  = filterOptions(0,'number_int');
+        //$filtOpts['status']  = Filter::_filterOptions(0,'number_int');
         foreach(['description','reproduce','expected','actual'] as $field)
         {
             if($this->data['category'][$field])
             {
-//                $filtOpts[$field] = filterOptions(0,'callback',null,[$this,'messageFilter']);
+//                $filtOpts[$field] = Filter::_filterOptions(0,'callback',null,[$this,'messageFilter']);
                 $filtOpts->addCallback($field, $callback);
             }
         }

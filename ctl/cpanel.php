@@ -357,15 +357,15 @@ class cpanel extends Controller
     private function categoryAdd()
     {
         $params = filter_input_array(INPUT_POST, [
-            'title' => filterOptions(0,'full_special_chars'),
-            'caption' => filterOptions(0,'full_special_chars'),
-            'description' => filterOptions(1,'boolean'),
-            'reproduce' => filterOptions(1,'boolean'),
-            'actual' => filterOptions(1,'boolean'),
-            'expected' => filterOptions(1,'boolean'),
-            'color' => filterOptions(1,'regexp',null,
+            'title' => Filter::_filterOptions(0,'full_special_chars'),
+            'caption' => Filter::_filterOptions(0,'full_special_chars'),
+            'description' => Filter::_filterOptions(1,'boolean'),
+            'reproduce' => Filter::_filterOptions(1,'boolean'),
+            'actual' => Filter::_filterOptions(1,'boolean'),
+            'expected' => Filter::_filterOptions(1,'boolean'),
+            'color' => Filter::_filterOptions(1,'regexp',null,
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
-            'icon' => filterOptions(0,'full_special_chars')
+            'icon' => Filter::_filterOptions(0,'full_special_chars')
         ]);
         $sql = 
             'INSERT INTO categories
@@ -383,10 +383,10 @@ class cpanel extends Controller
     private function statusAdd()
     {
         $params = filter_input_array(INPUT_POST, [
-            'title' => filterOptions(0,'full_special_chars'),
-            'color' => filterOptions(1,'regexp',null,
+            'title' => Filter::_filterOptions(0,'full_special_chars'),
+            'color' => Filter::_filterOptions(1,'regexp',null,
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
-            'icon' => filterOptions(0,'full_special_chars')
+            'icon' => Filter::_filterOptions(0,'full_special_chars')
         ]);
         $params['def'] = !selectCount('statuses') ? 1 : 0;
         $sql = 
@@ -421,10 +421,10 @@ class cpanel extends Controller
     private function tagAdd()
     {
         $params = filter_input_array(INPUT_POST, [
-            'title' => filterOptions(0,'full_special_chars'),
-            'color' => filterOptions(1,'regexp',null,
+            'title' => Filter::_filterOptions(0,'full_special_chars'),
+            'color' => Filter::_filterOptions(1,'regexp',null,
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
-            'icon' => filterOptions(0,'full_special_chars')
+            'icon' => Filter::_filterOptions(0,'full_special_chars')
         ]);
         $sql = 
             'INSERT INTO tags
@@ -451,15 +451,15 @@ class cpanel extends Controller
         }
 
         $params = filter_input_array(INPUT_POST, [
-            'title' => filterOptions(0,'full_special_chars','null_on_failure'),
-            'caption'=>filterOptions(0,'full_special_chars','null_on_failure'),
-            'description' => filterOptions(1,'boolean','null_on_failure'),
-            'reproduce' => filterOptions(1,'boolean','null_on_failure'),
-            'actual' => filterOptions(1,'boolean','null_on_failure'),
-            'expected' => filterOptions(1,'boolean','null_on_failure'),
-            'color' => filterOptions(1,'regexp','null_on_failure',
+            'title' => Filter::_filterOptions(0,'full_special_chars','null_on_failure'),
+            'caption'=> Filter::_filterOptions(0,'full_special_chars','null_on_failure'),
+            'description' => Filter::_filterOptions(1,'boolean','null_on_failure'),
+            'reproduce' => Filter::_filterOptions(1,'boolean','null_on_failure'),
+            'actual' => Filter::_filterOptions(1,'boolean','null_on_failure'),
+            'expected' => Filter::_filterOptions(1,'boolean','null_on_failure'),
+            'color' => Filter::_filterOptions(1,'regexp','null_on_failure',
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
-            'icon' => filterOptions(0,'full_special_chars','null_on_failure')
+            'icon' => Filter::_filterOptions(0,'full_special_chars','null_on_failure')
         ]);
 
         $set = [];
@@ -501,10 +501,10 @@ class cpanel extends Controller
         }
 
         $params = filter_input_array(INPUT_POST, [
-            'title' => filterOptions(0,'full_special_chars','null_on_failure'),
-            'color' => filterOptions(1,'regexp','null_on_failure',
+            'title' => Filter::_filterOptions(0,'full_special_chars','null_on_failure'),
+            'color' => Filter::_filterOptions(1,'regexp','null_on_failure',
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
-            'icon' => filterOptions(0,'full_special_chars','null_on_failure')
+            'icon' => Filter::_filterOptions(0,'full_special_chars','null_on_failure')
         ]);
 
         $set = [];
@@ -545,11 +545,11 @@ class cpanel extends Controller
         }
 
         $params = filter_input_array(INPUT_POST, [
-            'id'    => filterOptions(0, 'number_int'),
-            'title' => filterOptions(0,'full_special_chars','null_on_failure'),
-            'color' => filterOptions(1,'regexp','null_on_failure',
+            'id'    => Filter::_filterOptions(0, 'number_int'),
+            'title' => Filter::_filterOptions(0,'full_special_chars','null_on_failure'),
+            'color' => Filter::_filterOptions(1,'regexp','null_on_failure',
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
-            'icon' => filterOptions(0,'full_special_chars','null_on_failure')
+            'icon' => Filter::_filterOptions(0,'full_special_chars','null_on_failure')
         ]);
 
         $set = [];
@@ -591,10 +591,10 @@ class cpanel extends Controller
         }
 
         $params = filter_input_array(INPUT_POST, [
-            'title' => filterOptions(0,'full_special_chars','null_on_failure'),
-            'color' => filterOptions(1,'regexp','null_on_failure',
+            'title' => Filter::_filterOptions(0,'full_special_chars','null_on_failure'),
+            'color' => Filter::_filterOptions(1,'regexp','null_on_failure',
                 ['regexp'=>'/^[0-9a-f]{6}/i']),
-            'icon' => filterOptions(0,'full_special_chars','null_on_failure')
+            'icon' => Filter::_filterOptions(0,'full_special_chars','null_on_failure')
         ]);
 
         $set = [];
