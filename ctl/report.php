@@ -145,7 +145,8 @@ class report extends Controller
              WHERE report = '.$this->id)->fetchAll(PDO::FETCH_COLUMN);
 
         $this->data['status_log'] = db()->query(
-            'SELECT id,who,message,time FROM status_log WHERE report = '.$this->id.' OR category = '.$this->data['report']['category']
+            'SELECT id,who,message,time FROM status_log WHERE report = '.$this->id
+// too much spam.' OR category = '.$this->data['report']['category']
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['category_id'] = $this->data['report']['category'];

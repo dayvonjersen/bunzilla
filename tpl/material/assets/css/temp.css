@@ -481,10 +481,6 @@ input:not([type='checkbox']):not([type='radio']) + label.active {
 
 #gn-menu a.waves-effect { display: block !important; }
 #gn-menu .bc-item a { max-height: 30px }
-select.browser-default {
-    height: auto !important;
-    padding: 0 !important;
-}
 .material-tooltip { z-index: 10000 }
 
 .active .hide-on-active, .hide-on-inactive { font-size: 0; visibility: hidden; }

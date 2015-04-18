@@ -161,6 +161,8 @@ function unfiltermessage($msg)
     return $msg;
 }
 
+/**
+ * absolutely disgusting */
 function pagination( $url, $total, $curPage )
 {
     if($total < 50)
@@ -169,25 +171,12 @@ function pagination( $url, $total, $curPage )
     $curPage += 1;
     $pages = ceil($total/50);
 
-    $return = '<article class="center section no-pad-top no-pad-bot bz-paginate" >
+    $return = '<article class="center section no-pad-bot bz-paginate" >
         <div class="section no-pad-top no-pad-bot" data-textlabel="Page '."$curPage of $pages".'">';
-//    $return .= '<div class=" valign-wrapper">';
-
-//    $classList = 'z-depth-1 no-pad-top no-pad-bot section col s1 primary-text';
     $classList = 'btn btn-floating z-depth-2 waves-effect';
 
-/**
-    if($curPage != 1)
-        $return .= "<a href='$url' class='$classList' title='First Page' style='font-variant: small-caps'>1<sup>ST</sup></a>";
-    
-    if($curPage > 2)
-        $return .= "<a href='$url/".($curPage - 1)
-                ."' class='$classList' title='Previous Page'><i class='icon-left-open-mini'></i></a>";
-**/
-//    $return .= "<h4 class='' style='display: inline'>Page $curPage of $pages</h4>";
-
-//    $return .= '</div><div class="">';
-
+    $omit    = array_keys(array_fill(min([$curPage+3,$pages-3]),$pages-6,null));
+    $started = false;
     for($i = 1; $i <= $pages; $i++)
     {
         switch($i)
@@ -203,26 +192,34 @@ function pagination( $url, $total, $curPage )
             case ($curPage + 1):
                 $text = '<i class="icon-right-open-mini"></i>';
                 break;
-            default: $text = $i;
+            default: 
+                $text = $i;
         }
+        if($pages > 6 && in_array($i,$omit))
+        {
+            if(!$started)
+            {
+                $return .= '<select style="display: inline-block; width: 2.5rem; height: 2.5rem;"  onchange="window.location=\''.$url.'/\' + this.value" class="circle z-depth-5 shade-text browser-default">';
+                $return .= '<option disabled selected>...</option>';
+                $started = true;
+            }
+            $return .= '<option value='.($i-1).'>'.$text.'</option>';
+        } else {
+        if($started)
+        {
+            $return .= '</select>';
+            $started = false;
+        }           
         $return .= '<'.($i == $curPage ? 'em' : "a href='$url/".($i-1)."'").' style="margin: 0 0.5rem"'
                     ." class='$classList".($i == $curPage ? ' secondary-darken-4 z-depth-5' : ' shade-lighten-5 secondary-text')."'>$text</"
                     .($i == $curPage ? 'em' : 'a')
                     .'>';
+        }
     }
-/**    
-    if($curPage <= $pages - 2)
-        $return .= "<a href='$url/".($curPage+1)
-                    ."' class='$classList' title='Next Page'><i class='icon-right-open-mini'></i></a>";
-
-    if($curPage != $pages)
-       $return .= "<a href='$url/".($pages-1)."' class='$classList' title='Last'><small style='font-variant: small-caps'>END</small></a>";
-**/
     return "$return</div></article>";
 }
 
-// this is the hardest thing ever I swear to god
-// I am literally just pressing keys
+// XXX: not sure if this is used anymore
 function breadcrumb($crumbs, $youarehere, $categoryId)
 {   
     if(!count($crumbs))
