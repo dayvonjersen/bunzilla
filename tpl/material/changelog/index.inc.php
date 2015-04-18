@@ -75,13 +75,11 @@ if(empty($this->data['messages']))
 ?>
 <ol class="collapsible" data-collapsible="expandable">
 <?php
-for($i=0;$i<5;$i++){
 foreach($this->data['versions'] as $key => $ver)
 {
 
 ?>
-                                                                <?php /** XXX change $i to $key :: **/ ?>
-    <li style="margin: 0.5rem 0" class='shade-text z-depth-3' id="version-<?=$i?>"> 
+    <li style="margin: 0.5rem 0" class='shade-text z-depth-3' id="version-<?=$key?>"> 
         <div class="right">
             <a href="<?= BUNZ_HTTP_DIR ?>changelog/edit"
                 data-tooltip="manually edit "
@@ -116,7 +114,7 @@ foreach($this->data['versions'] as $key => $ver)
         </div>
     </li>
 <?php
-}}
+}
 ?>
 </ol>
 </div>
