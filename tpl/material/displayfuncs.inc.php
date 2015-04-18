@@ -175,7 +175,7 @@ function pagination( $url, $total, $curPage )
         <div class="section no-pad-top no-pad-bot" data-textlabel="Page '."$curPage of $pages".'">';
     $classList = 'btn btn-floating z-depth-2 waves-effect';
 
-    $omit    = array_keys(array_fill(min([$curPage+3,$pages-3]),$pages-6,null));
+    $omit    = $pages > 6  ? array_keys(array_fill(min([$curPage+3,$pages-3]),$pages-6,null)) : [];
     $started = false;
     for($i = 1; $i <= $pages; $i++)
     {
