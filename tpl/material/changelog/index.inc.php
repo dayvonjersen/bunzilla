@@ -19,8 +19,8 @@ require BUNZ_TPL_DIR . 'header.inc.php';
             <ul class="dropdown-content" id="version-list">
                 <li><a href="#" onclick="$('#dropdown-button-text').text('All Versions'); document.getElementById('expand-all').dispatchEvent(new Event('click'));">All Versions</a></li>
 <?php
-//foreach($this->data['versions'] as $key => $ver)
-for($key = 0, $ver = '0.2'; $key < 5; $key++)
+foreach($this->data['versions'] as $key => $ver)
+//for($key = 0, $ver = '0.2'; $key < 5; $key++)
 {
 ?>
                 <li><a href="#version-<?=$key?>" onclick="$('#dropdown-button-text').text('Version <?=$ver?>');$('li#version-<?=$key?>').addClass('active');$('li#version-<?=$key?> .collapsible-body').addClass('animated fuckityfuckfuck');$('li:not(#version-<?=$key?>)').removeClass('active');$('li:not(#version-<?=$key?>) .collapsible-body').removeClass('animated fuckityfuckfuck');document.getElementById('version-<?=$key?>').scrollIntoView({behavior:'smooth'});"><?= $ver ?></a></li>

@@ -8,7 +8,7 @@ class post extends Controller
 {
     // php class constants cannot contain expressions :\
     // this is no longer even the longest line which is sad
-    const ALLOWED_HTML = 'b|i|kbd|del|ins|strike|s|u|ol|ul|li|dt|dd|dl|sup|sub|small|big|image|link|code|p';
+    const ALLOWED_HTML = 'b|i|kbd|del|ins|strike|s|u|ol|ul|li|dt|dd|dl|sup|sub|small|big|image|link|code|p|strong|em';
 
     public function __construct()
     {
