@@ -1,33 +1,47 @@
 <?php
+define('CSS_CACHE_FILE', 'customcolors.css');
+
 class Cache
 {
-    public static function create( $table )
+    public static function create( $what, $mode = 'sql', $data = null )
     {
-        $data = [];
-        foreach(db()->query('SELECT * FROM '.$table)->fetchAll(PDO::FETCH_ASSOC)
-            as $i => $row)
-            $data[isset($row['id'])?$row['id']:$i] = $row;
-        file_put_contents(BUNZ_CACHE_DIR.$table.'.cache', serialize($data));
+        switch($mode)
+        {
+            case 'sql':
+                $data = [];
+                $result = db()->query('SELECT * FROM '.$what);
+                foreach($result->fetchAll(PDO::FETCH_ASSOC) as $i => $row)
+                    $data[ isset($row['id']) ? $row['id'] : $i ] = $row;
+                break;
+            case 'txt':
+                break;
+            default:
+                throw new InvalidArgumentException("Unsupported type of cache data!");
+        }
+
+        file_put_contents(BUNZ_CACHE_DIR.$what.'.cache', serialize($data));
     }
 
-    public static function read( $table )
+    public static function read( $what, $mode = 'sql' )
     {
-        if(!file_exists(BUNZ_CACHE_DIR.$table.'.cache'))
-            self::create($table);
+        if(!file_exists(BUNZ_CACHE_DIR.$what.'.cache'))
+        {
+            if($mode == 'txt')
+                return false;
+            self::create($what);
+        }
 
-        return unserialize(file_get_contents(BUNZ_CACHE_DIR.$table.'.cache'));
+        return unserialize(file_get_contents(BUNZ_CACHE_DIR.$what.'.cache'));
     }
 
-    public static function clear( $table )
+    public static function clear( $what, $mode = 'sql' )
     {
-        unlink(BUNZ_CACHE_DIR.$table.'.cache');
+        if(file_exists(BUNZ_CACHE_DIR.$what.'.cache'))
+            unlink(BUNZ_CACHE_DIR.$what.'.cache');
+        // quick hack for cache invalidation
+        if($mode == 'sql')
+            self::clear(CSS_CACHE_FILE,'txt');
     }
-
-    /**
-     * TODO (possibly): combine this with the above functionality
-     * i.e. function create( $name, $type = 'table' )
-     *      switch($type) { case 'table': ... case 'icon': ... case 'idk' ...
-     */
 
     public static function createIconList()
     {

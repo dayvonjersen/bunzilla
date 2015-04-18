@@ -177,7 +177,7 @@ class Bunzilla
     {
         $url = $this->parseUrl();
 
-        if(!preg_match('/^[a-z]+$/',$this->controller))
+        if(is_array($url) && !preg_match('/^[a-z]+$/',$url[0]))
             exit('fuk u');
 
         if(file_exists(BUNZ_CTL_DIR.$url[0].'.php'))

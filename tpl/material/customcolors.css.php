@@ -1,7 +1,32 @@
 <?php
 require_once '../../Bunzilla.php';
 require_once 'color.php'; // see also this file
+
+// CSS_CACHE_FILE is defined in:
 require_once '../../lib/cache.inc.php';
+
+if( !isset($_GET['prettyPrint']) && $cached = Cache::read(CSS_CACHE_FILE,'txt') )
+{
+    $_HTTP = apache_request_headers();
+    
+    header('Content-Type: text/css; charset=utf-8');
+    header('Cache-Control: max-age=10');
+    header('ETag: "'.$cached['ETag'].'"');
+
+    if(isset($_HTTP['If-None-Match']))
+    { 
+        if(preg_match('/^"'.preg_quote($cached['ETag']).'(\-gzip)?"$/',$_HTTP['If-None-Match']))
+        {
+            header('HTTP/1.1 304 Not Modified');
+            exit;
+        }
+
+    }
+
+    echo $cached['CSS'];
+    exit;
+}
+
 require_once '../../lib/db.inc.php';
 /**
  * standard theming */
@@ -82,10 +107,16 @@ header('Content-Type: text/css; charset=utf-8');
 $def = isset($_GET['prettyPrint']) ? ".%s {\n\t%s\n}\n\n" : '.%s{%s}';
 $del = isset($_GET['prettyPrint']) ? ";\n\t" : ';';
 
+$CSS = '';
 foreach($_ as $selector => $rules)
 {
     $css = [];
     foreach($rules as $property => $value)
         $css[] = sprintf('%s: %s',$property,$value);
-    printf($def, $selector, implode($del,$css));
+    $CSS .= sprintf($def, $selector, implode($del,$css));
 }
+
+if(!isset($_GET['prettyPrint']))
+    Cache::create(CSS_CACHE_FILE, 'txt', ['ETag' => md5($CSS), 'CSS' => $CSS]);
+
+echo $CSS;
