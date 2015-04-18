@@ -7,7 +7,7 @@ if(!empty($this->data['categories']))
     <section id="viewCategories">
         <section class="section shade-text">
             <h1>Categories</h1>
-            <p>blabla organize urself blabla productivity blabla carrots</p>
+            <p>Merely how reports are grouped. You can create as many categories as you like. Whatever applies to your project and your workflow can be set up.</p>
         </section>
 <?php
     $i = 0;
@@ -22,9 +22,10 @@ if(!empty($this->data['categories']))
                 actions
             -->
 
-                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
+                    <a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/category/',$cat['id']?>#categories" 
                        class="right btn btn-floating z-depth-5 danger-base" 
-                       title="delete category"><i class="icon-delete"></i></a>
+                       title="delete category"
+                        onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this category and all associated reports and comments?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>
 
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
                        class="right btn btn-floating z-depth-5 success-base" 
@@ -52,7 +53,7 @@ if(!empty($this->data['categories']))
     </section>
 
     <section id="moveCategory" class="section alert-base">
-        <form class=" z-depth-5 shade-text section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/category" method="post">
+        <form class=" z-depth-5 shade-text section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/category#categories" method="post">
             <h1 class="icon-move">Move All Reports</h1>
             <div class="input-field col s12 m6 section">
             <p>From:</p>
@@ -67,7 +68,7 @@ if(!empty($this->data['categories']))
     </section>        
 
     <section id="createCategory" class="secondary-base section">
-        <form class=" z-depth-5 section shade-text" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/category" method="post">
+        <form class=" z-depth-5 section shade-text" action="<?= BUNZ_HTTP_DIR ?>cpanel/add/category#categories" method="post">
             <h1 class="icon-plus secondary-text">Create New Category</h1>
             <div class="input-field">
                 <input id="add-category-title" type="text" name="title" maxlength="255"/>

@@ -355,7 +355,7 @@ class report extends Controller
         };
 
         $stmt->execute($makeInsert($dest,__METHOD__,2,dtr_pton('127.0.0.1'),nl2br(
-"<div class='section z-depth-5 shade-lighten-4'><p><i class='icon-attention'></i><em class='h2'>Merge is an experimental feature. Its behaviour is untested and subject to change at any time. Please be cautious.</em><p>If you have any suggestions, feedback, or concerns please leave a message on <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.<p>Thank you and have a very safe and productive day.</div>
+"<div class='col s12 section z-depth-5 shade-lighten-4 h6'><p><i class='icon-move'></i>Merge is an experimental feature.</p><p>If you have any suggestions, feedback, or concerns please leave a message on <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.</div>
 
 submitted: ".date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['time'])."\n"
 .($current_report['edit_time'] ? '<b>edit at</b> '.date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['edit_time']).' (diffs included this could get real ugly)'."\n" : '')."

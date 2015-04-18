@@ -6,7 +6,7 @@ if(!empty($this->data['statuses']))
 ?>  
     <section id="viewStatuses" class="section primary-text z-depth-3">
         <h1 class="icon-pinboard">Statuses</h1>
-        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status" method="post" class="section z-depth-3">
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status#statuses" method="post" class="section z-depth-3">
             <div class="row">
                 <div class="right-align col s2">
                     <span class="hide-on-med-and-down">Usage</span>
@@ -62,9 +62,10 @@ if(!empty($this->data['statuses']))
                                 left: 35px; top: 0; 
                                 pointer-events: none"></div>
                 </div>
-                <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/status/',$p['id']?>" 
+                <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/status/',$p['id']?>#statuses" 
                                class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
-                               title="delete status"><i class="icon-delete"></i></a>&emsp;
+                               title="delete status"
+onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this status?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/status/',$p['id']?>" 
                                class="waves-effect right btn btn-flat btn-floating success-base" 
                                title="edit status"><i class="icon-pencil-alt"></i></a>
@@ -84,11 +85,11 @@ if(!empty($this->data['statuses']))
     </section>
 
         <div class="section">
-            <p>Statuses do things.</p>
+            <p>Statuses are what you can use to mark the status or progress of a report. All reports will start off with a (configurable) default status. There is no limit to the number of statuses you can have, though they are limited to 25 characters for visual purposes.</p>
         </div>
 
     <section id="createStatus" class="row section primary-text z-depth-3">
-        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/status" method="post">
+        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/status#statuses" method="post">
             <h1 class="icon-plus">Create New Status</h1>
             <div class="input-field">
                 <input id="add-status-title" type="text" name="title" maxlength="255"/>

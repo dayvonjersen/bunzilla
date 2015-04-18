@@ -55,9 +55,10 @@ if(!empty($this->data['tags']))
                                 left: 7px; top: 0; 
                                 pointer-events: none"></div>&nbsp;
                 </div>
-                <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/tag/',$p['id']?>" 
+                <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/tag/',$p['id']?>#tags" 
                                class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
-                               title="delete tag"><i class="icon-delete"></i></a>&emsp;
+                               title="delete tag"
+                                onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this tag?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$p['id']?>" 
                                class="waves-effect right btn btn-flat btn-floating success-base" 
                                title="edit tag"><i class="icon-pencil-alt"></i></a>
@@ -72,11 +73,11 @@ if(!empty($this->data['tags']))
 ?>
 
         <div class="section">
-            <p>Tags do things.</p>
+            <p>Tags describe issues at a glance when such descriptions pan many categories. They can also be used as convenient search terms.</p>
         </div>
 
     <section id="createTag" class="row section primary-text z-depth-3">
-        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/tag" method="post">
+        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/tag#tags" method="post">
             <h1 class="icon-plus">Create New Tag</h1>
             <div class="input-field">
                 <input id="add-tag-title" type="text" name="title" maxlength="255"/>

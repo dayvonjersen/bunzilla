@@ -1,3 +1,3 @@
 <section id="statistics">
-    <img src="/pfsc/picturesforsadchildren/00000263.png" alt="[insert pointless graph here]"/>
+    <h1>nothing here yet</h1>
 </section>

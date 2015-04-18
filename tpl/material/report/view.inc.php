@@ -191,7 +191,7 @@ count($this->data['priorities'])
                       method="post">
 
                     <div class="row">
-<div class='col s12 section z-depth-5 shade-lighten-4'><p><i class='icon-move'></i><em class='h2'>Merge is an experimental feature. Its behaviour is untested and subject to change at any time. Please be cautious.</em><p>If you have any suggestions, feedback, or concerns please leave a message on <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.<p>Thank you and have a <em>very</em> safe and productive day.</div>
+<div class='col s12 section z-depth-5 shade-lighten-4 h6'><p><i class='icon-move'></i>Merge is an experimental feature. Please be cautious.</p><p>If you have any suggestions, feedback, or concerns please leave a message on <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.<p>Thank you and have a <em>very</em> safe and productive day.</p></div>
                         <div class="input-field col s12 m6 section">
                             <p>Merge Entire Report Into:</p>
                             <input type="text" name="report" maxlength="4" placeholder="yes you have to type the id manually right now"/>

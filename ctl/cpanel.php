@@ -197,6 +197,9 @@ class cpanel extends Controller
      * DELETE FROM */
     public function delete($mode,$id)
     {
+        if(!http_referer_is_host())
+            $this->abort('PANIC.');
+
         $id = (int)$id;
         switch($mode)
         {

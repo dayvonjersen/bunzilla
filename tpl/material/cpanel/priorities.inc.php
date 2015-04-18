@@ -6,7 +6,7 @@ if(!empty($this->data['priorities']))
 ?>  
     <section id="viewPriorities" class="section primary-text z-depth-3">
         <h1 class="icon-attention">Priorities</h1>
-        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority" method="post" class="section z-depth-3">
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority#priorities" method="post" class="section z-depth-3">
             <div class="row">
                 <div class="right-align col s2">
                     <span class="hide-on-med-and-down">Usage</span>
@@ -64,9 +64,10 @@ if(!empty($this->data['priorities']))
                 </div>
                 <div class="col s4"> <input type="text" disabled value="<?=$p['id']?>"/>
 
-                            <a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/priority/',$p['id']?>" 
+                            <a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/priority/',$p['id']?>#priorities" 
                                class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
-                               title="delete priority"><i class="icon-delete"></i></a>&emsp;
+                               title="delete priority"
+onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this priority?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$p['id']?>" 
                                class="waves-effect right btn btn-flat btn-floating success-base" 
                                title="edit priority"><i class="icon-pencil-alt"></i></a>
@@ -87,12 +88,11 @@ if(!empty($this->data['priorities']))
 
         <div class="section">
             <p>Priorities should be limited. A maximum of 128 are allowed.</p>
-            <p> Their ids determine their urgency (greater = more important)</p>
-            <p>Say something about default...<p>
+            <p>Like statuses, a default priority will be assigned to all new reports submitted. Unlike statuses, the ID determines the importance of the priority.<p>
         </div>
 
     <section id="createPriority" class="row section primary-text z-depth-3">
-        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/priority" method="post">
+        <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/priority#priorities" method="post">
             <h1 class="icon-plus">Create New Priority</h1>
             <div class="input-field">
                 <input id="add-priority-id" type="text" name="id" maxlength="3"/>
