@@ -8,7 +8,7 @@
  * Preliminary stuff */
 define('BUNZ_START_TIME', microtime(1));
 define('BUNZ_SIGNATURE', 'tracked by Bunzilla');
-define('BUNZ_VERSION', '0.2a');
+define('BUNZ_VERSION', '0.2b');
 define('BUNZ_DEVELOPMENT_MODE', true); // always true
 
 /**
@@ -141,19 +141,7 @@ if(file_exists(BUNZ_RES_DIR.'settings.ini'))
     $filt->addString('danger_color');
     $filt->addString('success_color');
     $cfg['theme'] = $filt->var_array($cfg['theme']);
-/*
-    filter_var_array($cfg['bunzilla'], [
-        'allow_anonymous' => FILTER_VALIDATE_BOOLEAN,
-        'require_captcha' => FILTER_VALIDATE_BOOLEAN,
-        'do_the_cron'     => FILTER_VALIDATE_BOOLEAN,
-        'date_format'     => FILTER_SANITIZE_STRING
-    ]);
-    filter_var_array($cfg['project'], [
-        'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-        'version' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-        'mission_statement' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
-    ]);
-*/
+
     foreach($cfg as $cat => $settings)
         foreach($settings as $def => $val)
             define('BUNZ_'.strtoupper($cat).'_'.strtoupper($def),$val);
@@ -203,6 +191,11 @@ class Bunzilla
                 unset($url[0],$url[1]);
             }
         }
+        /**
+         * CSRF Stuff
+         * with love from flussence.eu */
+        if(!empty($_POST) && !http_referer_is_host() && !$this->controller->auth()) 
+            unset($_POST);
 
         $this->params = !empty($url) ? array_values($url) : [];
 
@@ -227,7 +220,7 @@ class Controller
     protected $data = [];
     protected $tpl  = null;
     protected $flash = [];
-
+    
     private $auth = null;
 
     protected function setTemplate()
@@ -245,7 +238,7 @@ class Controller
         if(!is_dir(BUNZ_TPL_BASE_DIR . $tpl))
         {
             unset($_SESSION['tpl']);
-            exit("fux.");
+            exit("Template directory for $tpl doesn't exist.");
         }
 
         // persistence++
@@ -274,8 +267,7 @@ class Controller
             unset($_SESSION['login']);
             $this->auth = null;
             $this->login();
-        }
-        
+        }        
 
         if(isset($_SESSION['flash']))
         {
@@ -289,6 +281,9 @@ class Controller
             unset($_SESSION['params']);
         }
         
+        if(isset($_SESSION['captcha']) 
+            && (!BUNZ_BUNZILLA_REQUIRE_CAPTCHA || $this->auth))
+            unset($_SESSION['captcha']);
     }
 
     public function __destruct()
@@ -298,10 +293,13 @@ class Controller
         $this->data['tags']       = Cache::read('tags');
         $this->data['priorities'] = Cache::read('priorities');
 
-        if(isset($this->tpl) && file_exists(BUNZ_TPL_DIR . $this->tpl . '.inc.php'))
-            require_once BUNZ_TPL_DIR . $this->tpl . '.inc.php';
-        else
-            trigger_error('Missing template.',E_USER_DEPRECATED);
+        if(isset($this->tpl))
+        {
+            if(file_exists(BUNZ_TPL_DIR . $this->tpl . '.inc.php'))
+                require_once BUNZ_TPL_DIR . $this->tpl . '.inc.php';
+            else
+                trigger_error('Missing template.',E_USER_DEPRECATED);
+        }
     }
 
     public function abort($error = false)
@@ -396,48 +394,6 @@ class Controller
 }
 
 /**
- * Filter is neat but a little verbose at times
- * These mitigate that
- * ...hopefully */
-
-function _filterFlag($f)
-{
-    return constant(
-        'FILTER_'
-        .($f==='null_on_failure'||$f==='require_array'?'':'FLAG_')
-        .strtoupper($f)
-    );
-}
-
-function filterOptions($validate, $id, $flag = null, $opts = null)
-{
-    $const = constant('FILTER'.
-        (stripos($id,'callback')===0?'':'_'.($validate?'VALIDATE':'SANITIZE'))
-        .'_'.strtoupper($id)
-    );
-    if($flag === null && $opts === null)
-        return $const;
-
-    if($flag||$opts)
-    {       
-        $return = ['filter'=>$const];
-        if($flag)
-        {   $flags = 0;
-            if(is_array($flag))
-                foreach($flag as $f)
-                    $flags |= _filterFlag($f);
-            else
-                $flags = _filterFlag($flag);
-            $return['flags'] = $flags;
-        }
-        if(is_array($opts)||is_scalar($opts))
-            $return['options'] = $opts;
-        return $return;
-    }
-    return $const; // no options exist without flags
-}
-
-/**
  * this is probably a major vulnerability
  * and probably belongs in lib/db.inc.php */
 function selectCount($table,$where = 1,$field='*')
@@ -463,35 +419,5 @@ function remoteAddr() {
             trim(end(explode (',', $_SERVER['HTTP_X_FORWARDED_FOR']))) 
             : $_SERVER['REMOTE_ADDR'];
     }
-    return dtr_pton($ip);
-}
-
-/**
-* dtr_pton
-* dtr_ntop
-*
-* @author Mike Mackintosh - mike@bakeryphp.com
-* @param string $ip
-* @return string $bin
-*/
-function dtr_pton( $ip ){
- 
-    if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)){
-        return current( unpack( "A4", inet_pton( $ip ) ) );
-    }
-    elseif(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
-        return current( unpack( "A16", inet_pton( $ip ) ) );
-    }
-
-}
-
-function dtr_ntop( $str ){
-    if( strlen( $str ) == 16 OR strlen( $str ) == 4 ){
-        return inet_ntop( pack( "A".strlen( $str ) , $str ) );
-    }
-}
-
-function compareIP( $ip )
-{
-    return ( dtr_ntop(remoteAddr()) == dtr_ntop($ip) );
+    return $ip;
 }

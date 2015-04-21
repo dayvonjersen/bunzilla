@@ -1,7 +1,7 @@
 <?php
 define('RESPONSE', 200);
 
-if(isset($this->data['params']['comment_id']))
+if(isset($this->data['params']['message']))
 {
     $json = ['message' => $this->data['params']['message']];
 } else {

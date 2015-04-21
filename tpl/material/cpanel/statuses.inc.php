@@ -1,12 +1,15 @@
-<section id="statuses" class="col s12 primary-text shade-base section">
-  
+<section id="statuses" class="col s12 primary-text shade-base">
+     <section class="section shade-text">
+        <h1 class="icon-pinboard">Statuses</h1>
+        <p>Statuses are what you can use to mark the status or progress of a report. All reports will start off with a (configurable) default status. There is no limit to the number of statuses you can have, though they are limited to 25 characters for visual purposes.</p>
+    </section> 
 <?php
 if(!empty($this->data['statuses']))
 {
 ?>  
-    <section id="viewStatuses" class="section primary-text z-depth-3">
-        <h1 class="icon-pinboard">Statuses</h1>
-        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status#statuses" method="post" class="section z-depth-3">
+    <section id="viewStatuses" class="section row z-depth-3">
+        
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status#statuses" method="post" class="primary-text section z-depth-3">
             <div class="row">
                 <div class="right-align col s2">
                     <span class="hide-on-med-and-down">Usage</span>
@@ -26,7 +29,7 @@ if(!empty($this->data['statuses']))
     {
         $usage = round(selectCount('reports', 'status = '.$p['id'])/$total_reports, 2)*100;
 ?>
-            <div class="row">
+            <div class="row hoverfx">
 
                 <div class="col s1">
                     <a href="<?=BUNZ_HTTP_DIR,'search/status:',$p['id']?>" 
@@ -83,10 +86,6 @@ onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY
             </div>
         </form>
     </section>
-
-        <div class="section">
-            <p>Statuses are what you can use to mark the status or progress of a report. All reports will start off with a (configurable) default status. There is no limit to the number of statuses you can have, though they are limited to 25 characters for visual purposes.</p>
-        </div>
 
     <section id="createStatus" class="row section primary-text z-depth-3">
         <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/status#statuses" method="post">

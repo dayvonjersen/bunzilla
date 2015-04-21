@@ -13,4 +13,7 @@ if(defined(RESPONSE))
 
     header(sprintf('HTTP/1.1 %d %s', RESPONSE, $str));
 }
+if(isset($this) && !empty($this->flash))
+    $json = ['flash' => $this->flash] + $json;
+
 echo json_encode($json, JSON_PRETTY_PRINT);

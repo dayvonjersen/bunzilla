@@ -1,26 +1,321 @@
 <?php
 /**
  * post reports/comments 
- *
- * I'm not sure about the naming convention I've chosen here
- * index() and comment() make sense but category is ehh */
+ */
 class post extends Controller
 {
-    // php class constants cannot contain expressions :\
-    // this is no longer even the longest line which is sad
+    /**
+     * what tags are allowed in posts */
     const ALLOWED_HTML = 'b|i|kbd|del|ins|strike|s|u|ol|ul|li|dt|dd|dl|sup|sub|small|big|image|link|code|p|strong|em';
 
+    /**
+     * minimum time (in seconds) allowed between posts to cut down on spam */
+    const SPAM_TIMEOUT = 30;
+
+    /**
+     * Common to public methods */
+    // every posting method can be used without logging in,
+    // but only if you set allow_anonymous to 1 in res/settings.ini
     public function __construct()
     {
-
         parent::__construct();
         !BUNZ_BUNZILLA_ALLOW_ANONYMOUS && $this->requireLogin();
     }
 
-    public $breadcrumbs = [];
-    public function setBreadcrumbs($method)
+    /**
+     *
+     * Public-facing methods/routes 
+     *
+     */
+
+    // index: unused
+    public function index()
     {
-        
+        $this->abort();
+    }
+
+    // edit: 2 args = comment, 1 arg = report
+    public function edit($reportId, $commentId = false)
+    {
+        $editMode = $commentId === false ? 'report' : 'comment';
+
+        $this->tpl .= '/edit';
+
+        // verify the target exists
+        $this->checkReport($reportId);
+        $reportId  = (int) $reportId;
+        $commentId = (int) $commentId;
+        if($editMode == 'comment' && !selectCount(
+            'comments','id = '.$commentId.' AND report = '.$reportId
+        ))
+            $this->abort('No such comment!');
+
+        // grab datas
+        $fields = ['category','subject'];
+        if($editMode == 'report')
+            $fields = array_merge(
+                $fields,
+                ['description','reproduce','expected','actual',
+                 'INET6_NTOA(ip) AS ip','email']
+            );
+
+        $this->data['params'] = db()->query(
+            'SELECT '.implode(',',$fields).'
+             FROM reports
+             WHERE id = '.$reportId
+        )->fetch(PDO::FETCH_ASSOC);
+        $this->data['params']['report_id'] = $reportId;
+        $this->setReportCategory($this->data['params']['category']);
+
+        // additional pylons
+        if($editMode == 'comment')
+        {
+            // note this will overwrite the above ip and email in $params
+            $this->data['params'] = array_replace(
+                $this->data['params'],
+                db()->query(
+                    'SELECT INET6_NTOA(ip) AS ip, message, email 
+                     FROM comments 
+                     WHERE id = '.$commentId
+                )->fetch(PDO::FETCH_ASSOC)
+            );
+            $this->data['params']['comment_id'] = $commentId;
+            // needed for the view to display the field
+            $this->data['category']['message']  = true; 
+        } else {
+            $this->data['params']['tags'] = db()->query(
+                'SELECT tag
+                 FROM tag_joins 
+                 WHERE report = '.$reportId
+            )->fetchAll(PDO::FETCH_COLUMN);
+        }
+
+        if(!$this->auth() && remoteAddr() != $this->data['params']['ip'])
+            $this->abort('Access denied.');
+
+        $usr = $this->data['params']['email'];
+
+        unset($this->data['params']['email'],$this->data['params']['ip']);
+        if(!empty($_POST))
+        {
+            $filt    = $this->getFilter($editMode);
+            $changes = $filt->input_array();
+            $set     = [];
+            foreach($this->data['params'] as $field => $value)
+            {
+                if(!isset($changes[$field]) || $changes[$field] === $value)
+                {    
+                    if(!isset($_POST['preview_report']))
+                        unset($this->data['params'][$field]);
+                } else {
+                    $set[] = $field .' = :'.$field;
+                    $this->data['params'][$field] = $changes[$field];
+                    if(!isset($_POST['preview_report']))
+                    {
+                        $this->diff(
+                            $field, 
+                            $value, 
+                            $changes[$field], 
+                            $editMode.'s', 
+                            $editMode == 'report' ? $reportId : $commentId
+                        );
+                    }
+                }
+            }
+
+            $this->previewReport();
+
+            if($editMode == 'report' && $this->handleTags($reportId,true))
+            {
+                $this->flash[] = 'Tags updated.';
+            }
+
+            if(!count($set))
+            {
+                $this->redirectWithMessage(
+                    '/report/view/'.$reportId,
+                    'No changes were made.'
+                );
+            }
+
+            $set[] = 'edit_time = :edit_time';
+            $this->data['params']['edit_time'] = time();
+
+            $sql = 'UPDATE '.$editMode.'s 
+                    SET '.implode(', ',$set)
+                 .' WHERE id = '.($editMode == 'report' ? $reportId : $commentId);
+            if($this->createReport($sql))
+            {
+                if($editMode == 'report')
+                {
+                    Statuslog::create(
+                        'report', $reportId, 'made an edit', 
+                         $this->auth() ? $_SERVER['PHP_AUTH_USER'] : $usr
+                    );
+                }
+
+                $this->redirectWithMessage(
+                    'report/view/'.$reportId
+                        .($editMode == 'comment' ? '#reply-'.$commentId : ''),
+                    'Your desired changes were made.'
+                );
+            }
+        }
+           
+        $this->setBreadcrumbs(__FUNCTION__);
+    }
+
+    // comment: posts a new comment to a report specified by $id
+    public function comment($id)
+    {
+        $this->spamCheck();
+        $this->checkReport($id);
+
+        $filt = $this->getFilter('comment');
+        $this->data['params'] = $filt->input_array();
+
+        // force identity for logged in developers
+        if($this->auth())
+            $this->data['params']['email'] = 
+                $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
+
+        $this->data['params']['report'] = (int)$id;
+        $this->data['params']['epenis'] = (int)$this->auth();
+
+        /**
+         * advanced quote replies (tm) */
+        if(preg_match_all('/\&gt;\&gt;(\d+)/ms', 
+            $this->data['params']['message'], 
+            $quotes, PREG_SET_ORDER))
+        {
+            if(count($quotes) > 1)
+            {
+                $this->flash[] = 'At this time, you can reply to only
+                 one comment at a time (sorry!)';
+            } else {
+                foreach($quotes as $quote)
+                {
+                    $reply_to = (int)$quote[1];
+                    if(selectCount('comments', 'id = '.$reply_to))
+                    {
+                        $this->data['params']['message'] = str_replace(
+                            $quote[0],
+                            '<a href="#reply-'.$reply_to.'">&gt;&gt;'.$reply_to.'</a>',
+                            $this->data['params']['message']
+                        );
+                        $this->data['params']['reply_to'] = $reply_to;
+                    }
+                }
+            }
+        }
+        $sql = 'INSERT INTO comments 
+                (id,time,ip,'
+                    .implode(',', array_keys($this->data['params'])).')
+                VALUES 
+                (\'\',UNIX_TIMESTAMP(),INET6_ATON(:ip),:'
+                    .implode(',:',array_keys($this->data['params']))
+        .')';
+
+        $this->data['params']['ip']     = remoteAddr();
+
+        $location = 'report/view/'.(int) $id;
+        if(!empty($_POST))
+        {
+            $this->previewReport();
+            if($this->createReport($sql))
+            {
+                $message   = 'Comment added.';
+                $location .= '#reply-'.db()->lastInsertId();
+
+                if($this->auth() && isset($_POST['changelog']))
+                    Changelog::append($this->data['params']['message']);
+            } else {
+                unset($this->data['params']['email'],$this->data['params']['ip']);
+                $_SESSION['params'] = serialize($this->data['params']);
+                $location .= '#comment';
+            }
+        } else {
+            $this->captcha();
+        }
+
+        $this->redirectWithMessage($location,$message);
+    }
+
+    // category: posts a report to a category
+    public function category($id)
+    {
+        $this->spamCheck();
+        $this->tpl .= '/category';
+        $this->setReportCategory($id);
+
+        $this->data['tags'] = db()->query(
+            'SELECT id FROM tags ORDER BY title ASC'
+        )->fetchAll(PDO::FETCH_ASSOC);
+
+        $filt = $this->getFilter('report');
+
+        $this->data['params'] = $filt->input_array();
+
+        // force identity for logged in developers
+        if($this->auth())
+            $this->data['params']['email'] = 
+                $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
+
+        $this->data['params']['epenis']   = (int) $this->auth();
+
+        $this->data['params']['category'] = $this->data['category']['id'];
+
+        // initial status and priority
+        $this->data['params']['status']   = db()->query(
+            'SELECT id FROM statuses   WHERE `default` = 1'
+        )->fetchColumn();
+        $this->data['params']['priority'] = db()->query(
+            'SELECT id FROM priorities WHERE `default` = 1'
+        )->fetchColumn();
+
+        $sql = 'INSERT INTO reports 
+            (id,time,ip,'.implode(',',array_keys($this->data['params'])).')
+                VALUES 
+            (\'\',UNIX_TIMESTAMP(),INET6_ATON(:ip),:'
+            .implode(',:',array_keys($this->data['params'])).')';
+
+        $this->data['params']['ip'] = remoteAddr();
+        if(!empty($_POST))
+        {
+            $this->previewReport();
+            if($this->createReport($sql))
+            {
+                $reportId = db()->lastInsertId();
+                $this->handleTags($reportId);
+
+                $this->redirectWithMessage(
+                    'report/view/'.$reportId,
+                    'Report submitted!'
+                );
+            }
+        } else {
+            $this->captcha();
+        }
+
+        $this->setBreadcrumbs(__FUNCTION__);
+    }
+
+    /**
+     * Helper functions and abstractions from here to EOF
+     */
+
+    private function redirectWithMessage($location, $message)
+    {
+        $this->flash[] = $message;
+        $_SESSION['flash'] = serialize($this->flash);
+        header('Location: '.BUNZ_HTTP_DIR.$location);
+        exit;
+    }
+
+    // this breadcrumb thing feels out of place
+    public $breadcrumbs = [];
+    private function setBreadcrumbs($method)
+    {   
         $this->breadcrumbs[] = ['href' => 'report/index', 
                                 'title' => 'Category Listing',
                                 'icon'  => 'icon-ul'];
@@ -36,10 +331,9 @@ class post extends Controller
         if($method == 'category')
         {
             $this->breadcrumbs[] = ['href' => 'post/category/'.$category['id'],
-                                'title' => 'Submit New',
-                                'icon' => 'icon-plus'];
+                                    'title' => 'Submit New',
+                                    'icon' => 'icon-plus'];
         } else {
-
             $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['params']['report_id'],
                                     'title' => $this->data['params']['subject'],
                                     'icon' => 'icon-doc-text-inv'];
@@ -47,38 +341,25 @@ class post extends Controller
                                     'title' => 'Edit',
                                     'icon' => 'icon-pencil-alt'];
         }
-        return;
     }
 
+    // probably need a better mechanism than this
     private function spamCheck()
     {
         if(!empty($_POST) && !$this->auth())
         {
-        // probably need a better mechanism than this
-        $where = 'ip = '.db()->quote(remoteAddr())
-               .' AND time >= UNIX_TIMESTAMP() - 30';
-        if(selectCount('reports',$where)||selectCount('comments',$where))
-            $this->abort('stop spamming D:');
+            $where = 'ip = INET6_ATON('.db()->quote(remoteAddr()).')'
+                   .' AND time >= UNIX_TIMESTAMP() - '.self::SPAM_TIMEOUT;
+            if(selectCount('reports',$where)||selectCount('comments',$where))
+                $this->abort('stop spamming D:');
         }
     }
 
-    public function index()
-    {
-        $this->spamCheck();
-        $this->tpl .= '/index';
-        $this->data = [
-            'categories' => db()->query(
-                'SELECT id,title,caption,color,icon
-                 FROM categories
-                 ORDER BY title ASC'
-            )->fetchAll(PDO::FETCH_ASSOC)
-        ];
-    }
 
     /**
-     * useless feature, 
-     * but prevents someone from deleting useful/damning information */
-    protected function diff( $what, $text1, $text2, $type, $id )
+     * really an unnecessary feature, but it prevents someone 
+     * from permanently deleting potentially useful information */
+    private function diff( $what, $text1, $text2, $type, $id )
     {
         if(!in_array($type,['reports', 'comments'],true))
             throw new InvalidArgumentException('$type must be a valid table');
@@ -96,133 +377,30 @@ class post extends Controller
         unlink($edit);
     }
 
-    public function edit($reportId, $commentId = false)
-    {
-        $this->tpl .= '/edit';
-        $this->checkReport($reportId);
-        $reportId = (int)$reportId;
-        $this->data['params'] = current(db()->query(
-            'SELECT category, subject'.($commentId===false?', description, reproduce, expected, actual, ip, email':'').'
-             FROM reports
-             WHERE id = '.$reportId
-        )->fetchAll(PDO::FETCH_ASSOC));
-
-        $this->setReportCategory($this->data['params']['category']);
-        if($commentId !== false)
-        {
-            $commentId = (int)$commentId;
-            if(!selectCount('comments',
-                'id = '.$commentId.' AND report = '.$reportId))
-                $this->abort('No such comment!');
-
-            $this->data['params'] += current(db()->query(
-                'SELECT ip, message, email FROM comments WHERE id = '.$commentId
-            )->fetchAll(PDO::FETCH_ASSOC));
-
-            $this->data['params']['comment_id'] = $commentId;
-            $this->data['category']['message'] = true; // shut up
-        } else {
-            $this->data['params']['tags'] = [];
-            foreach(db()->query(
-            'SELECT tag
-             FROM tag_joins 
-             WHERE report = '.$reportId)->fetchAll(PDO::FETCH_NUM) as $tag)
-                $this->data['params']['tags'][] = $tag[0];
-        }
-
-        $this->data['params']['report_id'] = $reportId;
-
-        if(!$this->auth() && !compareIP($this->data['params']['ip']))
-            $this->abort('Access denied.');
-
-        $usr = $this->data['params']['email'];
-        unset($this->data['params']['email']);
-        if(!empty($_POST))
-        {
-/***
-XXX ::: what the fuck stop being a lazy shit
-***/
-            $filtOpts__obj = $this->getFilterOptions($commentId === false ? 'report' : 'comment');
-            $filtOpts = array_intersect_key(
-                $filtOpts__obj->options, $this->data['params']);
-            $changes = filter_input_array(INPUT_POST, $filtOpts);
-            $set = [];
-            foreach($this->data['params'] as $field => $value)
-            {
-                if(!isset($changes[$field]) || $changes[$field] === $value)
-                {    if(!isset($_POST['preview_report']))
-                        unset($this->data['params'][$field]);
-                }else {
-                    $set[] = $field .' = :'.$field;
-                    $this->data['params'][$field] = $changes[$field];
-                    if(!isset($_POST['preview_report']))
-                        $this->diff($field, $value, $changes[$field], $commentId === false ? 'reports' : 'comments', $commentId === false ? $reportId : $commentId);
-                }
-            }
-            $this->previewReport();
-
-            if(!count($set))
-            {
-                $this->flash[] = 'No changes were made.';
-                $_SESSION['flash'] = serialize($this->flash);
-                header('Location: '.BUNZ_HTTP_DIR.'/report/view/'.$reportId);
-                exit;
-            }
-
-            $set[] = 'edit_time = :fux';
-            $this->data['params']['fux'] = time();
-
-            $sql = 'UPDATE '.($commentId === false ? 'report' : 'comment').'s SET '.implode(', ',$set).' WHERE id = '.($commentId === false ? $reportId : $commentId);
-            if($this->createReport($sql))
-            {
-                if($commentId === false)
-                    Statuslog::create('report', $reportId, 'made an edit', $this->auth() ? $_SERVER['PHP_AUTH_USER'] : $usr);
-
-                $this->flash[] = 'Your desired changes were made.';
-                $_SESSION['flash'] = serialize($this->flash);
-                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId.($commentId !== false? '#reply-'.$commentId : ''));
-                exit;
-            }
-        }
-           
-        $this->setBreadcrumbs(__FUNCTION__);
-    }
-
     private function checkReport($id)
     {
         if(!selectCount('reports','id = '.(int)$id))
             $this->abort('No such report!');
     }
 
-    private function getFilterOptions($mode = 'report')
+    private function getFilter($mode = 'report')
     {
-        $filtOpts = new Filter();
-        $filtOpts->addEmail();
-//        $filtOpts = [];
-
-//        $filtOpts['email'] = filterOptions(1,'email');
+        $filt = new Filter();
+        $filt->addEmail();
 
         $callback = [$this,'messageFilter'];
         if($mode === 'comment')
         {
-//            $filtOpts['message'] = filterOptions(0,'callback',null,[$this,'messageFilter']);
-            $filtOpts->addCallback('message',$callback);
-            return $filtOpts;
+            $filt->addCallback('message',$callback);
+            return $filt;
         }
 
-//        $filtOpts['subject'] = filterOptions(0,'full_special_chars');
-        $filtOpts->addString('subject');
-        //$filtOpts['status']  = filterOptions(0,'number_int');
+        $filt->addString('subject');
         foreach(['description','reproduce','expected','actual'] as $field)
-        {
             if($this->data['category'][$field])
-            {
-//                $filtOpts[$field] = filterOptions(0,'callback',null,[$this,'messageFilter']);
-                $filtOpts->addCallback($field, $callback);
-            }
-        }
+                $filt->addCallback($field, $callback);
 
-        return $filtOpts;       
+        return $filt;       
     }
 
     private function setReportCategory($id)
@@ -238,127 +416,48 @@ XXX ::: what the fuck stop being a lazy shit
         $this->data['category'] = $result->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function comment($id)
+    private function handleTags($reportId,$editMode = false)
     {
-        $this->spamCheck();
-        $this->tpl = 'error';
-        $this->checkReport($id);
-
-        $filtOpts = $this->getFilterOptions('comment');
-//        $this->data['params'] = filter_input_array(INPUT_POST,$filtOpts);
-        $this->data['params'] = $filtOpts->input_array();
-        // force identity for logged in developers
-        if($this->auth())
-            $this->data['params']['email'] = 
-                $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
-        $this->data['params']['report'] = (int)$id;
-        $this->data['params']['ip'] = remoteAddr();
-
-        $this->data['params']['epenis'] = (int)$this->auth();
-        /**
-         * advanced quote replies (tm) */
-        if(preg_match_all('/\&gt;\&gt;(\d+)/ms', $this->data['params']['message'], $quotes, PREG_SET_ORDER))
+        $rows = 0;
+        if($editMode)
         {
-            if(count($quotes) > 1)
-                $this->flash[] = 'At this time, you can only reply to one comment at a time (sorry!)';
-            else {
-            foreach($quotes as $quote)
-            {
-                $reply_to = (int)$quote[1];
-                if(selectCount('comments', 'id = '.$reply_to))
-                {
-                    $this->data['params']['message'] = str_replace(
-                        $quote[0],
-                        '<a href="#reply-'.$reply_to.'">&gt;&gt;'.$reply_to.'</a>',
-                        $this->data['params']['message']
-                    );
-                    $this->data['params']['reply_to'] = $reply_to;
-                }
-            }}
-        }
-        $sql = 'INSERT INTO comments 
-
-         (id,time,'.implode(',',array_keys($this->data['params'])).')
-
-                VALUES 
-
-         (\'\',UNIX_TIMESTAMP(),:'.implode(',:',
-            array_keys($this->data['params'])).')';
-
-        $location = BUNZ_HTTP_DIR.'report/view/'.(int)$id;
-        if(!empty($_POST))
-        {
-            $this->previewReport();
-            if($this->createReport($sql))
-            {
-                $this->flash[] = 'Comment added.';
-                $location .= '#reply-'.db()->lastInsertId();
-
-                if($this->auth() && isset($_POST['changelog']))
-                    Changelog::append($this->data['params']['message']);
-            } else {
-                $_SESSION['params'] = serialize($this->data['params']);
-                $location .= '#comment';
-            }
-        }
-        $_SESSION['flash'] = serialize($this->flash);
-        header('Location: '.$location);        
-    }
-
-    private function handleTags($reportId)
-    {
-        if(isset($_POST['tags']) && is_array($_POST['tags']))
+            $previous_tags = db()->query(
+                'SELECT tag FROM tag_joins WHERE report = '.$reportId
+            )->fetchAll(PDO::FETCH_COLUMN);
+            $keep_tags = [];
+        } 
+        if(isset($_POST['tags']) && is_array($_POST['tags']) && !empty($_POST['tags']))
         {
             $tags = [];
             foreach($_POST['tags'] as $tag)
+            {
                 if(selectCount('tags','id = '.(int)$tag))
+                {
+                    if($editMode)
+                    {
+                        $keep_tags[] = (int)$tag;
+                        if(in_array($tag,$previous_tags))
+                            continue;
+                    }
                     $tags[] = '('.(int)$reportId.','.(int)$tag.')';
+                }
+            }
 
             if(!empty($tags))
-                db()->query('INSERT INTO tag_joins (report,tag) VALUES '.implode(',',$tags));
+                $rows += db()->query(
+                    'INSERT INTO tag_joins (report,tag) 
+                     VALUES '.implode(',',$tags)
+                )->rowCount();
+            if($editMode && count($keep_tags))
+                $rows += db()->query(
+                    'DELETE FROM tag_joins 
+                     WHERE report = '.$reportId
+                        .' AND tag NOT IN ('.implode(',',$keep_tags).')'
+                )->rowCount();
+        } elseif($editMode) {
+            $rows += db()->query('DELETE FROM tag_joins WHERE report = '.$reportId)->rowCount();
         }
-    }
-
-    public function category($id)
-    {
-        $this->spamCheck();
-        $this->tpl .= '/category';
-        $this->setReportCategory($id);
-        $this->data['tags'] = db()->query('SELECT id FROM tags ORDER BY title ASC')->fetchAll(PDO::FETCH_ASSOC);
-
-        $filtOpts = $this->getFilterOptions('report');
-
-        $this->data['params'] = $filtOpts->input_array();
-        // force identity for logged in developers
-        if($this->auth())
-            $this->data['params']['email'] = 
-                $_SERVER['PHP_AUTH_USER'].'@'.$_SERVER['SERVER_NAME'];
-        $this->data['params']['category'] = $this->data['category']['id'];
-        $this->data['params']['status'] = db()->query('SELECT id FROM statuses WHERE `default` = 1')->fetchColumn();
-
-        $this->data['params']['ip'] = remoteAddr();
-        $this->data['params']['epenis'] = (int)$this->auth();
-        $this->data['params']['priority'] = db()->query('SELECT id FROM priorities WHERE `default` = 1')->fetchColumn();
-
-        $sql = 'INSERT INTO reports 
-            (id,time,'.implode(',',array_keys($this->data['params'])).')
-                VALUES 
-            (\'\',UNIX_TIMESTAMP(),:'
-            .implode(',:',array_keys($this->data['params'])).')';
-
-        if(!empty($_POST))
-        {
-            $this->previewReport();
-            if($this->createReport($sql))
-            {
-                $reportId = db()->lastInsertId();
-                $this->handleTags($reportId);
-                $this->flash[] = 'Report submitted!';
-                $_SESSION['flash'] = serialize($this->flash);
-                header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$reportId);
-            }
-        }
-        $this->setBreadcrumbs(__FUNCTION__);
+        return $rows;
     }
 
     /**
@@ -457,9 +556,7 @@ XXX ::: what the fuck stop being a lazy shit
 
         return $msg;
     }
-
-    /**
-     * not as nice as what's in admin.php */
+ 
     private function createReport($sql)
     {
         // error checking ain't pretty
@@ -467,9 +564,9 @@ XXX ::: what the fuck stop being a lazy shit
         // maybe it should be
         foreach($this->data['params'] as $field => $value)
         {
-
             if($value !== 0 && in_array($field, ['subject', 'email', 'message']) && empty($value))
-            {   $this->flash[] = $field .' cannot be blank.';
+            {   
+                $this->flash[] = $field .' cannot be blank.';
                 continue;
             }
             switch($field)
@@ -490,27 +587,22 @@ XXX ::: what the fuck stop being a lazy shit
                             'Please be more specific in your subject line.';
 
 
-// you know what you doing
-if(!$this->auth())
-{
-                    // enforce length
-                    if(strlen($value) < 3 || strlen($value) > 255)
-                        $this->flash[] = 
-                            $field.' must be between 3 and 255 characters.';
+                    // you know what you doing
+                    if(!$this->auth())
+                    {
+                        // enforce length
+                        if(strlen($value) < 3 || strlen($value) > 255)
+                            $this->flash[] = 
+                                $field.' must be between 3 and 255 characters.';
 
-                    if(preg_match('/\S{25}/',$value))
-                        $this->flash[] = $field .' contains a single word '
-                            .'over 25 characters in length. This can cause '
-                          .'problems for certain browsers and is not allowed.';
+                        if(preg_match('/\S{25}/',$value))
+                            $this->flash[] = $field .' contains a single word '
+                                .'over 25 characters in length. This can cause '
+                              .'problems for certain browsers and is not allowed.';
 
-                    if(strtoupper($value) === $value)
-                        $this->flash[] = 'CAPS LOCK IS CRUISE CONTROL FOR COOL';
-}
-                    break;
-
-                case 'status':
-                    if(!selectCount('statuses','id = '.(int)$value))
-                        $this->flash[] = 'Please choose a valid initial status.';
+                        if(strtoupper($value) === $value)
+                            $this->flash[] = 'CAPS LOCK IS CRUISE CONTROL FOR COOL';
+                    }
                     break;
 
                 case 'description':
@@ -519,26 +611,28 @@ if(!$this->auth())
                 case 'actual':
                 case 'message':
 
-// $value = strlen(trim(strip_tags(preg_replace('/&.+?;/', '',$value))));
-
-// ^ this check doesn't count final message formatting against 
-//   the maximum length, which is nice for users
-
-//   however, the maximum length is actually the limit of the DB column
-//   at the moment, anyway
-
+/**
+ * note, an aside:
+ *
+ * strlen(trim(strip_tags(preg_replace('/&.+?;/', '',$value))));
+ *
+ * this check wouldn't count final message formatting against 
+ *   the maximum length, which is nice for users 
+ *
+ *   however, the maximum length is actually the limit of the DB column
+ *   at the moment, anyway 
+ */
                     if(strlen($value) < 2 || strlen($value) > 65535)
                         $this->flash[] = $field 
                             .' must be between 2 and 65,535 characters. Your '
                             .$field.' is '.strlen($value);
 
-// you know what you doing
-if(!$this->auth())
-{
-                    if(strtoupper($value) === $value)
-                        $this->flash[] = 'JESUS CHRIST STOP SHOUTING';
-                
-}
+                    // you know what you doing
+                    if(!$this->auth())
+                    {
+                        if(strtoupper($value) === $value)
+                            $this->flash[] = 'JESUS CHRIST STOP SHOUTING';
+                    }
                     break;
             }
         }
@@ -547,6 +641,9 @@ if(!$this->auth())
         if(!empty($this->flash))
             return false;
 
+        // stop here for robots
+        $this->captcha();
+
         // move zig
         $stmt = db()->prepare($sql);
         return($stmt->execute($this->data['params']));
@@ -554,12 +651,36 @@ if(!$this->auth())
 
     /**
      * let's see if I can shoehorn this in here */
+    // update: 4/21/2015 6:27:31 PM I *can* shoehorn this in here.
     private function previewReport()
     {
         if(isset($_POST['preview_report']))
         {
             $this->tpl = 'post/preview';
             exit;
+        }
+    }
+
+    private function captcha()
+    {
+        if(BUNZ_BUNZILLA_REQUIRE_CAPTCHA && !$this->auth())
+        {
+            if(empty($_POST))
+            {
+                captcha::set();
+            } elseif(isset($_SESSION['captcha'],$_POST['captcha'])) {
+                $answer = md5(strtolower(trim($_POST['captcha'])));
+                if(!in_array($answer,$_SESSION['captcha']->a))
+                {
+                    $this->flash[] = 'Sorry, you answered the captcha incorrectly!';
+                    exit;
+                } else {
+                    unset($_SESSION['captcha']);
+                }
+            } else {
+                $this->flash[] = 'You forgot to fill in the captcha!';
+                exit;
+            }
         }
     }
 }

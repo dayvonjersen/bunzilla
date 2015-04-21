@@ -26,6 +26,7 @@ require_once BUNZ_TPL_DIR . 'header.inc.php';
  * TODO (possibly): think of a way to load these dynamically with ajax 
  */
 include 'statistics.inc.php';
+include 'cron.inc.php';
 include 'categories.inc.php';
 include 'statuses.inc.php';
 include 'tags.inc.php';

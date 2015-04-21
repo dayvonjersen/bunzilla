@@ -151,6 +151,8 @@ class report extends Controller
 
         $this->data['category_id'] = $this->data['report']['category'];
         $this->setBreadcrumbs(__FUNCTION__);
+        if(!$this->auth())
+            captcha::set();
         exit;
     }
 

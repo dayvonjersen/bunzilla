@@ -1,11 +1,34 @@
-<section id="tags" class="col s12 primary-text secondary-base section">
+<section id="tags" class="col s12 primary-text secondary-base">
+        <section class="section shade-text">
+            <h1 class="icon-tags">Tags</h1>
+            <p>Tags describe issues at a glance when such descriptions pan many categories. They can also be used as convenient search terms.</p>
+        </section>
   
 <?php
 if(!empty($this->data['tags']))
 {
-?>  
-    <section id="viewTags" class="section primary-text z-depth-3">
-        <h1 class="icon-tags">Tags</h1>
+?> 
+    <style>
+.hoverfx:hover {
+    background: #eee;
+}
+#viewTags .label {
+    padding: 5px 0.5em 0;
+    max-height: 1.5em; 
+    display: inline-block; 
+    height: 100%;
+    position: absolute; 
+    z-index: 1;
+}
+#viewTags .graph {
+    height: calc(1.5em + 5px); 
+    position: absolute; 
+    left: 7px; top: 0;
+    pointer-events: none
+}
+</style>
+    <section id="viewTags" class="section row z-depth-3">
+        <div class="primary-text section ">
             <div class="row">
                 <div class="right-align col s2">
                     <span class="hide-on-med-and-down">Usage</span>
@@ -25,57 +48,43 @@ if(!empty($this->data['tags']))
     {
         $usage = round(selectCount('tag_joins', 'tag = '.$p['id'])/$total_reports, 2)*100;
 ?>
-            <div class="row">
+            <div class="row hoverfx">
 
                 <div class="col s1">
                     <a href="<?=BUNZ_HTTP_DIR,'search/tag:',$p['id']?>" 
-                               class="right btn btn-flat btn-floating secondary-text" 
+                               class="right btn btn-small btn-flat btn-floating secondary-text" 
                                title="Search for where this tag is used">
                         <i class="icon-search"></i></a>
                 </div>
-                <div class="col s1 right-align <?= $usage/100 > 1/$total_tags ? 'large' : 'small' ?>"><?= $usage ?>%</div>
-                <div class="col s6 input-field" style="position: relative;">
+                <div class="col s1 right-align <?= $usage/100 > 1/$total_tags ? 'h4' : 'h6' ?>"><?= $usage ?>%</div>
+                <div class="col s6 input-field" style="position: relative; line-height: 1;">
                         <div>&nbsp;
-                            <span class="tag-<?= $p['id'] ?> <?= $p['icon'] ?>"
-                                  style="padding: 0 0.5em;
-                                         max-height: 1.5em; margin-top: .75rem;
-                                         opacity: <?= 0.5 + $usage/200 ?>;
-                                         display: inline-block; 
-                                         height: 100%;
-                                         position: absolute;
-                                         z-index: 1">
+                            <span class="tag-<?= $p['id'] ?> <?= $p['icon'] ?> label"
+                                  style="opacity: <?= 0.5 + $usage/200 ?>;">
                                 <?= $p['title'] ?>
                             </span>
                         </div>
-                    <div class="tag-<?=$p['id']?> no-select" 
-                         style="width: <?=$usage?>%; 
-                                height: 1.5em; margin-top: .75rem;
-                                
-                                position: absolute; 
-                                left: 7px; top: 0; 
-                                pointer-events: none"></div>&nbsp;
+                    <div class="tag-<?=$p['id']?> no-select graph" 
+                         style="width: <?=$usage?>%;"></div>&nbsp;
                 </div>
                 <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/tag/',$p['id']?>#tags" 
-                               class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
+                               class="waves-effect waves-red right btn-small btn btn-flat btn-floating danger-text" 
                                title="delete tag"
                                 onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this tag?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$p['id']?>" 
-                               class="waves-effect right btn btn-flat btn-floating success-base" 
+                               class="waves-effect right btn btn-flat btn-small btn-floating success-base" 
                                title="edit tag"><i class="icon-pencil-alt"></i></a>
                 </div>
             </div>
 <?php
     }
 ?>
+        </div>
     </section>
+
 <?php
 }
 ?>
-
-        <div class="section">
-            <p>Tags describe issues at a glance when such descriptions pan many categories. They can also be used as convenient search terms.</p>
-        </div>
-
     <section id="createTag" class="row section primary-text z-depth-3">
         <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/tag#tags" method="post">
             <h1 class="icon-plus">Create New Tag</h1>

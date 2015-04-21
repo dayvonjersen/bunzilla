@@ -1,12 +1,16 @@
-<section id="priorities" class="col s12 primary-text alert-base section">
-  
+<section id="priorities" class="col s12 primary-text alert-base">
+      <section class="section shade-text">
+            <h1 class="icon-attention">Priorities</h1>
+            <p>Like statuses, a default priority will be assigned to all new reports submitted. Unlike statuses, the ID determines the importance of the priority.</p>
+            <p>Priorities should be of limited quantity. A maximum of 128 are allowed.</p>
+      </section>
 <?php
 if(!empty($this->data['priorities']))
 {
 ?>  
-    <section id="viewPriorities" class="section primary-text z-depth-3">
-        <h1 class="icon-attention">Priorities</h1>
-        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority#priorities" method="post" class="section z-depth-3">
+    <section id="viewPriorities" class="section row">
+        
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority#priorities" method="post" class="section z-depth-3 primary-text">
             <div class="row">
                 <div class="right-align col s2">
                     <span class="hide-on-med-and-down">Usage</span>
@@ -26,7 +30,7 @@ if(!empty($this->data['priorities']))
     {
         $usage = round(selectCount('reports', 'priority = '.$p['id'])/$total_reports, 2)*100;
 ?>
-            <div class="row">
+            <div class="row hoverfx">
 
                 <div class="col s1">
                     <a href="<?=BUNZ_HTTP_DIR,'search/priority:',$p['id']?>" 
@@ -51,7 +55,7 @@ if(!empty($this->data['priorities']))
                                          height: 100%;
                                          position: absolute;
                                          z-index: 1">
-                                <?= $p['title'] ?>
+                                <?= $p['title'], ' (id: ',$p['id'],')' ?>
                             </span>
                         </label>
                     </p>
@@ -62,8 +66,7 @@ if(!empty($this->data['priorities']))
                                 left: 35px; top: 0; 
                                 pointer-events: none"></div>
                 </div>
-                <div class="col s4"> <input type="text" disabled value="<?=$p['id']?>"/>
-
+                <div class="col s4">
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/priority/',$p['id']?>#priorities" 
                                class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
                                title="delete priority"
@@ -85,11 +88,6 @@ onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY
             </div>
         </form>
     </section>
-
-        <div class="section">
-            <p>Priorities should be limited. A maximum of 128 are allowed.</p>
-            <p>Like statuses, a default priority will be assigned to all new reports submitted. Unlike statuses, the ID determines the importance of the priority.<p>
-        </div>
 
     <section id="createPriority" class="row section primary-text z-depth-3">
         <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/priority#priorities" method="post">

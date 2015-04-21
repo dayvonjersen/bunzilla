@@ -100,10 +100,10 @@ epenis($report['epenis'])?></p>
                 <section class="section col s4 m4 transparent ">
 
                      <!-- nice javascript m8 -->
-                     <a href="#comment" onclick="(function(evt){evt.preventDefault();document.getElementById('comment').focus()})(event)" class="waves-effect z-depth-5 btn-large btn-floating secondary-base right" title="post a comment!"><i class="icon-chat"></i></a>
+                     <a href="#message" onclick="(function(evt){evt.preventDefault();document.getElementById('message').focus()})(event)" class="waves-effect z-depth-5 btn-large btn-floating secondary-base right" title="post a message!"><i class="icon-chat"></i></a>
 
 <?php
-if($this->auth() || compareIP($report['ip']))
+if($this->auth() || remoteAddr() === $report['ip'])
 {
 ?>
                      <!-- edit post -->
@@ -392,7 +392,7 @@ if(!empty($this->data['timeline']))
                 </header>
                 <blockquote>
 <?php
-if($this->auth() || compareIP($comment['ip']))
+if($this->auth() || remoteAddr() === $comment['ip'])
 {
 ?>
                         <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" 
@@ -434,7 +434,7 @@ if(isset($nested[$comment['id']]))
                 </header>
 
                 <blockquote><?php
-if($this->auth() || compareIP($comment['ip']))
+if($this->auth() || remoteAddr() === $comment['ip'])
 {
 ?>
                         <a href="<?= BUNZ_HTTP_DIR,'post/edit/',$report['id'],'/',$comment['id'] ?>" class='btn btn-floating btn-small waves-effect waves-green right' title="edit this comment" position: absolute; right: 4rem;"><i class='icon-pencil-alt'></i></a>
@@ -495,7 +495,7 @@ require BUNZ_TPL_DIR .'toolsModal.html';
                     </div>
                     <div class="input-field">
                         <i class="icon-chat prefix"></i>
-                        <textarea id="comment" class="materialize-textarea" required name='message'><?= empty($_POST) ? '' : unfiltermessage($this->data['params']['message']) ?></textarea>
+                        <textarea id="message" class="materialize-textarea" required name='message'><?= empty($_POST) ? '' : unfiltermessage($this->data['params']['message']) ?></textarea>
                         <label for="comment">your insight on this issue</label>
                         <span class="material-input"></span>
                     </div>
@@ -526,17 +526,39 @@ if($this->auth())
 <?php
 }
 ?>
-        <div class="input-field center">
+        <div class="input-field center" style='margin-bottom:1em'>
             <div class="row">
-            <a href="#toolsModal" data-for="message" class="col s4 btn-flat waves-effect secondary-lighten-3" onclick="toggleModal(event)"><i class="icon-code"></i> toggle toolbar</a>
-            <button type="reset" class="col s4 btn-flat white shade-text icon-cancel waves-effect" <?php
+            <a href="#toolsModal"
+               data-for="message" 
+               class="col s3 btn-flat waves-effect secondary-lighten-3 icon-code"
+               onclick="toggleModal(event)">toggle toolbar</a>
+            <a href="#message" class="col s3 btn icon-magic waves-effect primary-base"
+                onclick="previewtest();">Preview <sup class='primary-darken-4'>NEW!</sup></a>
+            <button type="reset" class="col s3 btn-flat white shade-text icon-cancel waves-effect" <?php
 if(empty($_POST))
  echo <<<JAVASCRIPT
 onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
 JAVASCRIPT;
 ?>><?= empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
-                    <button type="submit" class="col s4 btn category-<?= $cat['id'] ?>-darken-4 icon-chat waves-effect">post!</button></div>
+                    <button type="submit" class="col s3 btn category-<?= $cat['id'] ?>-darken-4 icon-chat waves-effect">post!</button></div>
         </div>
+<?php
+if(isset($_SESSION['captcha']))
+{
+?>
+        <div class="input-field">
+            <i class="icon-emo-shoot"></i>
+            <input type="text"
+                    id="captcha"
+                    name="captcha"
+                    required
+                    value="">
+            <span class="material-input"></span>
+            <label for="captcha">CAPTCHA: <?= htmlspecialchars($_SESSION['captcha']->q) ?></label>
+        </div>
+<?php
+}
+?>
             
                 </form>
             </section>
@@ -547,5 +569,13 @@ JAVASCRIPT;
     </article>
 <?php
 require BUNZ_TPL_DIR . 'diffModal.html';
+
+/**
+ * don't ask */
+$this->data['params']['comment_id'] = -1;
+$fields = ['message'=>-1];
+$cat['message'] = -1;
+$pageAction = 'post/comment/'.$this->data['id'];
+require BUNZ_TPL_DIR . 'previewModal.html';
 require BUNZ_TPL_DIR . 'footer.inc.php';
 ?>

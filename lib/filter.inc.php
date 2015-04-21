@@ -76,6 +76,13 @@ class Filter
         $this->add($key, self::_filterOptions(1,'boolean'));
     }
 
+    public function addRegex($key,$regex)
+    {
+        $this->add($key,self::_filterOptions(1,'regexp',null,['regexp'=>$regex]));
+    }
+    // in case I forget what I called this
+    public function addRegexp($key,$regex){$this->addRegex($key,$regex);}
+
     // all this so I can get an empty, keyed array for blank forms
     // ._.;
     public function input_array()

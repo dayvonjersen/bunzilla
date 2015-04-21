@@ -40,12 +40,6 @@ $_SESSION['last_active'] = time();
  */
 
 /**
- * CSRF Stuff
- * with love from flussence.eu */
-if(!empty($_POST) && !http_referer_is_host())
-    unset($_POST);
-
-/**
  * http_referer_is_host()
  * 
  * @comment does what the name implies
