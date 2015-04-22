@@ -19,7 +19,6 @@ require BUNZ_TPL_DIR . 'header.inc.php';
         <article>
             <div class="row">
                 <section class='section col s12 z-depth-5 category-<?=$cat['id']?>-base'>
-
                     <a href="<?=BUNZ_HTTP_DIR,'post/category/',$cat['id']?>" 
                        class="right btn-large waves-effect btn btn-floating z-depth-5 transparent" 
                        title="submit new"><i class="icon-plus"></i></a>
@@ -42,7 +41,6 @@ if($this->auth())
                     <h2 class="<?= $cat['icon'] ?>"><?= $cat['title'] ?></h2>
                     <h6><?= $cat['caption'] ?></h6>
                 </section>
-                
         </article>
     </div>
 </div>

@@ -7,48 +7,64 @@
 
 class report extends Controller
 {
+    const ITEMS_PER_PAGE = 50; // this should be made configurable
+                               // on a per-user basis 
+                               // once there is a users table
+
     protected $id = null;
     
-    protected function getPreviewField( $catId )
+    //
+    // helper functions and abstractions
+    //
+    public static function getPreviewField( $catId )
     {
         static $cats = null;
         if($cats === null)
             $cats = Cache::read('categories');
-        $cat = $cats[$catId];
-        if($cat['description'])
-            $field = 'description';
-        elseif($cat['reproduce'])
-            $field = 'reproduce';
-        elseif($cat['expected'])
-            $field = 'expected';
-        elseif($cat['actual'])
-            $field = 'actual';
-        else
-            return false;
-        return "r.$field";
+        foreach(['description','reproduce','expected','actual'] as $field)
+            if($cats[$catId][$field])
+                return $field;
+        return false;
     }
 
+    // should implement this kind of abstraction in more places
+    protected function checkId($id)
+    {
+        if(!selectCount('reports','id = '.(int)$id))
+            $this->abort('No such report.');
+        $this->id = (int)$id;
+    }
+
+    // breadcrumbs for this are heirarchial and nice
     public $breadcrumbs = [];
     public function setBreadcrumbs($method)
     { 
-        $this->breadcrumbs[] = ['href' => 'report/index', 
-                                'title' => 'Category Listing',
-                                'icon'  => 'icon-ul'];
+        $this->breadcrumbs[] = [
+            'href'  => 'report/index', 
+            'title' => 'Category Listing',
+            'icon'  => 'icon-ul'];
         if($method == 'index')
             return;
 
         $category = Cache::read('categories')[$this->data['category_id']];
-        $this->breadcrumbs[] = ['href' => 'report/category/'.$category['id'],
-                                'title' => $category['title'],
-                                'icon' => $category['icon']
+        $this->breadcrumbs[] = [
+            'href'  => 'report/category/'.$category['id'],
+            'title' => $category['title'],
+            'icon'  => $category['icon']
         ];
         if($method == 'category')
             return;
 
-        $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['report']['id'],
-                                'title' => $this->data['report']['subject'],
-                                'icon' => $this->data['report']['closed'] ? 'icon-lock' : 'icon-doc-text-inv'];
+        $this->breadcrumbs[] = [
+            'href'  => 'report/view/'.$this->data['report']['id'],
+            'title' => $this->data['report']['subject'],
+            'icon'  => $this->data['report']['closed'] ? 
+                'icon-lock' : 'icon-doc-text-inv'];
     }
+
+    //
+    // routes
+    //
 
     // this is default index page for bunzilla
     public function index()
@@ -81,21 +97,63 @@ class report extends Controller
             if($latest_comment)
                 $stats[$id]['last_activity'] = $latest_comment;
             
-            $stats[$id]['open_issues'] = selectCount('reports','closed = 0 AND category = '.$id);
+            $stats[$id]['open_issues'] = selectCount(
+                'reports','closed = 0 AND category = '.$id
+            );
         }
         $this->data['stats'] = $stats;
         $this->setBreadcrumbs(__FUNCTION__);
     }
 
-    // should implement this kind of abstraction in more places
-    protected function checkId($id)
+    // reports by category
+    public function category($id, $offset = 0)
     {
-        if($this->id!==null)
-            return true;
+        if(!selectCount('categories','id = '.(int)$id))
+            $this->abort('No such category.');
 
-        if(!selectCount('reports','id = '.(int)$id))
-            $this->abort('No such report.');
-        $this->id = (int)$id;
+        $offset = ((int) abs($offset)) * self::ITEMS_PER_PAGE;
+        if($offset && $offset > selectCount('reports', 'category = '.(int) $id))
+            $this->abort('Stop that.');
+
+        $this->tpl .= '/category';
+
+        $field = self::getPreviewField((int)$id);
+        $field = $field ? "r.$field AS preview_text," : '';
+
+        $this->data['reports'] = db()->query(
+                'SELECT 
+                    r.id, r.email, r.subject, '.$field.' 
+                    r.priority, r.status, r.closed,
+                    r.time, r.edit_time, r.updated_at,
+                    COUNT(c.id) AS comment_count, MAX(c.time) AS last_comment
+                 FROM reports AS r
+                    LEFT JOIN comments AS c
+                    ON r.id = c.report
+                 WHERE r.category = '.(int)$id.'
+                 GROUP BY r.id
+                 ORDER BY r.closed ASC,
+                    last_comment DESC,
+                    r.priority DESC,
+                    r.updated_at DESC,
+                    r.edit_time DESC,
+                    r.time ASC
+                 LIMIT '.$offset.',50'
+        )->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($this->data['reports'] as $i => $report)
+        {
+            $this->data['reports'][$i]['tags'] = db()->query(
+                'SELECT tag
+                 FROM tag_joins 
+                 WHERE report = '.$report['id']
+            )->fetchAll(PDO::FETCH_COLUMN);
+            $this->data['reports'][$i]['comments']   = $report['comment_count'];
+            $this->data['reports'][$i]['updated_at'] = max($report['updated_at'],$report['last_comment']);
+        }
+
+        $this->data['category_id'] = (int)$id;
+        $this->data['page_offset'] = ceil($offset / self::ITEMS_PER_PAGE);
+        $this->setBreadcrumbs(__FUNCTION__);
     }
 
     // individual reports
@@ -144,64 +202,6 @@ class report extends Controller
         if(!$this->auth())
             captcha::set();
         exit;
-    }
-
-    // reports by category
-    public function category($id, $offset = 0)
-    {
-        if(!selectCount('categories','id = '.(int)$id))
-            $this->abort('No such category.');
-
-        $offset = ((int) abs($offset)) * 50;
-        if($offset && $offset > selectCount('reports', 'category = '.(int) $id))
-            $this->abort('Stop that.');
-
-        $this->tpl .= '/category';
-
-        $field = $this->getPreviewField((int)$id);
-        $field .= $field ? ' AS preview_text,' : '';
-
-        $this->data = [
-// todo: remove xxx
-            'category' => current(db()->query(
-                'SELECT * FROM categories WHERE id = '.(int)$id
-            )->fetchAll(PDO::FETCH_ASSOC)),
-
-
-            'reports' => db()->query(
-                'SELECT 
-                    r.id, r.email, r.subject, '.$field.' 
-                    r.priority, r.status, r.closed,
-                    r.time, r.edit_time, r.updated_at,
-                    COUNT(c.id) AS comment_count, MAX(c.time) AS last_comment
-                 FROM reports AS r
-                    LEFT JOIN comments AS c
-                    ON r.id = c.report
-                 WHERE r.category = '.(int)$id.'
-                 GROUP BY r.id
-                 ORDER BY r.closed ASC,
-                    last_comment DESC,
-                    r.priority DESC,
-                    r.updated_at DESC,
-                    r.edit_time DESC,
-                    r.time ASC
-                 LIMIT '.$offset.',50'
-            )->fetchALL(PDO::FETCH_ASSOC)
-        ];
-
-        foreach($this->data['reports'] as $i => $report)
-        {
-            $this->data['reports'][$i]['tags'] = db()->query(
-                'SELECT tag
-                 FROM tag_joins 
-                 WHERE report = '.$report['id'])->fetchAll(PDO::FETCH_COLUMN);
-            $this->data['reports'][$i]['comments'] = $report['comment_count'];
-            $this->data['reports'][$i]['updated_at'] = max($report['updated_at'],$report['last_comment']);
-        }
-
-        $this->data['category_id'] = (int)$id;
-        $this->data['page_offset'] = ceil($offset / 50);
-        $this->setBreadcrumbs(__FUNCTION__);
     }
 
     // moderation actions

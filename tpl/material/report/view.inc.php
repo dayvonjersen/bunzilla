@@ -6,6 +6,9 @@
  * 3/3/2015 11:51:10 AM
  * OK this page and category.inc.php have gotten way out of hand
  * in terms of complexity and bullshit
+ * 4/22/2015 5:29:56 PM
+ * category.inc.php is somewhat reasonable 
+ * so let's just take care of this problem child
  */
 
 /**

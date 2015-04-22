@@ -672,12 +672,14 @@ class post extends Controller
                 $answer = md5(strtolower(trim($_POST['captcha'])));
                 if(!in_array($answer,$_SESSION['captcha']->a))
                 {
+                    captcha::set();
                     $this->flash[] = 'Sorry, you answered the captcha incorrectly!';
                     exit;
                 } else {
                     unset($_SESSION['captcha']);
                 }
             } else {
+                captcha::set();
                 $this->flash[] = 'You forgot to fill in the captcha!';
                 exit;
             }
