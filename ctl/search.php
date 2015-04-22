@@ -228,6 +228,12 @@ class search extends Controller
         return  $ret;
     }
 
+    public function tagcloud()
+    {
+        $this->tpl .= '/tagcloud';
+        $this->data['count'] = self::getTagCloud();
+    }
+
     private function __TEMP()
     {
 /**header('Content-Type: text/plain');

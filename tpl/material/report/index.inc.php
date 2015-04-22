@@ -1,127 +1,50 @@
 <?php
 //
-// index page : category listing : all bugs at a glance
+// index page : category listing and project overview
 //
 require BUNZ_TPL_DIR . 'header.inc.php';
 ?>
-<div style="height: 100%">
 <!--
     about:bunzilla
 -->
 <div class="row">
-        <article class="col s12 m6">
+<article class="col s12 m6">
 
-            <header class="section no-pad-bot">
-                <section class="section primary-base z-depth-5 waves-effect tooltipped"
-                         data-tooltip="Go to project website: <?= BUNZ_PROJECT_WEBSITE ?>"
-                         onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?= BUNZ_PROJECT_WEBSITE ?>'; }})(event);">
-                    <h1><?= BUNZ_PROJECT_TITLE ?></h1>
-                    <h6><em><?= BUNZ_SIGNATURE, ' v', BUNZ_VERSION ?></em></h6>
-                </section>
-            </header>
+    <header class="section no-pad-bot">
+        <section class="section primary-base z-depth-5 waves-effect tooltipped"
+                 data-tooltip="Go to project website: <?= BUNZ_PROJECT_WEBSITE ?>"
+                 onclick="(function(evt){ if(!(evt.target instanceof HTMLAnchorElement)){ window.location='<?= BUNZ_PROJECT_WEBSITE ?>'; }})(event);">
+            <h1><?= BUNZ_PROJECT_TITLE ?></h1>
+            <h6><em><?= BUNZ_SIGNATURE, ' v', BUNZ_VERSION ?></em></h6>
+        </section>
+        </header>
 
-            <section class="section row no-pad-top">
-                <p class="z-depth-5 col s4 section primary-lighten-3">version <?= BUNZ_PROJECT_VERSION ?></p>
-                <p class="z-depth-5 col s8 section primary-text right-align tooltipped" 
-                   data-tooltip="mission statement"><em><?= BUNZ_PROJECT_MISSION_STATEMENT ?></em></p>
-            </section>
+        <section class="section row no-pad-top">
+            <p class="z-depth-5 col s4 section primary-lighten-3">version <?= BUNZ_PROJECT_VERSION ?></p>
+            <p class="z-depth-5 col s8 section primary-text right-align tooltipped" 
+               data-tooltip="mission statement"><em><?= BUNZ_PROJECT_MISSION_STATEMENT ?></em></p>
+        </section>
 
-        </article>
+    </article>
+<?php
+if(count(Cache::read('tags')))
+{
+?>
         <article class="section col s12 m6">
-            <div class="row alert-base">(insert useful information here)<div>
-<?php
-/**
-            <ul class="tabs z-depth-3">
-                <li class="tab"><a href="#recent" class="waves-effect shade-base icon-history"><span class="hide-on-med-and-down">Recent Activity</span></a></li>
-                <li class="tab"><a href="#changelog" class="waves-effect secondary-base icon-doc-text-inv"><span class="hide-on-med-and-down">Changelog</span></a></li>
-                <li class="tab"><a href="#tagCloud" class="waves-effect primary-darken-2 icon-tags"><span class="hide-on-med-and-down">Popular Tags</span></a></li>
-                <li class="tab"><a href="#" class="active waves-effect red icon-cancel"></a></li>
-            </ul>
-            <section id="recent" class="section shade-base z-depth-5" >
-                <div class="section shade-lighten-3" style="max-height: 14em; overflow-y: auto">
-**/?>
-<?php
-/**
-if(empty($this->data['recent_activity']))
-    echo '<p><em>Nothing yet!</em></p>';
-
-function getURLbyColumn($col)
-{
-    $return = BUNZ_HTTP_DIR;
-    switch($col)
-    {
-        case 'report': $return .= "report/view/%d"; break;
-        case 'category': $return .= "report/category/%d"; break;
-        case 'status': $return .= "search/status/%d"; break;
-        case 'priority': $return .= "search/priority/%d"; break;
-        case 'tag': $return .= "search/tag/%d"; break;
-    }
-    return $return;
-}
-
-foreach($this->data['recent_activity'] as $log)
-{
-    $href = null;
-    foreach(['report','category','status','priority','tag'] as $col)
-    {
-        if(isset($log[$col]))
-        {
-            $href = sprintf(getURLbyColumn($col),$log[$col]);
-            break;
-        }
-    }
-    echo '<p>',
-            isset($href) ? "<a href='$href'>" : '',
-            '<strong>',$log['who'],'</strong> ',
-            $log['message'],'<br>',
-            '<small>',datef($log['time']),'</small>',
-            isset($href) ? '</a>' : '',
-        '</p>',"\n";
-}
-**/
-?><!--
-                </div>
+            <header class="section secondary-base z-depth-2">
+                <h4 class="icon-tags">A Tag Cloud or Something</h4>
+            </header>
+            <section class="section shade-text">
+                <div class="section secondary-text z-depth-3"
+                     style="overflow-y: auto; max-height: 12em; text-align: justify"
+                     id="tagCloud" 
+                     data-uri="<?= BUNZ_HTTP_DIR ?>search">Loading...</div>
             </section>
-            <section id="changelog" class="section secondary-base z-depth-5">
-                <pre class="section secondary-lighten-3" style="max-height: 14em; overflow-y: auto">-->
-<?php
-/**
-foreach(db()->query('SELECT message FROM change_log ORDER BY time DESC')->fetchAll(PDO::FETCH_NUM) as $msg)
-                echo " - {$msg[0]}\n";
-**/
-?><!--
-                </pre>
-            </section>
-            <section id="tagCloud" class="section primary-darken-2 z-depth-5">
-                <div class="section primary-lighten-4 center" style="max-height: 14em; overflow-y: auto">
--->
-<?php
-/**
-require_once BUNZ_CTL_DIR . 'search.php';
-$tags = search::getTagCloud();
-$unused = [];
-$sum = array_sum($tags);
-foreach($tags as $id => $count)
-{
-    if($count == 0)
-    {
-        $unused[] = $id;
-        continue;
-    }
-    if(isset($this->data['tags'][$id]))
-        echo '<a href="',BUNZ_HTTP_DIR,'search/tag/',$id,'" style="display: inline-block; font-size: ',max(round(10*($count/$sum),4),0.5),'em" class="tag-',$id,' ',$this->data['tags'][$id]['icon'],'" title="',$this->data['tags'][$id]['title'],'">',$this->data['tags'][$id]['title'],'</a>';
-}
-if(!empty($unused))
-{
-    echo '<p><em>Unused tags:</em> ';
-    foreach($unused as $id){
-        echo isset($this->data['tags'][$id]) ? tag($id) : "[MISSING_TAG_id#$id]";}
-    echo '</p>';
-}
-**/?><!--
-                </div>
-            </section>-->
         </article>
+        <script src="<?= BUNZ_JS_DIR ?>tagCloud.js"></script>
+<?php
+}
+?>
 </div>
 <!--
     main screen turn on
@@ -130,7 +53,7 @@ if(!empty($unused))
 if(empty($this->data['categories']))
 {
 ?>
-        <div class="z-depth-5 yellow section flow-text icon-attention center-align blue-text">No categories have been created yet! <a class="btn-flat icon-right-open-mini" href="<?= BUNZ_HTTP_DIR ?>cpanel">Go make one!</a></div>
+        <div class="z-depth-5 alert-text section icon-attention center-align">No categories have been created yet! <a class="btn secondary-base waves-effect icon-plus" href="<?= BUNZ_HTTP_DIR ?>cpanel#categories">Go make one!</a></div>
 <?php
 } else {
 

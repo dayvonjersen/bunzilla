@@ -1,10 +1,8 @@
 <?php
 /**
- * Another poorly named controller
- * 
- * it's actually the default route
+ * this is actually the default route
  *
- * words are hard
+ * it does way too much for what it is
  */
 
 class report extends Controller
@@ -32,8 +30,7 @@ class report extends Controller
 
     public $breadcrumbs = [];
     public function setBreadcrumbs($method)
-    {
-        
+    { 
         $this->breadcrumbs[] = ['href' => 'report/index', 
                                 'title' => 'Category Listing',
                                 'icon'  => 'icon-ul'];
@@ -41,7 +38,6 @@ class report extends Controller
             return;
 
         $category = Cache::read('categories')[$this->data['category_id']];
-
         $this->breadcrumbs[] = ['href' => 'report/category/'.$category['id'],
                                 'title' => $category['title'],
                                 'icon' => $category['icon']
@@ -52,25 +48,19 @@ class report extends Controller
         $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['report']['id'],
                                 'title' => $this->data['report']['subject'],
                                 'icon' => $this->data['report']['closed'] ? 'icon-lock' : 'icon-doc-text-inv'];
-        return;
     }
 
+    // this is default index page for bunzilla
     public function index()
     {
         $this->tpl .= '/index';
 
-        $this->data['recent_activity'] = db()->query(
-            'SELECT *
-             FROM status_log
-             ORDER BY time DESC
-             LIMIT 10'
-        )->fetchAll(PDO::FETCH_ASSOC);
-
+        // "stats" refers to report statistics per category
         $stats = [];
         $cats = Cache::read('categories');
         foreach($cats as $id => $cat)
         {
-            $stats[$id] = current(db()->query(
+            $stats[$id] = db()->query(
             'SELECT
                 COUNT(*) AS total_issues,
                 COUNT(DISTINCT(email)) AS unique_posters,
@@ -78,7 +68,7 @@ class report extends Controller
                     AS last_activity
              FROM reports
              WHERE category = '.$id
-            )->fetchAll(PDO::FETCH_ASSOC));
+            )->fetch(PDO::FETCH_ASSOC);
 
             $latest_comment = db()->query(
                 'SELECT MAX(c.time) 
