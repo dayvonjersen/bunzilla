@@ -237,3 +237,24 @@ function breadcrumb($crumbs, $youarehere, $categoryId)
         }
     }
 }
+
+// "e-penis" is an old online euphamism referring to
+// one's status, reputation, or clout especially as it relates to online
+// communities or an online identity and is actually meant to be 
+// disparaging against stereotypical, egotistical oftentimes teenaged males 
+//
+// this is the badge that shows up next to authorized users
+function epenis($epenis)
+{
+    switch($epenis)
+    {
+        default: return '';
+        case 1:
+            $q = ['secondary-base', 'icon-person', 'Developer'];
+            break;
+        case 2:
+            $q = ['alert-base', 'icon-terminal', 'System'];
+            break;
+    }
+    return vsprintf('<span class="badge %s left %s">%s</span>',$q);
+}

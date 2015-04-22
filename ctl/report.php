@@ -122,7 +122,7 @@ class report extends Controller
 
         $this->data['reports'] = db()->query(
                 'SELECT 
-                    r.id, r.email, r.subject, '.$field.' 
+                    r.id, r.email, r.epenis, r.subject, '.$field.' 
                     r.priority, r.status, r.closed,
                     r.time, r.edit_time, r.updated_at,
                     COUNT(c.id) AS comment_count, MAX(c.time) AS last_comment
@@ -163,43 +163,46 @@ class report extends Controller
 
         $this->tpl .= '/view';
 
-        $this->data['report'] = 
-            current(
-                db()->query(
-                    'SELECT * FROM reports WHERE id = '.$this->id
-                )->fetchAll(PDO::FETCH_ASSOC)
-        );
+        $this->data['report'] = db()->query(
+            'SELECT * FROM reports WHERE id = '.$this->id
+        )->fetch(PDO::FETCH_ASSOC);
 
-//todo: remove xxx
-        $this->data += $this->data['report'];
-
-        $this->data['comments'] = selectCount('comments','report = '.$this->id) ? db()->query('SELECT * FROM comments WHERE report = '.$this->id
-                )->fetchAll(PDO::FETCH_ASSOC) 
-            : [];
+        $this->data['comments'] = [];
+        if(selectCount('comments','report = '.$this->id))
+        {
+            $this->data['comments'] = db()->query(
+                'SELECT id,email,epenis,
+                    time,INET6_NTOA(ip) AS ip,edit_time,
+                    message,reply_to
+                 FROM comments WHERE report = '.$this->id
+            )->fetchAll(PDO::FETCH_ASSOC);
+        }
 
         // this is not great because the chance of 
         // a status_log and and a comment sharing the same ID is possible
         // but eh
         $this->data['timeline'] = db()->query(
-            '(SELECT id, time FROM status_log WHERE report = '.$this->id.' OR category = '.$this->data['report']['category'].')
+            '(SELECT id, time FROM status_log WHERE report = '.$this->id.')
              UNION
-             (SELECT id, time FROM comments WHERE report = '.$this->id.')
+             (SELECT id, time FROM comments   WHERE report = '.$this->id.')
              ORDER BY time ASC'
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['report']['tags'] = db()->query(
             'SELECT tag
              FROM tag_joins 
-             WHERE report = '.$this->id)->fetchAll(PDO::FETCH_COLUMN);
+             WHERE report = '.$this->id
+        )->fetchAll(PDO::FETCH_COLUMN);
 
         $this->data['status_log'] = db()->query(
-            'SELECT id,who,message,time FROM status_log WHERE report = '.$this->id
-// too much spam.' OR category = '.$this->data['report']['category']
+            'SELECT id, who, message, time 
+             FROM status_log 
+             WHERE report = '.$this->id
         )->fetchAll(PDO::FETCH_ASSOC);
 
         $this->data['category_id'] = $this->data['report']['category'];
         $this->setBreadcrumbs(__FUNCTION__);
-        if(!$this->auth())
+        if(!$this->auth() && empty($_POST))
             captcha::set();
         exit;
     }
@@ -207,11 +210,11 @@ class report extends Controller
     // moderation actions
     public function action($id)
     {
+        if(empty($_POST))
+            $this->abort();
+
         $this->requireLogin();
         $this->checkId($id);
-
-        if(empty($_POST))
-            $this->abort('What are you doing!? No GET access baka!');
         
         if(isset($_POST['delete']))
             $location = $this->delete();

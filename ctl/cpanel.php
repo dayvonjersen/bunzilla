@@ -119,7 +119,14 @@ class cpanel extends Controller
                 $this->abort('Unsupported action!');
         }
         call_user_func_array([$this,$mode.'Edit'],$args);
-        Statuslog::create($mode, (int)$args[0], 'modified');
+        if(isset($args[0]))
+        {
+            Statuslog::create(
+                $mode, 
+                (int)$args[0], 
+                'modified '.$mode.' '.Cache::read($tbl)[$args[0]]
+            );
+        }
         Cache::clear($tbl);
         $this->index();
     }

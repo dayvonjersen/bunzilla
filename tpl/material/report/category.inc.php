@@ -196,6 +196,7 @@ document.body.onload = function(){
 
 <?php // timestamps ?>
                     <span class="time_lastactive icon-time shade-text z-depth-2">
+<?= epenis($report['epenis']) ?>
 <?php if($report['last_active'] != $report['time']) { ?>
                         <span class="secondary-text"><span class="hide-on-med-and-down">last active: </span><?= datef($report['last_active']) ?></span>
                         <div class="hide-on-med-and-up icon-time"></div>&nbsp;|&nbsp;
