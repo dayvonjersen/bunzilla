@@ -17,9 +17,11 @@ class search extends Controller
     {
         /**
          * Get this page either by search/my term/another term ...
-            or search?q=my+term,+another+term...*/
+         *  or search?q=my+term,+another+term...*/
         $criteria = func_get_args();
-        array_shift($criteria);
+        if(isset($criteria[0]) && $criteria[0] == __CLASS__)
+            array_shift($criteria);
+
         if(isset($_GET['q']))
             $criteria[] = filter_input(INPUT_GET, 'q', FILTER_SANITIZE_ENCODED);
 
@@ -46,14 +48,10 @@ class search extends Controller
             }
             $search = trim(str_replace($match[0],'',$search));
         }
-/*        $require = empty($require) ? '' : implode(' AND ', $this->dostuff($require));
-        $include = empty($include) ? '' : implode(' OR ',  $this->dostuff($include));
-        $exclude = empty($exclude) ? '' : implode(' AND ', $this->dostuff($exclude,true));*/
+
         $require = $this->dostuff($require);
         $include = $this->dostuff($include);
         $exclude = $this->dostuff($exclude);
-
-        //$include = array_unique($require+$include+$exclude);
 
         $query = '';
         if(!empty($require))
@@ -64,8 +62,6 @@ class search extends Controller
 
         if(!empty($exclude))
             $query .= ' AND id NOT IN('.implode(',',$exclude).') ';
-
-//        $query = implode(' AND ', array_filter([$require,$include,$exclude],function($val){return $val!=='';}));
 
         if(!empty($search))
         {
@@ -101,7 +97,6 @@ class search extends Controller
                         default:  /** include as literal search term **/ continue 2;
                     }
                 }
-//                $this->data['test']['pcre'][] = $match;
                 $search = str_replace($match[0],'',$search);
             }
 
@@ -140,7 +135,7 @@ class search extends Controller
         $this->data['test']['term']  = !strlen($search) ? implode(',', $criteria) : $search;
         $this->data['test']['query'] = 'SELECT id,subject,description,reproduce,expected,actual FROM reports WHERE '.$query;
         $benchmark_it = microtime(1);
-        $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_NUM);    
+        $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_ASSOC);    
         $benchmark_it = microtime(1) - $benchmark_it;
         $this->data['test']['time'] =  $benchmark_it;
         exit;

@@ -47,7 +47,7 @@ if(empty($this->data['test']['results']))
 <?php
 } else {
 ?>
-        <h1>Results for <q class="secondary-text"><?= empty($this->data['test']['term']) ? filter_input(INPUT_GET,'q',FILTER_SANITIZE_STRING) : $this->data['test']['term'] ?></q></h1>
+        <h1>Results for <q class="secondary-text"><?= empty($this->data['test']['term']) ? filter_input(INPUT_GET,'q',FILTER_SANITIZE_STRING) : urldecode($this->data['test']['term']) ?></q></h1>
         <h5>(<?= count($this->data['test']['results']) ?> results; <?= $this->data['test']['time'] ?>s)</h5>
     </header>
     <section class="section z-depth-5 shade-text">
