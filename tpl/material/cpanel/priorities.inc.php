@@ -10,18 +10,37 @@ if(!empty($this->data['priorities']))
 ?>  
     <section id="viewPriorities" class="section row">
         
-        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority#priorities" method="post" class="section z-depth-3 primary-text">
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority#priorities" method="post" class="section z-depth-3 primary-text" id="priorityList">
             <div class="row">
                 <div class="right-align col s2">
-                    <span class="hide-on-med-and-down">Usage</span>
-                    <i class="icon-chart"></i>
+                    <a href="#viewPriorities" 
+                       class="btn-flat sort icon-chart waves-effect"
+                       data-sort="priority_usage">Usage<i class="icon-sort"></i>
+                    </a>
                 </div>
-                <div class="left-align col s6"><small>&nbsp;<i class="icon-ok"></i><span class="hide-on-med-and-down">Default</span></small>
-                <i class="icon-attention"></i> Priority <span class="hide-on-med-and-down">Icon, Title, and Color</span></div>
+                <div class="left-align col s6">
+                    <small>&nbsp;<i class="icon-ok"></i></small>
+                    <a href="#viewPriorities"
+                       class="btn-flat sort icon-ol waves-effect"
+                       data-sort="priority_id">ID#<i class="icon-sort"></i>
+                    </a>
+                    <a href="#viewPriorities"
+                       class="btn-flat sort icon-pinboard waves-effect"
+                       data-sort="priority_title">Title<i class="icon-sort"></i>
+                    </a>
+                    <a href="#viewPriorities"
+                       class="btn-flat sort icon-emo-happy waves-effect"
+                       data-sort="priority_icon">Icon<i class="icon-sort"></i>
+                    </a>
+                    <a href="#viewPriorities"
+                       class="btn-flat sort icon-css waves-effect"
+                       data-sort="priority_color">Color<i class="icon-sort"></i>
+                    </a></div>
                 <div class="right-align col s4"><i class="icon-cog"></i> Actions</div>
             </div>
             
             <div class="divider"></div>
+<ul class="list">
 <?php
     $i = 0;
     ($total_reports = selectCount('reports')) || ($total_reports = 1);
@@ -30,15 +49,12 @@ if(!empty($this->data['priorities']))
     {
         $usage = round(selectCount('reports', 'priority = '.$p['id'])/$total_reports, 2)*100;
 ?>
-            <div class="row hoverfx">
-
-                <div class="col s1">
-                    <a href="<?=BUNZ_HTTP_DIR,'search/priority:',$p['id']?>" 
-                               class="right btn btn-flat btn-floating secondary-text" 
-                               title="Search for where this priority is used">
-                        <i class="icon-search"></i></a>
-                </div>
-                <div class="col s1 right-align <?= $usage/100 > 1/$total_priorities ? 'large' : 'small' ?>"><?= $usage ?>%</div>
+            <li class="row hoverfx">
+                <span class="priority_color gone"><?=strtolower($p['color'])?></span>
+                <span class="priority_icon gone"><?=$p['icon']?></span>
+                <span class="priority_title gone"><?=$p['title']?></span>
+                <span class="priority_id gone"><?=$p['id']?></span>
+                <div class="priority_usage col s2 right-align <?= $usage/100 > 1/$total_priorities ? 'h4' : 'h5' ?>"><?= $usage ?>%</div>
                 <div class="col s6 input-field" style="position: relative;">
                     <p style="margin: 0">
                         <input type="radio" 
@@ -74,10 +90,15 @@ onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$p['id']?>" 
                                class="waves-effect right btn-small btn btn-flat btn-floating success-base" 
                                title="edit priority"><i class="icon-pencil-alt"></i></a>
+                    <a href="<?=BUNZ_HTTP_DIR,'search/priority:',$p['id']?>" 
+                               class="right btn btn-small btn-flat btn-floating secondary-text" 
+                               title="Search for where this priority is used">
+                        <i class="icon-search"></i></a>
                 </div>
-            </div>
+            </li>
 <?php
     }
+?></ul><?php
 }
 ?>
             <div class="row">

@@ -28,18 +28,34 @@ if(!empty($this->data['tags']))
 }
 </style>
     <section id="viewTags" class="section row z-depth-3">
-        <div class="primary-text section ">
+        <div class="primary-text section" id="tagList">
             <div class="row">
                 <div class="right-align col s2">
-                    <span class="hide-on-med-and-down">Usage</span>
-                    <i class="icon-chart"></i>
+                    <a href="#viewTags" 
+                       class="btn-flat sort icon-chart waves-effect"
+                       data-sort="tag_usage">Usage<i class="icon-sort"></i>
+                    </a>
                 </div>
                 <div class="left-align col s6">
-                <i class="icon-tags"></i> Tag <span class="hide-on-med-and-down">Icon, Title, and Color</span></div>
+                    <small>&nbsp;<i class="icon-ok"></i></small>
+                    <a href="#viewTags"
+                       class="btn-flat sort icon-pinboard waves-effect"
+                       data-sort="tag_title">Title<i class="icon-sort"></i>
+                    </a>
+                    <a href="#viewTags"
+                       class="btn-flat sort icon-emo-happy waves-effect"
+                       data-sort="tag_icon">Icon<i class="icon-sort"></i>
+                    </a>
+                    <a href="#viewTags"
+                       class="btn-flat sort icon-css waves-effect"
+                       data-sort="tag_color">Color<i class="icon-sort"></i>
+                    </a></div>
+                
                 <div class="right-align col s4"><i class="icon-cog"></i> Actions</div>
             </div>
             
             <div class="divider"></div>
+<ul class="list">
 <?php
     $i = 0;
     ($total_reports = selectCount('reports')) || ($total_reports = 1);
@@ -48,15 +64,12 @@ if(!empty($this->data['tags']))
     {
         $usage = round(selectCount('tag_joins', 'tag = '.$p['id'])/$total_reports, 2)*100;
 ?>
-            <div class="row hoverfx">
+            <li class="row hoverfx">
+                <span class="tag_title gone"><?=$p['title']?></span>
+                <span class="tag_icon gone"><?=$p['icon']?></span>
+                <span class="tag_color gone"><?=strtolower($p['color'])?></span>
 
-                <div class="col s1">
-                    <a href="<?=BUNZ_HTTP_DIR,'search/tag:',$p['id']?>" 
-                               class="right btn btn-small btn-flat btn-floating secondary-text" 
-                               title="Search for where this tag is used">
-                        <i class="icon-search"></i></a>
-                </div>
-                <div class="col s1 right-align <?= $usage/100 > 1/$total_tags ? 'h4' : 'h6' ?>"><?= $usage ?>%</div>
+                <div class="tag_usage col s2 right-align <?= $usage/100 > 1/$total_tags ? 'h4' : 'h6' ?>"><?= $usage ?>%</div>
                 <div class="col s6 input-field" style="position: relative; line-height: 1;">
                         <div>&nbsp;
                             <span class="tag-<?= $p['id'] ?> <?= $p['icon'] ?> label"
@@ -74,11 +87,17 @@ if(!empty($this->data['tags']))
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$p['id']?>" 
                                class="waves-effect right btn btn-flat btn-small btn-floating success-base" 
                                title="edit tag"><i class="icon-pencil-alt"></i></a>
+
+                    <a href="<?=BUNZ_HTTP_DIR,'search/tag:',$p['id']?>" 
+                               class="right btn btn-small btn-flat btn-floating secondary-text" 
+                               title="Search for where this tag is used">
+                        <i class="icon-search"></i></a>
                 </div>
-            </div>
+            </li>
 <?php
     }
 ?>
+</ul>
         </div>
     </section>
 

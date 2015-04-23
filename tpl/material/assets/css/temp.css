@@ -150,15 +150,15 @@ img { width: 50%; cursor: zoom-in }
 #list .subject-line { z-index: 110; font-size: 16px; }
 #list .subject-line a { margin: 0 1em 0 0; line-height: 1.874em; display:inline-block; max-width: calc(100vw - 10em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: justify; }
 #list .divider { margin: 1rem 0; }
-#list .btn-flat.asc i::before {
+.btn-flat.asc i::before {
     content: '\e845';
 }
-#list .btn-flat.desc i::before {
+.btn-flat.desc i::before {
     content: '\e842';
 }
-#list .btn-flat.asc, #list .btn-flat.desc {
-    background: #4eb3de;
-    color: #fff;
+.btn-flat.asc, .btn-flat.desc {
+    background: #4eb3de !important;
+    color: #fff !important;
 }
 #list
 

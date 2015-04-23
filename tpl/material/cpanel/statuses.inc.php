@@ -6,21 +6,36 @@
 <?php
 if(!empty($this->data['statuses']))
 {
-?>  
+?> 
     <section id="viewStatuses" class="section row z-depth-3">
         
-        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status#statuses" method="post" class="primary-text section z-depth-3">
+        <form action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/status#statuses" method="post" class="primary-text section z-depth-3"  id='statusList'>
             <div class="row">
                 <div class="right-align col s2">
-                    <span class="hide-on-med-and-down">Usage</span>
-                    <i class="icon-chart"></i>
+                    <a href="#viewStatuses" 
+                       class="btn-flat sort icon-chart waves-effect" 
+                       data-sort="status_usage">Usage<i class="icon-sort"></i>
+                    </a>
                 </div>
-                <div class="left-align col s6"><small>&nbsp;<i class="icon-ok"></i><span class="hide-on-med-and-down">Default</span></small>
-                <i class="icon-attention"></i> Status <span class="hide-on-med-and-down">Icon, Title, and Color</span></div>
+                <div class="left-align col s6">
+                    <small>&nbsp;<i class="icon-ok"></i></small>
+                    <a href="#viewStatuses"
+                       class="btn-flat sort icon-pinboard waves-effect"
+                       data-sort="status_title">Title<i class="icon-sort"></i>
+                    </a>
+                    <a href="#viewStatuses"
+                       class="btn-flat sort icon-emo-happy waves-effect"
+                       data-sort="status_icon">Icon<i class="icon-sort"></i>
+                    </a>
+                    <a href="#viewStatuses"
+                       class="btn-flat sort icon-css waves-effect"
+                       data-sort="status_color">Color<i class="icon-sort"></i>
+                    </a></div>
                 <div class="right-align col s4"><i class="icon-cog"></i> Actions</div>
             </div>
             
             <div class="divider"></div>
+<ul class="list">
 <?php
     $i = 0;
     ($total_reports = selectCount('reports')) || ($total_reports = 1);
@@ -29,15 +44,10 @@ if(!empty($this->data['statuses']))
     {
         $usage = round(selectCount('reports', 'status = '.$p['id'])/$total_reports, 2)*100;
 ?>
-            <div class="row hoverfx">
-
-                <div class="col s1">
-                    <a href="<?=BUNZ_HTTP_DIR,'search/status:',$p['id']?>" 
-                               class="right btn btn-flat btn-floating secondary-text" 
-                               title="Search for where this status is used">
-                        <i class="icon-search"></i></a>
-                </div>
-                <div class="col s1 right-align <?= $usage/100 > 1/$total_statuses ? 'large' : 'small' ?>"><?= $usage ?>%</div>
+            <li class="row hoverfx">
+                <span class="status_icon gone"><?=$p['icon']?></span>
+                <span class="status_color gone"><?=strtolower($p['color'])?></span>
+                <div class="status_usage col s2 right-align <?= $usage/100 > 1/$total_statuses ? 'h4' : 'h5' ?>"><?= $usage ?>%</div>
                 <div class="col s6 input-field" style="position: relative;">
                     <p style="margin: 0">
                         <input type="radio" 
@@ -47,7 +57,7 @@ if(!empty($this->data['statuses']))
                                <?= $p['default'] ? 'checked' : ''?>>
                         <label for="default_status_<?= $p['id'] ?>" 
                                style="position: static; transform: none; z-index: 1000;">
-                            <span class="status-<?= $p['id'] ?> <?= $p['icon'] ?>"
+                            <span class="status_title status-<?= $p['id'] ?> <?= $p['icon'] ?>"
                                   style="padding: 0 0.5em; 
                                          opacity: <?= 0.5 + $usage/200 ?>;
                                          display: inline-block; 
@@ -72,10 +82,16 @@ onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/status/',$p['id']?>" 
                                class="waves-effect right  btn-small btn btn-flat btn-floating success-base" 
                                title="edit status"><i class="icon-pencil-alt"></i></a>
+
+                    <a href="<?=BUNZ_HTTP_DIR,'search/status:',$p['id']?>" 
+                               class="right btn-small btn btn-flat btn-floating secondary-text" 
+                               title="Search for where this status is used">
+                        <i class="icon-search"></i></a>
                 </div>
-            </div>
+            </li>
 <?php
     }
+?></ul><?php
 }
 ?>
             <div class="row">

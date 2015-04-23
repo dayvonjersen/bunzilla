@@ -4,6 +4,34 @@ $background = 'primary-base';
 require_once BUNZ_TPL_DIR . 'header.inc.php';
 ?>
 <script src='<?= BUNZ_JS_DIR ?>jscolor.js'></script>
+<script src='<?= BUNZ_JS_DIR ?>list.min.js'></script>
+<script>
+//
+// list.js!
+//
+document.body.onload = function(){
+    statusList = new List('statusList', {valueNames: [
+        'status_usage',
+        'status_title',
+        'status_color',
+        'status_icon'
+    ]});
+    tagList = new List('tagList', {valueNames: [
+        'tag_usage',
+        'tag_title',
+        'tag_color',
+        'tag_icon'
+    ]});
+    priorityList = new List('priorityList', {valueNames: [
+        'priority_usage',
+        'priority_title',
+        'priority_color',
+        'priority_icon',
+        'priority_id'
+    ]});
+};
+
+</script>
 <article class=" primary-text">
     <header class="row">
 
