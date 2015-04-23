@@ -312,7 +312,7 @@ class Controller
         exit;
     }
 
-    public function requireLogin($ulevel = 0)
+    protected function requireLogin($ulevel = 0)
     {
         is_null($this->auth) && $this->auth();
         if(!$this->auth())
@@ -322,9 +322,19 @@ class Controller
         }
     }
 
+    protected function redirectWithMessage($location, $message = null)
+    {
+        if($message)
+            $this->flash[] = $message;
+        if(!empty($this->flash))
+            $_SESSION['flash'] = serialize($this->flash);
+        header('Location: '.BUNZ_HTTP_DIR.$location);
+        exit;
+    }
+
     /**
      * begin Terrible HTTP Authentication */
-    public function auth()
+    protected function auth()
     {
         if(!is_null($this->auth))
             return $this->auth;

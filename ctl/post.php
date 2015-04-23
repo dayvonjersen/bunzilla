@@ -218,6 +218,7 @@ class post extends Controller
 
         $this->data['params']['ip']     = remoteAddr();
 
+        $message  = null;
         $location = 'report/view/'.(int) $id;
         if(!empty($_POST))
         {
@@ -303,14 +304,6 @@ class post extends Controller
     /**
      * Helper functions and abstractions from here to EOF
      */
-
-    private function redirectWithMessage($location, $message)
-    {
-        $this->flash[] = $message;
-        $_SESSION['flash'] = serialize($this->flash);
-        header('Location: '.BUNZ_HTTP_DIR.$location);
-        exit;
-    }
 
     // this breadcrumb thing feels out of place
     public $breadcrumbs = [];

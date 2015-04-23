@@ -218,19 +218,18 @@ class report extends Controller
         
         if(isset($_POST['delete']))
             $location = $this->delete();
-
         elseif(isset($_POST['status'],$_POST['priority']))
-        {
             $location = $this->updateStatus((int)$_POST['status'],(int)$_POST['priority']);
-        }
-
-        $_SESSION['flash'] = serialize($this->flash);
-        header('Location: '.BUNZ_HTTP_DIR.$location);
-        exit;
+        elseif(isset($_POST['delete_comments']))
+            $location = $this->deleteComments();
+        $this->redirectWithMessage($location);
     }
 
     public function move($id,$destination_category = -1)
     {
+        if(empty($_POST))
+            $this->abort();
+
         $this->requireLogin();
         $this->checkId($id);
 
@@ -246,25 +245,22 @@ class report extends Controller
              WHERE id = '.$this->id
         )->fetch(PDO::FETCH_ASSOC);
 
+        $message = 'Move operation failed.'; // default message
         if($report['category'] == $destination_category)
         {
-            $this->flash[] = 'I\'m afraid I can\'t let you do that, Dave.';
+            $message = 'I\'m afraid I can\'t let you do that, Dave.';
         } else {
             $categories = Cache::read('categories');
 
             if(self::moveBulk([$report],$report['category'],$destination_category))
             {
-                $this->flash[] = 'Report moved to category &quot;'
-                    .$categories[(int)$destination_category]['title'].'&quot;';
-                StatusLog::create('report',$report['id'],end($this->flash),null);
+                $message = ' moved report to category "'
+                    .$categories[(int)$destination_category]['title'].'"';
+                StatusLog::create('report',$report['id'],$message,null);
             }
-            else
-                $this->abort('Something terrible happened.');
         }
 
-        $_SESSION['flash'] = serialize($this->flash);
-        header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$report['id']);
-        exit;        
+        $this->redirectWithMessage('report/view/'.$report['id'],$message);
     }
 
     public static function moveBulk( $reports, $current_category, $destination_category )
@@ -273,7 +269,7 @@ class report extends Controller
         $destination_category = (int) $destination_category;
 
         if(selectCount('categories',"id IN ($current_category, $destination_category)") != 2)
-            throw new InvalidArgumentException('Invalid parameter.');
+            $this->abort('Invalid parameter.');
 
         $categories = Cache::read('categories');
 
@@ -308,93 +304,156 @@ class report extends Controller
         return true;
     }
 
-
     public function merge($id)
     {
+        // preliminary stuff
+        if(empty($_POST))
+            $this->abort();
+
         $this->requireLogin();
+
+        $this->checkId($id);
+        $curr = (int)$id;
+
         $destination_report = isset($_POST['zig'],$_POST['report'])
             ? (int) $_POST['report'] : -1;
         $this->checkId($destination_report);
         $dest = (int)$destination_report;
-        $this->checkId($id);
-        $curr = (int)$id;
 
+        // obtain datas
         $results = [];
-        foreach(db()->query("SELECT * FROM reports WHERE id IN($curr,$dest)")->fetchAll(PDO::FETCH_ASSOC) as $report)
-        {
+        foreach(db()->query(
+            "SELECT id, email,INET6_NTOA(ip) AS ip, epenis, 
+                time, edit_time, category, status, priority,
+                subject, description, reproduce, expected, actual
+             FROM reports 
+             WHERE id IN($curr,$dest)"
+        )->fetchAll(PDO::FETCH_ASSOC) as $report)
             $results[$report['id']] = $report;
-        }
 
-        $current_report = $results[$curr];
+        $current_report     = $results[$curr];
         $destination_report = $results[$dest];
         
-        if($current_report['category'] != $destination_report['category'])
-        {
-            $this->flash[] = 'Merge is experimental; Please try again now that the report has moved.';
-            $this->move($curr,$dest);
-        }
-
         $current_report['tags'] = db()->query(
             'SELECT t.title
              FROM tags AS t
                 LEFT JOIN tag_joins AS tj
                 ON t.id = tj.tag
-             WHERE tj.report = '.$curr
+             WHERE tj.report = '.$current_report['id']
         )->fetchAll(PDO::FETCH_COLUMN);
 
         $stmt = db()->prepare(
-            'INSERT INTO comments (report,email,epenis,time,ip,message,reply_to) VALUES (:report,:email,:epenis,:time,:ip,:message,:reply_to)');
+            'INSERT INTO comments 
+                (report,email,epenis,time,ip,message,reply_to) 
+             VALUES 
+                (:report,:email,:epenis,:time,INET6_ATON(:ip),:message,:reply_to)'
+        );
 
+        // format array for pdo
         $makeInsert = function($report,$email,$epenis,$ip,$message,$time,$reply_to){
-            return ['report'=>$report,'email'=>$email,'epenis'=>$epenis,'ip'=>$ip,'message'=>$message,'time'=>$time,'reply_to'=>$reply_to];
+            return ['report'=>$report,'email'=>$email,'epenis'=>$epenis,'ip'=>$ip,
+                    'message'=>$message,'time'=>$time,'reply_to'=>$reply_to
+            ];
         };
 
-        $stmt->execute($makeInsert($dest,__METHOD__,2,dtr_pton('127.0.0.1'),nl2br(
-"<div class='col s12 section z-depth-5 shade-lighten-4 h6'><p><i class='icon-move'></i>Merge is an experimental feature.</p><p>If you have any suggestions, feedback, or concerns please leave a message on <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.</div>
+        // make a new comment in the destination report
+        // to hold the contents of the current report
+        $stmt->execute($makeInsert(
+            $dest,
+            __METHOD__,
+            2, // epenis 2 is "System"
+            remoteAddr(),
+            nl2br(
+            '<em>Merge is an experimental feature. '.
+            'If you encounter any problems or '. 
+            'if you have any suggestions or feedback, '. 
+            'please leave a message on '.
+            '<a href=\'http://meta.bunzilla.ga/\'>'.
+            'the Bunzilla meta-tracker</a>.</em>
 
-submitted: ".date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['time'])."\n"
-.($current_report['edit_time'] ? '<b>edit at</b> '.date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['edit_time']).' (diffs included this could get real ugly)'."\n" : '')."
-subject: {$current_report['subject']}
-priority: ".Cache::read('priorities')[$current_report['priority']]['title']."
-status: ".Cache::read('statuses')[$current_report['status']]['title']."\n"
-.(empty($current_report['tags']) ? '' : 'tagged: '.implode(', ',$current_report['tags'])."\n")),
-time(),null));
+            submitted: '
+            .date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['time'])."\n"
+            .($current_report['edit_time'] ? '<b>edit at</b> '
+                .date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['edit_time'])
+                .' (diffs included this could get real ugly)'."\n" : ''
+            )."subject: {$current_report['subject']}
+            priority: ".Cache::read('priorities')[$current_report['priority']]['title']."
+            status: " . Cache::read('statuses'  )[$current_report['status']]['title']."\n"
+            .(empty($current_report['tags']) ? '' 
+                : 'tagged: '.implode(', ',$current_report['tags'])."\n"
+            )),
+            time(),
+            null
+        ));
+
+        // add the contents of the current report 
+        // as replies to this initial comment we just made
         $reply_to = db()->lastInsertId();
         $inserts = [];
         foreach(['description','reproduce','expected','actual'] as $field)
         {
             if($current_report[$field])
             {
-                $inserts[] = $makeInsert($dest,$current_report['email'],$current_report['epenis'],$current_report['ip'],"<h3>$field</h3>".$current_report[$field],$current_report['time'],$reply_to);
+                $inserts[] = $makeInsert(
+                    $dest,
+                    $current_report['email'],
+                    $current_report['epenis'],
+                    $current_report['ip'],
+                    "<h3>$field</h3>".$current_report[$field],
+                    $current_report['time'],
+                    $reply_to
+                );
             }
         }
+
+        // include the contents of edits
+        // since we split the report (which has multiple fields)
+        // into individual comments of these fields, 
+        // and since the diff is taken against the entire report
+        // we *can't* just move the "diff/reports/some_number" 
+        // file to "diff/comments/some_other_number"
         if($current_report['edit_time'])
         {
             if(!file_exists(BUNZ_DIR.'diff/reports/'.$curr))
-                throw new RuntimeException;
-
-            $inserts[] = $makeInsert($dest,$current_report['email'],$current_report['epenis'],$current_report['ip'],"<h3>diff</h3>".nl2br(htmlentities(file_get_contents(BUNZ_DIR.'diff/reports/'.$curr))),$current_report['edit_time'],$reply_to);
+                $this->flash[] = 'This report has been edited but the diff is missing.';
+            else
+            {
+                $inserts[] = $makeInsert(
+                    $dest,
+                    $current_report['email'],
+                    2,
+                    $current_report['ip'],
+                    '<h3>diff</h3>'.nl2br(htmlentities(file_get_contents(
+                        BUNZ_DIR.'diff/reports/'.$curr))),
+                    $current_report['edit_time'],$reply_to
+                );
+                unlink(BUNZ_DIR.'diff/reports/'.$curr);
+            }
         }
 
+        // run all the insert statements at once
         foreach($inserts as $values)
             $stmt->execute($values);
 
-        db()->query('UPDATE comments SET time = UNIX_TIMESTAMP(), report = '.$dest.', reply_to = '.$reply_to.' WHERE report = '.$curr) or die(print_r(db()->errorInfo(),1));
+        // transfer the comments to the destination report
+        db()->query(
+           'UPDATE comments 
+            SET time = UNIX_TIMESTAMP(), 
+                report = '.$dest.', 
+                reply_to = '.$reply_to.' 
+            WHERE report = '.$curr);
 
-        $this->flash[] = 'well, THAT happened.';
-
+        // delete the original report
         $this->id = $curr;
         $this->delete();
 
-        $_SESSION['flash'] = serialize($this->flash);
-        header('Location: '.BUNZ_HTTP_DIR.'report/view/'.$dest);
-        exit;        
-    
+        $this->redirectWithMessage('report/view/'.$dest,'Report merged.');    
     }
 
     protected function updateStatus($status,$priority)
     {
-        if(selectCount('statuses','id = '.$status)&&selectCount('priorities','id = '.$priority))
+        if(selectCount('statuses','id = '.$status)
+            && selectCount('priorities','id = '.$priority))
         {
             $statlog = ['status' => $status, 'priority' => $priority];
             isset($_POST['toggleClosed']) && $statlog['closed'] = -1;
@@ -420,7 +479,7 @@ time(),null));
             'SELECT category FROM reports WHERE id = '.$this->id
         )->fetchColumn(0);
 
-//        Statuslog::create('category', $catid, 'deleted a report');
+        Statuslog::create('category', $catid, 'deleted a report');
 
         db()->query('DELETE FROM comments WHERE report = '.$this->id);
         db()->query('DELETE FROM tag_joins WHERE report = '.$this->id);
@@ -431,4 +490,28 @@ time(),null));
 
         return 'report/category/'.$catid;
     }
-}// this file could use some work
+
+    protected function deleteComments()
+    {
+        $ids = [];
+        $rows = 0;
+        foreach($_POST['delete_comments'] as $c)
+            $ids[] = (int)$c;
+        if(count($ids))
+        {
+            $in = implode(',',$ids);
+            $rows += db()->query(
+                'DELETE FROM comments 
+                 WHERE report = '.$this->id.' 
+                 AND id IN ('.$in.')'
+            )->rowCount();
+            db()->query(
+                'UPDATE comments 
+                 SET reply_to = NULL
+                 WHERE reply_to IN ('.$in.')'
+            );
+        }
+        $this->flash[] = sprintf('%d comment%s deleted.',$rows,$rows==1?'':'s');
+        return 'report/view/'.$this->id;
+    }
+}

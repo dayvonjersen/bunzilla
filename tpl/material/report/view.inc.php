@@ -291,6 +291,17 @@ if($report['edit_time'])
 ?>
         </div>
     </main>
+<?php
+//
+// delete comments is a form for admins
+//
+if($this->auth())
+{
+?>
+    <form action="<?= BUNZ_HTTP_DIR ?>report/action/<?=$report['id']?>" method="post">
+<?php
+}
+?>
     <footer id="comments" 
             class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-lighten-1" 
             style="text-align: left !important; margin-top: -1em;">
@@ -359,7 +370,23 @@ function displayComment( $comment, $number, $authUser = false, $cat, $report,$ne
          id="reply-<?=$comment['id']?>" 
          style="margin: 0 1em;">
     <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
-        <p style="margin: 10px 0"><?= $comment['email'], epenis($comment['epenis']) ?> 
+        <p style="margin: 10px 0">
+<?php
+// delete checkbox for admins
+if($authUser)
+{
+?>
+        <input type="checkbox" 
+               name="delete_comments[]"
+               value="<?= $comment['id']?>" 
+               id="del_comment_<?=$comment['id']?>">
+        <label title="Delete this comment" class="shade-text" for="del_comment_<?=$comment['id']?>">
+            <i class="icon-delete"></i>
+        </label>
+<?php
+}
+?>
+        <?= $comment['email'], epenis($comment['epenis']) ?> 
             <a class="right" href="#reply-<?= $comment['id'] ?>"> #<?=$number?></a>
             <span class="right small"><?= datef($comment['time']) ?>&emsp;&emsp;</span>
         </p>
@@ -408,7 +435,7 @@ function displayComment( $comment, $number, $authUser = false, $cat, $report,$ne
         }
 ?>
 <a href="#reply-<?=$reply_to?>" 
-       onclick="(function(evt){evt.preventDefault();document.getElementById('comment').value = '&gt;&gt;<?= $reply_to?>';document.getElementById('comment').focus()})(event)"
+       onclick='(function(evt){evt.preventDefault();document.getElementById("message").value += "&gt;&gt;<?= $reply_to?>\n";document.getElementById("message").focus()})(event)'
        style="margin-left: 1rem"
        class="waves-effect z-depth-5 large center btn-floating secondary-base tooltipped"
        data-tooltip="quotereply: use with caution"
@@ -418,7 +445,22 @@ function displayComment( $comment, $number, $authUser = false, $cat, $report,$ne
     }
     echo '</section>';
 }
-
+?>
+        </footer>
+<?php
+if($this->auth())
+{
+?>
+        <div class="section input-field center">
+            <button type="submit" 
+                   class="btn danger-base icon-delete waves-effect" 
+                   onclick="(function(evt){if(!window.confirm('There is no undo for this action!')) evt.preventDefault()})(event)"
+            >Delete Selected Comments</button>
+            <button type="reset" class="btn-flat waves-effect icon-cancel">Reset Form</button>
+        </div>
+        </form>
+<?php
+}
 //
 // post a comment
 //
@@ -426,6 +468,7 @@ if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
 {
 require BUNZ_TPL_DIR .'toolsModal.html';
 ?>
+        <footer>
             <section class="section">
                 <form action="<?= BUNZ_HTTP_DIR,'post/comment/',$report['id'] ?>" 
                       method="post" 
