@@ -63,27 +63,8 @@ $dir->close();
                                 </form>
                             </li>
                             <li>
-                                <a href="<?= BUNZ_HTTP_DIR ?>changelog" class="waves-effect gn-icon icon-history" title=""><?= BUNZ_PROJECT_TITLE ?> Changelog</a>
+                                <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index</a>
                             </li>
-<?php
-if($this->auth())
-{ 
-?>
-                            <li class="hide-on-small-only">
-                                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class=" waves-effect gn-icon icon-cog-alt">Cpanel</a>
-                            </li>
-                            <li class="hide-on-small-only waves-effect">
-                                <a href="?logout" class="  waves-effect gn-icon icon-logout">Logout <?= $_SERVER['PHP_AUTH_USER'] ?></a>
-                            </li>
-<?php
-} else {
-?>
-                            <li class="hide-on-small-only">
-                                <a href="?login" class=" waves-effect gn-icon icon-key">Login</a>
-                            </li>
-<?php
-}
-?>
                             <li>
 <?php
 if(isset($this->breadcrumbs) && count($this->breadcrumbs))
@@ -102,11 +83,43 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
     echo "\t\t\t\t\t\t</ul>\n";
 } else {
 ?>
-                                <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index Page</a>
+<!--                                <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index Page</a>-->
 <?php
 }
 ?>
                             </li>
+<?php
+if(!($this instanceof changelog))
+{
+?>
+                            <li>
+                                <a href="<?= BUNZ_HTTP_DIR ?>changelog" class="waves-effect gn-icon icon-history" title=""><?= BUNZ_PROJECT_TITLE ?> Changelog</a>
+                            </li>
+<?php
+}
+if($this->auth())
+{
+    if(!($this instanceof cpanel))
+    {
+?>
+                            <li class="hide-on-small-only">
+                                <a href="<?= BUNZ_HTTP_DIR ?>cpanel" class=" waves-effect gn-icon icon-cog-alt">Cpanel</a>
+                            </li>
+<?php
+    }
+?>
+                            <li class="hide-on-small-only waves-effect">
+                                <a href="?logout" class="  waves-effect gn-icon icon-logout">Logout <?= $_SERVER['PHP_AUTH_USER'] ?></a>
+                            </li>
+<?php
+} else {
+?>
+                            <li class="hide-on-small-only">
+                                <a href="?login" class=" waves-effect gn-icon icon-key">Login</a>
+                            </li>
+<?php
+}
+?>
                         </ul>
                     </div>
                 </nav>

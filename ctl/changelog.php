@@ -2,7 +2,6 @@
 class changelog extends Controller
 {
     public $breadcrumbs = [
-        ['href'=>'','title'=>BUNZ_PROJECT_TITLE,'icon'=>'icon-home'],
         ['href'=>'changelog','title'=>'Changelog','icon'=>'icon-history'],
     ];
     protected static function getVersions()
