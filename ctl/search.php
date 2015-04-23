@@ -10,7 +10,7 @@ class search extends Controller
             case 'tag': return 'tags';
             case 'priority': return 'priorities';
         }
-        throw new OutOfBoundsException('what the fuck dude');
+        throw new OutOfBoundsException('Unrecognized column '.$column);
     }
 
     public function index() 
@@ -32,14 +32,14 @@ class search extends Controller
         /**
          * search by meta-data */
         preg_match_all(
-            '/([!\-])?(category|status|tag|priority)(%3A|:)([\w\d]+)/i', 
+            '/([!\-])?(category|status|tag|priority)(%3A|:)(.+)/i', 
             $search, $matches, PREG_SET_ORDER
         );
         $require = $include = $exclude = [];
         foreach($matches as $match)
         {
             $col = strtolower($match[2]);
-            $match[4] = is_numeric($match[3]) ? (int)$match[3] : strtolower($match[4]);
+            $match[4] = is_numeric($match[3]) ? (int)$match[3] : strtolower(urldecode($match[4]));
             switch($match[1])
             {
                 case '!': $require[$col][] = $match[4]; break;
@@ -54,13 +54,13 @@ class search extends Controller
         $exclude = $this->dostuff($exclude);
 
         $query = '';
-        if(!empty($require))
+        if(count($require))
             $query .= ' AND id IN('.implode(',',$require).') ';
 
-        if(!empty($include))
+        if(count($include))
             $query .= ' OR id IN('.implode(',',$include).') ';
 
-        if(!empty($exclude))
+        if(count($exclude))
             $query .= ' AND id NOT IN('.implode(',',$exclude).') ';
 
         if(!empty($search))
@@ -68,7 +68,7 @@ class search extends Controller
             /**
              * search by field */
             preg_match_all(
-                '/([!\-])?(subject|description|reproduce|expected|actual|comment)(:.+)?/i',
+                '/([\+!\-])?(subject|description|reproduce|expected|actual|comment)((%3A|:).+)?/i',
                 $search, $matches, PREG_SET_ORDER
             );
             $fields = array_flip(['subject','description','reproduce','expected','actual','comment']);
@@ -92,7 +92,7 @@ class search extends Controller
                 } else {
                     switch($match[1])
                     {
-                        case '!': /** require **/ $require_fields[$match[2]] = true; break;
+                        case '!': case '+': /** require **/ $require_fields[$match[2]] = true; break;
                         case '-': /** exclude **/ unset($fields[$match[2]]); break;
                         default:  /** include as literal search term **/ continue 2;
                     }
@@ -133,12 +133,37 @@ class search extends Controller
 
         $this->data['reports'] = [];
         $this->data['test']['term']  = !strlen($search) ? implode(',', $criteria) : $search;
-        $this->data['test']['query'] = 'SELECT id,subject,description,reproduce,expected,actual FROM reports WHERE '.$query;
+        $this->data['test']['query'] = 
+                'SELECT 
+                    r.id, r.category, r.email, r.epenis, r.subject, r.description AS preview_text,
+                    r.priority, r.status, r.closed,
+                    r.time, r.edit_time, r.updated_at,
+                    COUNT(c.id) AS comment_count, MAX(c.time) AS last_comment
+                 FROM reports AS r
+                    LEFT JOIN comments AS c
+                    ON r.id = c.report
+                 WHERE r.id IN (SELECT id FROM reports WHERE '.$query.')
+                 GROUP BY r.id';
         $benchmark_it = microtime(1);
-        $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_ASSOC);    
+        try {
+            $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_ASSOC);    
+        } catch(PDOException $e) {
+            $this->data['error'] = '<pre><strong>'.$e->getMessage()."\n".print_r($this->data['test'],1).'</pre>';
+            exit;
+        }
+        $this->data['reports'] = $this->data['test']['results'];
+        foreach($this->data['reports'] as $i => $report)
+        {
+            $this->data['reports'][$i]['tags'] = db()->query(
+                'SELECT tag
+                 FROM tag_joins 
+                 WHERE report = '.$report['id']
+            )->fetchAll(PDO::FETCH_COLUMN);
+            $this->data['reports'][$i]['comments']   = $report['comment_count'];
+            $this->data['reports'][$i]['updated_at'] = max($report['updated_at'],$report['last_comment']);
+        }
         $benchmark_it = microtime(1) - $benchmark_it;
         $this->data['test']['time'] =  $benchmark_it;
-        exit;
     }
 
     private function dostuff( $array )
@@ -192,7 +217,7 @@ class search extends Controller
     {
         $categories = self::getIds('categories', func_get_args());
 
-        return !count($categories) ? [] : db()->query(
+        return empty($categories) ? [] : db()->query(
             'SELECT id FROM reports WHERE category IN ('.$categories.')'
         )->fetchAll(PDO::FETCH_COLUMN);
     }

@@ -16,9 +16,9 @@ require BUNZ_TPL_DIR . 'header.inc.php';
                     <div class="section no-pad icon-cog-alt collapsible-header secondary-text no-select waves-effect">
                         Advanced...</div>
 
-                    <div class="collapsible-body section">
+                    <div class="collapsible-body section active">
                         <div class="divider" style="margin-bottom: 1em"></div>
-                        <h2>nothing here yet</h2>
+                        <h2></h2>
                     </div>
                 </li>
             </ol>
@@ -43,6 +43,7 @@ if(empty($this->data['test']['results']))
 {
 ?>
         <h1>No results found!</h1>
+        <?= isset($this->data['error']) ? $this->data['error'] : '' ?>
     </header>
 <?php
 } else {
@@ -50,21 +51,10 @@ if(empty($this->data['test']['results']))
         <h1>Results for <q class="secondary-text"><?= empty($this->data['test']['term']) ? filter_input(INPUT_GET,'q',FILTER_SANITIZE_STRING) : urldecode($this->data['test']['term']) ?></q></h1>
         <h5>(<?= count($this->data['test']['results']) ?> results; <?= $this->data['test']['time'] ?>s)</h5>
     </header>
-    <section class="section z-depth-5 shade-text">
-    <ol> 
+
 <?php
-foreach($this->data['test']['results'] as $report)
-{
-?>
-    <li>
-        <a class="icon-doc-text-inv" href="<?= BUNZ_HTTP_DIR ?>report/view/<?= $report['id']?>"><?= $report['subject'] ?></a>
-    </li>
-<?php
-}
-?>
-    </ol>
-    </section>
-<?php
+    $pageMode = 'search';
+    require BUNZ_TPL_DIR . 'report/listing.phtml';
 }
 ?>
 </main>
