@@ -68,11 +68,11 @@ if(!empty($this->data['priorities']))
                 </div>
                 <div class="col s4">
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/priority/',$p['id']?>#priorities" 
-                               class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
+                               class="waves-effect waves-red right btn-small btn btn-flat btn-floating danger-text" 
                                title="delete priority"
 onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this priority?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/priority/',$p['id']?>" 
-                               class="waves-effect right btn btn-flat btn-floating success-base" 
+                               class="waves-effect right btn-small btn btn-flat btn-floating success-base" 
                                title="edit priority"><i class="icon-pencil-alt"></i></a>
                 </div>
             </div>

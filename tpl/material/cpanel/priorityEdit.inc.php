@@ -6,10 +6,10 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 $cat = $this->data['priority'];
 ?>
 <script src="<?= BUNZ_JS_DIR ?>jscolor.js"></script>
-   <section id="editPriority" class="shade-text section">
-            <h1 class="icon-pencil-alt"><?= $pageTitle ?></h1>
-            <div>&nbsp;        <?= priority($cat['id']) ?></div>
-        <form class=" z-depth-5 section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority/<?=$cat['id']?>" method="post">
+   <section id="editPriority" class="alert-base section">
+        <form class=" z-depth-5 section shade-text" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/priority/<?=$cat['id']?>" method="post">
+            <h3 class="icon-pencil-alt"><?= $pageTitle ?>
+            <?= priority($cat['id']) ?></h3><br/>
             <div class="input-field">
                 <input id="add-priority-id" type="text" name="id" maxlength="3" value="<?=$cat['id']?>"/>
                 <span class="material-input"></span>

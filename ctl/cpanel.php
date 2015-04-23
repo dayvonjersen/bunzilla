@@ -16,33 +16,44 @@ class cpanel extends Controller
     public $breadcrumbs = [];
     protected function setBreadcrumbs($method)
     {
-        $this->breadcrumbs[] = ['href' => '', 
-                                'title' => BUNZ_PROJECT_TITLE,
-                                'icon'  => 'icon-home'];
-        $this->breadcrumbs[] = ['href' => 'cpanel/index', 
-                                'title' => 'cpanel',
-                                'icon'  => 'icon-cog'];
         switch($method)
         {
             case 'tagEdit':
                 $this->breadcrumbs[] = ['href' => 'cpanel#tags',
                                         'title' => 'Tags',
                                         'icon' => 'icon-tags'];
+                $this->breadcrumbs[] = ['href' => '',
+                                        'title' => 'Edit Tag',
+                                        'icon' => 'icon-pencil-alt'];
                 break;
             case 'statusEdit':
                 $this->breadcrumbs[] = ['href' => 'cpanel#statuses',
                                         'title' => 'Statuses',
                                         'icon' => 'icon-pinboard'];
+                $this->breadcrumbs[] = ['href' => '',
+                                        'title' => 'Edit Status',
+                                        'icon' => 'icon-pencil-alt'];
                 break;
             case 'priorityEdit':
                 $this->breadcrumbs[] = ['href' => 'cpanel#priorities',
                                         'title' => 'Priorities',
                                         'icon' => 'icon-attention'];
+                $this->breadcrumbs[] = ['href' => '',
+                                        'title' => 'Edit Priority',
+                                        'icon' => 'icon-pencil-alt'];
                 break;
             case 'categoryEdit':
                 $this->breadcrumbs[] = ['href' => 'cpanel#categories',
                                         'title' => 'Categories',
                                         'icon' => 'icon-list-dl'];
+                $this->breadcrumbs[] = ['href' => '',
+                                        'title' => 'Edit Category',
+                                        'icon' => 'icon-pencil-alt'];
+                break;
+            default:
+                $this->breadcrumbs[] = ['href' => 'cpanel/index', 
+                                        'title' => 'cpanel',
+                                        'icon'  => 'icon-cog'];
                 break;
         }
     }
@@ -670,5 +681,55 @@ class cpanel extends Controller
 
         echo system('crontab -u '.$user.' '.$temp, $exit_code);
         echo "\n$exit_code";
+    }
+
+    public function export($mode = 'full')
+    {
+        if(!in_array($mode,['full','data','structure'],1))
+        {
+            $this->flash[] = 'Invalid export mode!';
+            $this->index();
+            exit;
+        }
+
+        header('Content-Type: text/plain; charset=utf-8');
+        header('Content-Disposition: attachment; filename="'.date('YmdHis').'-'.preg_replace('/[^a-z0-9-_]/i','_',BUNZ_PROJECT_TITLE).'--bunzilla-'.strtoupper($mode).'-dump.sql.gz"');
+        flush();
+        ob_start();
+        echo '-- database dump for: ',BUNZ_PROJECT_TITLE,' ',BUNZ_PROJECT_VERSION,"\n",
+             '-- ',BUNZ_SIGNATURE,' v',BUNZ_VERSION,"\n",
+             '-- ',date(BUNZ_BUNZILLA_DATE_FORMAT),"\n\n";
+        $db = db()->query('SELECT DATABASE()')->fetch(PDO::FETCH_COLUMN);
+        echo $mode != 'data' ? "CREATE DATABASE IF NOT EXISTS `$db`;\n" : '',
+             "USE `$db`\n\n";
+        foreach(db()->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN) as $tbl)
+        {
+            if($mode != 'data')
+            {
+                $create_table = str_replace('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS', db()->query('SHOW CREATE TABLE '.$tbl)->fetch(PDO::FETCH_NUM)[1]);
+                if($mode == 'structure')
+                    $create_table = preg_replace('/auto_increment=\d+\s+/i', '', $create_table);
+                echo "$create_table;\n";
+            }
+            $columns = db()->query('SHOW COLUMNS FROM '.$tbl)->fetchAll(PDO::FETCH_COLUMN);
+            if($mode != 'structure')
+            {
+                echo "\n -- data for $tbl\nREPLACE INTO `$tbl`\n  (`",implode('`,',$columns),"`)\nVALUES\n";
+                $rows = db()->query('SELECT * FROM '.$tbl)->fetchAll(PDO::FETCH_ASSOC);
+                foreach($rows as $row)
+                {
+                    echo "  (";
+                    foreach($columns as $col)
+                        echo db()->quote($row[$col]),$col === end($columns) ? '' : ',';
+                    echo ')',$row === end($rows) ? ';' : ',',"\n";
+                }
+            }
+            echo "\n";
+        }
+        echo '-- executed in ',microtime(1) - BUNZ_START_TIME,'s';
+        $output = gzencode(ob_get_contents(),9);
+        ob_end_clean();
+        echo $output;
+        exit;
     }
 }

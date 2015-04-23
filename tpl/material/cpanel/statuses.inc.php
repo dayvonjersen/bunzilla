@@ -66,11 +66,11 @@ if(!empty($this->data['statuses']))
                                 pointer-events: none"></div>
                 </div>
                 <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/status/',$p['id']?>#statuses" 
-                               class="waves-effect waves-red right btn btn-flat btn-floating danger-text" 
+                               class="waves-effect waves-red right btn-small btn btn-flat btn-floating danger-text" 
                                title="delete status"
 onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this status?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/status/',$p['id']?>" 
-                               class="waves-effect right btn btn-flat btn-floating success-base" 
+                               class="waves-effect right  btn-small btn btn-flat btn-floating success-base" 
                                title="edit status"><i class="icon-pencil-alt"></i></a>
                 </div>
             </div>

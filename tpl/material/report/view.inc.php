@@ -293,26 +293,26 @@ if($report['edit_time'])
     </main>
 <?php
 //
+// timeline of comments and status updates
+//
+if(!empty($this->data['timeline']))
+{
+//
 // delete comments is a form for admins
 //
-if($this->auth())
-{
+    if($this->auth())
+    {
 ?>
     <form action="<?= BUNZ_HTTP_DIR ?>report/action/<?=$report['id']?>" method="post">
 <?php
-}
+    }
 ?>
     <footer id="comments" 
             class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-lighten-1" 
             style="text-align: left !important; margin-top: -1em;">
 <?php
-//
-// timeline of comments and status updates
-//
-/**
- * all aboard the failtrain */
-if(!empty($this->data['timeline']))
-{
+    /**
+     * all aboard the failtrain */
     $statuslog_ids = $statuslog = [];
     foreach($this->data['status_log'] as $log_entry)
     {
@@ -357,6 +357,23 @@ if(!empty($this->data['timeline']))
             $comment = $comments[$eh['id']];
             displayComment($comment,$i++,$this->auth(),$cat,$report,$nested,$comments);
         }
+    }
+?>
+
+        </footer>
+<?php
+    if($this->auth())
+    {
+?>
+        <div class="section no-pad-bot input-field center">
+            <button type="submit" 
+                   class="btn danger-base icon-delete waves-effect" 
+                   onclick="(function(evt){if(!window.confirm('There is no undo for this action!')) evt.preventDefault()})(event)"
+            >Delete Selected Comments</button>
+            <button type="reset" class="btn-flat waves-effect icon-cancel">Reset Form</button>
+        </div>
+        </form>
+<?php
     }
 }
 
@@ -445,22 +462,7 @@ if($authUser)
     }
     echo '</section>';
 }
-?>
-        </footer>
-<?php
-if($this->auth())
-{
-?>
-        <div class="section input-field center">
-            <button type="submit" 
-                   class="btn danger-base icon-delete waves-effect" 
-                   onclick="(function(evt){if(!window.confirm('There is no undo for this action!')) evt.preventDefault()})(event)"
-            >Delete Selected Comments</button>
-            <button type="reset" class="btn-flat waves-effect icon-cancel">Reset Form</button>
-        </div>
-        </form>
-<?php
-}
+
 //
 // post a comment
 //

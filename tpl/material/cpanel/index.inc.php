@@ -10,16 +10,30 @@ require_once BUNZ_TPL_DIR . 'header.inc.php';
         <section class="col s12">
             <div class="row secondary-text">
                 <ul class="tabs">
-                    <li class="tab col s3"><a class="icon-chart shade-darken-2" href="#statistics"><span class="hide-on-med-and-down">Statistics</span></a></li>
-                    <li class="tab col s3"><a class="icon-cog shade-darken-4" href="#cron"><span class="hide-on-med-and-down">Cron Settings</span></a></li>
-
-                    <li class="tab col s1"><a class="icon-list-dl primary-base" href="#categories"><span class="hide-on-med-and-down">Categories</span></a></li>
-                    <li class="tab col s1"><a class="icon-pinboard shade-base" href="#statuses"><span class="hide-on-med-and-down">Statuses</span></a></li>
-                    <li class="tab col s1"><a class="icon-tags secondary-base" href="#tags"><span class="hide-on-med-and-down">Tags</span></a></li>
-                    <li class="tab col s1"><a class="icon-attention alert-base" href="#priorities"><span class="hide-on-med-and-down">Priorities</span></a></li>
-
-                    <li class="tab col s1"><a class="icon-delete danger-base" href="#purge"><span class="hide-on-med-and-down">Purge</span></a></li>
-                    <li class="tab col s1"><a class="icon-database success-base" href="#export"><span class="hide-on-med-and-down">Export</span></a></li>
+                    <li class="tab col s3" title="Statistics">
+                        <a class="icon-chart shade-text" href="#statistics">
+                            <span class="hide-on-med-and-down">Statistics</span></a></li>
+                    <li class="tab col s3" title="Cron Settings">
+                        <a class="icon-cog shade-text" href="#cron">
+                            <span class="hide-on-med-and-down">Cron Settings</span></a></li>
+                    <li class="tab col s1" title="Categories">
+                        <a class="icon-list-dl primary-base" href="#categories">
+                            <span class="hide-on-med-and-down">Categories</span></a></li>
+                    <li class="tab col s1" title="Statuses">
+                        <a class="icon-pinboard shade-base" href="#statuses">
+                            <span class="hide-on-med-and-down">Statuses</span></a></li>
+                    <li class="tab col s1" title="Tags">
+                        <a class="icon-tags secondary-base" href="#tags">
+                            <span class="hide-on-med-and-down">Tags</span></a></li>
+                    <li class="tab col s1" title="Priorities">
+                        <a class="icon-attention alert-base" href="#priorities">
+                            <span class="hide-on-med-and-down">Priorities</span></a></li>
+                    <li class="tab col s1" title="Purge Reports">
+                        <a class="icon-delete danger-text" href="#purge">
+                            <span class="hide-on-med-and-down">Purge</span></a></li>
+                    <li class="tab col s1"  title="Export Database">
+                        <a class="icon-database" href="#export">
+                        <span class="hide-on-med-and-down">Export</span></a></li>
                 </ul>
 <?php
 /**

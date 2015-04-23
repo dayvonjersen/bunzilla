@@ -94,7 +94,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
     foreach($bread as $crumb)
     {
         printf("\t\t\t\t\t\t\t\t<li><a class='waves-effect gn-icon %s' href='%s'>%s</a></li>\n",
-            $crumb['icon'], BUNZ_HTTP_DIR.$crumb['href'], 
+            $crumb['icon'], empty($crumb['href']) ? '#' : BUNZ_HTTP_DIR.$crumb['href'], 
             $crumb == end($bread) ? "<abbr data-textlabel='you are here &#10548;'>{$crumb['title']}</abbr>" : $crumb['title']
         );
     }
@@ -164,7 +164,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
                   '><span class="hide-overflow-text"><i class="',$currentCat['icon'],'"></i><span class="hide-on-med-and-down">',
                   $currentCat['title'],'</span></span></a>';
         } else {
-            echo '<a href="',BUNZ_HTTP_DIR,$crumb['href'],
+            echo '<a href="',empty($crumb['href']) ? '' : BUNZ_HTTP_DIR.$crumb['href'],
                  '" class="waves-effect "><span class="hide-overflow-text"> ',
                  isset($crumb['icon']) ? "<i class='{$crumb['icon']}'></i>" : '',
                  '<span class="hide-on-med-and-down">',

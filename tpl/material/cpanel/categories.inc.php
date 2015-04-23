@@ -23,12 +23,12 @@ if(!empty($this->data['categories']))
             -->
 
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/category/',$cat['id']?>#categories" 
-                       class="right btn btn-floating z-depth-5 danger-base" 
+                       class="right btn-small btn btn-floating z-depth-5 danger-base" 
                        title="delete category"
                         onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this category and all associated reports and comments?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>
 
                     <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/category/',$cat['id']?>" 
-                       class="right btn btn-floating z-depth-5 success-base" 
+                       class="right btn-small btn btn-floating z-depth-5 success-base" 
                        title="edit category"><i class="icon-pencil-alt"></i></a>
 
             <!-- 

@@ -293,7 +293,7 @@ class Controller
         $this->data['tags']       = Cache::read('tags');
         $this->data['priorities'] = Cache::read('priorities');
 
-        if(isset($this->tpl))
+        if(!headers_sent() && isset($this->tpl))
         {
             if(file_exists(BUNZ_TPL_DIR . $this->tpl . '.inc.php'))
                 require_once BUNZ_TPL_DIR . $this->tpl . '.inc.php';

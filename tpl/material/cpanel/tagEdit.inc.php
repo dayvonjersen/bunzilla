@@ -6,9 +6,11 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 $cat = $this->data['tag'];
 ?>
 <script src="<?= BUNZ_JS_DIR ?>jscolor.js"></script>
-   <section id="editTag" class="shade-text section no-pad-top no-pad-bot">
-        <h1 class="icon-pencil-alt success-text">Edit <?= $cat['title'] ?> : 
-        <form class="z-depth-5 section no-pad" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/tag/<?=$cat['id']?>" method="post"><?= tag($cat['id']) ?></h1>
+   <section id="editTag" class="section secondary-base">
+        <form class="z-depth-5 shade-text section" action="<?= BUNZ_HTTP_DIR ?>cpanel/edit/tag/<?=$cat['id']?>" method="post">
+            <h3 class="icon-pencil-alt">Edit Tag &quot;<?= $cat['title'] ?>&quot;
+                <?= tag($cat['id']) ?>
+            </h3>
             <div class="input-field">
                 <input id="edit-tag-title" type="text" name="title" maxlength="255" value="<?= $cat['title'] ?>"/>
                 <span class="material-input"></span>
