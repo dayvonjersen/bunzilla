@@ -138,12 +138,12 @@ class search extends Controller
 
         $this->data['reports'] = [];
         $this->data['test']['term']  = !strlen($search) ? implode(',', $criteria) : $search;
-        $this->data['test']['query'] = 'SELECT * FROM reports WHERE '.$query;
+        $this->data['test']['query'] = 'SELECT id,subject,description,reproduce,expected,actual FROM reports WHERE '.$query;
         $benchmark_it = microtime(1);
-        $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_ASSOC);    
+        $this->data['test']['results'] = db()->query($this->data['test']['query'])->fetchAll(PDO::FETCH_NUM);    
         $benchmark_it = microtime(1) - $benchmark_it;
         $this->data['test']['time'] =  $benchmark_it;
-      //  $this->__TEMP();
+        exit;
     }
 
     private function dostuff( $array )
@@ -155,9 +155,9 @@ class search extends Controller
             if(empty($ids))
                 continue;
             //$ret[] = "id ".($not ? 'NOT ' : '').'IN ('.implode(',',$ids).')';
-            $ret = array_merge($ret,array_flip($ids));
+            $ret = array_merge($ret,$ids);
         }
-        return array_flip($ret);
+        return $ret;
     }
 
     private static function getIds( $tbl, $array )
@@ -170,7 +170,7 @@ class search extends Controller
             $titles[$id] = strtolower($row['title']);
         }
 
-        return  implode(',',array_keys(
+        return implode(',',array_keys(
             array_intersect($titles, $array) + array_intersect($ids, $array)
         ));
     }
@@ -232,41 +232,5 @@ class search extends Controller
     {
         $this->tpl .= '/tagcloud';
         $this->data['count'] = self::getTagCloud();
-    }
-
-    private function __TEMP()
-    {
-/**header('Content-Type: text/plain');
-print_r($this->data['test']);
-echo "\n", file_get_contents(__FILE__);
-exit;
-*/
-/** XXX SUPER TEMPORARY please ignore to EOF **/
-        $this->data['categories'] = [13 => ['id' => 13,
-            'title' => 'SUPER TEMPORARY SEARCH PAGE',
-            'caption' => '<form action="'.BUNZ_HTTP_DIR.'search" method="get"><div class="input-field"><input type="text" name="q"><label>ENTER TEXT HERE</label><span class="material-input"></span><input type="submit"></form>',
-            'icon' => 'icon-search',
-            'color' => 'ffffff']];
-        $this->data['category_id'] = 13;
-$this->data['reports'] = count($this->data['test']) ? $this->data['test']['results'] : [];
-$this->data['page_offset'] = 0;
-$this->data['statuses'] = Cache::read('statuses');
-$this->data['tags'] = Cache::read('tags');
-$this->data['priorities'] = Cache::read('priorities');
-        foreach($this->data['reports'] as $i => $report)
-        {
-            $this->data['reports'][$i]['tags'] = db()->query(
-                'SELECT tag
-                 FROM tag_joins 
-                 WHERE report = '.$report['id'])->fetchAll(PDO::FETCH_COLUMN);
-            $this->data['reports'][$i]['comments'] = selectCount(
-                'comments','report = '.$report['id']
-            );
-            $this->data['reports'][$i]['preview_text'] = 'Nothing to see here...';
-        }
-
-//$this->tpl = BUNZ_DIR . 'tpl/material/report/category'; exit;
-require_once BUNZ_DIR . 'tpl/material/report/category.inc.php';
-
     }
 }
