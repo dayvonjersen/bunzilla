@@ -59,7 +59,7 @@ class cpanel extends Controller
     }
 
     /**
-     * Every served from this */
+     * Everything served from this */
     public function index()
     {
         $this->tpl .= '/index';
