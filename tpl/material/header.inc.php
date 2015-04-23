@@ -62,9 +62,16 @@ $dir->close();
                                 </div>
                                 </form>
                             </li>
+<?php
+if(!($this instanceof report))
+{
+?>
                             <li>
                                 <a href="<?= BUNZ_HTTP_DIR ?>" class="waves-effect gn-icon icon-home" title="Bunzilla, go home.">Index</a>
                             </li>
+<?php
+}
+?>
                             <li>
 <?php
 if(isset($this->breadcrumbs) && count($this->breadcrumbs))
