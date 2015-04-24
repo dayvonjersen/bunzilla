@@ -34,12 +34,21 @@
                     </div>
                 </div>
         </footer>
+<?php
+if(BUNZ_DEVELOPMENT_MODE)
+{
+?>
         <script src="<?= BUNZ_JS_DIR ?>jquery-2.1.3.min.js"></script>
         <script src="<?= BUNZ_JS_DIR ?>materialize.js"></script>
         <script src="<?= BUNZ_JS_DIR ?>gnmenu.js"></script>
         <script src="<?= BUNZ_JS_DIR ?>headroom.js"></script>
         <script src="<?= BUNZ_JS_DIR ?>cottontail.js"></script>
 <?php
+} else {
+?>
+        <script src="<?= BUNZ_JS_DIR ?>all.min.js"></script>
+<?php
+}
 if(!empty($this->flash))
 {
 ?>
