@@ -1,0 +1,6 @@
+npm install -g uglify-js
+npm install -g minifier
+cd /path/to/bunzilla/tpl/material/assets/js
+uglifyjs --screw-ie8 -c -m -r jQuery jquery-2.1.3.min.js materialize.js gnmenu.js headroom.js cottontail.js > all.min.js
+cd /path/to/bunzilla/tpl/material/assets/css
+minify all.css
