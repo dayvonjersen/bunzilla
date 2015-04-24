@@ -1,5 +1,5 @@
 #bunzilla
-####current version: 0.2
+####current version: 0.2b
 "Dead Simple Bug Tracking"
 ###[Live Demo and Meta-Tracker](https://meta.bunzilla.ga)
 
@@ -51,10 +51,11 @@ The idea here is a bright, colorful, upbeat **can-do** approach to organizing wh
  - Color picker by [JSColor](http://jscolor.com/)
  - Sorting courtesy [List.js](http://www.listjs.com/)
  - And [jQuery](http://jquery.com) is in there too so yeah.
+ - Captcha courtesy [textcaptcha](http://textcaptcha.com)
 
 All of the above are included with Bunzilla and some of the above has been modified in some way by yours truly.
 
-The only JavaScript widget I actually made for this is toolsModal.js in `tpl/material/assets/js`
+The JavaScript widgets I have written from scratch for this include the toolbar for inserting HTML, the preview functionality, and tag cloud on the index.
 
 ###A note about highlight.js:
 The packaged version of highlight.js included here has support for *every language* for demonstration purposes only. 
@@ -74,9 +75,9 @@ Put it in `tpl/material/assets/js/` as `highlight.js`
 ---
 
 ###Prerequisites
- - PHP5.4
- - Apache 2 (with mod_rewrite)
- - MySQL5
+ - PHP &gt;= 5.4
+ - Apache 2 \(with mod\_rewrite\)
+ - MySQL &gt;= 5.6.23 (for INET6\_\* functions)
 
 ---
 
@@ -93,8 +94,10 @@ And save as **res/db.config.ini**
 
 3. Edit `res/example.settings.ini` and customize it to your liking, filling in your project's details.
 And save as **res/settings.ini**
+**UPDATE Fri 24 Apr 2015 03:01:34 PM EDT**
+You can enable or disable captchas for anonymous users to post reports (to help combat spam) in `res/settings.ini`
 
-4. Edit `example.htaccess` for mod_rewrite, make sure it looks like this:
+4. Edit `example.htaccess` for mod\_rewrite, make sure it looks like this:
 	`RewriteEngine On`
 	`# for http://example.com/bunzilla`
 	`RewriteBase /bunzilla`
@@ -125,6 +128,9 @@ And save as **.htaccess**
 
 **UPDATE Wed 01 Apr 2015 11:04:40 PM EDT**
 You should be able to upgrade bunzilla at any time with `git pull`
+
+**UPDATE Fri 24 Apr 2015 03:03:42 PM EDT**
+If you care about minified assets, set BUNZ\_DEVELOPMENT\_MODE to false in Bunzilla.php to use the all.min.css and all.min.js files. How these files got generated is shown in the HOW2MINIFY file. If you know how to get uglify-js to --mangle-props without breaking everything please tell me.
 
 ---
 
@@ -232,6 +238,8 @@ If a report is a duplicate, there is...
 ###Merging
 ...which is an experimental feature that takes a report and turns it (and its associated comments) into a quotereply to another report.
 
+This is an alternative to the "MARKED AS DUPLICATE (CLOSED) (NO SHUT UP)" paradigm that you might have come across.
+
 ###Quotereply
 ...lets you directly reply to a comment, but this only goes 1 level deep at the moment.
 
@@ -249,10 +257,28 @@ And it will show up on the changelog for the current project version. If you inc
 
 Changelog can additionally be viewed as plaintext or unstyled HTML for all versions or any particular version.
 
-###Search
-...is being worked on. You can use it currently via the sidebar on any page
+**Note Fri 24 Apr 2015 03:11:46 PM EDT**
+This is not meant to replace the changelog for your project, as right now you cannot easily edit the entries in it, but rather make it easier to generate one when you plan to package up a release.
 
-A more robust advanced search is planned with the ability to addtionally filter and sort results.
+###Search
+...is there. Working on making it better but as far as options:
+
+ - typing in words tries to match those words
+
+ - you can search by category, status, priority, or tag with either id or title, e.g.
+ 
+   - tag:1 
+
+   - category:todo
+
+ - you can do the opposite of this by prepending "-"
+
+   - -status:done 
+
+   - -priority:low
+
+**Note: Fri 24 Apr 2015 03:16:25 PM EDT**
+Being able to do "some string -category:5" is meant to work, but it might break at the moment.
 
 ###Alternate templates
 ...to the default "material" template are also being worked on including:
@@ -262,16 +288,31 @@ Unstyled, pure HTML designed for text-only browsers such as lynx. Can be used as
 
 Append "?nofrills" to the url to use.
 
-***Note: not yet implemented for all pages **
+**\*Note: not yet implemented for all pages **
+** Note: Fri 24 Apr 2015 03:17:17 PM EDT **
+"?nofrills" is meant to be persistent, append "?material" to get back.
 
 ####RSS Feeds
 Currently only available for categories and individual reports.
 
 Append "?rss" to the url to use.
 
+**\*Note: you will only receive new reports and not updates on their status. I may address this in the future, or this non-spammy behavior might actually be a good thing.
+
 ####JSON API
-Append "?json" to the url to use.
-**\*Note: Not yet implemented for *any* page**
+...isn't really an API at all. Append "?json" to the url to use alternate views which export the page data as JSON.
+
+**\*Note: Not yet implemented for all pages. Notably any of the cpanel pages**
+
+I am using it in a few places to introduce some useful ajax features. If someone wants to create a single-page application view (template) for Bunzilla, this is how it could be done.
+
+If you wish to do API stuff for some reason, you _can_ make curl requests to either POST or to GET pages that require logging in with
+
+`--basic --user username:password`
+
+Otherwise, the CSRF filtering will deny you the POST request. Further, there are pages that do redirects with HTTP Location headers
+
+You must POST form data in the old-fashioned "param1=value&param2=anothervalue" way. Look at the HTML forms or PHP source for what data to send.
 
 ---
 ##License
@@ -294,3 +335,4 @@ Bunzilla is merely a way to organize and keep track of notes and noteworthy dial
 For discussions, face-to-face, telephones, e-mail, IRC, bbs, forums and social media are some more preferable communication mediums (in that order)
 
 > Written with [StackEdit](https://stackedit.io/).
+> Edited with [VIM](http://www.vim.org/)
