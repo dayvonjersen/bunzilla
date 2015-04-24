@@ -21,7 +21,7 @@
                             <li class='hide-on-small-only icon-emo-shoot'>
                                 <a href="http://textcaptcha.com/">textcaptcha.com</a>
                             </li>
-                            <li class='hide-on-med-and-up icon-mail'><a href="mailto:țšō@țėķńĭķ.ı0?subject=remove+accents">tell me what you think</a></li>
+                            <li class='hide-on-med-and-up icon-mail'><a href="mailto:țšō@țėķńĭķ.ı0?subject=remove+accents"><span class="hide-on-small-only">tell me what you think</span><span class="hide-on-med-and-up">e-mail me</span></a></li>
                             <li class='hide-on-med-and-up icon-magic'><?= round(microtime(1) - BUNZ_START_TIME,4) ?>s</li>
                         </ul>
                     </div>

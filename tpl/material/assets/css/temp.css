@@ -1,6 +1,6 @@
 /** THE RIDE NEVER ENDS **/
 /**
- * page layout hax that are probably already in materialize.min.css 
+ * page layout hax that are probably already in materialize.min.css {{{ 
  */
 html {
     overflow-x: hidden; 
@@ -30,8 +30,8 @@ body#bunzilla > footer.footer,
     z-index: 1000;
 }
 
-/**
- * general purpose styles and fixes that should be in materialize.min.css 
+/** }}}
+ * general purpose styles and fixes that should be in materialize.min.css {{{
  */
 /* Elements */
 strong, b { 
@@ -57,12 +57,6 @@ input:checked ~ label {
     color: #0af;
 }
 
-/* Media Queries */
-@media (max-width: 601px) {
-    .section { padding-left: 0; padding-right: 0; }
-    .tag::before { right: 0 !important; }
-}
-
 /* Classes that exist or should */
 .small { font-size: 0.8889rem !important; }
 .tooltipped { cursor: help; }
@@ -82,8 +76,14 @@ input:checked ~ label {
     display: inline-block;
 }
 
-/**
- * Custom feature: data-textlabel */ 
+/* Media Queries */
+@media (max-width: 601px) {
+    .section { padding-left: 0; padding-right: 0; }
+    .tag::before { right: 0 !important; }
+}
+
+/** }}}
+ * Custom feature: data-textlabel {{{ */ 
 [data-textlabel] { position: relative; }
 [data-textlabel]::before {
     content: attr(data-textlabel);
@@ -96,8 +96,8 @@ input:checked ~ label {
     letter-spacing: 0px;
     text-shadow: 0 4px rgba(0, 0, 0, 0.24), 0px 2px rgba(0, 0, 0, 0.19);
 }
-/**
- * Bunzilla-specific Assets 
+/** }}}
+ * Bunzilla-specific assets {{{
  */
 .tag {
     height: 24px;
@@ -133,9 +133,9 @@ span.priority {
     height: 24px;
 }
 
-/**
- * The floating label effect in materialize is not well thought-out,
- * There is also a hack in tpl/material/assets/js/cottontail.js to fix it
+/** }}}
+ * The floating label effect in materialize is not well thought-out, {{{
+ * There is also a hack in tpl/material/assets/js/cottontail.js to fix it 
  */
 input[autofocus] + label,
 input:not([type='checkbox']):not([type='radio']) + label.active {
@@ -148,8 +148,8 @@ input:not([type='checkbox']):not([type='radio']) + label.active {
     color: #0af;
 }
 
-/**
- * Materialbox also needed a fix
+/** }}}
+ * Materialbox also needed a fix {{{
  */
 #materialbox-overlay { 
     z-index: 1000 !important;
@@ -166,8 +166,8 @@ img.intialized.active {
     cursor: zoom-out
 }
 
-/**
- * accordion overrides 
+/** }}}
+ * accordion overrides {{{
  */
 .collapsible, .collapsible-header {
     border: none !important;
@@ -209,8 +209,8 @@ img.intialized.active {
     transform: translate3d(0,0,0);
 }
 
-/**
- * tab overrides which should be in materialize.min.css already 
+/** }}}
+ * tab overrides which should be in materialize.min.css already {{{
  */
 .tabs, ul.tabs li {
     height: 2em !important;
@@ -219,8 +219,8 @@ img.intialized.active {
 }
 .tabs div.indicator { width: auto !important; }
 
-/**
- * I have no idea what a .thumb is; maybe it's for input[type=range] 
+/** }}}
+ * I have no idea what a .thumb is; maybe it's for input[type=range] {{{
  */
 .thumb {
     display: inline-block;
@@ -233,8 +233,8 @@ img.intialized.active {
     transform: none !important;
 }
 
-/**
- * widgetry 
+/** }}}
+ * widgetry {{{
  */
 #toolsModal {
     padding: 0;
@@ -260,8 +260,8 @@ textarea:focus ~ a[href="#toolsModal"] {
     position: relative;
 }
 
-/**
- * see report/listing.phtml 
+/** }}}
+ * see report/listing.phtml {{{
  */
 #list { 
     height: 100%;
@@ -374,8 +374,8 @@ textarea:focus ~ a[href="#toolsModal"] {
     top: -3px;
 }
 
-/**
- * sort arrow hacks based on the classes list.js sets 
+/** }}}
+ * sort arrow hacks based on the classes list.js sets {{{
  */
 .btn-flat.asc i::before {
     content: '\e845';
@@ -388,8 +388,9 @@ textarea:focus ~ a[href="#toolsModal"] {
     color: #fff !important;
 }
 
-/**
- * top/sidebar hax which should be merged into gn-codrops.css */
+/** }}}
+ * top/sidebar hax which should be merged into gn-codrops.css {{{
+ */
 #gn-menu nav, #gn-menu li {
     vertical-align: middle;
 }
@@ -434,8 +435,8 @@ textarea:focus ~ a[href="#toolsModal"] {
     font-variant: normal;
 }
 
-/**
- * annoying page navigation button that's on every page on the Internet these days
+/** }}}
+ * annoying page navigation button that's on every page on the Internet these days {{{
  */
 #back-to-top {
     position: fixed; bottom: 2em; right: 2em;
@@ -450,8 +451,8 @@ textarea:focus ~ a[href="#toolsModal"] {
     opacity: 0.5;
 }
 
-/**
- * Animated cursor input effect taken from bootstrap material design 
+/** }}}
+ * Animated cursor input effect taken from bootstrap material design {{{
  */
 @keyframes input-highlight {
     0% { left: 20%; width: 20%; }
@@ -507,8 +508,8 @@ textarea:focus ~ .material-input:after
      opacity: 0;
 }
 
-/**
- * Breadcrumbs 
+/** }}}
+ * Breadcrumbs {{{
  */
 .bc-container::before {
     content: "\21b6 you are here";
@@ -577,6 +578,7 @@ textarea:focus ~ .material-input:after
     margin: 0 !important;
 }
 
+/* }}} */
 /*********************************************************
  *                                                       *
  * oddly specific miscellany that should be investigated *
@@ -600,3 +602,4 @@ header section.primary-base.waves-effect { display: block !important; }
 time { z-index: 10001; }
 ul.list.section { padding-top: 0.5rem; } /** SHOOT ME $12 **/
 a:not([class]) { text-decoration: underline !important; }
+/* vim:set fdm=marker: */
