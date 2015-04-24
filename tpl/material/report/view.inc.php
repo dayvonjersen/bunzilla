@@ -408,7 +408,7 @@ if($authUser)
             <span class="right"><?= datef($comment['time']) ?>&emsp;&emsp;</span>
         </p>
     </header>
-    <section class="section no-pad-top" style="padding-left: 0">
+    <section class="section" style="padding-left: 0">
     <blockquote>
 <?php
     if($authUser || remoteAddr() === $comment['ip'])
