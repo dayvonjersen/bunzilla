@@ -36,9 +36,7 @@ body#bunzilla > footer.footer, #page-wrap::after { padding: 0 !important; height
 td > .status {
     display: block;
 }
-.status {
-    padding: 10px 2px;
-}
+
 .tag {
     padding: 2px;
 }
@@ -141,14 +139,17 @@ img { width: 50%; cursor: zoom-in }
 /**
  * goddam */
 #list { height: 100%; }
-#list li { margin-bottom: 4px; }
+#list li { margin: 0.5rem 0; }
 #list li .row { margin: 0 !important }
 #list .collapsible-header {  cursor: pointer; box-shadow: none !important; line-height: 1 !important; }
 #list .collapsible-header i[class*="icon"]:before { font-size: 1rem; }
 #list .collapsible-header > .row { /*padding: 0.5em 1em 0 1em;*/ }
 #list .collapsible-header a:hover, #tagCloud a:hover { text-decoration: underline; cursor: pointer; color: #2962FF; }
-#list .subject-line { z-index: 110; font-size: 16px; }
+#list .subject-line { z-index: 110; overflow: hidden; clear: both; }
 #list .subject-line a { margin: 0 1em 0 0; line-height: 1.874em; display:inline-block; max-width: calc(100vw - 10em); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: justify; }
+#list .subject-line span.badge.status {
+    padding: 8px 2px; max-height: 2rem; display: inline-block; overflow: hidden;
+}
 #list .divider { margin: 1rem 0; }
 .btn-flat.asc i::before {
     content: '\e845';
@@ -164,7 +165,7 @@ img { width: 50%; cursor: zoom-in }
 
 .row { margin-bottom: 0 !important; }
 
-#list .collapsible-header { position: relative; z-index: 100; padding: 4px 0; }
+#list .collapsible-header { position: relative; z-index: 100; padding: 0; }
 #list .collapsible-body { z-index: 99; margin-top: -8px; }
 /*
 [class*='waves-'] {
@@ -266,7 +267,7 @@ textarea:focus ~ a[href="#toolsModal"] { opacity: 1; top: -2em; }
 
 /*a:not([class*='tag-']):not([class*='category-']), .btn-floating i { color: inherit !important; }*/
 p { margin: 0; }
-p.tooltipped { cursor: help; }
+.tooltipped { cursor: help; }
 header section.primary-base > * { margin: 0 !important; }
 .waves-effect { overflow: hidden !important; }
 header section.primary-base.waves-effect { display: block !important; }
@@ -494,7 +495,6 @@ input:not([type='checkbox']):not([type='radio']) + label.active {
 }
 
 .tag {
-    font-size: 12px !important;
     height: 24px;
     z-index: 3;
     position: relative;
@@ -518,6 +518,7 @@ input:not([type='checkbox']):not([type='radio']) + label.active {
     position: absolute;
     right: -6px;
     z-index: 2;
+    font-size: 12px !important;
 }
 .tag::after {
     position: absolute;
@@ -535,6 +536,7 @@ input:not([type='checkbox']):not([type='radio']) + label.active {
 span.priority {
     font-size: 0.8889rem !important;
     margin: 3px 0 0 0;
+    height: 24px;
 }
 
 #list span.priority {    padding: 4px 6px !important; }
@@ -549,52 +551,30 @@ img.intialized.active { cursor: zoom-out }
 .comment-badge {
     border-radius: 0 1rem 1rem 0;
     font-size: 0.6667rem;
-    margin-top: -1px;
-    padding: 6px 6px 6px 1em;
-    top: 4px;
+    padding: 7px 6px 7px 1em;
     position: relative;
     z-index: 0;
 }
 .time_submitted, .time_lastactive {
     font-size: 0.6667rem;
-    margin-top: -1px;
     padding: 6px 6px 6px 1em;
     z-index: -2;
     position: absolute; 
-    top: 4px; 
-    margin-left: -8px;
-}
-.time_submitted::after,
-.time_lastactive::after,
-.dontworryaboutit::after {
-   content: "";
-    border: 12px #eee solid;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    position: absolute;
     top: 0;
-    left: 0;
-    height: 0;
-    width: 0;
+    right: 0;
 }
-.dontworryaboutit {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    z-index: -1;
-}
-span.dontworryaboutit::after {
-    border-left-color: #fff;
-    border-bottom-color: #fff;
-}
-.info-bar { height: 24px; position: relative; z-index: -1; /*afsdlkjsdafl;kjsadf*/
-border-top: 1px groove;
-border-bottom: 1px groove; }
-.info-bar > * {
-    border-bottom: 1px solid #fff;
+
+.info-bar { height: 24px; position: relative; z-index: -1; top: 6px; }
+.info-bar span.badge.epenis {
+  left: -12px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: relative;
+  top: -6px;
+  font-size: small;
 }
 time { z-index: 10001; }
-.info-bar div.left { position: relative; z-index: 2 }
+.info-bar div.left { position: relative; z-index: 2; top: -3px; }
 ul.list.section { padding-top: 0.5rem; } /** SHOOT ME $12 **/
 
 a:not([class]) { text-decoration: underline !important; }

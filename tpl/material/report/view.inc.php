@@ -57,9 +57,9 @@ if($this->auth())
 //
 ?>
             <section class="section no-pad-bot col s12 category-<?= $cat['id'] ?>-darken-1" id="status">
-                <section class="section no-pad-bot col s8 m8 z-depth-3 category-<?=$cat['id']?>-text">
+                <section class="section col s8 m8 z-depth-3 category-<?=$cat['id']?>-text">
                     <p class="icon-mail"><?= $report['email'], epenis($report['epenis'])?></p>
-                    <p class="icon-time" title="submitted at"><?= datef($report['time']) ?></p>
+                    <p class="icon-time" title="submitted at"><?= datef($report['time'],'right') ?></p>
                 </section>
 
 <?php
@@ -67,7 +67,7 @@ if($this->auth())
 // post a comment
 //
 ?>
-                <section class="section col s4 m4 transparent ">
+                <section class="col s4 m4 transparent ">
                      <a href="#message" 
                         onclick="(function(evt){evt.preventDefault();document.getElementById('message').focus()})(event)" 
                         class="waves-effect z-depth-5 btn-large btn-floating secondary-base right" 
@@ -230,9 +230,9 @@ if($this->auth())
 // subject, tags, status, priority, whether it's closed or not
 //
 ?>
-      <section class='section category-<?=$cat['id']?>-base col s12'>
+      <section class='section no-pad-top category-<?=$cat['id']?>-base col s12'>
             <section class="z-depth-5 category-<?=$cat['id']?>-text no-pad-bot">
-                <p class="left">
+                <p class="left" style="position:relative;top:-3px">
 <?php
 if(!empty($report['tags']))
     foreach($report['tags'] as $tag)
@@ -284,7 +284,7 @@ if($report['edit_time'])
 ?>
         <section class="section category-<?=$cat['id']?>-text">
             <div class="divider"></div>
-            <p class="icon-pencil-alt"><strong>edit</strong> <em><a href="<?= BUNZ_DIFF_DIR ?>reports/<?= $report['id']?>"><?= datef($report['edit_time']) ?></a></em></p>
+            <p class="icon-pencil-alt"><strong>edit</strong> <em><a href="<?= BUNZ_DIFF_DIR ?>reports/<?= $report['id']?>"><?= datef($report['edit_time'],'right') ?></a></em></p>
         </section>
 <?php
 }
@@ -343,11 +343,11 @@ if(!empty($this->data['timeline']))
         {
             $log = $statuslog[$eh['id']];
 ?>
-            <section class="section no-pad shade-text z-depth-2" style="margin: 10px 1em 0 1em">
-                <blockquote class="small">
+            <section class="shade-text z-depth-2" style="padding-bottom: 0.5rem; margin: 10px 1em 0 1em">
+                <blockquote class="small" style="padding-bottom: 0">
                     <span class="right" ><?=datef($log['time'])?></span>
-                        <strong><?= $log['who'] ?>&emsp;&emsp;</strong>
-                        <p><?= $log['message'] ?></p>
+                        <strong><?= $log['who'] ?>&emsp;</strong>
+                        <span><?= $log['message'] ?></span>
                 </blockquote>
             </section>
 <?php
@@ -383,11 +383,11 @@ if(!empty($this->data['timeline']))
 function displayComment( $comment, $number, $authUser = false, $cat, $report,$nested=[],$comments=[] )
 {
 ?>
-<section class="category-<?=$cat['id']?>-text z-depth-5" 
+<article class="category-<?=$cat['id']?>-text z-depth-5" 
          id="reply-<?=$comment['id']?>" 
          style="margin: 0 1em;">
-    <header class="section no-pad-top no-pad-bot category-<?=$cat['id']?>-darken-3">
-        <p style="margin: 10px 0">
+    <header class="category-<?=$cat['id']?>-darken-3">
+        <p style="margin: 10px 1rem 0 0">
 <?php
 // delete checkbox for admins
 if($authUser)
@@ -405,9 +405,10 @@ if($authUser)
 ?>
         <?= $comment['email'], epenis($comment['epenis']) ?> 
             <a class="right" href="#reply-<?= $comment['id'] ?>"> #<?=$number?></a>
-            <span class="right small"><?= datef($comment['time']) ?>&emsp;&emsp;</span>
+            <span class="right"><?= datef($comment['time']) ?>&emsp;&emsp;</span>
         </p>
     </header>
+    <section class="section no-pad-top" style="padding-left: 0">
     <blockquote>
 <?php
     if($authUser || remoteAddr() === $comment['ip'])
@@ -419,7 +420,7 @@ if($authUser)
    style="position: absolute; right: 2rem;"><i class='icon-pencil-alt'></i></a>
 <?php
     }
-    echo $comment['message'], '</blockquote>';
+    echo $comment['message'], '</blockquote></section>';
 
     if($comment['edit_time'])
     {
@@ -429,7 +430,7 @@ if($authUser)
     <strong>edit</strong> 
     <em>
         <a href="<?= BUNZ_DIFF_DIR ?>comments/<?= $comment['id']?>">
-            <?= datef($comment['edit_time']) ?></a>
+            <?= datef($comment['edit_time'],'right') ?></a>
     </em>
 </p>
 <?php
@@ -460,7 +461,7 @@ if($authUser)
 </footer>
 <?php
     }
-    echo '</section>';
+    echo '</article>';
 }
 
 //

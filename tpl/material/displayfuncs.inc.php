@@ -19,7 +19,7 @@ function ftime( $time, $amount, $unit )
  * formatted date for web 2.0 
  * relative > exact according to the kids
  */
-function datef( $time = -1 )
+function datef( $time = -1, $tooltip_direction = 'left' )
 {
     if($time == 0)
         return '<em>never</em>';
@@ -42,7 +42,8 @@ function datef( $time = -1 )
     list($ret[], $diff) = ftime($diff, 1, 'second');
 
     $text = implode(', ',array_filter($ret,function($val){return $val;}));
-    return sprintf('<time class="tooltipped" data-tooltip="%s ago">%s</time>',
+    return sprintf('<time class="tooltipped" data-position="%s" data-tooltip="%s ago">%s</time>',
+        $tooltip_direction,
         $text,
         date(BUNZ_BUNZILLA_DATE_FORMAT, $time)
     );
@@ -219,25 +220,6 @@ function pagination( $url, $total, $curPage )
     return "$return</div></article>";
 }
 
-// XXX: not sure if this is used anymore
-function breadcrumb($crumbs, $youarehere, $categoryId)
-{   
-    if(!count($crumbs))
-        return;
-    $style = ' style="padding: 0 1em;width: '.round(66.6667/count($crumbs), 4).'%" ';
-    foreach($crumbs as $crumb)
-    {
-        if(strstr($crumb['href'],'report/category'))
-        {
-            echo '<li class="hide-overflow-text hide-on-small-only',strstr($crumb['href'],$youarehere) ? ' secondary-text"' : '"',$style,'>',categoryDropdown($categoryId,false,'window.location="'.BUNZ_HTTP_DIR.'report/category/" + this.value'),'</li>';
-        } elseif(strstr($crumb['href'],$youarehere)) {
-            echo '<li',$style,' class="secondary-text gn-multiline hide-overflow-text hide-on-small-only"><i class="',$crumb['icon'],'"></i><em>',$crumb['title'],'</em><small>&rarr;you are here&larr;</small></li>';
-        } else {
-            echo '<li',$style,' class="hide-overflow-text hide-on-small-only"><a href="',BUNZ_HTTP_DIR,$crumb['href'],'"', isset($crumb['icon']) ? " class='{$crumb['icon']}'" : '','>',$crumb['title'],'</a></li>',"\n";
-        }
-    }
-}
-
 // "e-penis" is an old online euphamism referring to
 // one's status, reputation, or clout especially as it relates to online
 // communities or an online identity and is actually meant to be 
@@ -250,11 +232,11 @@ function epenis($epenis)
     {
         default: return '';
         case 1:
-            $q = ['secondary-base', 'icon-person', 'Developer'];
+            $q = ['secondary-base', 'icon-person', 'Posted by a '.BUNZ_PROJECT_TITLE.' developer','Developer'];
             break;
         case 2:
-            $q = ['alert-base', 'icon-terminal', 'System'];
+            $q = ['alert-base', 'icon-terminal', 'Automatically posted by the system','System'];
             break;
     }
-    return vsprintf('<span class="badge %s left %s">%s</span>',$q);
+    return vsprintf('<span class="badge tooltipped epenis %s left %s" data-position="right" data-tooltip="%s"><span class="hide-on-small-only ">%s</span></span>',$q);
 }

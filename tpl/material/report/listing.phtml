@@ -30,7 +30,7 @@ document.body.onload = function(){
                 <div class="col s3 right-align">
                     <button
                        class="sort btn-flat waves-effect icon-lock tooltipped" 
-                       data-position="bottom" 
+                       data-position="right" 
                        data-sort="closed" 
                        data-tooltip="sort by open/closed">
                         <i class="icon-sort"></i>
@@ -39,7 +39,7 @@ document.body.onload = function(){
                 <div class="col s3 center-align">
                     <button
                        class="sort btn-flat waves-effect waves-light icon-attention tooltipped" 
-                       data-position="bottom"
+                       data-position="right"
                        data-sort="priority" 
                        data-tooltip="sort by priority">
                         <i class="icon-sort"></i>
@@ -48,7 +48,7 @@ document.body.onload = function(){
                 <div class="col s3 left-align">
                     <button
                        class="sort btn-flat waves-effect waves-light icon-pinboard tooltipped" 
-                       data-position="bottom"
+                       data-position="left"
                        data-sort="status" 
                        data-tooltip="sort by status">
                         <i class="icon-sort"></i>
@@ -59,7 +59,7 @@ document.body.onload = function(){
                 <div class="col s3 right-align">
                     <button
                         class="sort btn-flat waves-effect waves-light icon-doc-text-inv tooltipped"
-                        data-position="bottom"
+                        data-position="right"
                         data-sort="subject"
                         data-tooltip="sort by subject">
                         <i class="icon-sort"></i>
@@ -68,7 +68,7 @@ document.body.onload = function(){
                 <div class="col s3 center-align">
                     <button
                         class="sort btn-flat waves-effect waves-light icon-chat tooltipped"
-                        data-position="bottom"
+                        data-position="right"
                         data-sort="comments"
                         data-tooltip="sort by # comments">
                         <i class="icon-sort"></i>
@@ -77,7 +77,7 @@ document.body.onload = function(){
                 <div class="col s3 center-align">
                     <button
                        class="sort btn-flat waves-effect waves-light icon-time tooltipped"
-                       data-position="bottom"
+                       data-position="left"
                        data-sort="submitted" 
                        data-tooltip="sort by submission time">
                         <i class="icon-sort"></i>
@@ -86,7 +86,7 @@ document.body.onload = function(){
                 <div class="col s3 left-align">
                     <button
                        class="sort btn-flat waves-effect waves-light icon-time tooltipped"
-                       data-position="bottom"
+                       data-position="left"
                        data-sort="lastactive"
                        data-tooltip="sort by last activity">
                         <i class="icon-sort"></i>
@@ -131,7 +131,7 @@ document.body.onload = function(){
 
 <?php // Click-to-expand-style heading ?>
             <div class="collapsible-header no-select">
-                <div class="info-bar">
+                <div class="info-bar category-<?=$cat['id']?>-lighten-1">
 <?php // Link to comments section ?>
 <?php if($report['comments']) { ?>
                 <span class="comment-badge secondary-darken-2 z-depth-2 waves-effect">
@@ -140,15 +140,16 @@ document.body.onload = function(){
 <?php } else echo '&nbsp;' ?> <!-- don't worry about it -->
 
 <?php // timestamps ?>
-                    <span class="time_lastactive icon-time shade-text z-depth-2">
+                    <span class="time_lastactive icon-time z-depth-2 shade-darken-2">
 <?= epenis($report['epenis']) ?>
 <?php if($report['last_active'] != $report['time']) { ?>
                         <span class="secondary-text"><span class="hide-on-med-and-down">last active: </span><?= datef($report['last_active']) ?></span>
-                        <div class="hide-on-med-and-up icon-time"></div>&nbsp;|&nbsp;
+                        <span class="hide-on-med-and-down">&nbsp;|&nbsp;
 <?php } ?>
-                        <span class="hide-on-med-and-down">submitted: </span><?= datef($report['time']) ?>
-                        <span class="dontworryaboutit"></span>
+                        <span class="hide-on-med-and-down">submitted: </span><?= datef($report['time']) ?></span>
+<?php if($report['last_active']) { ?>
                     </span>
+<?php } ?>
 <?php // Tags and Priority ?>
 <?php
         if(!$report['closed'])
@@ -164,7 +165,7 @@ document.body.onload = function(){
 ?>
 </div>
 <?php // Subject ?>
-                <div class="z-depth-3 subject-line <?= $report['closed'] ? 'shade-text' : "category-{$cat['id']}-text" ?>" style="clear: both"
+                <div class="z-depth-3 subject-line <?= $report['closed'] ? 'shade-text' : "category-{$cat['id']}-text" ?>"
                     title="<?= $report['subject'] ?>">
                     <a class="waves-effect icon-<?= $report['closed'] ? 'lock shade-text' : 'doc-text-inv category-'.$cat['id'].'-text'?>" 
                        href="<?= BUNZ_HTTP_DIR, 'report/view/',$report['id']?>"><?= $report['subject'] ?></a>

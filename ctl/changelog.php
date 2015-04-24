@@ -9,7 +9,7 @@ class changelog extends Controller
         $versions = db()->query(
             'SELECT DISTINCT(version)
              FROM change_log 
-             ORDER BY time ASC'
+             ORDER BY time DESC'
         )->fetchAll(PDO::FETCH_COLUMN);
 
         return $versions;

@@ -37,7 +37,6 @@ if(!empty($this->data['tags']))
                     </a>
                 </div>
                 <div class="left-align col s6">
-                    <small>&nbsp;<i class="icon-ok"></i></small>
                     <a href="#viewTags"
                        class="btn-flat sort icon-pinboard waves-effect"
                        data-sort="tag_title">Title<i class="icon-sort"></i>
