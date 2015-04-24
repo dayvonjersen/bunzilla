@@ -9,7 +9,7 @@
 define('BUNZ_START_TIME', microtime(1));
 define('BUNZ_SIGNATURE', 'tracked by Bunzilla');
 define('BUNZ_VERSION', '0.2b');
-define('BUNZ_DEVELOPMENT_MODE', true); // always true
+define('BUNZ_DEVELOPMENT_MODE', false); // always true
 
 /**
  * Error handling~ */
