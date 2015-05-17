@@ -132,11 +132,11 @@ class cpanel extends Controller
         call_user_func_array([$this,$mode.'Edit'],$args);
         if(isset($args[0]))
         {
-            Statuslog::create(
+            /*Statuslog::create(
                 $mode, 
                 (int)$args[0], 
                 'modified '.$mode.' '.Cache::read($tbl)[$args[0]]
-            );
+            );*/
         }
         Cache::clear($tbl);
         $this->index();
@@ -498,9 +498,15 @@ class cpanel extends Controller
         $params = $filt->input_array();
 
         $set = [];
+//trigger_error(var_export($params,1));
         foreach($params as $field => $value)
         {
+            // temp fix don't mind me
             if($value === null)
+            {
+                $params[$field] = $value = false;
+            }
+            if($value === $this->data['category'][$field])
                 unset($params[$field]);
             else
                 $set[] = $field .' = :'. $field;
