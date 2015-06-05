@@ -1,7 +1,7 @@
 <?php
 require BUNZ_TPL_DIR . 'constants.inc.php';
 
-$category = $this->data['category'];
+$category = $this->data['categories'][$this->data['category_id']];
 $pageTitle = $category['title'];
 $thisPage  = "report/category/{$category['id']}";
 $rss = [];
