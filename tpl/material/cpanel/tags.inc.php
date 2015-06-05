@@ -82,7 +82,7 @@ if(!empty($this->data['tags']))
                 <div class="col s4"><a href="<?=BUNZ_HTTP_DIR,'cpanel/delete/tag/',$p['id']?>#tags" 
                                class="waves-effect waves-red right btn-small btn btn-flat btn-floating danger-text" 
                                title="delete tag"
-                                onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this tag?')) evt.stopPropagation(); evt.preventDefault();})(event);"><i class="icon-delete"></i></a>&emsp;
+                                onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY(!) DELETE this tag?')){ evt.stopPropagation(); evt.preventDefault();}})(event);"><i class="icon-delete"></i></a>&emsp;
                             <a href="<?=BUNZ_HTTP_DIR,'cpanel/edit/tag/',$p['id']?>" 
                                class="waves-effect right btn btn-flat btn-small btn-floating success-base" 
                                title="edit tag"><i class="icon-pencil-alt"></i></a>
