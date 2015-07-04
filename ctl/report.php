@@ -125,18 +125,17 @@ class report extends Controller
                     r.id, r.email, r.epenis, r.subject, '.$field.' 
                     r.priority, r.status, r.closed,
                     r.time, r.edit_time, r.updated_at,
-                    COUNT(c.id) AS comment_count, MAX(c.time) AS last_comment
+                    COUNT(c.id) AS comment_count, MAX(c.time) AS last_comment,
+                    GREATEST(COALESCE(MAX(r.edit_time),0),MAX(r.time),COALESCE(MAX(r.updated_at),0),COALESCE(MAX(c.time),0)) AS last_activity
+                    
                  FROM reports AS r
                     LEFT JOIN comments AS c
                     ON r.id = c.report
                  WHERE r.category = '.(int)$id.'
                  GROUP BY r.id
                  ORDER BY r.closed ASC,
-                    last_comment DESC,
                     r.priority DESC,
-                    r.updated_at DESC,
-                    r.edit_time DESC,
-                    r.time ASC
+                    last_activity DESC
                  LIMIT '.$offset.',50'
         )->fetchAll(PDO::FETCH_ASSOC);
 
