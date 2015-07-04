@@ -1028,162 +1028,198 @@ function update_indicator($index, $prev_index) {
 
   };
 }( jQuery ));
-;(function ($) {
-    var timeout;
-    var counter;
-    var started;
-    var counterInterval;
+(function ($) {
+// Unique ID
+    var guid = (function() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+                   .toString(16)
+                   .substring(1);
+      }
+      return function() {
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+               s4() + '-' + s4() + s4() + s4();
+      };
+    })();
     $.fn.tooltip = function (options) {
-      var margin = 5;
-      
-      started = false;
+        var timeout = null,
+        counter = null,
+        started = false,
+        counterInterval = null,
+        margin = 5;
 
       // Defaults
       var defaults = {
         delay: 350
+      };
+
+      // Remove tooltip from the activator
+      if (options === "remove") {
+        this.each(function(){
+          $('#' + $(this).attr('data-tooltip-id')).remove();
+        });
+        return false;
       }
+
       options = $.extend(defaults, options);
-      
+
+
       return this.each(function(){
+        var tooltipId = guid();
         var origin = $(this);
-      
-      // Create tooltip
-      var newTooltip = $('<div></div');
-      newTooltip.addClass('material-tooltip').html(origin.attr('data-tooltip'));
-      newTooltip.appendTo($('body'));
-      
-      var backdrop = $('<div></div').addClass('backdrop');
-      backdrop.appendTo(newTooltip);
-      backdrop.css({ top: 0, left:0 });
-      
+        origin.attr('data-tooltip-id', tooltipId);
 
-      // Mouse In
-      $(this).hover(function(e) {
-        e.stopPropagation();
-        counter = 0;
-        counterInterval = setInterval(function(){
-          counter += 50;
-          if (counter >= defaults.delay && started == false) {
-            started = true
-            newTooltip.css({ display: 'block', left: '0px', top: '0px' });
+        // Create Text span
+        var tooltip_text = $('<span></span>').text(origin.attr('data-tooltip'));
 
-            // Tooltip positioning
-            var originWidth = origin.outerWidth();
-            var originHeight = origin.outerHeight();
-            var tooltipPosition =  origin.attr('data-position');
-            var tooltipHeight = newTooltip.outerHeight();
-            var tooltipWidth = newTooltip.outerWidth();
-            var tooltipVerticalMovement = '0px';
-            var tooltipHorizontalMovement = '0px';
-            var scale_factor = 8;
+        // Create tooltip
+        var newTooltip = $('<div></div>');
+        newTooltip.addClass('material-tooltip').append(tooltip_text)
+          .appendTo($('body'))
+          .attr('id', tooltipId);
 
-            // console.log(origin.offset().left);
+        var backdrop = $('<div></div>').addClass('backdrop');
+        backdrop.appendTo(newTooltip);
+        backdrop.css({ top: 0, left:0 });
 
-            if (tooltipPosition === "top") {
-            // Top Position
-            newTooltip.css({
-              top: origin.offset().top - tooltipHeight - margin,
-              left: origin.offset().left + originWidth/2 - tooltipWidth/2
-            });
-            tooltipVerticalMovement = '-10px';
-            backdrop.css({
-//              borderRadius: '14px 14px 0 0',
-              transformOrigin: '50% 90%',
-              marginTop: tooltipHeight,
-              marginLeft: (tooltipWidth/2) - (backdrop.width()/2)
 
-            });
-            }
-            // Left Position
-            else if (tooltipPosition === "left") {
+       //Destroy previously binded events
+      origin.off('mouseenter.tooltip mouseleave.tooltip');
+        // Mouse In
+      origin.on({
+        'mouseenter.tooltip': function(e) {
+          var tooltip_delay = origin.data("delay");
+          tooltip_delay = (tooltip_delay === undefined || tooltip_delay === '') ? options.delay : tooltip_delay;
+          counter = 0;
+          counterInterval = setInterval(function(){
+            counter += 10;
+            if (counter >= tooltip_delay && started === false) {
+              started = true;
+              newTooltip.css({ display: 'block', left: '0px', top: '0px' });
+
+              // Set Tooltip text
+              newTooltip.children('span').text(origin.attr('data-tooltip'));
+
+              // Tooltip positioning
+              var originWidth = origin.outerWidth();
+              var originHeight = origin.outerHeight();
+              var tooltipPosition =  origin.attr('data-position');
+              var tooltipHeight = newTooltip.outerHeight();
+              var tooltipWidth = newTooltip.outerWidth();
+              var tooltipVerticalMovement = '0px';
+              var tooltipHorizontalMovement = '0px';
+              var scale_factor = 8;
+
+              if (tooltipPosition === "top") {
+              // Top Position
               newTooltip.css({
-                top: origin.offset().top + originHeight/2 - tooltipHeight/2,
-                left: origin.offset().left - tooltipWidth - margin
-              });
-              tooltipHorizontalMovement = '-10px';
-              backdrop.css({
-                width: '14px',
-                height: '14px',
-//                borderRadius: '14px 0 0 14px',
-                transformOrigin: '95% 50%',
-                marginTop: tooltipHeight/2,
-                marginLeft: tooltipWidth
-              });
-            }
-            // Right Position
-            else if (tooltipPosition === "right") {
-              newTooltip.css({
-                top: origin.offset().top + originHeight/2 - tooltipHeight/2,
-                left: origin.offset().left + originWidth + margin
-              });
-              tooltipHorizontalMovement = '+10px';
-              backdrop.css({
-                width: '14px',
-                height: '14px',
-//                borderRadius: '0 14px 14px 0',
-                transformOrigin: '5% 50%',
-                marginTop: tooltipHeight/2,
-                marginLeft: '0px'
-              });
-            }
-            else {
-              // Bottom Position
-              newTooltip.css({
-                top: origin.offset().top + origin.outerHeight() + margin,
+                top: origin.offset().top - tooltipHeight - margin,
                 left: origin.offset().left + originWidth/2 - tooltipWidth/2
               });
-//              console.log(origin.offset().left)
-//              console.log(originWidth/2)
-//              console.log(tooltipWidth/2)
-              tooltipVerticalMovement = '+10px';
+              tooltipVerticalMovement = '-10px';
               backdrop.css({
+                borderRadius: '14px 14px 0 0',
+                transformOrigin: '50% 90%',
+                marginTop: tooltipHeight,
                 marginLeft: (tooltipWidth/2) - (backdrop.width()/2)
+
               });
+              }
+              // Left Position
+              else if (tooltipPosition === "left") {
+                newTooltip.css({
+                  top: origin.offset().top + originHeight/2 - tooltipHeight/2,
+                  left: origin.offset().left - tooltipWidth - margin
+                });
+                tooltipHorizontalMovement = '-10px';
+                backdrop.css({
+                  width: '14px',
+                  height: '14px',
+                  borderRadius: '14px 0 0 14px',
+                  transformOrigin: '95% 50%',
+                  marginTop: tooltipHeight/2,
+                  marginLeft: tooltipWidth
+                });
+              }
+              // Right Position
+              else if (tooltipPosition === "right") {
+                newTooltip.css({
+                  top: origin.offset().top + originHeight/2 - tooltipHeight/2,
+                  left: origin.offset().left + originWidth + margin
+                });
+                tooltipHorizontalMovement = '+10px';
+                backdrop.css({
+                  width: '14px',
+                  height: '14px',
+                  borderRadius: '0 14px 14px 0',
+                  transformOrigin: '5% 50%',
+                  marginTop: tooltipHeight/2,
+                  marginLeft: '0px'
+                });
+              }
+              else {
+                // Bottom Position
+                newTooltip.css({
+                  top: origin.offset().top + origin.outerHeight() + margin,
+                  left: origin.offset().left + originWidth/2 - tooltipWidth/2
+                });
+                tooltipVerticalMovement = '+10px';
+                backdrop.css({
+                  marginLeft: (tooltipWidth/2) - (backdrop.width()/2)
+                });
+              }
+
+              // Calculate Scale to fill
+              scale_factor = tooltipWidth / 8;
+              if (scale_factor < 8) {
+                scale_factor = 8;
+              }
+              if (tooltipPosition === "right" || tooltipPosition === "left") {
+                scale_factor = tooltipWidth / 10;
+                if (scale_factor < 6)
+                  scale_factor = 6;
+              }
+
+              newTooltip.velocity({ marginTop: tooltipVerticalMovement, marginLeft: tooltipHorizontalMovement}, { duration: 350, queue: false })
+                .velocity({opacity: 1}, {duration: 300, delay: 50, queue: false});
+              backdrop.css({ display: 'block' })
+              .velocity({opacity:1},{duration: 55, delay: 0, queue: false})
+              .velocity({scale: scale_factor}, {duration: 300, delay: 0, queue: false, easing: 'easeInOutQuad'});
+
             }
+          }, 10); // End Interval
 
-            // Calculate Scale to fill
-            scale_factor = tooltipWidth / 8;
-            if (scale_factor < 8) {
-              scale_factor = 8;
-            }
-            if (tooltipPosition === "right" || tooltipPosition === "left") {
-              scale_factor = tooltipWidth / 10;
-              if (scale_factor < 6)
-                scale_factor = 6;
-            }
+        // Mouse Out
+        },
+        'mouseleave.tooltip': function(){
+          // Reset State
+          clearInterval(counterInterval);
+          counter = 0;
 
-            newTooltip.velocity({ opacity: 1, marginTop: tooltipVerticalMovement, marginLeft: tooltipHorizontalMovement}, { duration: 350, queue: false });
-            backdrop.css({ display: 'block' })
-            .velocity({opacity:1},{duration: 55, delay: 0, queue: false})
-            .velocity({scale: scale_factor}, {duration: 300, delay: 0, queue: false, easing: 'easeInOutQuad'});
-
-          }
-        }, 50); // End Interval
-
-      // Mouse Out
-      }, function(){
-        // Reset State
-        clearInterval(counterInterval);
-        counter = 0;
-
-        // Animate back
-        newTooltip.velocity({
-          opacity: 0, marginTop: 0, marginLeft: 0}, { duration: 225, queue: false, delay: 275 }
-        );
-        backdrop.velocity({opacity: 0, scale: 1}, {
-          duration:225,
-          delay: 275, queue: false,
-          complete: function(){
-            backdrop.css('display', 'none');
-            newTooltip.css('display', 'none');
-            started = false;}
+          // Animate back
+          newTooltip.velocity({
+            opacity: 0, marginTop: 0, marginLeft: 0}, { duration: 225, queue: false, delay: 225 }
+          );
+          backdrop.velocity({opacity: 0, scale: 1}, {
+            duration:225,
+            delay: 275, queue: false,
+            complete: function(){
+              backdrop.css('display', 'none');
+              newTooltip.css('display', 'none');
+              started = false;}
+          });
+        }
         });
-      });
     });
-  }
-}( jQuery ));;
+  };
+
+  $(document).ready(function(){
+     $('.tooltipped').tooltip();
+   });
+}( jQuery ));
+
 /*!
- * Waves v0.5.3
+ * Waves v0.6.4
  * http://fian.my.id/Waves
  *
  * Copyright 2014 Alfiana E. Sibuea and other contributors
@@ -1207,7 +1243,6 @@ function update_indicator($index, $prev_index) {
     }
 
     function offset(elem) {
-
         var docElem, win,
             box = {top: 0, left: 0},
             doc = elem && elem.ownerDocument;
@@ -1225,7 +1260,6 @@ function update_indicator($index, $prev_index) {
     }
 
     function convertStyle(obj) {
-
         var style = '';
 
         for (var a in obj) {
@@ -1240,16 +1274,16 @@ function update_indicator($index, $prev_index) {
     var Effect = {
 
         // Effect delay
-        duration: 700,
+        duration: 750,
 
-        show: function(e) {
+        show: function(e, element) {
 
             // Disable right click
             if (e.button === 2) {
-              return false;
+                return false;
             }
 
-            var el = this;
+            var el = element || this;
 
             // Create ripple
             var ripple = document.createElement('div');
@@ -1260,7 +1294,7 @@ function update_indicator($index, $prev_index) {
             var pos         = offset(el);
             var relativeY   = (e.pageY - pos.top);
             var relativeX   = (e.pageX - pos.left);
-            var scale       = 'scale('+((el.clientWidth / 100) * 22)+')';
+            var scale       = 'scale('+((el.clientWidth / 100) * 10)+')';
 
             // Support for touch devices
             if ('touches' in e) {
@@ -1292,39 +1326,31 @@ function update_indicator($index, $prev_index) {
             rippleStyle.transform = scale;
             rippleStyle.opacity   = '1';
 
-            rippleStyle['-webkit-transition-duration'] = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
-            rippleStyle['-moz-transition-duration']    = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
-            rippleStyle['-o-transition-duration']      = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
-            rippleStyle['transition-duration']         = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
+            rippleStyle['-webkit-transition-duration'] = Effect.duration + 'ms';
+            rippleStyle['-moz-transition-duration']    = Effect.duration + 'ms';
+            rippleStyle['-o-transition-duration']      = Effect.duration + 'ms';
+            rippleStyle['transition-duration']         = Effect.duration + 'ms';
 
-            rippleStyle['-webkit-transition-timing-function'] = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
-            rippleStyle['-moz-transition-timing-function']    = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
-            rippleStyle['-o-transition-timing-function']      = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
-            rippleStyle['transition-timing-function']         = 'cubic-bezier(0.215, 0.610, 0.355, 1.000)';
+            rippleStyle['-webkit-transition-timing-function'] = 'cubic-bezier(0.250, 0.460, 0.450, 0.940)';
+            rippleStyle['-moz-transition-timing-function']    = 'cubic-bezier(0.250, 0.460, 0.450, 0.940)';
+            rippleStyle['-o-transition-timing-function']      = 'cubic-bezier(0.250, 0.460, 0.450, 0.940)';
+            rippleStyle['transition-timing-function']         = 'cubic-bezier(0.250, 0.460, 0.450, 0.940)';
 
             ripple.setAttribute('style', convertStyle(rippleStyle));
-
         },
 
-        hide: function() {
+        hide: function(e) {
+            TouchHandler.touchup(e);
 
             var el = this;
-
             var width = el.clientWidth * 1.4;
 
             // Get first ripple
             var ripple = null;
-
-            var childrenLength = el.children.length;
-
-            for (var a = 0; a < childrenLength; a++) {
-                if (el.children[a].className.indexOf('waves-ripple') !== -1) {
-                    ripple = el.children[a];
-                    continue;
-                }
-            }
-
-            if (!ripple) {
+            var ripples = el.getElementsByClassName('waves-ripple');
+            if (ripples.length > 0) {
+                ripple = ripples[ripples.length - 1];
+            } else {
                 return false;
             }
 
@@ -1334,7 +1360,7 @@ function update_indicator($index, $prev_index) {
 
             // Get delay beetween mousedown and mouse leave
             var diff = Date.now() - Number(ripple.getAttribute('data-hold'));
-            var delay = 500 - diff;
+            var delay = 350 - diff;
 
             if (delay < 0) {
                 delay = 0;
@@ -1342,7 +1368,6 @@ function update_indicator($index, $prev_index) {
 
             // Fade out ripple after delay
             setTimeout(function() {
-
                 var style = {
                     'top': relativeY+'px',
                     'left': relativeX+'px',
@@ -1363,34 +1388,26 @@ function update_indicator($index, $prev_index) {
                 ripple.setAttribute('style', convertStyle(style));
 
                 setTimeout(function() {
-
                     try {
                         el.removeChild(ripple);
                     } catch(e) {
                         return false;
                     }
-
-
                 }, Effect.duration);
-
             }, delay);
-
         },
 
         // Little hack to make <input> can perform waves effect
         wrapInput: function(elements) {
-
             for (var a = 0; a < elements.length; a++) {
-
                 var el = elements[a];
 
                 if (el.tagName.toLowerCase() === 'input') {
-
                     var parent = el.parentNode;
 
                     // If input already have parent just pass through
                     if (parent.tagName.toLowerCase() === 'i' && parent.className.indexOf('waves-effect') !== -1) {
-                        return false;
+                        continue;
                     }
 
                     // Put element class and style to the specified parent
@@ -1411,15 +1428,90 @@ function update_indicator($index, $prev_index) {
                     // Put element as child
                     parent.replaceChild(wrapper, el);
                     wrapper.appendChild(el);
-
                 }
-
             }
         }
     };
 
-    Waves.displayEffect = function(options) {
 
+    /**
+     * Disable mousedown event for 500ms during and after touch
+     */
+    var TouchHandler = {
+        /* uses an integer rather than bool so there's no issues with
+         * needing to clear timeouts if another touch event occurred
+         * within the 500ms. Cannot mouseup between touchstart and
+         * touchend, nor in the 500ms after touchend. */
+        touches: 0,
+        allowEvent: function(e) {
+            var allow = true;
+
+            if (e.type === 'touchstart') {
+                TouchHandler.touches += 1; //push
+            } else if (e.type === 'touchend' || e.type === 'touchcancel') {
+                setTimeout(function() {
+                    if (TouchHandler.touches > 0) {
+                        TouchHandler.touches -= 1; //pop after 500ms
+                    }
+                }, 500);
+            } else if (e.type === 'mousedown' && TouchHandler.touches > 0) {
+                allow = false;
+            }
+
+            return allow;
+        },
+        touchup: function(e) {
+            TouchHandler.allowEvent(e);
+        }
+    };
+
+
+    /**
+     * Delegated click handler for .waves-effect element.
+     * returns null when .waves-effect element not in "click tree"
+     */
+    function getWavesEffectElement(e) {
+        if (TouchHandler.allowEvent(e) === false) {
+            return null;
+        }
+
+        var element = null;
+        var target = e.target || e.srcElement;
+
+        while (target.parentElement !== null) {
+            if (!(target instanceof SVGElement) && target.className.indexOf('waves-effect') !== -1) {
+                element = target;
+                break;
+            } else if (target.classList.contains('waves-effect')) {
+                element = target;
+                break;
+            }
+            target = target.parentElement;
+        }
+
+        return element;
+    }
+
+    /**
+     * Bubble the click and show effect if .waves-effect elem was found
+     */
+    function showEffect(e) {
+        var element = getWavesEffectElement(e);
+
+        if (element !== null) {
+            Effect.show(e, element);
+
+            if ('ontouchstart' in window) {
+                element.addEventListener('touchend', Effect.hide, false);
+                element.addEventListener('touchcancel', Effect.hide, false);
+            }
+
+            element.addEventListener('mouseup', Effect.hide, false);
+            element.addEventListener('mouseleave', Effect.hide, false);
+        }
+    }
+
+    Waves.displayEffect = function(options) {
         options = options || {};
 
         if ('duration' in options) {
@@ -1429,30 +1521,41 @@ function update_indicator($index, $prev_index) {
         //Wrap input inside <i> tag
         Effect.wrapInput($$('.waves-effect'));
 
-        Array.prototype.forEach.call($$('.waves-effect'), function(i) {
-
         if ('ontouchstart' in window) {
-          i.addEventListener('mouseup', Effect.hide, false);                      i.addEventListener('touchstart', Effect.show, false);
-          i.addEventListener('mouseleave', Effect.hide, false);                   i.addEventListener('touchend',   Effect.hide, false);
-          i.addEventListener('touchcancel',   Effect.hide, false);
+            document.body.addEventListener('touchstart', showEffect, false);
         }
 
-        i.addEventListener('mousedown', Effect.show, false);
-        i.addEventListener('mouseup', Effect.hide, false);
-        i.addEventListener('mouseleave', Effect.hide, false);
+        document.body.addEventListener('mousedown', showEffect, false);
+    };
 
+    /**
+     * Attach Waves to an input element (or any element which doesn't
+     * bubble mouseup/mousedown events).
+     *   Intended to be used with dynamically loaded forms/inputs, or
+     * where the user doesn't want a delegated click handler.
+     */
+    Waves.attach = function(element) {
+        //FUTURE: automatically add waves classes and allow users
+        // to specify them with an options param? Eg. light/classic/button
+        if (element.tagName.toLowerCase() === 'input') {
+            Effect.wrapInput([element]);
+            element = element.parentElement;
+        }
 
-        });
+        if ('ontouchstart' in window) {
+            element.addEventListener('touchstart', showEffect, false);
+        }
 
+        element.addEventListener('mousedown', showEffect, false);
     };
 
     window.Waves = Waves;
 
-    $(document).ready(function() {
-      Waves.displayEffect();
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        Waves.displayEffect();
+    }, false);
 
-})(window);;function toast(message, displayLength, className, completeCallback) {
+})(window);function toast(message, displayLength, className, completeCallback) {
     className = className || "";
     if ($('#toast-container').length == 0) {
         // create notification container

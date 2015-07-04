@@ -1,7 +1,7 @@
 /**
  * activate materialize.js components */
-//$(document).ready(function(){
-$(window).load(function(){
+$(document).ready(function(){
+//$(window).load(function(){
     $(".dropdown-button").dropdown(
 {
     hover: false,
