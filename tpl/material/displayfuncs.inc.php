@@ -75,7 +75,7 @@ function badge( $type, $id, $short = false, $z = 1 )
     return '
 <span class="badge right z-depth-'.$z.' '.$type.' '.$type.'-'.$id.' '.${$type}[$id]['icon'].'" 
       title="'.ucfirst($type).': '.${$type}[$id]['title'].'">'
-.($short ? '': '<span class="hide-on-small-only">').${$type}[$id]['title'].'</span></span>'."\n";
+.($short ? '': '<span class="hide-on-small-only">'.${$type}[$id]['title'].'</span>').'</span>'."\n";
 }
 function status( $id, $short = false ) { return badge('status',(int)$id,$short,5); }
 function tag( $id, $short = true ) { return badge('tag',(int)$id,$short); }
