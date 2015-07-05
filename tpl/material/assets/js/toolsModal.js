@@ -140,10 +140,18 @@ var toolsModal = (function()
                 deactivate();
                 if(evt.target == document.getElementById('selectBoxesAreHard'))
                     evt.target = document.getElementById('codelang');
+
+                var codeBtn = document.querySelector('#toolsModal button[data-markup="code"]');
+                codeBtn.addEventListener('click', function() {
+                    codeBtn.classList.remove('primary-base')
+                    codeBtn.classList.add('shade-text')
+                },false);
                 evt.target.addEventListener('change',function(){
+                    codeBtn.classList.remove('shade-text')
+                    codeBtn.classList.add('primary-base')
                     activate();
-                    var fakeEvent = {"target": document.querySelector('button[data-markup="code"]')};
-                    insertHandler(fakeEvent);
+//                    var fakeEvent = {"target": document.querySelector('button[data-markup="code"]')};
+//                    insertHandler(fakeEvent);
                 });
                 return;
             } else {

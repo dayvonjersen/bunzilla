@@ -191,6 +191,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
         if(strpos($crumb['href'],'report/index') === 0)
         {
             echo '<a href="#" class="waves-effect dropdown-button primary-text" data-activates="bc-catlist">Category Listing <i class="icon-down-open-mini"></i></a>';
+            $currentCat = 0;
         } 
         elseif(strpos($crumb['href'],'report/category') === 0)
         {
