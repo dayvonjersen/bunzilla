@@ -127,6 +127,9 @@ input:checked ~ label {
     border-left-width: 12px;
     border-left-style: solid;
 }
+label span.tag {
+    line-height: 1.5
+}
 span.priority {
     font-size: 0.8889rem !important;
     margin: 3px 0 0 0;

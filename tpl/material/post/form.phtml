@@ -181,7 +181,7 @@ if(!defined('FUX') && count($this->data['tags']) && !isset($this->data['params']
 ?>
                     <div class="input-field col s6 m3 l1">
                         <input type="checkbox" name="tags[]" id="tag_<?= $id ?>" value="<?= $id ?>"<?= in_array($id, $checked) ? ' checked' : ''?>>
-                        <label for="tag_<?= $id ?>"><small><?= $tag['title'] ?></small></label>
+                        <label for="tag_<?= $id ?>"><small><!--<?= $tag['title'] ?></small>--> <?= tag($id,0) ?></label>
                     </div>
 <?php
         if($i%12 == 0 || $tag === end($this->data['tags']))
