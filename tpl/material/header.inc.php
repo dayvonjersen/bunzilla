@@ -42,6 +42,19 @@ if(BUNZ_DEVELOPMENT_MODE)
                 "\n";
     $dir->close();
 }
+
+if(isset($this->breadcrumbs))
+{
+    $thisPage = end($this->breadcrumbs)['href'];
+    $route = explode('/', $thisPage);
+    if(file_exists(BUNZ_TPL_BASE_DIR . 'rss/'.$route[0].'/'.$route[1].'.inc.php'))
+    {
+    ?>
+        <link rel='alternate' type='application/rss+xml' title='<?= $pageTitle ?>' href='<?= BUNZ_HTTP_DIR, $thisPage, '?rss' ?>'>
+    <?php
+    }
+    unset($thisPage, $route);
+}
 ?>
     </head>
 
