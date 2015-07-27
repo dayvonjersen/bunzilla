@@ -707,7 +707,7 @@ class cpanel extends Controller
              '-- ',date(BUNZ_BUNZILLA_DATE_FORMAT),"\n\n";
         $db = db()->query('SELECT DATABASE()')->fetch(PDO::FETCH_COLUMN);
         echo $mode != 'data' ? "CREATE DATABASE IF NOT EXISTS `$db`;\n" : '',
-             "USE `$db`\n\n";
+             "USE `$db`;\n\n";
         foreach(db()->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN) as $tbl)
         {
             if($mode != 'data')
@@ -720,14 +720,16 @@ class cpanel extends Controller
             $columns = db()->query('SHOW COLUMNS FROM '.$tbl)->fetchAll(PDO::FETCH_COLUMN);
             if($mode != 'structure')
             {
-                echo "\n -- data for $tbl\nREPLACE INTO `$tbl`\n  (`",implode('`,',$columns),"`)\nVALUES\n";
                 $rows = db()->query('SELECT * FROM '.$tbl)->fetchAll(PDO::FETCH_ASSOC);
-                foreach($rows as $row)
-                {
-                    echo "  (";
-                    foreach($columns as $col)
-                        echo db()->quote($row[$col]),$col === end($columns) ? '' : ',';
-                    echo ')',$row === end($rows) ? ';' : ',',"\n";
+                if(!empty($rows)) {
+                    echo "\n -- data for $tbl\nREPLACE INTO `$tbl`\n  (`",implode('`,`',$columns),"`)\nVALUES\n";
+                    foreach($rows as $row)
+                    {
+                        echo "  (";
+                        foreach($columns as $col)
+                            echo db()->quote($row[$col]),$col === end($columns) ? '' : ',';
+                        echo ')',$row === end($rows) ? ';' : ',',"\n";
+                    }
                 }
             }
             echo "\n";
