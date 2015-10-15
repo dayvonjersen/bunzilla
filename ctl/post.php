@@ -155,7 +155,7 @@ class post extends Controller
                 }
 
                 $this->redirectWithMessage(
-                    'report/view/'.$reportId
+                    '/report/view/'.$reportId
                         .($editMode == 'comment' ? '#reply-'.$commentId : ''),
                     'Your desired changes were made.'
                 );
@@ -461,6 +461,12 @@ class post extends Controller
     {
         $msg = htmlspecialchars($msg);
         $msg = trim(str_replace([chr(7),chr(160),chr(173)], '', $msg));
+
+        // how to handle newlines is a bit of a pain, this works for now
+        // but disabling them is a fix
+        if(!isset($_POST['disable_nlbr']) || !$_POST['disable_nlbr'])
+            $msg = nl2br($msg);
+
         if(isset($_POST['disable_html']))
             return $msg;
 
@@ -519,30 +525,25 @@ class post extends Controller
             );
         }
 
-        // how to handle newlines is a bit of a pain, this works for now
-        // but disabling them is a fix
-        if(!isset($_POST['disable_nlbr']) || !$_POST['disable_nlbr'])
-            $msg = nl2br($msg);
-
         /**
          * Highlighted Code!
          * @usage: <code php><?= 'hello, world' ?></code>
          * highlight.js does the hard stuff */
         preg_match_all(
-            '/\<code(\s+[0-9a-z]+)?\>(.+?)\<\/code\>/ims',
+            '/(<|&lt;)code(\s+[0-9a-z]+)?(>|&gt;)(.+?)(<|&lt;)\/code(>|&gt;)/ims',
             $msg,$codes,PREG_SET_ORDER
         );
         foreach($codes as $code)
         {
-            $code[1] = ( strlen($code[1]) 
-                       ? ' class="language-'.trim($code[1]).'"'
+            $code[2] = ( strlen($code[2]) 
+                       ? ' class="language-'.trim($code[2]).'"'
                        : ''
                        );
 
-            $code[2] = str_replace('<br />', '', $code[2]);
+            $code[4] = str_replace('<br />', '', $code[4]);
             $msg = str_replace(
                 $code[0],
-                '<pre><code'.$code[1].'>'.$code[2].'</code></pre>',
+                '<pre><code'.$code[2].'>'.$code[4].'</code></pre>',
                 $msg
             );
         }

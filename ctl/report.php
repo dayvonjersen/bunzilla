@@ -163,7 +163,11 @@ class report extends Controller
         $this->tpl .= '/view';
 
         $this->data['report'] = db()->query(
-            'SELECT * FROM reports WHERE id = '.$this->id
+            'SELECT id, email, INET6_NTOA(ip) AS ip,
+                time, category, subject, description,
+                reproduce, expected, actual, 
+                closed, epenis, edit_time, status, priority, updated_at
+             FROM reports WHERE id = '.$this->id
         )->fetch(PDO::FETCH_ASSOC);
 
         $this->data['comments'] = [];
