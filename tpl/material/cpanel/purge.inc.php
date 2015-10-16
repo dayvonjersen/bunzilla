@@ -1,3 +1,9 @@
+<style>
+#purge :target {
+    /* .z-depth-5 */
+    box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.22);
+}
+</style>
 <section id="purge" class="col s12 danger-base">
     <div class="section">
         <h1 class="icon-delete">THERE IS NO UNDO FOR THIS <a href="<?= BUNZ_HTTP_DIR?>cpanel/export">BACKUP FIRST</a></h1>
@@ -9,7 +15,7 @@
     <form id="purge__form" class=""
           action="<?= BUNZ_HTTP_DIR ?>cpanel/purge"
           method="post">
-        <div class="row section shade-text">
+        <div class="row section shade-text" id="purge__time">
             <div class="col s12">made...</div>
             <div class="col s6">
                 <input type="radio" id="before" name="before" value="1" checked>
@@ -23,7 +29,7 @@
 
             <div class="col s12">the past...</div>
             <div class="col s2 section no-pad-top">
-            <select name="year">
+            <select name="year" class="browser-default">
 <?php
 for($i = 0; $i < 11; $i++) { // XXX adjust as needed
 ?>
@@ -34,7 +40,7 @@ for($i = 0; $i < 11; $i++) { // XXX adjust as needed
             </select> years
             </div>
             <div class="col s2 section no-pad-top">
-            <select name="month">
+            <select name="month" class="browser-default">
 <?php
 for($i = 0; $i <= 12; $i++) { // XXX adjust as needed
 ?>
@@ -45,7 +51,7 @@ for($i = 0; $i <= 12; $i++) { // XXX adjust as needed
             </select> months
             </div>
             <div class="col offset-s1 s2 section no-pad-top">
-            <select name="day">
+            <select name="day" class="browser-default">
 <?php
 for($i = 0; $i <= 12; $i++) { // XXX adjust as needed
 ?>
@@ -56,7 +62,7 @@ for($i = 0; $i <= 12; $i++) { // XXX adjust as needed
             </select> days
             </div>
             <div class="col offset-s1 s2 section no-pad-top">
-            <select name="hour">
+            <select name="hour" class="browser-default">
 <?php
 for($i = 0; $i <= 12; $i++) { // XXX adjust as needed
 ?>
@@ -67,7 +73,7 @@ for($i = 0; $i <= 12; $i++) { // XXX adjust as needed
             </select> hours
             </div>
             <div class="col s2 section no-pad-top">
-            <select name="year">
+            <select name="minute" class="browser-default">
 <?php
 for($i = 0; $i < 60; $i++) { // XXX adjust as needed
 ?>
@@ -87,6 +93,33 @@ for($i = 0; $i < 60; $i++) { // XXX adjust as needed
             <div class="col s6">
                 <input type="radio" id="close" name="include_open" value="0" checked>
                 <label for="close"><span class="icon-lock"></span>which are closed</label>
+            </div>
+        </div>&nbsp;
+        <div class="row">
+            <div class="col s12 section secondary-base"><strong>PROTIP:</strong> leaving the subsequent sections blank will exclude them from the request, so leave <strong>nothing below checked</strong> if you want to just clear <strong>all</strong> reports matching <strong>above criteria</strong>.</div>&nbsp;
+            <div class="col s12 section secondary-lighten-5">Actually you know what here have some presets:
+                <ul>
+                    <li><a onclick="
+var form=document.forms['purge__form'];
+form.reset();
+[].forEach.call(form, function(el) {
+    el.checked = (el.id === 'close' || el.id === 'before');
+});" href="#purge__submit">Delete All Closed Reports</a></li>
+                    <li><a onclick="
+var form=document.forms['purge__form'];
+form.reset();
+[].forEach.call(form, function(el) {
+    el.checked = (el.id === 'open' || el.id === 'before');
+});" href="#purge__ips">An attacker/spambot/skid/troll posted a bunch of shit sometime in the past</a></li>
+                    <li><a onclick="
+var form=document.forms['purge__form'];
+form.reset();
+[].forEach.call(form, function(el) {
+    el.checked = (el.id === 'open' || el.id === 'during');
+});" href="#purge__time">An attacker/spambot/skid/troll is posting a bunch of shit RIGHT NOW</a>, then <a href="#purge__ips">Select their IP and/or email <strong>ONLY</strong></a></li>
+                    <li>todo: think of more common purge scenarios</li>
+                    </li>
+                </ul>
             </div>
         </div>&nbsp;
         <div class="row section shade-text">
@@ -125,7 +158,7 @@ foreach($this->data['priorities'] as $id => $priority) {
 }
 ?>
         </div>&nbsp;
-        <div class="row section shade-text">
+        <div class="row section shade-text" id="purge__ips">
             <div class="col s12 section">made by users with ANY of the following IPs:<br>&nbsp;</div>
 <?php
 foreach($this->data['users']['ips'] as $id => $ip) {
@@ -137,7 +170,7 @@ foreach($this->data['users']['ips'] as $id => $ip) {
 }
 ?>
         </div>&nbsp;
-        <div class="row section shade-text">
+        <div class="row section shade-text" id="purge__emails">
             <div class="col s12 section">made by users with ANY of the following Email Addresses:<br>&nbsp;</div>
 <?php
 foreach($this->data['users']['emails'] as $id => $email) {
@@ -149,9 +182,9 @@ foreach($this->data['users']['emails'] as $id => $email) {
 }
 ?>
         </div>&nbsp;
-        <div class="row section shade-text">
+        <div class="row section shade-text" id="purge__submit">
             <div class="col s12 section center">
-                <button onclick="event.preventDefault(); event.stopPropagation(); [].forEach.call(document.forms['purge__form'], function(el){el.checked=false})"
+                <button onclick="event.preventDefault(); event.stopPropagation(); document.forms['purge__form'].reset(); [].forEach.call(document.forms['purge__form'], function(el){el.checked=false})"
                         class="btn btn-flat white shade-text icon-cancel waves-effect">Clear All!</button>
                 <button type="reset"
                         class="btn btn-flat white secondary-text icon-cancel waves-effect waves-effect-red">Defaults Please!</button>
