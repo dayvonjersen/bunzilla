@@ -120,7 +120,7 @@ class Filter {
 			throw new Exception('Unknown Filter type "' . $type . '"');
 		}
 
-		if (isset($arrMode)) {
+		if ($arrMode) {
 			unset($arrMode);
 			$f = 'require_array';
 			$c = 'array';

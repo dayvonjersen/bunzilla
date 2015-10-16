@@ -757,15 +757,37 @@ class cpanel extends Controller
         $filt->addBool('include_open');
         $filt->addIntArray('categories');
         $filt->addIntArray('statuses');
-        $filt->addIntArray('tags');
         $filt->stringArray('ips');
         $filt->stringArray('emails');
 
         $params = $filt->input_array();
 
+        $yy = $params['year']*31104000;
+        $mm = $params['month']*2592000;
+        $dd = $params['day']*86400;
+        $h = $params['hour']*3600;
+        $m = $params['minute']*60;
+
+        $time = time() - $yy+$mm+$dd+$h+$m;
+
+        $query = '`updated_at` ';
+        $query .= $params['before'] ? '<=' : '>=';
+        $query .= $time;
+        $query .= $params['include_open'] ? '' : ' AND `closed` = 1';
+        $query .= empty($params['categories']) ? '' : ' AND `category` IN ('.implode(',', $params['categories']).')';
+        $query .= empty($params['statuses']) ? '' : ' AND `status` IN ('.implode(',', $params['statuses']).')';
+        $query .= empty($params['ips']) ? '' : ' AND `ip` IN ('.implode(',', $params['ips']).')';
+        $query .= empty($params['emails']) ? '' : ' AND `email` IN ('.implode(',', $params['emails']).')';
+
         $this->tpl = null;
         header('Content-Type: text/plain');
-        var_dump($params);
+        echo "DELETE FROM `reports` WHERE $query\n\n";
+        echo 'This was only a test. Had this been a real purge ',selectCount('reports',$query),' records would have been permanently deleted.';
         exit;
+
+        $res = db()->query("DELETE FROM `reports` WHERE $query");
+        $rows = $res->rowCount();
+        $this->flash[] = $rows ? "Nothing was deleted." : $rows . ' message'. ($rows === 1 ? '' : 's') . ' were purged.';
+        
     }
 }
