@@ -697,7 +697,7 @@ class cpanel extends Controller
             $this->index();
             exit;
         }
-
+        $this->tpl = null;
         header('Content-Type: text/plain; charset=utf-8');
         header('Content-Disposition: attachment; filename="'.date('YmdHis').'-'.preg_replace('/[^a-z0-9-_]/i','_',BUNZ_PROJECT_TITLE).'--bunzilla-'.strtoupper($mode).'-dump.sql.gz"');
         flush();
@@ -787,6 +787,7 @@ class cpanel extends Controller
 
         $res = db()->query("DELETE FROM `reports` WHERE $query");
         $rows = $res->rowCount();
+
         $this->flash[] = $rows ? "Nothing was deleted." : $rows . ' message'. ($rows === 1 ? '' : 's') . ' were purged.';
         
     }
