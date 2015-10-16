@@ -13,7 +13,7 @@ if(!empty($this->data['tags']))
     background: #eee;
 }
 #viewTags .label {
-    padding: 5px 0.5em 0;
+    padding: 5px 0.5em ;
     max-height: 1.5em; 
     display: inline-block; 
     height: 100%;
@@ -21,7 +21,7 @@ if(!empty($this->data['tags']))
     z-index: 1;
 }
 #viewTags .graph {
-    height: calc(1.5em + 5px); 
+    height: 1.5em; 
     position: absolute; 
     left: 7px; top: 0;
     pointer-events: none

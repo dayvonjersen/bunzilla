@@ -275,12 +275,13 @@ input.gn-search:focus {
 .gn-menu-main li[title]::before {
     content: attr(title);
     position: fixed;
-    z-index: -1;
-    font-size: xx-large;
+    z-index: 1;
+    font-size: 1.5em;
     top: 0;
-    left: 2em;
+    left: 4em;
     text-align: left;
     width: 100vw;
+    pointer-events: none;
     color: #efefef;
 }
 

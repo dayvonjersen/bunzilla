@@ -179,9 +179,9 @@ if(!defined('FUX') && count($this->data['tags']) && !isset($this->data['params']
     foreach($this->data['tags'] as $id => $tag)
     {
 ?>
-                    <div class="input-field col s6 m3 l1">
+                    <div class="input-field col s6 m3 l2">
                         <input type="checkbox" name="tags[]" id="tag_<?= $id ?>" value="<?= $id ?>"<?= in_array($id, $checked) ? ' checked' : ''?>>
-                        <label for="tag_<?= $id ?>"><small><?= $tag['title'] ?></small></label>
+                        <label for="tag_<?= $id ?>"><?= tag($id,0) ?></label>
                     </div>
 <?php
         if($i%12 == 0 || $tag === end($this->data['tags']))
@@ -220,6 +220,4 @@ if(defined('FUX'))
 {
     require '../toolsModal.html';
     echo '<script src="../jquery-2.1.3.min.js"></script><style>@import "../assets/css/materialize.min.css";label{display:none !important}button{background: #fff !important}textarea{height: 10em !important}</style></body></html>';
-} else {
-     require BUNZ_TPL_DIR .'footer.inc.php';
-}
+} 

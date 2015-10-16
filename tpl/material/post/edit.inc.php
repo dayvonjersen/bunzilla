@@ -19,3 +19,5 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 require BUNZ_TPL_DIR .'toolsModal.html';
 require 'form.phtml';
 require BUNZ_TPL_DIR .'previewModal.html';
+
+require BUNZ_TPL_DIR . 'footer.inc.php';
