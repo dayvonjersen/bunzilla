@@ -50,7 +50,7 @@ if(isset($this->breadcrumbs))
     if(file_exists(BUNZ_TPL_BASE_DIR . 'rss/'.$route[0].'/'.$route[1].'.inc.php'))
     {
     ?>
-        <link rel='alternate' type='application/rss+xml' title='<?= $pageTitle ?>' href='<?= BUNZ_HTTP_DIR, $thisPage, '?rss' ?>'>
+        <link rel='alternate' type='application/rss+xml' title='<?= isset($pageTitle) ? $pageTitle : BUNZ_PROJECT_TITLE ?>' href='<?= BUNZ_HTTP_DIR, $thisPage, '?rss' ?>'>
     <?php
     }
     unset($thisPage, $route);
