@@ -12,12 +12,13 @@ $report = $this->data['report'];
         <article>
             <header>
                 <h1><?= $report['subject'], $report['closed'] ? ' [CLOSED]' : '' ?></h1>
-                <h2><?= $report['email'] ?></h2>
+		<h2><?= $report['email'], $report['epenis'] ? ' [developer] ' : ' ', date(BUNZ_BUNZILLA_DATE_FORMAT, $report['time']) ?></h2>
                 <h3><?= date(BUNZ_BUNZILLA_DATE_FORMAT, $report['time']) ?></h3>
             </header>
             <hr/>
-            <p>status priority whatever</p>
-            <p><button>actions</button><button>or</button><button>something</button></p>
+            <p>[<?=  $this->data['priorities'][$report['priority']]['title'] ?>] [<?= $this->data['statuses'][$report['status']]['title'] ?>]</p>
+	    <hr/>
+            <!--<p><button>actions</button><button>or</button><button>something</button></p>-->
             <main>
 <?php
 foreach(['description','reproduce','expected','actual'] as $field)
@@ -25,6 +26,7 @@ foreach(['description','reproduce','expected','actual'] as $field)
     if($category[$field])
     {
 ?>
+                <h5><?= $field ?></h5>
                 <section><?= $report[$field] ?></section>
 <?php
     }
@@ -32,7 +34,30 @@ foreach(['description','reproduce','expected','actual'] as $field)
 ?>
             </main>
             <hr/>
-            <p>comments or something</p>
+<?php
+if(!empty($this->data['comments']))
+{
+?>
+	   <footer>
+<?php
+foreach($this->data['comments'] as $comment)
+{
+?>
+		<article>
+			<header><?= $comment['email'], $comment['epenis'] ? $comment['epenis'] == 2 ? ' [system] ' : ' [developer] ' : ' ', date(BUNZ_BUNZILLA_DATE_FORMAT, $comment['time']) ?></header>
+			<main><?= $comment['message'] ?></main>
+		</article>
+		<hr/>
+<?php
+}
+?>
+	   </footer>
+<?php
+}
+?>
         </article>
+	<footer>
+		<address><?= BUNZ_PROJECT_TITLE, ' ', BUNZ_SIGNATURE ?></address>
+	</footer>
     </body>
 </html>
