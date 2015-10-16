@@ -1,7 +1,9 @@
 <section id="purge" class="col s12 danger-base">
     <div class="section">
-        <h1 class="icon-delete tab">Purge ALL Reports &mdash; NO UNDO <a href="<?= BUNZ_HTTP_DIR?>cpanel/export">BACKUP FIRST</a></h1>
-        <h4>(and associated comments and diffs)</h4>
+        <h1 class="icon-delete">THERE IS NO UNDO FOR THIS <a href="<?= BUNZ_HTTP_DIR?>cpanel/export">BACKUP FIRST</a></h1>
+        <h5>hint: read this form like a sentence</h5>
+        <h1 class="icon-delete">Purge ALL Reports...</h1>
+        <h4>...and associated comments and diffs...</h4>
     </div>
     <div class="section">
     <form id="purge__form" class=""
@@ -80,11 +82,11 @@ for($i = 0; $i < 60; $i++) { // XXX adjust as needed
         <div class="row section shade-text">
             <div class="col s6">
                 <input type="radio" id="open" name="include_open" value="1">
-                <label for="open">INCLUDING OPEN REPORTS</label>
+                <label for="open" class="danger-text"><span class="icon-unlock"></span>INCLUDING OPEN REPORTS</label>
             </div>
             <div class="col s6">
                 <input type="radio" id="close" name="include_open" value="0" checked>
-                <label for="close">which are closed</label>
+                <label for="close"><span class="icon-lock"></span>which are closed</label>
             </div>
         </div>&nbsp;
         <div class="row section shade-text">
@@ -112,6 +114,42 @@ foreach($this->data['statuses'] as $id => $stat) {
 ?>
         </div>&nbsp;
         <div class="row section shade-text">
+            <div class="col s12 section">with ANY of the following priorities:<br>&nbsp;</div>
+<?php
+foreach($this->data['priorities'] as $id => $priority) {
+?>          <div class="input-field col s12 m6 l3">
+                <input type="checkbox" id="purge__priority<?= $id ?>" name="priorities[]" value="<?=$id?>" checked>
+                <label for="purge__priority<?= $id ?>"><span class="<?= $priority['icon'] ?>"></span><?=$priority['title']?></label>
+            </div>
+<?php
+}
+?>
+        </div>&nbsp;
+        <div class="row section shade-text">
+            <div class="col s12 section">made by users with ANY of the following IPs:<br>&nbsp;</div>
+<?php
+foreach($this->data['users']['ips'] as $id => $ip) {
+?>          <div class="input-field col s12 m6 l3">
+                <input type="checkbox" id="purge__ip<?= $id ?>" name="ips[]" value="<?=$ip?>" checked>
+                <label for="purge__ip<?= $id ?>"><?=$ip?></label>
+            </div>
+<?php
+}
+?>
+        </div>&nbsp;
+        <div class="row section shade-text">
+            <div class="col s12 section">made by users with ANY of the following Email Addresses:<br>&nbsp;</div>
+<?php
+foreach($this->data['users']['emails'] as $id => $email) {
+?>          <div class="input-field col s12 m6 l3">
+                <input type="checkbox" id="purge__email<?= $id ?>" name="emails[]" value="<?=$email?>" checked>
+                <label for="purge__email<?= $id ?>"><?=$email?></label>
+            </div>
+<?php
+}
+?>
+        </div>&nbsp;
+        <div class="row section shade-text">
             <div class="col s12 section center">
                 <button onclick="event.preventDefault(); event.stopPropagation(); [].forEach.call(document.forms['purge__form'], function(el){el.checked=false})"
                         class="btn btn-flat white shade-text icon-cancel waves-effect">Clear All!</button>
@@ -120,7 +158,7 @@ foreach($this->data['statuses'] as $id => $stat) {
                 <br>&nbsp;<br>
                 <button type="submit"
                         onclick="(function(evt){if(!window.confirm('FOR GREAT JUSTICE')){ evt.stopPropagation(); evt.preventDefault(); alert('MOVE ZIG'); }})(event)"
-                        class="btn icon-delete waves-effect btn-raised danger-base">YOU KNOW WHAT YOU DOING<i>!!</i></button>
+                        class="btn btn-large large icon-delete waves-effect btn-raised danger-base">YOU KNOW WHAT YOU DOING<i>!!</i></button>
             </div>
         </div>
     </form> 

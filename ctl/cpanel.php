@@ -69,6 +69,25 @@ class cpanel extends Controller
             'open_reports'  => selectCount('reports', 'closed = 0')
         ];
 
+        /**
+         * :^) */
+        $report_ips = db()->query('SELECT DISTINCT(INET6_NTOA(`ip`)) FROM `reports`')->fetchAll(PDO::FETCH_COLUMN);
+        $comment_ips = db()->query('SELECT DISTINCT(INET6_NTOA(`ip`)) FROM `comments`')->fetchAll(PDO::FETCH_COLUMN);
+        $report_emails = db()->query('SELECT DISTINCT(email) FROM `reports`')->fetchAll(PDO::FETCH_COLUMN);
+        $comment_emails = db()->query('SELECT DISTINCT(email) FROM `comments`')->fetchAll(PDO::FETCH_COLUMN);
+
+        $filt = new Filter;
+        $filt->addIpArray('ips');
+        $filt->addEmailArray('emails');
+        $nsa = [
+            'ips' => array_unique(array_merge($report_ips, $comment_ips)),
+            'emails' => array_unique(array_merge($report_emails, $comment_emails))
+        ];
+        $nsa = $filt->var_array($nsa);
+        $nsa['ips'] = array_filter($nsa['ips']);
+        $nsa['emails'] = array_filter($nsa['emails']);
+        $this->data['users'] = $nsa;
+
         $this->setBreadcrumbs(__FUNCTION__);
     }
 
@@ -747,6 +766,9 @@ class cpanel extends Controller
             return;
         }
 
+        ignore_user_abort(1);
+        set_time_limit(0);
+
         $filt = new Filter;
         $filt->addBool('before');
         $filt->addInt('year');
@@ -757,8 +779,9 @@ class cpanel extends Controller
         $filt->addBool('include_open');
         $filt->addIntArray('categories');
         $filt->addIntArray('statuses');
-        $filt->stringArray('ips');
-        $filt->stringArray('emails');
+        $filt->addIntArray('priorities');
+        $filt->addIpArray('ips');
+        $filt->addEmailArray('emails');
 
         $params = $filt->input_array();
 
@@ -776,19 +799,62 @@ class cpanel extends Controller
         $query .= $params['include_open'] ? '' : ' AND `closed` = 1';
         $query .= empty($params['categories']) ? '' : ' AND `category` IN ('.implode(',', $params['categories']).')';
         $query .= empty($params['statuses']) ? '' : ' AND `status` IN ('.implode(',', $params['statuses']).')';
-        $query .= empty($params['ips']) ? '' : ' AND `ip` IN ('.implode(',', $params['ips']).')';
-        $query .= empty($params['emails']) ? '' : ' AND `email` IN ('.implode(',', $params['emails']).')';
+        $query .= empty($params['priorities']) ? '' : ' AND `priority` IN ('.implode(',', $params['priorities']).')';
+        $query .= empty($params['ips']) ? '' : ' AND `ip` IN ('.implode(',', array_filter(array_map(function($val) {
+            return $val ? "INET6_ATON('$val')" : false;
+        }, $params['ips']))).')';
+        $query .= empty($params['emails']) ? '' : ' AND `email` IN ('.implode(',', array_map(function($val) {
+            return "'$val'";
+        }, array_filter($params['emails']))).')';
 
-        $this->tpl = null;
-        header('Content-Type: text/plain');
-        echo "DELETE FROM `reports` WHERE $query\n\n";
-        echo 'This was only a test. Had this been a real purge ',selectCount('reports',$query),' records would have been permanently deleted.';
-        exit;
+        $res = db()->query('SELECT id FROM `reports` WHERE '.$query);
+        if(!$res->rowCount()) {
+            $this->flash[] = "Nothing was deleted.";
+            return;
+        }
 
-        $res = db()->query("DELETE FROM `reports` WHERE $query");
-        $rows = $res->rowCount();
+        $ids = $res->fetchAll(PDO::FETCH_COLUMN);
+        $diff_count = 0;
+        foreach($ids as $report_id) {
+            $diff_file = BUNZ_DIR."diff/reports/$report_id";
+            if(file_exists($diff_file)) {
+                if(1)//unlink($diff_file))
+                    $diff_count++;
+                else
+                    $this->flash[] = "Could not remove $diff_file check your <s>permission</s> privilege";
+            }
+        }
+        $ids = implode(',',$ids);
 
-        $this->flash[] = $rows ? "Nothing was deleted." : $rows . ' message'. ($rows === 1 ? '' : 's') . ' were purged.';
-        
+        $comment_ids = db()->query("SELECT id FROM `comments` WHERE report IN($ids)");
+        if($comment_ids->rowCount()) {
+            foreach($comment_ids->fetchAll(PDO::FETCH_COLUMN) as $comment_id) {
+                $diff_file = BUNZ_DIR."diff/comments/$comment_id";
+                if(file_exists($diff_file)) {
+                    if(1)//unlink($diff_file))
+                        $diff_count++;
+                    else
+                        $this->flash[] = "Could not remove $diff_file check your <s>permission</s> privilege";
+                }
+            }
+        }
+
+        if($diff_count) {
+            $this->flash[] = "$diff_count diffs were permanently deleted.";
+        }
+
+        $rm = [
+            'comments'   => 'report',
+            'status_log' => 'report',
+            'tag_joins'  => 'report',
+            'reports'    => 'id'
+        ];
+        foreach($rm as $tbl => $field) {
+            //$res = db()->query("DELETE FROM $tbl WHERE `$field` IN ($ids)");
+            //$rows = $res->rowCount();
+            $rows = selectCount($tbl, "$field in ($ids)");
+            if($rows)
+                $this->flash[] =  "$rows $tbl were purged.";
+        }
     }
 }

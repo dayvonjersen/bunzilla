@@ -84,7 +84,7 @@ class Filter {
         }
 
 		$key = array_shift($args);
-		$f = count($args) ? array_shift($args) : null;
+		$f = count($args) ? array_shift($args) : [];
 		$o = count($args) ? array_shift($args) : [];
 
 		switch ($type) {
@@ -93,6 +93,14 @@ class Filter {
 			$i = 'email';
 			$c = 'string';
 			break;
+
+        case 'ip':
+            $v = 1;
+            $i = 'ip';
+            $f[] = 'ipv4';
+            $f[] = 'ipv6';
+            $c = 'string';
+            break;
 
 		case 'string':
             $v = 0;
@@ -122,7 +130,7 @@ class Filter {
 
 		if ($arrMode) {
 			unset($arrMode);
-			$f = 'require_array';
+			$f[] = 'require_array';
 			$c = 'array';
 		}
 		$this->setFailsafe($key, $c);
