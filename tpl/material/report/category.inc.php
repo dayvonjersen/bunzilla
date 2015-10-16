@@ -13,14 +13,6 @@ require BUNZ_TPL_DIR . 'header.inc.php';
 //
 ?>
 <div class="row">
-<?php
-if($this->auth() && $_SERVER['HTTP_HOST'] === 'meta.bunzilla.ga' && $cat['id'] != 16)
-{
-?>
-    <div class="col s12 section h5 alert-text center">Please report any issues you encounter in <a href="/report/category/16">Bug Reports</a>.</div>
-<?php
-}
-?>
     <div class="col s12">
         <article>
             <div class="row">
