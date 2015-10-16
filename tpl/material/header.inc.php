@@ -47,7 +47,7 @@ if(isset($this->breadcrumbs))
 {
     $thisPage = end($this->breadcrumbs)['href'];
     $route = explode('/', $thisPage);
-    if(file_exists(BUNZ_TPL_BASE_DIR . 'rss/'.$route[0].'/'.$route[1].'.inc.php'))
+    if(count($route) > 1 && file_exists(BUNZ_TPL_BASE_DIR . 'rss/'.$route[0].'/'.$route[1].'.inc.php'))
     {
     ?>
         <link rel='alternate' type='application/rss+xml' title='<?= isset($pageTitle) ? $pageTitle : BUNZ_PROJECT_TITLE ?>' href='<?= BUNZ_HTTP_DIR, $thisPage, '?rss' ?>'>
@@ -82,7 +82,7 @@ if(isset($this->breadcrumbs))
                         <ul class="gn-menu">
                             <li class="gn-search-item">
                                 <form action="<?= BUNZ_HTTP_DIR ?>search" method="get">
-                                <button type="submit" title="Search!" class="btn btn-floating right transparent gone" id="searchsubmit" style="margin-top: 0.5em; margin-right: 2em"><i class="icon-search"></i></button>
+                                <button type="submit" title="Search!" class="btn btn-floating btn-flat right transparent gone" id="searchsubmit" style="margin-top: 0.5em; margin-right: 2em"><i class="icon-search"></i></button>
                                 <div class="input-field">
                                     <i class="gn-icon icon-search">
                                     <span>Search</span></i>
