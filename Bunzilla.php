@@ -334,7 +334,7 @@ class Controller
 
     /**
      * begin Terrible HTTP Authentication */
-    protected function auth()
+    public function auth()
     {
         if(!is_null($this->auth))
             return $this->auth;

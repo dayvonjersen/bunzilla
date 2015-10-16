@@ -59,16 +59,26 @@ class Filter {
                 return;
             }
 		}
+
+        $arrMode = 0;
+		if (strstr($type, 'Array')) {
+			$type = str_replace('Array', '', $type);
+			$arrMode = 1;
+		}
         $type = strtolower(str_replace('add', '', $type));
 
         switch($type) {
 		case 'regexp':
 		case 'pcre':
         case 'regex':
+            if($arrMode)
+                throw new Exception('Array Filter type for pcre|regex(p)? is currently unsupported!');
             call_user_func_array([$this, 'regex'], $args);
             return;
 
         case 'callback':
+            if($arrMode)
+                throw new Exception('Array Filter type for callback functions is currently unsupported!');
             call_user_func_array([$this, 'callback'], $args);
             return;
         }
@@ -76,11 +86,6 @@ class Filter {
 		$key = array_shift($args);
 		$f = count($args) ? array_shift($args) : null;
 		$o = count($args) ? array_shift($args) : [];
-
-		if (strstr($type, 'Array')) {
-			$type = str_replace('Array', '', $type);
-			$arrMode = 1;
-		}
 
 		switch ($type) {
 		case 'email':
@@ -110,6 +115,8 @@ class Filter {
 			break;
 
 		default:
+            if($arrMode)
+                throw new Exception('Array Filter type must have a type e.g. addIntArray, addBoolArray...');
 			throw new Exception('Unknown Filter type "' . $type . '"');
 		}
 

@@ -740,4 +740,32 @@ class cpanel extends Controller
         echo $output;
         exit;
     }
+
+    public function purge() {
+        $this->index();
+        if(empty($_POST)) {
+            return;
+        }
+
+        $filt = new Filter;
+        $filt->addBool('before');
+        $filt->addInt('year');
+        $filt->addInt('month');
+        $filt->addInt('day');
+        $filt->addInt('hour');
+        $filt->addInt('minute');
+        $filt->addBool('include_open');
+        $filt->addIntArray('categories');
+        $filt->addIntArray('statuses');
+        $filt->addIntArray('tags');
+        $filt->stringArray('ips');
+        $filt->stringArray('emails');
+
+        $params = $filt->input_array();
+
+        $this->tpl = null;
+        header('Content-Type: text/plain');
+        var_dump($params);
+        exit;
+    }
 }

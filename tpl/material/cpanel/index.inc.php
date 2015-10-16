@@ -57,10 +57,10 @@ document.body.onload = function(){
                         <a class="icon-attention alert-base" href="#priorities">
                             <span class="hide-on-med-and-down">Priorities</span></a></li>
                     <li class="tab col s1" title="Purge Reports">
-                        <a class="icon-delete danger-text" href="#purge">
+                        <a class="icon-delete danger-base" href="#purge">
                             <span class="hide-on-med-and-down">Purge</span></a></li>
                     <li class="tab col s1"  title="Export Database">
-                        <a class="icon-database" href="#export">
+                        <a class="icon-database success-base" href="#export">
                         <span class="hide-on-med-and-down">Export</span></a></li>
                 </ul>
 <?php
