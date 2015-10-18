@@ -1,7 +1,7 @@
 <?php
 $cat = $this->data['category'];
 
-$pageTitle = 'Submit New &quot;'.$cat['title'].'&quot;';
+$pageTitle = $cat['title'];
 $background = "category-{$cat['id']}-base";
 $pageIcon = 'icon-plus';
 $pageAction = 'post/category/'.$cat['id'];

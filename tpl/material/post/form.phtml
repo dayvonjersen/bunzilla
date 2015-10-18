@@ -20,24 +20,58 @@ if(basename($_SERVER['PHP_SELF']) === basename(__FILE__))
     $cat = ['description'=>1,'reproduce'=>1,'expected'=>1,'actual'=>1];
     echo '<html><body style="background: #fff !important; margin-top: 150px">';
 }
+
+$fields = [
+    'description' => 'A synopsis or summary of the report you wish to submit',
+    'reproduce'   => 'Instructions on how to create the behavior',
+    'expected'    => 'The result, output, or other behavior you expect',
+    'actual'      => 'The actual result, output, or other behavior that occurs',
+];
+if($pageMode == 'edit' && isset($this->data['params']['comment_id']))
+    $fields = ['message' => 'Your unique and insightful voice'];
 ?>
 <!-- necessary for preview -->
 <script src="<?= BUNZ_JS_DIR, 'highlight.js' ?>"></script>
 
-<h1 class="<?= $pageIcon ?>"><?= $pageTitle ?></h1>
+<h1 class="<?= $pageIcon ?> section"><?= $pageTitle ?></h1>
 <form action="<?= BUNZ_HTTP_DIR, $pageAction ?>"
       id="withToolsModal"
       method="post"
       class="section">
 
-    <div class="section category-<?= $cat['id'] ?>-text z-depth-3">
+        <div class="section no-pad-bot" style="margin-top: -8.5em">
+            <div class="valign-wrapper" style="justify-content: flex-end;-webkit-box-pack:end;-webkit-justify-content:flex-end;-ms-flex-pack:end;position:relative;top:5.5em;right:-.25em">
+                <a href="#toolsModal" 
+                   class="btn btn-floating btn-flat waves-effect secondary-lighten-3 icon-code tooltipped"
+                   data-tooltip="toolbar"
+                   onclick="toggleModal(event)"></a>&emsp;
+                <a href="#"
+                    class="btn btn-floating btn-flat icon-magic waves-effect primary-base tooltipped"
+                    data-tooltip="preview" 
+                    onclick="previewtest();"></a>&emsp;
+                <button type="reset" 
+                        class="btn btn-flat btn-floating btn-flat white shade-text icon-cancel waves-effect tooltipped"
+                        data-tooltip="reset" <?php
+if($pageMode == 'new' && empty($_POST))
+ echo <<<JAVASCRIPT
+onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
+JAVASCRIPT;
+?>></button>&emsp;
+                <button type="submit" 
+                        class="btn btn-floating z-depth-3 btn-large h1 category-4-darken-4 icon-chat waves-effect tooltipped"
+                        data-tooltip="post!"                        
+></button>
+            </div>
+
+        </div>
+    <div class="section category-<?= $cat['id'] ?>-text">
 <?php
 if($pageMode == 'new')
 {
 /**
  * XXX */
 ?>
-         <div class="input-field">
+         <div class="input-field" style="width:50%">
             <i class="icon-mail prefix"></i>
             <input type="email" 
                     id="email" 
@@ -72,16 +106,6 @@ if(!defined('FUX') && ($pageMode == 'new' || !isset($this->data['params']['comme
 <?php
 }
 
-$fields = [
-    'description' => 'A synopsis or summary of the report you wish to submit',
-    'reproduce'   => 'Instructions on how to create the behavior',
-    'expected'    => 'The result, output, or other behavior you expect',
-    'actual'      => 'The actual result, output, or other behavior that occurs',
-];
-
-if($pageMode == 'edit' && isset($this->data['params']['comment_id']))
-    $fields = ['message' => 'Your unique and insightful voice'];
-
 foreach($fields as $name => $placeholder)
 {
     if(!$cat[$name])
@@ -100,8 +124,21 @@ foreach($fields as $name => $placeholder)
 }
 ?>
 
-<div class="" style="margin: 1em 0 2em 0"></div>
+<div class="input-field collapsible no-select section" id="opts" style="padding: 1em;">
+            <div class="collapsible-header" style="position: absolute; width: 75%; z-index: 1">
+                <i class="icon-cog prefix hide-on-small-only" style="margin: -1rem 0 0 -2rem"></i>
+                <i class="icon-cog prefix hide-on-med-and-up" style="margin: -1rem 0 0 -1rem"></i>
+                <p style="margin: -1rem 0 0 2rem; line-height: 3">Options... 
+                    <span class="icon-down-open-mini hide-on-active"></span>
+                    <span class="icon-up-open-mini hide-on-inactive"></span>
+                </p>
+            </div>
 
+            <div class="collapsible-body section z-depth-2 " style="margin: -1rem -1rem 0">
+                <div style="padding-top: 1rem">&nbsp;</div>
+                <div class="row section">
+                    <div class="divider" style="margin-bottom: 1rem"></div>
+                </div>
         <p class="input-field">
             <input type="checkbox" id="disable_nlbr" name="disable_nlbr" value="1" <?= isset($_POST['disable_nlbr']) || (empty($_POST) && $pageMode == 'edit') ? ' checked' : ''?>>
             <label for="disable_nlbr">
@@ -117,32 +154,15 @@ foreach($fields as $name => $placeholder)
             <label for="disable_html">
             <i class="icon-cancel"></i>Disable HTML/bbCode entirely</label>
         </p>
-        <div class="input-field center" style="margin-bottom: 1em">
-            <div class="row">
-                <a href="#toolsModal" 
-                   data-for="<?= $name ?>"
-                   class="col s6 m3 btn btn-flat waves-effect secondary-lighten-3 icon-code"
-                   onclick="toggleModal(event)">toggle toolbar</a>
-                <a href="#" class="col s6 m3 btn icon-magic waves-effect primary-base"
-                    onclick="previewtest();">Preview <sup class='primary-darken-4'>NEW!</sup></a>
-                <button type="reset" 
-                        class="col s6 m3 btn btn-flat white shade-text icon-cancel waves-effect" <?php
-if($pageMode == 'new' && empty($_POST))
- echo <<<JAVASCRIPT
-onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
-JAVASCRIPT;
-?>><?= $pageMode == 'new' && empty($_POST) ? 'Clear' : 'Reset'?> Form</button>
-                <button type="submit" 
-                        class="col s6 m3 btn icon-plus waves-effect category-<?= $cat['id'] ?>-base">Submit</button>
-            </div>
 
-        </div>
+</div></div>
 <?php
 /**
  * XXX */
 if(!defined('FUX') && count($this->data['tags']) && !isset($this->data['params']['comment_id']))
 {
 ?>
+<div class="" style="margin: 1em 0 1em 0"></div>
         <div class="input-field collapsible no-select section" id="tagz" style="padding: 1em;">
             <div class="collapsible-header" style="position: absolute; width: 75%; z-index: 1">
                 <i class="icon-tags prefix hide-on-small-only" style="margin: -1rem 0 0 -2rem"></i>
@@ -199,14 +219,16 @@ if(isset($_SESSION['captcha']))
 {
 ?>
         <div class="input-field" style="margin-top: 1em">
-            <i class="icon-emo-shoot"></i>
+            <i class="icon-emo-shoot prefix"></i>
             <input type="text"
+                    style="padding-left:2em"
                     id="captcha"
                     name="captcha"
                     required
                     value="">
             <span class="material-input"></span>
-            <label for="captcha">CAPTCHA: <?= htmlspecialchars($_SESSION['captcha']->q) ?></label>
+            <label for="captcha"
+                    style="padding-left:1em">CAPTCHA: <?= htmlspecialchars($_SESSION['captcha']->q) ?></label>
         </div>
 <?php
 }

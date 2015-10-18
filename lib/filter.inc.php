@@ -210,14 +210,15 @@ class Filter {
 
 		$result = $function($target, $this->options, false);
 
-		if (count(array_keys($result)) < count($this->options)) {
+		if (!is_array($result) || count(array_keys($result)) < count($this->options)) {
 			$ret = $this->failsafe;
-			foreach ($result as $k => $v) {
-				if (gettype($v) === gettype($ret[$k])) {
-					$ret[$k] = $v;
-				}
-
-			}
+            if(is_array($result)) {
+    			foreach ($result as $k => $v) {
+	    			if (gettype($v) === gettype($ret[$k])) {
+		    			$ret[$k] = $v;
+			    	}
+    			}
+            }
 			$result = $ret;
 		}
 

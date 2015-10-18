@@ -471,14 +471,39 @@ if(BUNZ_BUNZILLA_ALLOW_ANONYMOUS || $this->auth())
 {
 require BUNZ_TPL_DIR .'toolsModal.html';
 ?>
-        <footer>
-            <section class="section">
+        <footer class="row">
+            <section class="section col s12 m8 offset-m2 l6 offset-l3">
                 <form action="<?= BUNZ_HTTP_DIR,'post/comment/',$report['id'] ?>" 
                       method="post" 
                       id="withToolsModal">
-                    <div class="section category-<?=$cat['id']?>-text z-depth-3">
-                        <h2><i class="icon-chat prefix"></i>post a comment</h2>
-                    <div class="input-field">
+                        <div class="section no-pad-bot" style="margin-top: -6.5em">
+                            <div class="valign-wrapper" style="justify-content: flex-end;-webkit-box-pack:end;-webkit-justify-content:flex-end;-ms-flex-pack:end;position:relative;top:5.5em;right:-.25em">
+                                <a onclick="toggleModal(event)" 
+                                   class="btn btn-floating btn-flat waves-effect secondary-lighten-3 icon-code tooltipped"
+                                   data-tooltip="toolbar"
+                                   data-for="message"
+                                   href="#toolsModal"></a>&emsp;
+                                <a onclick="previewtest();"
+                                   class="btn btn-floating btn-flat icon-magic waves-effect primary-base tooltipped"
+                                   data-tooltip="preview"
+                                   href="#message"></a>&emsp;
+                                <button 
+<?php
+            if(empty($_POST))
+             echo <<<JAVASCRIPT
+                                    onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
+JAVASCRIPT;
+?>
+                                        class="btn btn-flat btn-floating btn-flat white shade-text icon-cancel waves-effect tooltipped"
+                                        data-tooltip="reset"
+                                        type="reset"></button>&emsp;
+                                <button class="btn btn-floating z-depth-3 btn-large h1 category-4-darken-4 icon-chat waves-effect tooltipped"
+                                        data-tooltip="post!"
+                                        type="submit"></button>
+                            </div>
+                        </div>
+                        <div class=" section no-pad-bot category-<?=$cat['id']?>-text">
+                    <div class="input-field" style="width:50%">
                         <i class="icon-mail prefix"></i>
                         <input type="email" 
                                id="email" 
@@ -496,12 +521,17 @@ $this->auth() ? '"' . $_SERVER['PHP_AUTH_USER'] .'@'. $_SERVER['SERVER_NAME'] .'
                         <textarea id="message" 
                                   class="materialize-textarea" 
                                   required 
-                                  name='message'><?= 
+                                  name='message'
+                                  rows='10'><?= 
 empty($_POST) ? '' : unfiltermessage($this->data['params']['message']) 
 ?></textarea>
                         <label for="comment">your insight on this issue</label>
                         <span class="material-input"></span>
                     </div>
+                    <div class="collapsible no-select" style="padding: 1em 0">
+                    <div class="collapsible-header" style="position: relative; top: -1em; left: 1em">
+                        <i class="icon-cog" style="margin-top: -.5em; margin-left: -1em; font-size: 1.5rem"></i>Options...</div>
+                    <div class="collapsible-body">
                     <p class="input-field" style="margin-top: 1em">
                         <input type="checkbox" 
                                id="disable_nlbr" 
@@ -542,42 +572,24 @@ empty($_POST) ? '' : unfiltermessage($this->data['params']['message'])
 <?php
     }
 ?>
-                    <div class="input-field center" style='margin-bottom:1em'>
-                        <div class="row">
-                            <a href="#toolsModal"
-                               data-for="message" 
-                               class="col s3 btn-flat waves-effect secondary-lighten-3 icon-code"
-                               onclick="toggleModal(event)">toolbar</a>
-                            <a href="#message" 
-                               class="col s3 btn icon-magic waves-effect primary-base"
-                               onclick="previewtest();">preview</a>
-                            <button type="reset" 
-                                    class="col s3 btn-flat white shade-text icon-cancel waves-effect"
-<?php
-            if(empty($_POST))
-             echo <<<JAVASCRIPT
-                                    onclick="(function(evt){if(!window.confirm('This action will delete everything you typed.')) evt.preventDefault()})(event)"
-JAVASCRIPT;
-?>
-                            >reset</button>
-                            <button type="submit" 
-                                    class="col s3 btn category-<?= $cat['id'] ?>-darken-4 icon-chat waves-effect"
-                            >post!</button>
-                        </div>
                     </div>
 <?php
+
     if(isset($_SESSION['captcha']))
     {
 ?>
                     <div class="input-field">
-                        <i class="icon-emo-shoot"></i>
+                        <i class="icon-emo-shoot prefix"></i>
                         <input type="text"
+                               style="padding-left:2em"
                                 id="captcha"
                                 name="captcha"
                                 required
                                 value="">
                         <span class="material-input"></span>
-                        <label for="captcha">CAPTCHA: <?= htmlspecialchars($_SESSION['captcha']->q) ?></label>
+                        <label for="captcha"
+                               style="padding-left:2em"
+                        >CAPTCHA: <?= htmlspecialchars($_SESSION['captcha']->q) ?></label>
                     </div>
 <?php
     }
