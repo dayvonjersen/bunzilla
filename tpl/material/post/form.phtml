@@ -38,7 +38,6 @@ if($pageMode == 'edit' && isset($this->data['params']['comment_id']))
       id="withToolsModal"
       method="post"
       class="section">
-
         <div class="section no-pad-bot" style="margin-top: -8.5em">
             <div class="valign-wrapper" style="justify-content: flex-end;-webkit-box-pack:end;-webkit-justify-content:flex-end;-ms-flex-pack:end;position:relative;top:5.5em;right:-.25em">
                 <a href="#toolsModal" 
@@ -65,6 +64,10 @@ JAVASCRIPT;
 
         </div>
     <div class="section category-<?= $cat['id'] ?>-text">
+<?php
+if($pageMode == 'edit' && isset($this->data['params']['comment_id']))
+    echo "<div style=\"height: 3em;\">&nbsp;</div>";
+?>
 <?php
 if($pageMode == 'new')
 {
