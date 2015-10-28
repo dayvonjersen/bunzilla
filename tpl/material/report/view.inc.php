@@ -36,7 +36,7 @@ if($this->auth())
             <ul class="tabs z-depth-3">
                 <li class="tab col s3">
                     <a href="#status" 
-                       class="waves-effect active icon-doc-text-inv category-<?=$cat['id']?>-text"><span class="hide-on-med-and-down">Details</span></a>
+                       class="waves-effect active icon-doc-text-inv category-<?=$cat['id']?>-invert"><span class="hide-on-med-and-down">Details</span></a>
                 </li>
                 <li class="tab col s3">
                     <a href="#update" class="waves-effect icon-magic secondary-base"><span class="hide-on-med-and-down">Update</span></a>

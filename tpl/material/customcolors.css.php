@@ -51,6 +51,7 @@ function createShades( $className, $color )
     $ret = [];
     $ret += createCSSRule("$className-base",$color);
     $ret += createCSSRule("$className-text",$color,true);
+    $ret += createCSSRule("$className-invert",$color,true);
 
     for($i = 1; $i <= 5; $i++)
     {
@@ -98,8 +99,13 @@ foreach(Cache::read('tags') as $id => $data)
 foreach(Cache::read('priorities') as $id => $data)
     $_ += createCSSRule("priority-$id",$data['color']);
 
-foreach(Cache::read('categories') as $id => $data)
+foreach(Cache::read('categories') as $id => $data) {
     $_ += createShades("category-$id", $data['color']);
+    // more hax
+    $_["category-$id-text"]['color'] = $_["category-$id-text"]['background-color'];
+    $_["category-$id-text"]['background-color'] = 'transparent';
+}
+
 /**
  * output tiem */
 header('Content-Type: text/css; charset=utf-8');

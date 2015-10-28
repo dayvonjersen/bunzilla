@@ -54,7 +54,7 @@ input, textarea, textarea:focus {
     box-shadow: none !important
 }
 input:checked ~ label { 
-    color: #0af;
+    color: inherit;
 }
 
 /* Classes that exist or should */
@@ -148,7 +148,7 @@ input:not([type='checkbox']):not([type='radio']) + label.active {
     -ms-transform: translateY(-130%);
     -o-transform: translateY(-130%);
     transform: translateY(-130%);
-    color: #0af;
+    color: inherit;
 }
 
 /** }}}
@@ -471,7 +471,7 @@ textarea:focus ~ a[href="#toolsModal"] {
     position: relative;
 }
 .material-input:before {
-     background-color: #4eb3de;
+     background-color: currentColor;
      bottom: calc(1em - 1px);
      content: "";
      height: 2px;
@@ -505,7 +505,7 @@ textarea:focus ~ .material-input:before
 input:focus ~ .material-input:after,
 textarea:focus ~ .material-input:after
 {
-     background-color: #4eb3de;
+     background-color: currentColor;
      animation: 0.3s ease 0s normal forwards 1 input-highlight;
      -webkit-animation: 0.3s ease 0s normal forwards 1 input-highlight;
      opacity: 0;
@@ -605,4 +605,5 @@ header section.primary-base.waves-effect { display: block !important; }
 time { z-index: 10001; }
 ul.list.section { padding-top: 0.5rem; } /** SHOOT ME $12 **/
 a:not([class]) { text-decoration: underline !important; }
+.input-field label, .input-field .prefix.active, textarea:focus, input[type]:focus { color: inherit !important; border-color: currentColor !important; }
 /* vim:set fdm=marker: */

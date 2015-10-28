@@ -198,7 +198,7 @@ if(isset($this->breadcrumbs) && count($this->breadcrumbs))
             /**
              * just go with it */
             $offset = 0;
-            list($what,$why) = strpos($prevClassName, 'text') !== false ? ['text','base'] : ['base','text'];
+            list($what,$why) = strpos($prevClassName, 'text') !== false ? ['text','base'] : ['base','invert'];
             echo '<div class="bc-triangle ', str_replace($what, $why, $prevClassName) ,'"></div>',"\n";
         }
         if(strpos($crumb['href'],'report/index') === 0)
