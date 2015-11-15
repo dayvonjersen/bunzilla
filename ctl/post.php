@@ -133,7 +133,7 @@ class post extends Controller
             if(!count($set))
             {
                 $this->redirectWithMessage(
-                    '/report/view/'.$reportId,
+                    'report/view/'.$reportId,
                     'No changes were made.'
                 );
             }
@@ -155,7 +155,7 @@ class post extends Controller
                 }
 
                 $this->redirectWithMessage(
-                    '/report/view/'.$reportId
+                    'report/view/'.$reportId
                         .($editMode == 'comment' ? '#reply-'.$commentId : ''),
                     'Your desired changes were made.'
                 );
@@ -327,6 +327,10 @@ class post extends Controller
                                     'title' => 'Submit New',
                                     'icon' => 'icon-plus'];
         } else {
+            if(!isset($this->data['params']['report_id'])) {
+                // this shouldn't happen but it does anyway fff TODO XXX D:
+                return;
+            }
             $this->breadcrumbs[] = ['href' => 'report/view/'.$this->data['params']['report_id'],
                                     'title' => $this->data['params']['subject'],
                                     'icon' => 'icon-doc-text-inv'];
