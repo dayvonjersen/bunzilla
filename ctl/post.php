@@ -101,6 +101,7 @@ class post extends Controller
             $filt    = $this->getFilter($editMode);
             $changes = $filt->input_array();
             $set     = [];
+            $temp = $this->data['params'];
             foreach($this->data['params'] as $field => $value)
             {
                 if(!isset($changes[$field]) || $changes[$field] === $value)
@@ -132,6 +133,7 @@ class post extends Controller
 
             if(!count($set))
             {
+                $this->data['params'] = $temp;
                 $this->redirectWithMessage(
                     'report/view/'.$reportId,
                     'No changes were made.'
@@ -154,12 +156,14 @@ class post extends Controller
                     );
                 }
 
+                $this->data['params'] = $temp;
                 $this->redirectWithMessage(
                     'report/view/'.$reportId
                         .($editMode == 'comment' ? '#reply-'.$commentId : ''),
                     'Your desired changes were made.'
                 );
             }
+            $this->data['params'] = $temp;
         }
            
         $this->setBreadcrumbs(__FUNCTION__);
