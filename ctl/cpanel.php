@@ -818,7 +818,7 @@ class cpanel extends Controller
         foreach($ids as $report_id) {
             $diff_file = BUNZ_DIR."diff/reports/$report_id";
             if(file_exists($diff_file)) {
-                if(1)//unlink($diff_file))
+                if(unlink($diff_file))
                     $diff_count++;
                 else
                     $this->flash[] = "Could not remove $diff_file check your <s>permission</s> privilege";
@@ -831,7 +831,7 @@ class cpanel extends Controller
             foreach($comment_ids->fetchAll(PDO::FETCH_COLUMN) as $comment_id) {
                 $diff_file = BUNZ_DIR."diff/comments/$comment_id";
                 if(file_exists($diff_file)) {
-                    if(1)//unlink($diff_file))
+                    if(unlink($diff_file))
                         $diff_count++;
                     else
                         $this->flash[] = "Could not remove $diff_file check your <s>permission</s> privilege";
@@ -850,9 +850,8 @@ class cpanel extends Controller
             'reports'    => 'id'
         ];
         foreach($rm as $tbl => $field) {
-            //$res = db()->query("DELETE FROM $tbl WHERE `$field` IN ($ids)");
-            //$rows = $res->rowCount();
-            $rows = selectCount($tbl, "$field in ($ids)");
+            $res = db()->query("DELETE FROM $tbl WHERE `$field` IN ($ids)");
+            $rows = $res->rowCount();
             if($rows)
                 $this->flash[] =  "$rows $tbl were purged.";
         }
