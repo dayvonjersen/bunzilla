@@ -612,7 +612,11 @@ class post extends Controller
                 case 'expected':
                 case 'actual':
                 case 'message':
-
+                    // temp fix; required fields are annoying as it turns out
+                    if($value === '') {
+                        $this->data['params'][$field] = '(none)';
+                        break;
+                    }
 /**
  * note, an aside:
  *

@@ -118,7 +118,6 @@ foreach($fields as $name => $placeholder)
             <i class="icon-doc-text-inv prefix"></i>
             <textarea id="<?= $name ?>"
                       class="materialize-textarea" 
-                      required 
                       name='<?= $name ?>'><?= !defined('FUX') && isset($this->data['params']) ? unfiltermessage($this->data['params'][$name]) : '' ?></textarea>
             <span class="material-input"></span>
             <label for="<?= $name ?>"><?= $name, ': ', $placeholder ?></label>
