@@ -322,7 +322,7 @@ Unstyled, pure HTML designed for text-only browsers such as lynx. Can be used as
 
 Append "?nofrills" to the url to use.
 
-**\*Note: not yet implemented for all pages **
+**Note:** not yet implemented for all pages
 
 ** Note: Fri 24 Apr 2015 03:17:17 PM EDT **
 
@@ -336,7 +336,7 @@ Append "?nofrills" to the url to use.
 
 Append "?rss" to the url to use.
 
-**\*Note: you will only receive new reports and not updates on their status. I may address this in the future, or this non-spammy behavior might actually be a good thing.
+**Note:** you will only receive new reports and not updates on their status. I may address this in the future, or this non-spammy behavior might actually be a good thing.
 
 ####JSON 
 
@@ -344,7 +344,7 @@ Append "?rss" to the url to use.
 
 Append "?json" to the url to use alternate views which export the page data as JSON.
 
-**\*Note: Not yet implemented for all pages. Notably any of the cpanel pages**
+**Note:** Not yet implemented for all pages. Notably any of the cpanel pages
 
 I am using it in a few places to introduce some useful ajax features. If someone wants to create a single-page application view (template) for Bunzilla, this is how it could be done.
 
