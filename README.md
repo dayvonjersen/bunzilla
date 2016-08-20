@@ -3,6 +3,8 @@
 
 Bunzilla is a simple, standalone bug tracker with a bright and colorful UI designed for small teams.
 
+![](https://u.teknik.io/u0ojI.png)
+
 ---
 
 [Prerequisites](#prerequisites)
@@ -146,9 +148,13 @@ And edit [tpl/material/toolsModal.html](tpl/material/toolsModal.html)
 
 ####Customization
 
+![](https://u.teknik.io/aTGFj.png)
+
 All of the colors, icons, and of course text labels can be changed either through the cpanel or in `res/settings.ini`
 
 ####Categories
+
+![](https://u.teknik.io/9bk8X.png)
 
 Categories are merely how reports are grouped. You can create as many categories as you like. Whatever applies to your project and your workflow can be set up.
 
@@ -170,6 +176,8 @@ If you want all 4 or just description; ... it's up to you
 
 ####Statuses
 
+![](https://u.teknik.io/52iT3.png)
+
 Statuses are what you can use to mark the progress of a report. Again, it can be anything you like so make it make sense for you.
 
 All reports will start off with a (configurable) default status. There is no limit to the number of statuses you can have, though they are limited to 25 characters for visual purposes
@@ -187,6 +195,9 @@ All reports will start off with a (configurable) default status. There is no lim
 The sky's the limit!
 
 ####Tags
+
+![](https://u.teknik.io/DDzaa.png)
+
 Tags describe issues at a glance when such descriptions pan many categories. 
 
 They can also be used as convenient search terms.
@@ -226,6 +237,9 @@ The idea here is to be able to say "I want to write some python today", search f
 Speaking of which...
 
 ###Priorities
+
+![](https://u.teknik.io/3D1p5.png)
+
 Priorities are an additional layer of classifying meta-data which affect the order of reports in a category list. Assigning priorities appropriately will let you see what's most important so that you can see where you should focus first.
 
 Like statuses, a default priority will be assigned to all new reports submitted. Unlike statuses, the ID determines the importance of the priority.
@@ -247,12 +261,18 @@ There's no reason to make drama llamas out of "closed" issues or "necromancy" (u
 If a report is a duplicate, there is an alternative to the "MARKED AS DUPLICATE (CLOSED) (NO SHUT UP)" paradigm that you might have come across.
 
 ###Merging
+
+![](https://u.teknik.io/Rbksx.png)
+
 Merging is an experimental feature that takes a report and turns it (and its associated comments) into a quotereply to another report.
 
 ###Quotereply
 Quotereply lets you directly reply to a comment, but this only goes 1 level deep at the moment.
 
 ###Changelog 
+
+![](https://u.teknik.io/p9MjI.png)
+
 Changelog entries can be automatically generated with any comment.
 
 After fixing a bug you can comment (before or after closing it!) like so
@@ -269,6 +289,9 @@ Changelog can additionally be viewed as plaintext or unstyled HTML for all versi
 This is not meant to replace the changelog for your project, as right now you cannot easily edit the entries in it, but rather make it easier to generate one when you plan to package up a release.
 
 ###Search
+
+![](https://u.teknik.io/No2M5.png)
+
 Working on making it better but as far as options:
 
  - typing in words tries to match those words
@@ -292,6 +315,9 @@ Being able to do "some string -category:5" is meant to work, but it might break 
 ###Alternate templates
 
 ####nofrills
+
+![](https://u.teknik.io/qTvru.png)
+
 Unstyled, pure HTML designed for text-only browsers such as lynx. Can be used as a basis for new templates.
 
 Append "?nofrills" to the url to use.
@@ -303,13 +329,19 @@ Append "?nofrills" to the url to use.
 "?nofrills" is meant to be persistent, append "?material" to get back.
 
 ####RSS Feeds
-Currently only available for categories and individual reports.
+
+![](https://u.teknik.io/Ir9v6.png)
+
+*Currently only available for categories and individual reports.*
 
 Append "?rss" to the url to use.
 
 **\*Note: you will only receive new reports and not updates on their status. I may address this in the future, or this non-spammy behavior might actually be a good thing.
 
 ####JSON 
+
+![](https://u.teknik.io/opHDJ.png)
+
 Append "?json" to the url to use alternate views which export the page data as JSON.
 
 **\*Note: Not yet implemented for all pages. Notably any of the cpanel pages**
