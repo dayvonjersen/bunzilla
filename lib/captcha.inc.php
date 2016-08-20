@@ -11,7 +11,7 @@ class captcha
             return false;
 
         $_SESSION['captcha'] = json_decode(file_get_contents(
-            'http://api.textcaptcha.com/bunzilla.ga.json'
+            'http://api.textcaptcha.com/bunzilla.json'
         ));
         if(!$_SESSION['captcha'])
         {

@@ -367,14 +367,7 @@ class report extends Controller
             2, // epenis 2 is "System"
             remoteAddr(),
             nl2br(
-            '<em>Merge is an experimental feature. '.
-            'If you encounter any problems or '. 
-            'if you have any suggestions or feedback, '. 
-            'please leave a message on '.
-            '<a href=\'http://meta.bunzilla.ga/\'>'.
-            'the Bunzilla meta-tracker</a>.</em>
-
-            submitted: '
+            'submitted: '
             .date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['time'])."\n"
             .($current_report['edit_time'] ? '<b>edit at</b> '
                 .date(BUNZ_BUNZILLA_DATE_FORMAT, $current_report['edit_time'])

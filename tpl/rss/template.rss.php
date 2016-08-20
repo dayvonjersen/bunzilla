@@ -22,7 +22,6 @@ echo '<?xml version="1.0" encoding="utf-8"?>',"\n";
         <lastBuildDate><?= date(RSS_DATE_FORMAT) ?></lastBuildDate>
         <category>bug reports</category>
         <generator>Bunzilla v<?= BUNZ_VERSION ?></generator>
-        <docs>https://bunzilla.ga</docs>
 <?php
 /**
  * unused right now, might be useful down the line

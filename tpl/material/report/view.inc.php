@@ -171,12 +171,7 @@ if($this->auth())
                       method="post">
                     <div class="row">
                         <div class='col s12 section z-depth-5 shade-lighten-4 h5'>
-                            <p><i class='icon-move'></i>Merge is an experimental
-                            feature. Please be cautious.</p>
-                            <p>If you have any suggestions, feedback, or concerns
-                            please leave a message on 
-                            <a href='http://meta.bunzilla.ga/'>the Bunzilla meta-tracker</a>.</p>
-                            <p>Thank you and have a <em>very</em> safe and productive day.</p>
+                            <p><i class='icon-move'></i>Merge is an experimental feature. Please be cautious.</p>
                         </div>
                         <div class="input-field col s12 m6 section">
                             <p>Merge Entire Report Into:</p>

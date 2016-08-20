@@ -10,6 +10,5 @@
             </ul>
         <p>Alternatively, especially if you're on windows where the above "whoami" shell call will have produced errors on this page, you can run the script from the command line using php-cli.</p>
         <p>If you don't know what some of the words on this page mean, google them.</p>
-        <p>If you want me to make this process be automated (note: it'll be for *nix only), <a href="http://meta.bunzilla.ga/">let me know</a>.</p>
     </blockquote>
 </section>
