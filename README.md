@@ -1,5 +1,6 @@
-#bunzilla
-####current version: 0.2b
+# bunzilla
+
+#### current version: 0.2b
 
 Bunzilla is a simple, standalone bug tracker with a bright and colorful UI designed for small teams.
 
@@ -29,14 +30,15 @@ Bunzilla is a simple, standalone bug tracker with a bright and colorful UI desig
 
 ---
 
-###Prerequisites
+### Prerequisites
+
  - PHP &gt;= 5.4
  - Apache 2 \(with mod\_rewrite\)
  - MySQL &gt;= 5.6.23 (for INET6\_\* functions)
 
 ---
 
-###Installation
+### Installation
 
 Clone the repository and get ready to edit a few files:
 
@@ -65,15 +67,10 @@ Create a file named **res/settings.ini**, there is an example in [res/example.se
 Create a file named **.htaccess**:
 ```
 RewriteEngine On
-
 RewriteBase /bunzilla
-
 RewriteCond %{REQUEST_FILENAME} !-d
-
 RewriteCond %{REQUEST_FILENAME} !-f
-
 RewriteCond %{REQUEST_FILENAME} !-l
-
 RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
 ```
 
@@ -93,11 +90,8 @@ Optionally, if you want to hide bunzilla entirely behind HTTP Authentication, ed
 
 ```
 AuthType Basic
-
 AuthName Bunzilla
-
 AuthUserFile /path/to/bunzilla/res/.htpasswd
-
 Require valid-user
 ```
 
@@ -117,7 +111,7 @@ If you know how to get uglify-js to --mangle-props without breaking everything p
 
 ---
 
-####Other software used in this project
+#### Other software used in this project
 
  - [MaterializeCSS](http://materializecss.com/)
  - Source Code Pro font from [Adobe](http://www.adobe.com/)
@@ -135,7 +129,7 @@ All of the above are included with Bunzilla and some of the above has been modif
 
 The JavaScript widgets I have written from scratch for this include the toolbar for inserting HTML, the preview functionality, and tag cloud on the index.
 
-###A note about highlight.js:
+### A note about highlight.js:
 The packaged version of highlight.js included here has support for *every language* for demonstration purposes only. 
 
 I *highly* recommend heading over to https://highlightjs.org/ and customizing a lightweight package for your project that includes only the languages you actually use.
@@ -144,15 +138,15 @@ Put it in `tpl/material/assets/js/` as `highlight.js`
 
 And edit [tpl/material/toolsModal.html](tpl/material/toolsModal.html)
 
-###Features
+### Features
 
-####Customization
+#### Customization
 
 ![](https://u.teknik.io/aTGFj.png)
 
 All of the colors, icons, and of course text labels can be changed either through the cpanel or in `res/settings.ini`
 
-####Categories
+#### Categories
 
 ![](https://u.teknik.io/9bk8X.png)
 
@@ -174,7 +168,7 @@ If you want all 4 or just description; ... it's up to you
  - Feature Requests
  - TODO
 
-####Statuses
+#### Statuses
 
 ![](https://u.teknik.io/52iT3.png)
 
@@ -194,7 +188,7 @@ All reports will start off with a (configurable) default status. There is no lim
 
 The sky's the limit!
 
-####Tags
+#### Tags
 
 ![](https://u.teknik.io/DDzaa.png)
 
@@ -236,7 +230,7 @@ The idea here is to be able to say "I want to write some python today", search f
 
 Speaking of which...
 
-###Priorities
+### Priorities
 
 ![](https://u.teknik.io/3D1p5.png)
 
@@ -253,23 +247,23 @@ Like statuses, a default priority will be assigned to all new reports submitted.
 
 You should probably avoid having too many priorities. 
 
-###Closed Reports
+### Closed Reports
 Closed reports can still be commented upon---intentionally; by design. 
 
 There's no reason to make drama llamas out of "closed" issues or "necromancy" (unless it's literal). If an issue resurfaces, reopening it and changing the status can be done with ease.
 
 If a report is a duplicate, there is an alternative to the "MARKED AS DUPLICATE (CLOSED) (NO SHUT UP)" paradigm that you might have come across.
 
-###Merging
+### Merging
 
 ![](https://u.teknik.io/Rbksx.png)
 
 Merging is an experimental feature that takes a report and turns it (and its associated comments) into a quotereply to another report.
 
-###Quotereply
+### Quotereply
 Quotereply lets you directly reply to a comment, but this only goes 1 level deep at the moment.
 
-###Changelog 
+### Changelog 
 
 ![](https://u.teknik.io/p9MjI.png)
 
@@ -288,7 +282,7 @@ Changelog can additionally be viewed as plaintext or unstyled HTML for all versi
 
 This is not meant to replace the changelog for your project, as right now you cannot easily edit the entries in it, but rather make it easier to generate one when you plan to package up a release.
 
-###Search
+### Search
 
 ![](https://u.teknik.io/No2M5.png)
 
@@ -312,9 +306,9 @@ Working on making it better but as far as options:
 
 Being able to do "some string -category:5" is meant to work, but it might break at the moment.
 
-###Alternate templates
+### Alternate templates
 
-####nofrills
+#### nofrills
 
 ![](https://u.teknik.io/qTvru.png)
 
@@ -324,11 +318,11 @@ Append "?nofrills" to the url to use.
 
 **Note:** not yet implemented for all pages
 
-** Note: Fri 24 Apr 2015 03:17:17 PM EDT **
+**Note: Fri 24 Apr 2015 03:17:17 PM EDT**
 
 "?nofrills" is meant to be persistent, append "?material" to get back.
 
-####RSS Feeds
+#### RSS Feeds
 
 ![](https://u.teknik.io/Ir9v6.png)
 
@@ -338,7 +332,7 @@ Append "?rss" to the url to use.
 
 **Note:** you will only receive new reports and not updates on their status. I may address this in the future, or this non-spammy behavior might actually be a good thing.
 
-####JSON 
+#### JSON 
 
 ![](https://u.teknik.io/opHDJ.png)
 
@@ -357,7 +351,8 @@ Otherwise, the CSRF filtering will deny you the POST request. Further, there are
 You must POST form data in the old-fashioned "param1=value&param2=anothervalue" way. Look at the HTML forms or PHP source for what data to send.
 
 ---
-##License
+
+## License
 
 [http://www.wtfpl.net/about](http://www.wtfpl.net/about)
 
