@@ -79,7 +79,8 @@ There is an example in [example.htaccess](example.htaccess)
 Run [res/generatepasswd.php](res/generatepasswd.php) to create a compatible .htpasswd
  
 ```
-$ ./res/generatepasswd.php
+$ cd res/
+$ ./generatepasswd.php
 ```
 
 The username and password you specify with this can be used to log in and gain total administrative access. 
