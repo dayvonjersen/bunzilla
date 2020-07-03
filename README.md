@@ -43,7 +43,7 @@ Bunzilla is a simple, standalone bug tracker with a bright and colorful UI desig
 Clone the repository and get ready to edit a few files:
 
 ```
-$ git clone https://github.com/generaltso/bunzilla.git
+$ git clone https://github.com/dayvonjersen/bunzilla.git
 $ cd bunzilla
 ```
 
