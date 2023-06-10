@@ -16,8 +16,8 @@ echo '<?xml version="1.0" encoding="utf-8"?>',"\n";
         <!--optional-->
         <language>en-US</language>
         <copyright>WTFPL <?= date('Y') ?></copyright>
-        <managingEditor>tso@teknik.io</managingEditor>
-        <webMaster>tso@teknik.io</webMaster>
+        <managingEditor>me@dayvonjersen.com</managingEditor>
+        <webMaster>me@dayvonjersen.com</webMaster>
         <pubDate><?= date(RSS_DATE_FORMAT) ?></pubDate>
         <lastBuildDate><?= date(RSS_DATE_FORMAT) ?></lastBuildDate>
         <category>bug reports</category>

@@ -427,11 +427,11 @@ class cpanel extends Controller
         $params = $filt->input_array();
         $sql = 
             'INSERT INTO categories
-                (id,title,caption,
+                (title,caption,
                  description,reproduce,expected,actual,
                  color,icon)
              VALUES
-                (\'\',:title,:caption,
+                (:title,:caption,
                 :description,:reproduce,:actual,:expected,
                 :color,:icon)';
 
@@ -449,9 +449,9 @@ class cpanel extends Controller
         $params['def'] = !selectCount('statuses') ? 1 : 0;
         $sql = 
             'INSERT INTO statuses
-                (id,title,color,icon,`default`)
+                (title,color,icon,`default`)
              VALUES
-                (\'\',:title,:color,:icon,:def)';
+                (:title,:color,:icon,:def)';
         if($this->_exec($sql,$params))
             $this->flash[] = 'Status added';
     }
@@ -467,9 +467,9 @@ class cpanel extends Controller
         $params['def'] = !selectCount('priorities') ? 1 : 0;
         $sql = 
             'INSERT INTO priorities
-                (id,title,color,icon,`default`)
+                (title,color,icon,`default`)
              VALUES
-                (:id,:title,:color,:icon,:def)';
+                (:title,:color,:icon,:def)';
         if($this->_exec($sql,$params))
             $this->flash[] = 'Priority added';
     }
@@ -483,9 +483,9 @@ class cpanel extends Controller
         $params = $filt->input_array();
         $sql = 
             'INSERT INTO tags
-                (id,title,color,icon)
+                (title,color,icon)
              VALUES
-                (\'\',:title,:color,:icon)';
+                (:title,:color,:icon)';
         if($this->_exec($sql,$params))
             $this->flash[] = 'Tag added';
     }

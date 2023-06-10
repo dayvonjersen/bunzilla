@@ -252,7 +252,7 @@ if(isset($currentCat))
 ?>
     <ul id="bc-catlist" class="dropdown-content">
 <?php
-    foreach($this->data['categories'] as $c)
+    foreach($this->data['categories'] as $idx => $c)
     {
         if($c['id'] == $currentCat['id'])
             continue;

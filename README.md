@@ -1,10 +1,90 @@
+## GETTING THIS WORKING IN 2023
+## GETTING THIS WORKING IN 2023
+## GETTING THIS WORKING IN 2023
+
+### SET UP THE DATABASE
+```
+sudo mysql -u root < bunzilla.sql
+sudo mysql -u root
+mysql> CREATE USER 'bunzilla'@'localhost';
+mysql> GRANT ALL PRIVILEGES ON bunzilla.* TO 'bunzilla'@'localhost';
+Query OK, 0 rows affected (0.11 sec)
+```
+
+### FIX FILE PERMISSIONS THE RIGHT WAY
+```
+sudo chmod -R 0777 */* */.*
+```
+
+### CONFIGURE THE APP
+
+>edit and save res/example.*.ini without the "example."
+
+### CONFIGURE NGINX
+
+>nvim /etc/nginx/sites-enabled/default
+
+```
+server {
+    listen 1028;
+    root /srv/bunzilla;
+    # index index.php;
+
+    location /tpl/ {
+        root /srv/bunzilla;
+    }
+    location / {
+        return 307 http://oysterpail:1028/index.php?url=$request_uri;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+    }
+}
+:wq
+```
+
+### COMMENT OUT THESE LINES:
+
+>nvim /path/to/bunzilla/Bunzilla.php
+```
+168         if(is_array($url) && !preg_match('/^[a-z]+$/',$url[0]))
+169              exit('fuk u');
+170
+```
+
+### YES I COULD JUST UPDATE Bunzilla.php BUT I AM LAZY AF
+
+### MAKE SURE YOU HAVE pdo_mysql LOADED (CHECK BY USING phpinfo();)
+### IF NOT
+```
+sudo apt-get install php7.4-mysql
+sudo service php7.4-fpm restart
+sudo service nginx restart
+```
+
+### FIX THE FUCKING DB
+```
+ALTER TABLE `reports`
+	CHANGE COLUMN `closed` `closed` TINYINT(1) NOT NULL DEFAULT '0' AFTER `actual`;
+```
+
+# WORKS ON MY MACHINE
+
+>-day Fri 09 Jun 2023 10:19:18 PM EDT
+
 # bunzilla
 
 #### current version: 0.2b
 
 Bunzilla is a simple, standalone bug tracker with a bright and colorful UI designed for small teams.
 
-![](https://u.teknik.io/u0ojI.png)
+>NOTE(day): 
+>**god bless archive.org for caching all the images on the internet that ever existed**
+>-day Fri 09 Jun 2023 08:06:09 PM EDT
+
+![](https://dayvonjersen.com/bz/001.png)
 
 ---
 
@@ -143,13 +223,13 @@ And edit [tpl/material/toolsModal.html](tpl/material/toolsModal.html)
 
 #### Customization
 
-![](https://u.teknik.io/aTGFj.png)
+![](https://dayvonjersen.com/bz/002.png)
 
 All of the colors, icons, and of course text labels can be changed either through the cpanel or in `res/settings.ini`
 
 #### Categories
 
-![](https://u.teknik.io/9bk8X.png)
+![](https://dayvonjersen.com/bz/003.png)
 
 Categories are merely how reports are grouped. You can create as many categories as you like. Whatever applies to your project and your workflow can be set up.
 
@@ -171,7 +251,7 @@ If you want all 4 or just description; ... it's up to you
 
 #### Statuses
 
-![](https://u.teknik.io/52iT3.png)
+![](https://dayvonjersen.com/bz/004.png)
 
 Statuses are what you can use to mark the progress of a report. Again, it can be anything you like so make it make sense for you.
 
@@ -191,7 +271,7 @@ The sky's the limit!
 
 #### Tags
 
-![](https://u.teknik.io/DDzaa.png)
+![](https://dayvonjersen.com/bz/005.png)
 
 Tags describe issues at a glance when such descriptions pan many categories. 
 
@@ -233,7 +313,7 @@ Speaking of which...
 
 ### Priorities
 
-![](https://u.teknik.io/3D1p5.png)
+![](https://dayvonjersen.com/bz/006.png)
 
 Priorities are an additional layer of classifying meta-data which affect the order of reports in a category list. Assigning priorities appropriately will let you see what's most important so that you can see where you should focus first.
 
@@ -257,7 +337,7 @@ If a report is a duplicate, there is an alternative to the "MARKED AS DUPLICATE 
 
 ### Merging
 
-![](https://u.teknik.io/Rbksx.png)
+![](https://dayvonjersen.com/bz/007.png)
 
 Merging is an experimental feature that takes a report and turns it (and its associated comments) into a quotereply to another report.
 
@@ -266,7 +346,7 @@ Quotereply lets you directly reply to a comment, but this only goes 1 level deep
 
 ### Changelog 
 
-![](https://u.teknik.io/p9MjI.png)
+![](https://dayvonjersen.com/bz/012.png)
 
 Changelog entries can be automatically generated with any comment.
 
@@ -285,7 +365,7 @@ This is not meant to replace the changelog for your project, as right now you ca
 
 ### Search
 
-![](https://u.teknik.io/No2M5.png)
+![](https://dayvonjersen.com/bz/008.png)
 
 Working on making it better but as far as options:
 
@@ -311,7 +391,7 @@ Being able to do "some string -category:5" is meant to work, but it might break 
 
 #### nofrills
 
-![](https://u.teknik.io/qTvru.png)
+![](https://dayvonjersen.com/bz/009.png)
 
 Unstyled, pure HTML designed for text-only browsers such as lynx. Can be used as a basis for new templates.
 
@@ -325,7 +405,7 @@ Append "?nofrills" to the url to use.
 
 #### RSS Feeds
 
-![](https://u.teknik.io/Ir9v6.png)
+![](https://dayvonjersen.com/bz/010.png)
 
 *Currently only available for categories and individual reports.*
 
@@ -335,7 +415,7 @@ Append "?rss" to the url to use.
 
 #### JSON 
 
-![](https://u.teknik.io/opHDJ.png)
+![](https://dayvonjersen.com/bz/011.png)
 
 Append "?json" to the url to use alternate views which export the page data as JSON.
 

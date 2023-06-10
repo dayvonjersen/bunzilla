@@ -18,13 +18,13 @@
                             <li class='hide-on-small-only icon-emo-shoot'>
                                 <a href="http://textcaptcha.com/">textcaptcha.com</a>
                             </li>
-                            <li class='hide-on-med-and-up icon-mail'><a href="mailto:tso@teknik.io"><span class="hide-on-small-only">tell me what you think</span><span class="hide-on-med-and-up">e-mail me</span></a></li>
+                            <li class='hide-on-med-and-up icon-mail'><a href="mailto:me@dayvonjersen.com"><span class="hide-on-small-only">tell me what you think</span><span class="hide-on-med-and-up">e-mail me</span></a></li>
                             <li class='hide-on-med-and-up icon-magic'><?= round(microtime(1) - BUNZ_START_TIME,4) ?>s</li>
                         </ul>
                     </div>
                     <div class="section col m4 hide-on-small-only">
                         <ul class="">
-                            <li class='icon-mail'><a href="mailto:tso@teknik.io">tell me what you think</a></li>
+                            <li class='icon-mail'><a href="mailto:me@dayvonjersen.com">tell me what you think</a></li>
                             <li class='icon-bug'>x_x</li>
                             <li class='icon-magic'><?= round(microtime(1) - BUNZ_START_TIME,4) ?>s</li>
                         </ul>

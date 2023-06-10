@@ -213,10 +213,10 @@ class post extends Controller
             }
         }
         $sql = 'INSERT INTO comments 
-                (id,time,ip,'
+                (time,ip,'
                     .implode(',', array_keys($this->data['params'])).')
                 VALUES 
-                (\'\',UNIX_TIMESTAMP(),INET6_ATON(:ip),:'
+                (UNIX_TIMESTAMP(),INET6_ATON(:ip),:'
                     .implode(',:',array_keys($this->data['params']))
         .')';
 
@@ -271,17 +271,17 @@ class post extends Controller
         $this->data['params']['category'] = $this->data['category']['id'];
 
         // initial status and priority
-        $this->data['params']['status']   = db()->query(
+        $this->data['params']['status']   = (int)db()->query(
             'SELECT id FROM statuses   WHERE `default` = 1'
         )->fetchColumn();
-        $this->data['params']['priority'] = db()->query(
+        $this->data['params']['priority'] = (int)db()->query(
             'SELECT id FROM priorities WHERE `default` = 1'
         )->fetchColumn();
 
         $sql = 'INSERT INTO reports 
-            (id,time,ip,'.implode(',',array_keys($this->data['params'])).')
+            (time,ip,'.implode(',',array_keys($this->data['params'])).')
                 VALUES 
-            (\'\',UNIX_TIMESTAMP(),INET6_ATON(:ip),:'
+            (UNIX_TIMESTAMP(),INET6_ATON(:ip),:'
             .implode(',:',array_keys($this->data['params'])).')';
 
         $this->data['params']['ip'] = remoteAddr();

@@ -38,8 +38,8 @@ class StatusLog {
 
         $sql = 
         'INSERT INTO status_log 
-            (id, '.$column.', who, time, message)
-         VALUES (\'\', :column_id, :usr, UNIX_TIMESTAMP(), :msg)';
+            ('.$column.', who, time, message)
+         VALUES (:column_id, :usr, UNIX_TIMESTAMP(), :msg)';
 
         $stmt = db()->prepare($sql);
         return $stmt->execute([
@@ -51,8 +51,8 @@ class StatusLog {
 
     public static function globalMessage( $msg ) {
        $stmt = db()->prepare(
-            'INSERT INTO status_log (id, who, time, message) 
-             VALUES (\'\',:usr,UNIX_TIMESTAMP(),:msg)');
+            'INSERT INTO status_log (who, time, message) 
+             VALUES (:usr,UNIX_TIMESTAMP(),:msg)');
        return $stmt->execute(['usr'=>'**GLOBAL**','msg'=>$msg]);
     }
 

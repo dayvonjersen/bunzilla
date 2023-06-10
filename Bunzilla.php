@@ -19,6 +19,10 @@ ini_set('html_errors',0);
 
 function err_handler($no,$str,$file,$line,$context)
 {
+    // HACK(day):
+    if($no == E_NOTICE || $no == E_USER_NOTICE){
+        return;
+    }
     switch($no) {
         case E_ERROR:
         case E_PARSE:
@@ -165,8 +169,8 @@ class Bunzilla
     {
         $url = $this->parseUrl();
 
-        if(is_array($url) && !preg_match('/^[a-z]+$/',$url[0]))
-            exit('fuk u');
+        /* if(is_array($url) && !preg_match('/^[a-z]+$/',$url[0])) */
+        /*     exit('fuk u'); */
 
         if(file_exists(BUNZ_CTL_DIR.$url[0].'.php'))
         {
@@ -206,7 +210,8 @@ class Bunzilla
     {
         if(isset($_GET['url']))
         {
-            $url = filter_var(rtrim($_GET['url'],'/'),FILTER_SANITIZE_URL);
+            // FIXME(day):
+            $url = filter_var(trim($_GET['url'],'/'),FILTER_SANITIZE_URL);
             return stristr($url,'/') ? explode('/',$url) : [$url];
         }
     }
