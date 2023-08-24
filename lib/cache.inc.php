@@ -49,9 +49,7 @@ class Cache
 
         preg_match_all(
             '/^\.(icon-[a-z0-9-_]+):before\s*\{\s*content:\s*\'([^\';]+)/m',
-            file_get_contents(
-                str_replace(BUNZ_HTTP_DIR,BUNZ_DIR,BUNZ_CSS_DIR)
-                .'bunzilla-icons.css'),
+            file_get_contents(BUNZ_DIR.BUNZ_CSS_DIR.'bunzilla-icons.css'),
             $icons,
             PREG_SET_ORDER
         );
