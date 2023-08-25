@@ -98,9 +98,7 @@ onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY
             </li>
 <?php
     }
-?></ul><?php
-}
-?>
+?></ul>
             <div class="row">
                 <div  class="col offset-s2 s10">
                     <button type="submit" class="waves-effect btn btn-flat secondary-text"><i class="icon-ok"></i>Change Default</button>
@@ -109,7 +107,9 @@ onclick="(function(evt){if(!window.confirm('Are you sure you want to PERMANENTLY
             </div>
         </form>
     </section>
-
+<?php
+}
+?>
     <section id="createPriority" class="row section primary-text z-depth-3">
         <form class="secondary-text z-depth-5 section " action="<?= BUNZ_HTTP_DIR ?>cpanel/add/priority#priorities" method="post">
             <h1 class="icon-plus">Create New Priority</h1>
